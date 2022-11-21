@@ -10,6 +10,6 @@ RUN mkdir -p /home/highgo
 # 指定路径
 WORKDIR /home/highgo
 # 复制jar文件到路径
-COPY ./highgo-crm.jar /home/highgo/highgo-crm.jar
+COPY ./highgo-modules-crm.jar /home/highgo/highgo-modules-crm.jar
 # 启动系统服务
-ENTRYPOINT ["java","-jar","highgo-crm.jar"]
+ENTRYPOINT ["java","-jar","highgo-modules-crm.jar"]
