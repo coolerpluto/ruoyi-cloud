@@ -38,6 +38,7 @@ com.ruoyi
 │       └── ruoyi-common-security                     // 安全模块
 │       └── ruoyi-common-swagger                      // 系统接口
 ├── ruoyi-modules         // 业务模块
+│       └── highgo-crm                                // 新增CRM模块 [9401]
 │       └── ruoyi-system                              // 系统模块 [9201]
 │       └── ruoyi-gen                                 // 代码生成 [9202]
 │       └── ruoyi-job                                 // 定时任务 [9203]
