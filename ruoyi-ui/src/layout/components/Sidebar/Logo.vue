@@ -35,7 +35,7 @@ export default {
   },
   data() {
     return {
-      title: 'CRM管理系统',
+      title: '统一管理系统',
       logo: logoImg
     }
   }

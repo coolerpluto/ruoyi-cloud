@@ -1,7 +1,7 @@
 {
   "name": "ruoyi",
   "version": "3.6.1",
-  "description": "CRM管理系统",
+  "description": "统一管理系统",
   "author": "若依",
   "license": "MIT",
   "scripts": {
