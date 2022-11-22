@@ -1,0 +1,33 @@
+# Tomcat
+server:
+  port: 9402
+
+# nacos
+nacos:
+  server-addr: 192.168.110.201:8848
+  # 开发dev
+  namespace: cdbcb16d-3531-49c2-a205-c3c1c52270a9
+  # 测试uat namespace: b57afa1a-893b-43f6-bc6b-09a3515758bd
+  # 生产prod namespace: 558c4710-85fd-4dbc-8da1-68ed478c9395
+
+# Spring
+spring: 
+  application:
+    # 应用名称
+    name: highgo-medium
+  profiles:
+    # 环境配置
+    active: dev
+  cloud:
+    nacos:
+      discovery:
+        # 服务注册地址
+        server-addr: ${nacos.server-addr}
+      config:
+        # 配置中心地址
+        server-addr: ${nacos.server-addr}
+        # 配置文件格式
+        file-extension: yml
+        # 共享配置
+        shared-configs:
+          - application-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
