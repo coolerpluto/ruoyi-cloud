@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.highgo.medium.mapper.MLicenseFileInfoMapper">
+    
+    <resultMap type="MLicenseFileInfo" id="MLicenseFileInfoResult">
+        <result property="id"    column="id"    />
+        <result property="serial"    column="serial"    />
+        <result property="applyTime"    column="apply_time"    />
+        <result property="opportunityNum"    column="opportunity_num"    />
+        <result property="authType"    column="auth_type"    />
+        <result property="customerName"    column="customer_name"    />
+        <result property="purpose"    column="purpose"    />
+        <result property="expireTime"    column="expire_time"    />
+        <result property="prodType"    column="prod_type"    />
+        <result property="dbVersion"    column="db_version"    />
+        <result property="serverUrl"    column="server_url"    />
+        <result property="otherParam"    column="other_param"    />
+        <result property="status"    column="status"    />
+        <result property="createId"    column="create_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateId"    column="update_id"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectMLicenseFileInfoVo">
+        select id, serial, apply_time, opportunity_num, auth_type, customer_name, purpose, expire_time, prod_type, db_version, server_url, other_param, status, create_id, create_by, create_time, update_id, update_by, update_time, remark from t_license_info
+    </sql>
+
+    <select id="selectMLicenseFileInfoList" parameterType="MLicenseFileInfo" resultMap="MLicenseFileInfoResult">
+        <include refid="selectMLicenseFileInfoVo"/>
+        <where>  
+            <if test="applyTime != null "> and apply_time = #{applyTime}</if>
+            <if test="opportunityNum != null  and opportunityNum != ''"> and opportunity_num like concat('%', #{opportunityNum}, '%')</if>
+            <if test="authType != null  and authType != ''"> and auth_type = #{authType}</if>
+            <if test="customerName != null  and customerName != ''"> and customer_name like concat('%', #{customerName}, '%')</if>
+            <if test="purpose != null  and purpose != ''"> and purpose = #{purpose}</if>
+            <if test="expireTime != null "> and expire_time &lt;= #{expireTime}</if>
+            <if test="prodType != null  and prodType != ''"> and prod_type like concat('%', #{prodType}, '%')</if>
+            <if test="dbVersion != null  and dbVersion != ''"> and db_version like concat('%', #{dbVersion}, '%')</if>
+            <if test="serverUrl != null  and serverUrl != ''"> and server_url like concat('%', #{serverUrl}, '%')</if>
+            <if test="status != null  and status != ''"> and status like concat('%', #{status}, '%')</if>
+            <if test="createTime != null "> and create_time &lt;= #{createTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectMLicenseFileInfoById" parameterType="Long" resultMap="MLicenseFileInfoResult">
+        <include refid="selectMLicenseFileInfoVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertMLicenseFileInfo" parameterType="MLicenseFileInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into t_license_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serial != null">serial,</if>
+            <if test="applyTime != null">apply_time,</if>
+            <if test="opportunityNum != null">opportunity_num,</if>
+            <if test="authType != null">auth_type,</if>
+            <if test="customerName != null">customer_name,</if>
+            <if test="purpose != null">purpose,</if>
+            <if test="expireTime != null">expire_time,</if>
+            <if test="prodType != null">prod_type,</if>
+            <if test="dbVersion != null">db_version,</if>
+            <if test="serverUrl != null">server_url,</if>
+            <if test="otherParam != null">other_param,</if>
+            <if test="status != null">status,</if>
+            <if test="createId != null">create_id,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateId != null">update_id,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serial != null">#{serial},</if>
+            <if test="applyTime != null">#{applyTime},</if>
+            <if test="opportunityNum != null">#{opportunityNum},</if>
+            <if test="authType != null">#{authType},</if>
+            <if test="customerName != null">#{customerName},</if>
+            <if test="purpose != null">#{purpose},</if>
+            <if test="expireTime != null">#{expireTime},</if>
+            <if test="prodType != null">#{prodType},</if>
+            <if test="dbVersion != null">#{dbVersion},</if>
+            <if test="serverUrl != null">#{serverUrl},</if>
+            <if test="otherParam != null">#{otherParam},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createId != null">#{createId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateId != null">#{updateId},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMLicenseFileInfo" parameterType="MLicenseFileInfo">
+        update t_license_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="serial != null">serial = #{serial},</if>
+            <if test="applyTime != null">apply_time = #{applyTime},</if>
+            <if test="opportunityNum != null">opportunity_num = #{opportunityNum},</if>
+            <if test="authType != null">auth_type = #{authType},</if>
+            <if test="customerName != null">customer_name = #{customerName},</if>
+            <if test="purpose != null">purpose = #{purpose},</if>
+            <if test="expireTime != null">expire_time = #{expireTime},</if>
+            <if test="prodType != null">prod_type = #{prodType},</if>
+            <if test="dbVersion != null">db_version = #{dbVersion},</if>
+            <if test="serverUrl != null">server_url = #{serverUrl},</if>
+            <if test="otherParam != null">other_param = #{otherParam},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createId != null">create_id = #{createId},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateId != null">update_id = #{updateId},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMLicenseFileInfoById" parameterType="Long">
+        delete from t_license_info where id = #{id}
+    </delete>
+
+    <delete id="deleteMLicenseFileInfoByIds" parameterType="String">
+        delete from t_license_info where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

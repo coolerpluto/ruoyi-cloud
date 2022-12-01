@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.highgo.medium.mapper.MediumFileInfoMapper">
+    
+    <resultMap type="MediumFileInfo" id="MediumFileInfoResult">
+        <result property="id"    column="id"    />
+        <result property="mediumType"    column="medium_type"    />
+        <result property="dbVersion"    column="db_version"    />
+        <result property="cpuType"    column="cpu_type"    />
+        <result property="packageType"    column="package_type"    />
+        <result property="mediumFileId"    column="medium_file_id"    />
+        <result property="mediumMd5FileId"    column="medium_md5_file_id"    />
+        <result property="postgisFileId"    column="postgis_file_id"    />
+        <result property="postgisMd5FileId"    column="postgis_md5_file_id"    />
+        <result property="signFileId"    column="sign_file_id"    />
+        <result property="signMd5FileId"    column="sign_md5_file_id"    />
+        <result property="otherFileId"    column="other_file_id"    />
+        <result property="status"    column="status"    />
+        <result property="createId"    column="create_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateId"    column="update_id"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectMediumFileInfoVo">
+        select id, medium_type, db_version, cpu_type, package_type, medium_file_id, medium_md5_file_id, postgis_file_id, postgis_md5_file_id, sign_file_id, sign_md5_file_id, other_file_id, status, create_id, create_by, create_time, update_id, update_by, update_time, remark from t_medium_info
+    </sql>
+
+    <select id="selectMediumFileInfoList" parameterType="MediumFileInfo" resultMap="MediumFileInfoResult">
+        <include refid="selectMediumFileInfoVo"/>
+        <where>  
+            <if test="mediumType != null  and mediumType != ''"> and medium_type = #{mediumType}</if>
+            <if test="dbVersion != null  and dbVersion != ''"> and db_version = #{dbVersion}</if>
+            <if test="cpuType != null  and cpuType != ''"> and cpu_type = #{cpuType}</if>
+            <if test="packageType != null  and packageType != ''"> and package_type = #{packageType}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by like concat('%', #{createBy}, '%')</if>
+            <if test="createTime != null "> and create_time &lt;= #{createTime}</if>
+            <if test="updateBy != null  and updateBy != ''"> and update_by like concat('%', #{updateBy}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectMediumFileInfoById" parameterType="Long" resultMap="MediumFileInfoResult">
+        <include refid="selectMediumFileInfoVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertMediumFileInfo" parameterType="MediumFileInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into t_medium_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="mediumType != null">medium_type,</if>
+            <if test="dbVersion != null">db_version,</if>
+            <if test="cpuType != null">cpu_type,</if>
+            <if test="packageType != null">package_type,</if>
+            <if test="mediumFileId != null">medium_file_id,</if>
+            <if test="mediumMd5FileId != null">medium_md5_file_id,</if>
+            <if test="postgisFileId != null">postgis_file_id,</if>
+            <if test="postgisMd5FileId != null">postgis_md5_file_id,</if>
+            <if test="signFileId != null">sign_file_id,</if>
+            <if test="signMd5FileId != null">sign_md5_file_id,</if>
+            <if test="otherFileId != null">other_file_id,</if>
+            <if test="status != null">status,</if>
+            <if test="createId != null">create_id,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateId != null">update_id,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="mediumType != null">#{mediumType},</if>
+            <if test="dbVersion != null">#{dbVersion},</if>
+            <if test="cpuType != null">#{cpuType},</if>
+            <if test="packageType != null">#{packageType},</if>
+            <if test="mediumFileId != null">#{mediumFileId},</if>
+            <if test="mediumMd5FileId != null">#{mediumMd5FileId},</if>
+            <if test="postgisFileId != null">#{postgisFileId},</if>
+            <if test="postgisMd5FileId != null">#{postgisMd5FileId},</if>
+            <if test="signFileId != null">#{signFileId},</if>
+            <if test="signMd5FileId != null">#{signMd5FileId},</if>
+            <if test="otherFileId != null">#{otherFileId},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createId != null">#{createId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateId != null">#{updateId},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMediumFileInfo" parameterType="MediumFileInfo">
+        update t_medium_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="mediumType != null">medium_type = #{mediumType},</if>
+            <if test="dbVersion != null">db_version = #{dbVersion},</if>
+            <if test="cpuType != null">cpu_type = #{cpuType},</if>
+            <if test="packageType != null">package_type = #{packageType},</if>
+            <if test="mediumFileId != null">medium_file_id = #{mediumFileId},</if>
+            <if test="mediumMd5FileId != null">medium_md5_file_id = #{mediumMd5FileId},</if>
+            <if test="postgisFileId != null">postgis_file_id = #{postgisFileId},</if>
+            <if test="postgisMd5FileId != null">postgis_md5_file_id = #{postgisMd5FileId},</if>
+            <if test="signFileId != null">sign_file_id = #{signFileId},</if>
+            <if test="signMd5FileId != null">sign_md5_file_id = #{signMd5FileId},</if>
+            <if test="otherFileId != null">other_file_id = #{otherFileId},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createId != null">create_id = #{createId},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateId != null">update_id = #{updateId},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMediumFileInfoById" parameterType="Long">
+        delete from t_medium_info where id = #{id}
+    </delete>
+
+    <delete id="deleteMediumFileInfoByIds" parameterType="String">
+        delete from t_medium_info where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.highgo.medium.mapper.MFileDownHisMapper">
+    
+    <resultMap type="MFileDownHis" id="MFileDownHisResult">
+        <result property="id"    column="id"    />
+        <result property="opportunityNum"    column="opportunity_num"    />
+        <result property="fileId"    column="file_id"    />
+        <result property="fileType"    column="file_type"    />
+        <result property="createId"    column="create_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateId"    column="update_id"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectMFileDownHisVo">
+        select id, opportunity_num, file_id, file_type, create_id, create_by, create_time, update_id, update_by, update_time, remark from t_file_down_his
+    </sql>
+
+    <select id="selectMFileDownHisList" parameterType="MFileDownHis" resultMap="MFileDownHisResult">
+        <include refid="selectMFileDownHisVo"/>
+        <where>  
+            <if test="opportunityNum != null  and opportunityNum != ''"> and opportunity_num like concat('%', #{opportunityNum}, '%')</if>
+            <if test="fileId != null "> and file_id = #{fileId}</if>
+            <if test="fileType != null  and fileType != ''"> and file_type = #{fileType}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by like concat('%', #{createBy}, '%')</if>
+            <if test="createTime != null  and createTime != ''"> and create_time &lt;= #{createTime}</if>
+            <if test="updateBy != null "> and update_by like concat('%', #{updateBy}, '%')</if>
+            <if test="updateTime != null "> and update_time &lt;= #{updateTime}</if>
+            <if test="remark != null  and remark != ''"> and remark like concat('%', #{remark}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectMFileDownHisById" parameterType="Long" resultMap="MFileDownHisResult">
+        <include refid="selectMFileDownHisVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertMFileDownHis" parameterType="MFileDownHis" useGeneratedKeys="true" keyProperty="id">
+        insert into t_file_down_his
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="opportunityNum != null and opportunityNum != ''">opportunity_num,</if>
+            <if test="fileId != null">file_id,</if>
+            <if test="fileType != null">file_type,</if>
+            <if test="createId != null">create_id,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateId != null">update_id,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="opportunityNum != null and opportunityNum != ''">#{opportunityNum},</if>
+            <if test="fileId != null">#{fileId},</if>
+            <if test="fileType != null">#{fileType},</if>
+            <if test="createId != null">#{createId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateId != null">#{updateId},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMFileDownHis" parameterType="MFileDownHis">
+        update t_file_down_his
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="opportunityNum != null and opportunityNum != ''">opportunity_num = #{opportunityNum},</if>
+            <if test="fileId != null">file_id = #{fileId},</if>
+            <if test="fileType != null">file_type = #{fileType},</if>
+            <if test="createId != null">create_id = #{createId},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateId != null">update_id = #{updateId},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMFileDownHisById" parameterType="Long">
+        delete from t_file_down_his where id = #{id}
+    </delete>
+
+    <delete id="deleteMFileDownHisByIds" parameterType="String">
+        delete from t_file_down_his where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

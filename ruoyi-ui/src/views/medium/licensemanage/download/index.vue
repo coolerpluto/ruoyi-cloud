@@ -11,7 +11,7 @@
         <el-input v-model="queryParams.applicant" placeholder="请输入申请人姓名" clearable style="width: 220px" @keyup.enter.native="handleQuery"/>
       </el-form-item>
       <el-form-item label="申请时间">
-        <el-date-picker v-model="dateRange" style="width: 220px" value-format="yyyy-MM-dd" type="daterange" 
+        <el-date-picker v-model="dateRange" style="width: 220px" value-format="yyyy-MM-dd" type="daterange"
         range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
       </el-form-item>
       <el-form-item>
@@ -19,20 +19,6 @@
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
-
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete" v-hasPermi="['system:config:remove']">
-          删除选择
-        </el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport" v-hasPermi="['system:config:export']">
-          导出结果
-        </el-button>
-      </el-col>      
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
-    </el-row>
 
     <el-table v-loading="loading" :data="licenseList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
@@ -60,9 +46,6 @@
         <template slot-scope="scope">
           <el-button size="mini" type="text" icon="el-icon-edit" @click="handleDownload(scope.row)" v-hasPermi="['system:config:edit']">
             下载
-          </el-button>
-          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)" v-hasPermi="['system:config:remove']">
-            删除
           </el-button>
         </template>
       </el-table-column>
@@ -131,14 +114,14 @@ export default {
       this.resetForm("queryForm");
       this.handleQuery();
     },
-    
+
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map((item) => item.licenseId);
       this.single = selection.length != 1;
       this.multiple = !selection.length;
     },
-   
+
     /** 删除按钮操作 */
     handleDelete(row) {
       const licenseIds = row.licenseId || this.ids;
