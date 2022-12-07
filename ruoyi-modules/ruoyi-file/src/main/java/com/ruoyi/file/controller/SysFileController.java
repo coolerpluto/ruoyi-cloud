@@ -32,7 +32,7 @@ public class SysFileController {
     private ISysFileService sysFileService;
 
     /**
-     * 文件上传请求
+     * 文件上传请求 默认路径
      */
     @PostMapping("upload")
     public R<SysFile> upload(MultipartFile file) {
@@ -45,7 +45,29 @@ public class SysFileController {
             return R.ok(sysFile);
         } catch (Exception e) {
             log.error("上传文件失败", e);
-            return R.fail(e.getMessage());
+            return R.fail(930022000, "下载文件流失败!请稍后重试或联系管理员");
+        }
+    }
+
+    /**
+     * 文件上传请求 到指定目录
+     * minio为桶名 fastDfs为组名 local 为path下的二级目录
+     */
+    @PostMapping("upSpecifyDir")
+    public R<SysFile> upload(MultipartFile file, String specify) {
+        if (StringUtils.isBlank(specify)) {
+            return upload(file);
+        }
+        try {
+            // 上传并返回访问地址
+            String url = sysFileService.uploadFile(file, specify);
+            SysFile sysFile = new SysFile();
+            sysFile.setName(FileUtils.getName(url));
+            sysFile.setUrl(url);
+            return R.ok(sysFile);
+        } catch (Exception e) {
+            log.error("上传文件失败", e);
+            return R.fail(930022000, "下载文件流失败!请稍后重试或联系管理员");
         }
     }
 
@@ -64,7 +86,7 @@ public class SysFileController {
         try {
             byte[] fileData = sysFileService.downloadFile(fileReq.getFullFileName(),
                     fileReq.getFileName(), fileReq.getBucketName());
-            return R.ok(fileData,"success");
+            return R.ok(fileData, "success");
         } catch (Exception e) {
             log.error("下载文件流失败", e);
             return R.fail(930022002, "下载文件流失败!请稍后重试或联系管理员");
@@ -73,33 +95,31 @@ public class SysFileController {
 
     @DeleteMapping("file")
     public R<String> deleteFile(FileReq fileReq) {
-
         try {
             sysFileService.deleteFile(fileReq.getFullFileName(), fileReq.getFileName(), fileReq.getBucketName());
-            return R.ok("完成","success");
+            return R.ok("完成", "success");
         } catch (Exception e) {
             log.error("删除文件失败", e);
             return R.fail(930022001, "文件删除失败!请稍后重试或联系管理员");
         }
     }
+
     @GetMapping("file/list")
-    public R<List<Map<String,Object>>> fileList(String primaryDir, String catalog) {
-
+    public R<List<Map<String, Object>>> fileList(String primaryDir, String catalog) {
         try {
-
-            List<Map<String,Object>> tempObjectUrl = sysFileService.listCatalogNameFile(primaryDir,catalog);
-            return R.ok(tempObjectUrl,"success");
+            List<Map<String, Object>> tempObjectUrl = sysFileService.listCatalogNameFile(primaryDir, catalog);
+            return R.ok(tempObjectUrl, "success");
         } catch (Exception e) {
             log.error("获取文件临时路径失败", e);
             return R.fail(930022003, "获取文件临时路径失败!请稍后重试或联系管理员");
         }
     }
+
     @GetMapping("file/previewFile")
     public R<String> previewFile(FileReq fileReq) {
-
         try {
             String tempObjectUrl = sysFileService.previewFile(fileReq.getFullFileName(), fileReq.getBucketName());
-            return R.ok(tempObjectUrl,"success");
+            return R.ok(tempObjectUrl, "success");
         } catch (Exception e) {
             log.error("获取文件临时路径失败", e);
             return R.fail(930022003, "获取文件临时路径失败!请稍后重试或联系管理员");

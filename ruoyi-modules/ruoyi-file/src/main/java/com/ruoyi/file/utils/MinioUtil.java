@@ -1,10 +1,7 @@
 package com.ruoyi.file.utils;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Iterables;
 import com.ruoyi.common.core.utils.DateUtils;
-import com.ruoyi.common.core.utils.bean.BeanUtils;
 import com.ruoyi.common.core.utils.file.MimeTypeUtils;
 import com.ruoyi.common.core.utils.uuid.Seq;
 import com.ruoyi.file.config.MinioConfig;

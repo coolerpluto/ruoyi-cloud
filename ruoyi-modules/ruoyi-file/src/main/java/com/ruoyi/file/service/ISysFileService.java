@@ -50,7 +50,7 @@ public interface ISysFileService {
      * @param primaryDir 首级目录 按格式匹配
      * @throws Exception 异常
      */
-    public void downloadFile(String fileFullPath, String fileName, HttpServletResponse response, String primaryDir) ;
+    public void downloadFile(String fileFullPath, String fileName, HttpServletResponse response, String primaryDir) throws Exception;
 
     /**
      * 删除文件
