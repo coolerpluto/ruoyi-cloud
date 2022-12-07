@@ -1,5 +1,6 @@
 package com.ruoyi.file.domain;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -7,10 +8,6 @@ import java.io.Serializable;
 
 public class FileReq implements Serializable {
     private static final long serialVersionUID = 1L;
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
 
     public String getFileName() {
         return fileName;
@@ -29,7 +26,13 @@ public class FileReq implements Serializable {
     }
 
     public String getFullFileName() {
-        return fullFileName;
+        String fullPath = "";
+        if (StringUtils.isBlank(fullFileName)) {
+            fullPath = filePath + "/" + fileName;
+        } else {
+            fullPath = fullFileName;
+        }
+        return fullPath;
     }
 
     public void setFullFileName(String fullFileName) {

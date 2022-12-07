@@ -14,9 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Minio 文件存储
@@ -64,105 +64,76 @@ public class MinioSysFileServiceImpl extends ASysFileService {
      */
     @Override
     public String uploadFile(MultipartFile file, String bucketName) throws Exception {
-        if (StringUtils.isBlank(bucketName)){
+        if (StringUtils.isBlank(bucketName)) {
             return uploadFile(file);
         }
-        return MinioUtil.getInstance().putObject(file,bucketName);
+        return MinioUtil.getInstance().putObject(file, bucketName);
     }
 
     /**
      * 下载文件
      *
-     * @param fileFullPath     文件的完整路径
-     * @param fileName 文件名 带后缀
-     * @param bucketName 桶
+     * @param fileFullPath 文件的完整路径
+     * @param fileName     文件名 带后缀
+     * @param bucketName   桶
      * @throws Exception
      */
     @Override
-    public InputStream downloadFile(String fileFullPath, String fileName, String bucketName) {
-        try {
-            return MinioUtil.getInstance().getObject(fileFullPath,bucketName);
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
-        return new InputStream() {
-            @Override
-            public int read() throws IOException {
-                return 0;
-            }
-        };
+    public byte[] downloadFile(String fileFullPath, String fileName, String bucketName) throws Exception {
+        return MinioUtil.getInstance().getObjectByteArray(fileFullPath, bucketName);
     }
 
     /**
      * 下载文件 完整路径=path+fileName
      *
-     * @param fileFullPath       文件全路径
-     * @param fileName   文件名 带后缀
-     * @param response   http数据流
-     * @param bucketName 首级目录 桶名
+     * @param fileFullPath 文件全路径
+     * @param fileName     文件名 带后缀
+     * @param response     http数据流
+     * @param bucketName   首级目录 桶名
      * @throws Exception 异常
      */
     @Override
     public void downloadFile(String fileFullPath, String fileName, HttpServletResponse response, String bucketName) {
-        //不知道下面俩那个快
-        System.out.println(new Date().getTime());
-        MinioUtil.getInstance().downloadFile(fileFullPath,fileName,bucketName,response);
+        // 下载500K压缩包时 第一个时第二个的2倍速
+        MinioUtil.getInstance().downloadFile(fileFullPath, fileName, bucketName, response);
         //MinioUtil.getInstance().getObject(fileFullPath,fileName,bucketName,response);
-        System.out.println(new Date().getTime());
     }
 
     /**
-     * 下删除文件 完整路径=path+fileName
+     * 删除文件
      *
-     * @param path     文件的路径
-     * @param fileName 文件名 带后缀
-     * @param response http数据流
-     * @throws Exception
+     * @param fileFullPath 完整路径
+     * @param fileName     文件名 带后缀
+     * @param primaryDir   首级目录 按格式匹配
+     * @throws Exception 异常
      */
-    @Override
-    public void deleteFile(String path, String fileName, HttpServletResponse response) throws Exception {
-        //TODO
+    public void deleteFile(String fileFullPath, String fileName, String primaryDir) throws Exception {
+        MinioUtil.getInstance().removeObject(fileFullPath, primaryDir);
     }
 
     /**
-     * 下删除文件 完整路径=path+fileName
+     * 文件预览
      *
-     * @param path       文件的路径
-     * @param fileName   文件名 带后缀
-     * @param response   http数据流
-     * @param bucketName 首级目录 桶名
+     * @param fileFullPath 完整路径
+     * @param bucketName   首级目录 按格式匹配
      * @throws Exception 异常
      */
     @Override
-    public void deleteFile(String path, String fileName, HttpServletResponse response, String bucketName) throws Exception {
-//TODO
+    public String previewFile(String fileFullPath, String bucketName) throws Exception {
+        return MinioUtil.getInstance().getPresignedObjectUrl(fileFullPath, bucketName);
     }
 
     /**
-     * 文件预览 完整路径=path+fileName
+     * 获取指定首级目录下的全部文件
+     * minio为桶名 fastDfs为组名 loacl为path
      *
-     * @param path     文件的路径
-     * @param fileName 文件名 带后缀
-     * @param response http数据流
-     * @throws Exception 异常
+     * @param bucketName
+     * @param prefix  二级目录
+     * @return
      */
     @Override
-    public String previewFile(String path, String fileName, HttpServletResponse response) throws Exception {
-        //TODO
-        return "";
-    }
+    public List<Map<String,Object>> listBucketNameFile(String bucketName, String prefix) {
 
-    /**
-     * 文件预览 完整路径=path+fileName
-     *
-     * @param path       文件的路径
-     * @param fileName   文件名 带后缀
-     * @param response   http数据流
-     * @param bucketName 首级目录 按格式匹配
-     * @throws Exception 异常
-     */
-    @Override
-    public String previewFile(String path, String fileName, HttpServletResponse response, String bucketName) {
-        return MinioUtil.getInstance().getPresignedObjectUrl(path+fileName,bucketName);
+        return MinioUtil.getInstance().listObjectsMap(bucketName,prefix);
     }
 }

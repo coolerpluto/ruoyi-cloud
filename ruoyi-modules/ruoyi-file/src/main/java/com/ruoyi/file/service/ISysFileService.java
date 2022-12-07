@@ -4,6 +4,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 文件上传接口
@@ -37,7 +39,7 @@ public interface ISysFileService {
      * @param fileName   文件名 带后缀
      * @throws Exception 异常
      */
-    public InputStream downloadFile(String fullFileName, String fileName, String primaryDir) ;
+    public byte[] downloadFile(String fullFileName, String fileName, String primaryDir) throws Exception;
 
     /**
      * 下载文件 完整路径
@@ -51,44 +53,30 @@ public interface ISysFileService {
     public void downloadFile(String fileFullPath, String fileName, HttpServletResponse response, String primaryDir) ;
 
     /**
-     * 下删除文件 完整路径=path+fileName
+     * 删除文件
      *
-     * @param path     文件的路径
-     * @param fileName 文件名 带后缀
-     * @param response http数据流
-     * @throws Exception 异常
-     */
-    public void deleteFile(String path, String fileName, HttpServletResponse response) throws Exception;
-
-    /**
-     * 下删除文件 完整路径=path+fileName
-     *
-     * @param path       文件的路径
+     * @param fileFullPath       完整路径
      * @param fileName   文件名 带后缀
-     * @param response   http数据流
      * @param primaryDir 首级目录 按格式匹配
      * @throws Exception 异常
      */
-    public void deleteFile(String path, String fileName, HttpServletResponse response, String primaryDir) throws Exception;
+    public void deleteFile(String fileFullPath, String fileName, String primaryDir) throws Exception;
 
     /**
      * 文件预览 完整路径=path+fileName
      *
-     * @param path     文件的路径
-     * @param fileName 文件名 带后缀
-     * @param response http数据流
-     * @throws Exception 异常
-     */
-    public String previewFile(String path, String fileName, HttpServletResponse response) throws Exception;
-
-    /**
-     * 文件预览 完整路径=path+fileName
-     *
-     * @param path       文件的路径
-     * @param fileName   文件名 带后缀
-     * @param response   http数据流
+     * @param fileFullPath       完整路径
      * @param primaryDir 首级目录 按格式匹配
      * @throws Exception 异常
      */
-    public String previewFile(String path, String fileName, HttpServletResponse response, String primaryDir) throws Exception;
+    public String previewFile(String fileFullPath, String primaryDir) throws Exception;
+
+    /**
+     * 获取指定首级目录下的全部文件
+     * minio为桶名 fastDfs为组名 loacl为path
+     * @param bucketName
+     * @param prefix 二级目录
+     * @return
+     */
+    List<Map<String,Object>> listBucketNameFile(String bucketName, String prefix);
 }
