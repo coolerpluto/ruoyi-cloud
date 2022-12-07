@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +23,6 @@ import java.util.Map;
  * @author ruoyi
  */
 @Service
-@Primary
 public class MinioSysFileServiceImpl extends ASysFileService {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -107,6 +105,7 @@ public class MinioSysFileServiceImpl extends ASysFileService {
      * @param primaryDir   首级目录 按格式匹配
      * @throws Exception 异常
      */
+    @Override
     public void deleteFile(String fileFullPath, String fileName, String primaryDir) throws Exception {
         MinioUtil.getInstance().removeObject(fileFullPath, primaryDir);
     }
@@ -127,13 +126,15 @@ public class MinioSysFileServiceImpl extends ASysFileService {
      * 获取指定首级目录下的全部文件
      * minio为桶名 fastDfs为组名 loacl为path
      *
-     * @param bucketName
+     * @param bucketName  minio为桶名 fastDfs为组名 loacl为path
      * @param prefix  二级目录
      * @return
      */
     @Override
-    public List<Map<String,Object>> listBucketNameFile(String bucketName, String prefix) {
-
+    public List<Map<String,Object>> listCatalogNameFile(String bucketName, String prefix) {
+        if (StringUtils.isBlank(prefix)){
+            prefix= "/";
+        }
         return MinioUtil.getInstance().listObjectsMap(bucketName,prefix);
     }
 }

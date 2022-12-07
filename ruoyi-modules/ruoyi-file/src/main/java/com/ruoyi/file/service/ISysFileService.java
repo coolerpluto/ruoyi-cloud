@@ -73,10 +73,10 @@ public interface ISysFileService {
 
     /**
      * 获取指定首级目录下的全部文件
-     * minio为桶名 fastDfs为组名 loacl为path
-     * @param bucketName
-     * @param prefix 二级目录
+     *
+     * @param primaryDir minio为桶名 fastDfs为组名 loacl为path
+     * @param catalog 二级目录
      * @return
      */
-    List<Map<String,Object>> listBucketNameFile(String bucketName, String prefix);
+    List<Map<String,Object>> listCatalogNameFile(String primaryDir, String catalog);
 }

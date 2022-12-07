@@ -83,13 +83,11 @@ public class SysFileController {
         }
     }
     @GetMapping("file/list")
-    public R<List<Map<String,Object>>> fileList(String bucketName,String prefix) {
+    public R<List<Map<String,Object>>> fileList(String primaryDir, String catalog) {
 
         try {
-            if (StringUtils.isBlank(prefix)){
-                prefix= "/";
-            }
-            List<Map<String,Object>> tempObjectUrl = sysFileService.listBucketNameFile(bucketName,prefix);
+
+            List<Map<String,Object>> tempObjectUrl = sysFileService.listCatalogNameFile(primaryDir,catalog);
             return R.ok(tempObjectUrl,"success");
         } catch (Exception e) {
             log.error("获取文件临时路径失败", e);

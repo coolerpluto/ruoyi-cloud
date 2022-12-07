@@ -81,11 +81,12 @@ public abstract class ASysFileService implements ISysFileService {
 
     /**
      * 获取指定首级目录下的全部文件
-     * minio为桶名 fastDfs为组名 loacl为path
-     * @param bucketName
+     *
+     * @param primaryDir minio为桶名 fastDfs为组名 loacl为path
+     * @param catalog 二级目录
      * @return
      */
-    public List<Map<String,Object>> listBucketNameFile(String bucketName, String prefix) {
+    public List<Map<String,Object>> listCatalogNameFile(String primaryDir, String catalog) {
         return new ArrayList<>();
     }
 }
