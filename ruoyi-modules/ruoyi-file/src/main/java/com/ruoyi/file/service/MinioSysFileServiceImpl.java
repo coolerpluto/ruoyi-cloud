@@ -22,6 +22,7 @@ import java.util.Map;
  *
  * @author ruoyi
  */
+@Primary
 @Service
 public class MinioSysFileServiceImpl extends ASysFileService {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
