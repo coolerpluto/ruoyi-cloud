@@ -12,11 +12,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="packageType"    column="package_type"    />
         <result property="mediumFileId"    column="medium_file_id"    />
         <result property="mediumMd5FileId"    column="medium_md5_file_id"    />
-        <result property="postgisFileId"    column="postgis_file_id"    />
-        <result property="postgisMd5FileId"    column="postgis_md5_file_id"    />
-        <result property="signFileId"    column="sign_file_id"    />
-        <result property="signMd5FileId"    column="sign_md5_file_id"    />
-        <result property="otherFileId"    column="other_file_id"    />
         <result property="status"    column="status"    />
         <result property="createId"    column="create_id"    />
         <result property="createBy"    column="create_by"    />
@@ -28,7 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectMediumFileInfoVo">
-        select id, medium_type, db_version, cpu_type, package_type, medium_file_id, medium_md5_file_id, postgis_file_id, postgis_md5_file_id, sign_file_id, sign_md5_file_id, other_file_id, status, create_id, create_by, create_time, update_id, update_by, update_time, remark from t_medium_info
+        select id, medium_type, db_version, cpu_type, package_type, medium_file_id, medium_md5_file_id, status, create_id, create_by, create_time, update_id, update_by, update_time, remark from t_medium_info
     </sql>
 
     <select id="selectMediumFileInfoList" parameterType="MediumFileInfo" resultMap="MediumFileInfoResult">
@@ -59,11 +54,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="packageType != null">package_type,</if>
             <if test="mediumFileId != null">medium_file_id,</if>
             <if test="mediumMd5FileId != null">medium_md5_file_id,</if>
-            <if test="postgisFileId != null">postgis_file_id,</if>
-            <if test="postgisMd5FileId != null">postgis_md5_file_id,</if>
-            <if test="signFileId != null">sign_file_id,</if>
-            <if test="signMd5FileId != null">sign_md5_file_id,</if>
-            <if test="otherFileId != null">other_file_id,</if>
             <if test="status != null">status,</if>
             <if test="createId != null">create_id,</if>
             <if test="createBy != null">create_by,</if>
@@ -80,11 +70,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="packageType != null">#{packageType},</if>
             <if test="mediumFileId != null">#{mediumFileId},</if>
             <if test="mediumMd5FileId != null">#{mediumMd5FileId},</if>
-            <if test="postgisFileId != null">#{postgisFileId},</if>
-            <if test="postgisMd5FileId != null">#{postgisMd5FileId},</if>
-            <if test="signFileId != null">#{signFileId},</if>
-            <if test="signMd5FileId != null">#{signMd5FileId},</if>
-            <if test="otherFileId != null">#{otherFileId},</if>
             <if test="status != null">#{status},</if>
             <if test="createId != null">#{createId},</if>
             <if test="createBy != null">#{createBy},</if>
@@ -105,11 +90,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="packageType != null">package_type = #{packageType},</if>
             <if test="mediumFileId != null">medium_file_id = #{mediumFileId},</if>
             <if test="mediumMd5FileId != null">medium_md5_file_id = #{mediumMd5FileId},</if>
-            <if test="postgisFileId != null">postgis_file_id = #{postgisFileId},</if>
-            <if test="postgisMd5FileId != null">postgis_md5_file_id = #{postgisMd5FileId},</if>
-            <if test="signFileId != null">sign_file_id = #{signFileId},</if>
-            <if test="signMd5FileId != null">sign_md5_file_id = #{signMd5FileId},</if>
-            <if test="otherFileId != null">other_file_id = #{otherFileId},</if>
             <if test="status != null">status = #{status},</if>
             <if test="createId != null">create_id = #{createId},</if>
             <if test="createBy != null">create_by = #{createBy},</if>

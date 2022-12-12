@@ -2,6 +2,10 @@
 FROM  openjdk:8-jre
 # author
 MAINTAINER eszhang
+# 调整字符集
+ENV LANG C.UTF-8
+# 调整时区 +8
+ENV TZ Asia/Shanghai
 EXPOSE 9402
 # 挂载目录
 VOLUME /home/highgo

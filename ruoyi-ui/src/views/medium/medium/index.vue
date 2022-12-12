@@ -120,11 +120,6 @@
       <el-table-column label="打包方式" align="center" prop="packageType" />
       <el-table-column label="介质文件" align="center" prop="mediumFileId" />
       <el-table-column label="介质MD5文件" align="center" prop="mediumMd5FileId" />
-      <el-table-column label="PostGis文件" align="center" prop="postgisFileId" />
-      <el-table-column label="PostGis MD5文件" align="center" prop="postgisMd5FileId" />
-      <el-table-column label="签名文件" align="center" prop="signFileId" />
-      <el-table-column label="签名MD5文件" align="center" prop="signMd5FileId" />
-      <el-table-column label="其他文件" align="center" prop="otherFileId" />
       <el-table-column label="文件状态" align="center" prop="status" />
 <!--      <el-table-column label="创建者ID" align="center" prop="createId" />-->
       <el-table-column label="创建者名" align="center" prop="createBy" />
@@ -247,11 +242,6 @@ export default {
         packageType: null,
         mediumFileId: null,
         mediumMd5FileId: null,
-        postgisFileId: null,
-        postgisMd5FileId: null,
-        signFileId: null,
-        signMd5FileId: null,
-        otherFileId: null,
         status: null,
         createId: null,
         createBy: null,
