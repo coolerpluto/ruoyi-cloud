@@ -97,7 +97,7 @@
 
     <el-table v-loading="loading" :data="fileList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-<!--      <el-table-column label="记录ID" align="center" prop="id" />-->
+      <el-table-column label="记录ID" align="center" prop="id" :show-overflow-tooltip="true"/>
       <!-- <el-table-column label="文件服务器" align="center" prop="fileServer" :show-overflow-tooltip="true"/> -->
       <el-table-column label="文件路径" align="center" prop="filePath" :show-overflow-tooltip="true"/>
       <el-table-column label="文件名" align="center" prop="fileName" :show-overflow-tooltip="true"/>
@@ -308,7 +308,8 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
-      this.$modal.confirm('是否确认删除文件记录编号为"' + ids + '"的数据项？').then(function() {
+      //this.$modal.confirm('是否确认删除文件记录编号为"' + ids + '"的数据项？').then(function() {
+      this.$modal.confirm('是否确认删除选择的文件吗？').then(function() {
         return delFile(ids);
       }).then(() => {
         this.getList();

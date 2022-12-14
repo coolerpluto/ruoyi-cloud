@@ -16,7 +16,7 @@ public class MFileInfo extends BaseEntity
     private static final long serialVersionUID = 1L;
 
     /** 记录ID */
-    private Long id;
+    private String id;
 
     /** 文件服务器 */
     @Excel(name = "文件服务器")
@@ -44,12 +44,12 @@ public class MFileInfo extends BaseEntity
     /** 更新者ID */
     private Long updateId;
 
-    public void setId(Long id) 
+    public void setId(String id)
     {
         this.id = id;
     }
 
-    public Long getId() 
+    public String getId()
     {
         return id;
     }
@@ -98,21 +98,21 @@ public class MFileInfo extends BaseEntity
     {
         return status;
     }
-    public void setCreateId(Long createId) 
+    public void setCreateId(Long createId)
     {
         this.createId = createId;
     }
 
-    public Long getCreateId() 
+    public Long getCreateId()
     {
         return createId;
     }
-    public void setUpdateId(Long updateId) 
+    public void setUpdateId(Long updateId)
     {
         this.updateId = updateId;
     }
 
-    public Long getUpdateId() 
+    public Long getUpdateId()
     {
         return updateId;
     }

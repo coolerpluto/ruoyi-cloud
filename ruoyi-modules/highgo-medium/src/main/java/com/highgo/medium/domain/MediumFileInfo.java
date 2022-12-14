@@ -18,7 +18,7 @@ public class MediumFileInfo extends BaseEntity {
     /**
      * 记录ID
      */
-    private Long id;
+    private String id;
 
     /**
      * 介质别名
@@ -53,14 +53,14 @@ public class MediumFileInfo extends BaseEntity {
      * 介质文件
      */
     @Excel(name = "介质文件")
-    private Long mediumFileId;
+    private String mediumFileId;
     private String mediumFileName;
 
     /**
      * 介质MD5文件
      */
     @Excel(name = "介质MD5文件")
-    private Long mediumMd5FileId;
+    private String mediumMd5FileId;
     private String mediumMd5FileName;
 
     /**
@@ -79,11 +79,11 @@ public class MediumFileInfo extends BaseEntity {
      */
     private Long updateId;
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
@@ -143,19 +143,19 @@ public class MediumFileInfo extends BaseEntity {
         return packageType;
     }
 
-    public void setMediumFileId(Long mediumFileId) {
+    public void setMediumFileId(String mediumFileId) {
         this.mediumFileId = mediumFileId;
     }
 
-    public Long getMediumFileId() {
+    public String getMediumFileId() {
         return mediumFileId;
     }
 
-    public void setMediumMd5FileId(Long mediumMd5FileId) {
+    public void setMediumMd5FileId(String mediumMd5FileId) {
         this.mediumMd5FileId = mediumMd5FileId;
     }
 
-    public Long getMediumMd5FileId() {
+    public String getMediumMd5FileId() {
         return mediumMd5FileId;
     }
 

@@ -13,7 +13,7 @@ public class MediumUtil {
      *
      * @return
      */
-    public static long getId() {
+    public static String getId() {
         MediumUtil.Guid += 1;
         long now = System.currentTimeMillis();
         //获取4位年月份数字
@@ -29,6 +29,6 @@ public class MediumUtil {
         }
         ran = MediumUtil.Guid;
         String resStr = time + info.substring(2, info.length()) + ran;
-        return Long.valueOf(resStr);
+        return resStr;
     }
 }

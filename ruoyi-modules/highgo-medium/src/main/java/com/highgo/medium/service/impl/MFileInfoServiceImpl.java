@@ -5,6 +5,7 @@ import java.util.List;
 import com.highgo.medium.utils.MediumUtil;
 import com.ruoyi.common.core.utils.DateUtils;
 import com.ruoyi.common.security.utils.SecurityUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.highgo.medium.mapper.MFileInfoMapper;
@@ -66,7 +67,7 @@ public class MFileInfoServiceImpl implements IMFileInfoService
     public int insertMFileInfoBath(List<MFileInfo> mFileInfos) {
         int res = 0;
         for (MFileInfo mFileInfo:mFileInfos ) {
-            if (0==mFileInfo.getId()){
+            if (StringUtils.isBlank(mFileInfo.getId())) {
                 mFileInfo.setId(MediumUtil.getId());
             }
             mFileInfo.setCreateTime(DateUtils.getNowDate());
