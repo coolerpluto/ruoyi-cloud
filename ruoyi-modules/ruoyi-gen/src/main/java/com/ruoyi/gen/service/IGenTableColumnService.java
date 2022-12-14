@@ -41,4 +41,6 @@ public interface IGenTableColumnService
      * @return 结果
      */
     public int deleteGenTableColumnByIds(String ids);
+
+    int deleteGenTableColumns(List<GenTableColumn> genTableColumns);
 }

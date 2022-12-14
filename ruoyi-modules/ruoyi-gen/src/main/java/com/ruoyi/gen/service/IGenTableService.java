@@ -118,4 +118,6 @@ public interface IGenTableService
      * @param genTable 业务信息
      */
     public void validateEdit(GenTable genTable);
+
+    void addGenTable(GenTable genTable);
 }

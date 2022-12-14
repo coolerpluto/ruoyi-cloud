@@ -1,6 +1,7 @@
 package com.ruoyi.gen.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +31,7 @@ import com.ruoyi.gen.service.IGenTableService;
 
 /**
  * 代码生成 操作处理
- * 
+ *
  * @author ruoyi
  */
 @RequestMapping("/gen")
@@ -88,7 +89,7 @@ public class GenController extends BaseController
      * 查询数据表字段列表
      */
     @GetMapping(value = "/column/{tableId}")
-    public TableDataInfo columnList(Long tableId)
+    public TableDataInfo columnList(@PathVariable Long tableId)
     {
         TableDataInfo dataInfo = new TableDataInfo();
         List<GenTableColumn> list = genTableColumnService.selectGenTableColumnListByTableId(tableId);
@@ -109,6 +110,34 @@ public class GenController extends BaseController
         // 查询表信息
         List<GenTable> tableList = genTableService.selectDbTableListByNames(tableNames);
         genTableService.importGenTable(tableList);
+        return success();
+    }
+
+    @RequiresPermissions("tool:gen:add")
+    @Log(title = "代码生成", businessType = BusinessType.INSERT)
+    @PostMapping("/addTable")
+    public AjaxResult addTableSave(GenTable genTable){
+        genTableService.addGenTable(genTable);
+        return success();
+    }
+
+    @RequiresPermissions("tool:gen:add")
+    @Log(title = "代码生成", businessType = BusinessType.INSERT)
+    @PostMapping("/column/addTableColumn")
+    public AjaxResult addTableColumnSave(GenTableColumn genTableColumn){
+        genTableColumnService.insertGenTableColumn(genTableColumn);
+        return success();
+    }
+
+    @RequiresPermissions("tool:gen:remove")
+    @Log(title = "代码生成", businessType = BusinessType.DELETE)
+    @DeleteMapping("/column/{columnId}")
+    public AjaxResult removeTableColumn(@PathVariable Long  columnId){
+        List<GenTableColumn>  genTableColumns = new ArrayList<>();
+        GenTableColumn genTableColumn = new GenTableColumn();
+        genTableColumn.setColumnId(columnId);
+        genTableColumns.add(genTableColumn);
+        genTableColumnService.deleteGenTableColumns(genTableColumns);
         return success();
     }
 

@@ -42,7 +42,14 @@ export function importTable(data) {
     params: data
   })
 }
-
+// 添加表
+export function addTable(data) {
+  return request({
+    url: '/code/gen/addTable',
+    method: 'post',
+    params: data
+  })
+}
 // 预览生成代码
 export function previewTable(tableId) {
   return request({
@@ -72,5 +79,27 @@ export function synchDb(tableName) {
   return request({
     url: '/code/gen/synchDb/' + tableName,
     method: 'get'
+  })
+}
+// 添加字段
+export function addTableColumn(data) {
+  return request({
+    url: '/code/gen/column/addTableColumn',
+    method: 'post',
+    params: data
+  })
+}
+// 查询数据表字段列表
+export function columnList(tableId) {
+  return request({
+    url: '/code/gen/column/' + tableId,
+    method: 'get'
+  })
+}
+// 删除数据表字段列表
+export function delTableColumn(columnId) {
+  return request({
+    url: '/code/gen/column/' + columnId,
+    method: 'delete'
   })
 }

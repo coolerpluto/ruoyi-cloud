@@ -98,11 +98,18 @@
     <el-table v-loading="loading" :data="fileList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
 <!--      <el-table-column label="记录ID" align="center" prop="id" />-->
-      <el-table-column label="文件服务器" align="center" prop="fileServer" :show-overflow-tooltip="true"/>
+      <!-- <el-table-column label="文件服务器" align="center" prop="fileServer" :show-overflow-tooltip="true"/> -->
       <el-table-column label="文件路径" align="center" prop="filePath" :show-overflow-tooltip="true"/>
       <el-table-column label="文件名" align="center" prop="fileName" :show-overflow-tooltip="true"/>
       <el-table-column label="文件类型" align="center" prop="fileType" />
-      <el-table-column label="记录状态" align="center" prop="status" />
+      <el-table-column label="记录状态" align="center" prop="status" >
+         <template slot-scope="scope">
+          <dict-tag
+            :options="dict.type.sys_normal_disable"
+            :value="scope.row.status"
+          />
+        </template>
+      </el-table-column>
 
       <el-table-column label="创建者名" align="center" prop="createBy" :show-overflow-tooltip="true"/>
       <el-table-column label="创建时间" align="center" prop="createTime" :show-overflow-tooltip="true"/>
@@ -155,7 +162,7 @@ import { listFile, getFile, delFile, addFile, updateFile } from "@/api/medium/fi
 
 export default {
   name: "File",
-  dicts: ['sys_file_type'],
+  dicts: ['sys_file_type','sys_normal_disable'],
   data() {
     return {
       // 遮罩层

@@ -5,6 +5,7 @@
         <basic-info-form ref="basicInfo" :info="info" />
       </el-tab-pane>
       <el-tab-pane label="字段信息" name="columnInfo">
+        <el-button type="primary" plain icon="el-icon-document-add" size="mini" @click="handleAddTableColumn" v-hasPermi="['tool:gen:add']">添加新列</el-button>
         <el-table ref="dragTable" :data="columns" row-key="columnId" :max-height="tableHeight">
           <el-table-column label="序号" type="index" min-width="5%" class-name="allowDrag" />
           <el-table-column
@@ -18,12 +19,16 @@
               <el-input v-model="scope.row.columnComment"></el-input>
             </template>
           </el-table-column>
-          <el-table-column
-            label="物理类型"
-            prop="columnType"
-            min-width="10%"
-            :show-overflow-tooltip="true"
-          />
+          <el-table-column label="物理类型" min-width="10%" :show-overflow-tooltip="true">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.columnType"></el-input>
+            </template>
+          </el-table-column>
+          <el-table-column label="字段排序" min-width="10%" :show-overflow-tooltip="true">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.sort"></el-input>
+            </template>
+          </el-table-column>
           <el-table-column label="Java类型" min-width="11%">
             <template slot-scope="scope">
               <el-select v-model="scope.row.javaType">
@@ -111,7 +116,19 @@
               </el-select>
             </template>
           </el-table-column>
+          <el-table-column label="字段操作" min-width="7%">
+            <template slot-scope="scope">
+              <el-button
+                type="text"
+                size="small"
+                icon="el-icon-delete"
+                @click="handleDeleteColumn(scope.row)"
+                v-hasPermi="['tool:gen:remove']"
+              >删除</el-button>
+            </template>
+          </el-table-column>
         </el-table>
+        <add-new-table-column ref="addNewColumn" :tableInfo="info" @ok="handleQueryColumn" />
       </el-tab-pane>
       <el-tab-pane label="生成信息" name="genInfo">
         <gen-info-form ref="genInfo" :info="info" :tables="tables" :menus="menus"/>
@@ -127,16 +144,18 @@
 </template>
 
 <script>
-import { getGenTable, updateGenTable } from "@/api/tool/gen";
+import { delTableColumn,columnList,getGenTable, updateGenTable } from "@/api/tool/gen";
 import { optionselect as getDictOptionselect } from "@/api/system/dict/type";
 import { listMenu as getMenuTreeselect } from "@/api/system/menu";
 import basicInfoForm from "./basicInfoForm";
 import genInfoForm from "./genInfoForm";
+import addNewTableColumn from "./addNewTableColumn";
 import Sortable from 'sortablejs'
 
 export default {
   name: "GenEdit",
   components: {
+    addNewTableColumn,
     basicInfoForm,
     genInfoForm
   },
@@ -178,6 +197,23 @@ export default {
     }
   },
   methods: {
+    handleAddTableColumn(){
+      this.$refs.addNewColumn.show();
+    },
+    handleQueryColumn(){
+      columnList(this.info.tableId).then(res => {
+        this.columns = res.rows;
+      });
+    },
+    handleDeleteColumn(row){
+      debugger
+      console.debug(row)
+      delTableColumn(row.columnId).then(res => {
+        if (res.code === 200) {
+          this.handleQueryColumn();
+        }
+      });
+    },
     /** 提交按钮 */
     submitForm() {
       const basicForm = this.$refs.basicInfo.$refs.basicInfoForm;

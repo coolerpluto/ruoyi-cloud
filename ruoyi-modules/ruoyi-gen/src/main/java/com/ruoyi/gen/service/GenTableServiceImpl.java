@@ -428,6 +428,11 @@ public class GenTableServiceImpl implements IGenTableService
         }
     }
 
+    @Override
+    public void addGenTable(GenTable genTable) {
+        genTableMapper.insertGenTable(genTable);
+    }
+
     /**
      * 设置主键列信息
      * 
