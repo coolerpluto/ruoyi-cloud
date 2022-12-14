@@ -73,13 +73,15 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="文件状态" prop="status">
-        <el-input
-          v-model="queryParams.status"
-          placeholder="请输入文件状态"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+      <el-form-item label="可用文件" prop="status">
+        <el-select v-model="queryParams.status" placeholder="请选择文件状态" clearable>
+          <el-option
+            v-for="dict in dict.type.sys_yes_no"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -140,28 +142,28 @@
     <el-table v-loading="loading" :data="licenseList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
       <!--      <el-table-column label="记录ID" align="center" prop="id" />-->
-      <el-table-column label="Lic序列号" align="center" prop="serial"/>
+      <el-table-column label="Lic序列号" align="center" prop="serial" :show-overflow-tooltip="true"/>
       <el-table-column label="申请时间" align="center" prop="applyTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.applyTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="商机编号" align="center" prop="opportunityNum"/>
+      <el-table-column label="商机编号" align="center" prop="opportunityNum" :show-overflow-tooltip="true"/>
       <el-table-column label="授权方式" align="center" prop="authType"/>
-      <el-table-column label="使用客户" align="center" prop="customerName"/>
+      <el-table-column label="使用客户" align="center" prop="customerName" :show-overflow-tooltip="true"/>
       <el-table-column label="使用用途" align="center" prop="purpose"/>
-      <el-table-column label="过期时间" align="center" prop="expireTime"/>
+      <el-table-column label="过期时间" align="center" prop="expireTime" :show-overflow-tooltip="true"/>
       <el-table-column label="产品类型" align="center" prop="prodType"/>
-      <el-table-column label="数据库版本" align="center" prop="dbVersion"/>
-      <el-table-column label="下载连接" align="center" prop="serverUrl"/>
-      <el-table-column label="其他参数" align="center" prop="otherParam"/>
+      <el-table-column label="数据库版本" align="center" prop="dbVersion" :show-overflow-tooltip="true"/>
+      <el-table-column label="下载连接" align="center" prop="serverUrl" :show-overflow-tooltip="true"/>
+      <el-table-column label="其他参数" align="center" prop="otherParam" v-if="false" :show-overflow-tooltip="true"/>
       <el-table-column label="文件状态" align="center" prop="status"/>
       <!--      <el-table-column label="创建者ID" align="center" prop="createId" />-->
       <el-table-column label="创建者名" align="center" prop="createBy"/>
-      <el-table-column label="创建时间" align="center" prop="createTime"/>
+      <el-table-column label="创建时间" align="center" prop="createTime" :show-overflow-tooltip="true"/>
       <!--      <el-table-column label="更新者ID" align="center" prop="updateId" />-->
       <!--      <el-table-column label="更新者名" align="center" prop="updateBy" />-->
-      <!--      <el-table-column label="更新时间" align="center" prop="updateTime" />-->
+      <!--      <el-table-column label="更新时间" align="center" prop="updateTime" :show-overflow-tooltip="true"/>-->
       <el-table-column label="备注" align="center" prop="remark"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -218,7 +220,7 @@ import {listLicense, getLicense, delLicense, addLicense, updateLicense} from "@/
 
 export default {
   name: "License",
-  dicts: ['medium_lic_purposes', 'medium_lic_db_auth_type', 'medium_db_version', 'medium_lic_prod_type'],
+  dicts: ['sys_yes_no','medium_lic_purposes', 'medium_lic_db_auth_type', 'medium_db_version', 'medium_lic_prod_type'],
   data() {
     return {
       // 遮罩层

@@ -1,7 +1,10 @@
 package com.highgo.medium.service.impl;
 
 import java.util.List;
+
+import com.highgo.medium.utils.MediumUtil;
 import com.ruoyi.common.core.utils.DateUtils;
+import com.ruoyi.common.security.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.highgo.medium.mapper.MFileInfoMapper;
@@ -54,7 +57,24 @@ public class MFileInfoServiceImpl implements IMFileInfoService
     public int insertMFileInfo(MFileInfo mFileInfo)
     {
         mFileInfo.setCreateTime(DateUtils.getNowDate());
+        mFileInfo.setCreateBy(SecurityUtils.getUsername());
+        mFileInfo.setCreateId(SecurityUtils.getUserId());
         return mFileInfoMapper.insertMFileInfo(mFileInfo);
+    }
+
+    @Override
+    public int insertMFileInfoBath(List<MFileInfo> mFileInfos) {
+        int res = 0;
+        for (MFileInfo mFileInfo:mFileInfos ) {
+            if (0==mFileInfo.getId()){
+                mFileInfo.setId(MediumUtil.getId());
+            }
+            mFileInfo.setCreateTime(DateUtils.getNowDate());
+            mFileInfo.setCreateBy(SecurityUtils.getUsername());
+            mFileInfo.setCreateId(SecurityUtils.getUserId());
+            res=res+mFileInfoMapper.insertMFileInfo(mFileInfo);
+        }
+        return res;
     }
 
     /**
@@ -67,6 +87,8 @@ public class MFileInfoServiceImpl implements IMFileInfoService
     public int updateMFileInfo(MFileInfo mFileInfo)
     {
         mFileInfo.setUpdateTime(DateUtils.getNowDate());
+        mFileInfo.setUpdateBy(SecurityUtils.getUsername());
+        mFileInfo.setUpdateId(SecurityUtils.getUserId());
         return mFileInfoMapper.updateMFileInfo(mFileInfo);
     }
 

@@ -26,7 +26,7 @@
           placeholder="请选择"
         >
           <el-option
-            v-for="item in dict.type.opportunity_status"
+            v-for="item in dict.type.crm_opportunity_status"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -300,7 +300,7 @@ import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 import {listsOpportunity} from "@/api/crm/opportunity";
 export default {
   name: "Opportunity",
-  dicts: ["sys_yes_no", "opportunity_status"],
+  dicts: ["sys_yes_no", "crm_opportunity_status"],
   components: { Treeselect },
   data() {
     return {

@@ -4,6 +4,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.core.annotation.Excel;
 import com.ruoyi.common.core.web.domain.BaseEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 介质文件信息记录对象 t_medium_info
@@ -19,6 +20,11 @@ public class MediumFileInfo extends BaseEntity {
      */
     private Long id;
 
+    /**
+     * 介质别名
+     */
+    @Excel(name = "介质名称")
+    private String mediumName;
     /**
      * 版本类型
      */
@@ -48,12 +54,14 @@ public class MediumFileInfo extends BaseEntity {
      */
     @Excel(name = "介质文件")
     private Long mediumFileId;
+    private String mediumFileName;
 
     /**
      * 介质MD5文件
      */
     @Excel(name = "介质MD5文件")
     private Long mediumMd5FileId;
+    private String mediumMd5FileName;
 
     /**
      * 文件状态
@@ -77,6 +85,30 @@ public class MediumFileInfo extends BaseEntity {
 
     public Long getId() {
         return id;
+    }
+
+    public String getMediumFileName() {
+        return mediumFileName;
+    }
+
+    public void setMediumFileName(String mediumFileName) {
+        this.mediumFileName = mediumFileName;
+    }
+
+    public String getMediumMd5FileName() {
+        return mediumMd5FileName;
+    }
+
+    public void setMediumMd5FileName(String mediumMd5FileName) {
+        this.mediumMd5FileName = mediumMd5FileName;
+    }
+
+    public void setMediumName(String mediumName) {
+        this.mediumName = mediumName;
+    }
+
+    public String getMediumName() {
+        return mediumName;
     }
 
     public void setMediumType(String mediumType) {
@@ -155,6 +187,7 @@ public class MediumFileInfo extends BaseEntity {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
                 .append("id", getId())
+                .append("mediumName", getMediumName())
                 .append("mediumType", getMediumType())
                 .append("dbVersion", getDbVersion())
                 .append("cpuType", getCpuType())

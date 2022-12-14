@@ -22,22 +22,22 @@
 
     <el-table v-loading="loading" :data="licenseList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="License编号" align="center" prop="licenseId" v-if="false"/>
-      <el-table-column label="License文件名" align="center" prop="licenseName" v-if="false"/>
-      <el-table-column label="商机编号" align="center" prop="opportunityId" />
+      <el-table-column label="License编号" align="center" prop="licenseId" v-if="false" :show-overflow-tooltip="true"/>
+      <el-table-column label="License文件名" align="center" prop="licenseName" v-if="false" :show-overflow-tooltip="true"/>
+      <el-table-column label="商机编号" align="center" prop="opportunityId" :show-overflow-tooltip="true"/>
       <el-table-column label="商机名称" align="center" prop="opportunityName" :show-overflow-tooltip="true"/>
-      <el-table-column label="最终用户" align="center" prop="customer"/>
+      <el-table-column label="最终用户" align="center" prop="customer" :show-overflow-tooltip="true"/>
       <el-table-column label="序列编号" align="center" prop="licenseSerial" :show-overflow-tooltip="true"/>
       <el-table-column label="授权方式" align="center" prop="authType" />
-      <el-table-column label="产品信息" align="center" prop="prodInfo" />
+      <el-table-column label="产品信息" align="center" prop="prodInfo" :show-overflow-tooltip="true"/>
       <el-table-column label="使用用途" align="center" prop="configType"/>
       <el-table-column label="申请人" align="center" prop="applicant"/>
-      <el-table-column label="申请时间" align="center" prop="applicationTime" width="180">
+      <el-table-column label="申请时间" align="center" prop="applicationTime" width="180" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.applicationTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="有效期限" align="center" prop="effTime" width="180">
+      <el-table-column label="有效期限" align="center" prop="effTime" width="180" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.effTime) }}</span>
         </template>

@@ -34,6 +34,7 @@ public interface MFileInfoMapper
      * @return 结果
      */
     public int insertMFileInfo(MFileInfo mFileInfo);
+    public int insertMFileInfoBath(List<MFileInfo> mFileInfos);
 
     /**
      * 修改文件记录

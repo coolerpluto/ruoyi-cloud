@@ -2,6 +2,7 @@ package com.highgo.medium.service;
 
 import java.util.List;
 import com.highgo.medium.domain.MediumFileInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 介质文件信息记录Service接口
@@ -58,4 +59,8 @@ public interface IMediumFileInfoService
      * @return 结果
      */
     public int deleteMediumFileInfoById(Long id);
+
+    int updateMediumFileInfoWithFile(MediumFileInfo mediumFileInfo, MultipartFile mediumFile, MultipartFile mediumFileMd5);
+
+    int insertMediumFileInfoWithFile(MediumFileInfo mediumFileInfo, MultipartFile mediumFile, MultipartFile mediumFileMd5);
 }

@@ -47,6 +47,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertMFileInfo" parameterType="MFileInfo" useGeneratedKeys="true" keyProperty="id">
         insert into t_file_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">id,</if>
             <if test="fileServer != null and fileServer != ''">file_server,</if>
             <if test="filePath != null and filePath != ''">file_path,</if>
             <if test="fileName != null and fileName != ''">file_name,</if>
@@ -61,6 +62,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="remark != null">remark,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">#{id},</if>
             <if test="fileServer != null and fileServer != ''">#{fileServer},</if>
             <if test="filePath != null and filePath != ''">#{filePath},</if>
             <if test="fileName != null and fileName != ''">#{fileName},</if>

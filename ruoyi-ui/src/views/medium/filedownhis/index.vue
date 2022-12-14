@@ -92,11 +92,12 @@
 <!--      <el-table-column label="记录ID" align="center" prop="id" />-->
       <el-table-column label="商机编号" align="center" prop="opportunityNum" />
       <el-table-column label="文件ID" align="center" prop="fileId" />
+      <el-table-column label="文件名字" align="center" prop="fileName" :show-overflow-tooltip="true"/>
       <el-table-column label="文件类型" align="center" prop="fileType" />
 
-      <el-table-column label="创建者名" align="center" prop="createBy" />
-      <el-table-column label="创建时间" align="center" prop="createTime" />
-      <el-table-column label="备注" align="center" prop="remark" />
+      <el-table-column label="下载人员" align="center" prop="createBy" />
+      <el-table-column label="创建时间" align="center" prop="createTime" :show-overflow-tooltip="true" />
+      <el-table-column label="备注" align="center" prop="remark" :show-overflow-tooltip="true"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -142,7 +143,7 @@ import { listFiledownhis, getFiledownhis, delFiledownhis, addFiledownhis, update
 
 export default {
   name: "Filedownhis",
-  dicts: ['sys_file_type'],
+  dicts: ['sys_file_type','medium_file_type'],
   data() {
     return {
       // 遮罩层

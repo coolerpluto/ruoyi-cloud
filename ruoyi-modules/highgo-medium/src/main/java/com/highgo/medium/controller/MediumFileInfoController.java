@@ -1,26 +1,22 @@
 package com.highgo.medium.controller;
 
-import java.util.List;
-import java.io.IOException;
-import javax.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.highgo.medium.domain.MediumFileInfo;
+import com.highgo.medium.service.IMediumFileInfoService;
+import com.ruoyi.common.core.utils.poi.ExcelUtil;
+import com.ruoyi.common.core.web.controller.BaseController;
+import com.ruoyi.common.core.web.domain.AjaxResult;
+import com.ruoyi.common.core.web.page.TableDataInfo;
 import com.ruoyi.common.log.annotation.Log;
 import com.ruoyi.common.log.enums.BusinessType;
 import com.ruoyi.common.security.annotation.RequiresPermissions;
-import com.highgo.medium.domain.MediumFileInfo;
-import com.highgo.medium.service.IMediumFileInfoService;
-import com.ruoyi.common.core.web.controller.BaseController;
-import com.ruoyi.common.core.web.domain.AjaxResult;
-import com.ruoyi.common.core.utils.poi.ExcelUtil;
-import com.ruoyi.common.core.web.page.TableDataInfo;
+import com.ruoyi.common.security.utils.SecurityUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 介质文件信息记录Controller
@@ -74,24 +70,52 @@ public class MediumFileInfoController extends BaseController
      * 新增介质文件信息记录
      */
     @RequiresPermissions("medium:medium:add")
-    @Log(title = "介质文件信息记录", businessType = BusinessType.INSERT)
+    @Log(title = "介质信息记录", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody MediumFileInfo mediumFileInfo)
     {
+        mediumFileInfo.setCreateBy(SecurityUtils.getUsername());
+        mediumFileInfo.setCreateId(SecurityUtils.getUserId());
         return toAjax(mediumFileInfoService.insertMediumFileInfo(mediumFileInfo));
     }
 
+    @RequiresPermissions("medium:medium:add")
+    @Log(title = "介质文件信息记录", businessType = BusinessType.INSERT)
+    @PostMapping("/addWithFile")
+    public AjaxResult addWithFile(MediumFileInfo mediumFileInfo,
+                                  MultipartFile mediumFile,
+                                  MultipartFile mediumFileMd5) {
+        mediumFileInfo.setCreateBy(SecurityUtils.getUsername());
+        mediumFileInfo.setCreateId(SecurityUtils.getUserId());
+        mediumFileInfo.setCreateTime(new Date());
+        return toAjax(mediumFileInfoService.insertMediumFileInfoWithFile(mediumFileInfo,mediumFile,mediumFileMd5));
+    }
+    /**
+     * 修改介质文件信息记录
+     */
+    @RequiresPermissions("medium:medium:edit")
+    @Log(title = "介质信息记录", businessType = BusinessType.UPDATE)
+    @PutMapping
+    public AjaxResult edit(@RequestBody MediumFileInfo mediumFileInfo)
+    {
+        mediumFileInfo.setUpdateBy(SecurityUtils.getUsername());
+        mediumFileInfo.setUpdateId(SecurityUtils.getUserId());
+        return toAjax(mediumFileInfoService.updateMediumFileInfo(mediumFileInfo));
+    }
     /**
      * 修改介质文件信息记录
      */
     @RequiresPermissions("medium:medium:edit")
     @Log(title = "介质文件信息记录", businessType = BusinessType.UPDATE)
-    @PutMapping
-    public AjaxResult edit(@RequestBody MediumFileInfo mediumFileInfo)
+    @PutMapping("/editWithFile")
+    public AjaxResult editWithFile(MediumFileInfo mediumFileInfo,
+                                   MultipartFile mediumFile,
+                                   MultipartFile mediumFileMd5)
     {
-        return toAjax(mediumFileInfoService.updateMediumFileInfo(mediumFileInfo));
+        mediumFileInfo.setUpdateBy(SecurityUtils.getUsername());
+        mediumFileInfo.setUpdateId(SecurityUtils.getUserId());
+        return toAjax(mediumFileInfoService.updateMediumFileInfoWithFile(mediumFileInfo,mediumFile,mediumFileMd5));
     }
-
     /**
      * 删除介质文件信息记录
      */

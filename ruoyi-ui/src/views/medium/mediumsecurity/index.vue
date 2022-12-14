@@ -76,16 +76,18 @@
 <!--      <el-table-column label="记录ID" align="center" prop="id" />-->
       <el-table-column label="介质ID" align="center" prop="mediumId" />
       <el-table-column label="文件类型" align="center" prop="fileType" />
+      
+      <el-table-column label="文件名称" align="center" prop="fileName" :show-overflow-tooltip="true"/>
       <el-table-column label="文件ID" align="center" prop="fileId" />
       <el-table-column label="md5 ID" align="center" prop="md5FileId" />
       <el-table-column label="文件状态" align="center" prop="status" />
 <!--      <el-table-column label="创建者ID" align="center" prop="createId" />-->
-      <el-table-column label="创建者名" align="center" prop="createBy" />
-      <el-table-column label="创建时间" align="center" prop="createTime" />
+      <el-table-column label="创建者名" align="center" prop="createBy" :show-overflow-tooltip="true"/>
+      <el-table-column label="创建时间" align="center" prop="createTime" :show-overflow-tooltip="true" />
 <!--      <el-table-column label="更新者ID" align="center" prop="updateId" />-->
-      <el-table-column label="更新者名" align="center" prop="updateBy" />
-      <el-table-column label="更新时间" align="center" prop="updateTime" />
-      <el-table-column label="备注" align="center" prop="remark" />
+      <el-table-column label="更新者名" align="center" prop="updateBy" :show-overflow-tooltip="true"/>
+      <el-table-column label="更新时间" align="center" prop="updateTime" :show-overflow-tooltip="true"/>
+      <el-table-column label="备注" align="center" prop="remark" :show-overflow-tooltip="true"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button

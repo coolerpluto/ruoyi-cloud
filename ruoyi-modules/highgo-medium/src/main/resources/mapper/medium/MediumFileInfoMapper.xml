@@ -6,12 +6,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <resultMap type="MediumFileInfo" id="MediumFileInfoResult">
         <result property="id"    column="id"    />
+        <result property="mediumName"    column="medium_name"    />
         <result property="mediumType"    column="medium_type"    />
         <result property="dbVersion"    column="db_version"    />
         <result property="cpuType"    column="cpu_type"    />
         <result property="packageType"    column="package_type"    />
         <result property="mediumFileId"    column="medium_file_id"    />
+        <result property="mediumFileName"    column="medium_file_name"    />
         <result property="mediumMd5FileId"    column="medium_md5_file_id"    />
+        <result property="mediumMd5FileName"    column="medium_md5_file_name"    />
         <result property="status"    column="status"    />
         <result property="createId"    column="create_id"    />
         <result property="createBy"    column="create_by"    />
@@ -23,31 +26,36 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectMediumFileInfoVo">
-        select id, medium_type, db_version, cpu_type, package_type, medium_file_id, medium_md5_file_id, status, create_id, create_by, create_time, update_id, update_by, update_time, remark from t_medium_info
+        select tmi.id, tmi.medium_name,tmi.medium_type, tmi.db_version, tmi.cpu_type, tmi.package_type,
+               tmi.medium_file_id, (select tfi.file_name from t_file_info tfi where tfi.id=tmi.medium_file_id) medium_file_name,
+               tmi.medium_md5_file_id, (select tfi2.file_name from t_file_info tfi2 where tfi2.id=tmi.medium_md5_file_id) medium_md5_file_name,
+               tmi.status, tmi.create_id, tmi.create_by, tmi.create_time, tmi.update_id, tmi.update_by, tmi.update_time, tmi.remark from t_medium_info tmi
     </sql>
 
     <select id="selectMediumFileInfoList" parameterType="MediumFileInfo" resultMap="MediumFileInfoResult">
         <include refid="selectMediumFileInfoVo"/>
         <where>  
-            <if test="mediumType != null  and mediumType != ''"> and medium_type = #{mediumType}</if>
-            <if test="dbVersion != null  and dbVersion != ''"> and db_version = #{dbVersion}</if>
-            <if test="cpuType != null  and cpuType != ''"> and cpu_type = #{cpuType}</if>
-            <if test="packageType != null  and packageType != ''"> and package_type = #{packageType}</if>
-            <if test="status != null  and status != ''"> and status = #{status}</if>
-            <if test="createBy != null  and createBy != ''"> and create_by like concat('%', #{createBy}, '%')</if>
-            <if test="createTime != null "> and create_time &lt;= #{createTime}</if>
-            <if test="updateBy != null  and updateBy != ''"> and update_by like concat('%', #{updateBy}, '%')</if>
+            <if test="mediumName != null  and mediumName != ''"> and tmi.medium_name = #{mediumName}</if>
+            <if test="mediumType != null  and mediumType != ''"> and tmi.medium_type = #{mediumType}</if>
+            <if test="dbVersion != null  and dbVersion != ''"> and tmi.db_version = #{dbVersion}</if>
+            <if test="cpuType != null  and cpuType != ''"> and tmi.cpu_type = #{cpuType}</if>
+            <if test="packageType != null  and packageType != ''"> and tmi.package_type = #{packageType}</if>
+            <if test="status != null  and status != ''"> and tmi.status = #{status}</if>
+            <if test="createBy != null  and createBy != ''"> and tmi.create_by like concat('%', #{createBy}, '%')</if>
+            <if test="createTime != null "> and tmi.create_time &lt;= #{createTime}</if>
+            <if test="updateBy != null  and updateBy != ''"> and tmi.update_by like concat('%', #{updateBy}, '%')</if>
         </where>
     </select>
     
     <select id="selectMediumFileInfoById" parameterType="Long" resultMap="MediumFileInfoResult">
         <include refid="selectMediumFileInfoVo"/>
-        where id = #{id}
+        where tmi.id = #{id}
     </select>
         
     <insert id="insertMediumFileInfo" parameterType="MediumFileInfo" useGeneratedKeys="true" keyProperty="id">
         insert into t_medium_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="mediumName != null">medium_name,</if>
             <if test="mediumType != null">medium_type,</if>
             <if test="dbVersion != null">db_version,</if>
             <if test="cpuType != null">cpu_type,</if>
@@ -64,6 +72,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="remark != null">remark,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="mediumName != null">#{mediumName},</if>
             <if test="mediumType != null">#{mediumType},</if>
             <if test="dbVersion != null">#{dbVersion},</if>
             <if test="cpuType != null">#{cpuType},</if>
@@ -84,6 +93,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateMediumFileInfo" parameterType="MediumFileInfo">
         update t_medium_info
         <trim prefix="SET" suffixOverrides=",">
+            <if test="mediumName != null">medium_name = #{mediumName},</if>
             <if test="mediumType != null">medium_type = #{mediumType},</if>
             <if test="dbVersion != null">db_version = #{dbVersion},</if>
             <if test="cpuType != null">cpu_type = #{cpuType},</if>

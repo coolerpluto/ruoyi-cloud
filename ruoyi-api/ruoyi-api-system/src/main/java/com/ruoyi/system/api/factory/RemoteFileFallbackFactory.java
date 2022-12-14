@@ -1,5 +1,6 @@
 package com.ruoyi.system.api.factory;
 
+import com.ruoyi.system.api.domain.FileReq;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.openfeign.FallbackFactory;
@@ -8,6 +9,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ruoyi.common.core.domain.R;
 import com.ruoyi.system.api.RemoteFileService;
 import com.ruoyi.system.api.domain.SysFile;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 文件服务降级处理
@@ -30,6 +34,37 @@ public class RemoteFileFallbackFactory implements FallbackFactory<RemoteFileServ
             {
                 return R.fail("上传文件失败:" + throwable.getMessage());
             }
+
+            @Override
+            public R<SysFile> upload(MultipartFile file, String specify) {
+                return R.fail("上传文件到指定路径失败:" + throwable.getMessage());
+            }
+
+            @Override
+            public void downLoad(FileReq fileReq) {
+                R.fail("下载文件失败:" + throwable.getMessage());
+            }
+
+            @Override
+            public R<byte[]> downLoadFileData(FileReq fileReq) {
+                return R.fail("下载文件流失败:" + throwable.getMessage());
+            }
+
+            @Override
+            public R<String> deleteFile(FileReq fileReq) {
+                return R.fail("删除文件失败:" + throwable.getMessage());
+            }
+
+            @Override
+            public R<List<Map<String, Object>>> fileList(String primaryDir, String catalog) {
+                return R.fail("获取文件列表失败:" + throwable.getMessage());
+            }
+
+            @Override
+            public R<String> previewFile(FileReq fileReq) {
+                return R.fail("获取文件临时路径失败:" + throwable.getMessage());
+            }
+
         };
     }
 }
