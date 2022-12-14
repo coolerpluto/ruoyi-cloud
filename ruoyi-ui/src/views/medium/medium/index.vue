@@ -482,6 +482,7 @@ export default {
         createTime: null,
         updateBy: null,
       },
+      action:undefined,
       // 表单参数
       form: {},
       // 表单校验
@@ -499,7 +500,7 @@ export default {
           { required: true, message: "版本类型未选择", trigger: "blur" },
         ],
         mediumFile: [
-          { required: true, message: "介质文件未选择上传", trigger: "blur" },
+          { required: this.action=="Add", message: "介质文件未选择上传", trigger: "blur" },
         ],
       },
     };
@@ -558,6 +559,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
+      this.action="Add";
       this.title = "添加文件及相关配置";
     },
     /** 修改按钮操作 */
@@ -567,6 +569,7 @@ export default {
       getMedium(id).then((response) => {
         this.form = response.data;
         this.open = true;
+        this.action="Update";
         this.title = "修改文件及相关配置";
       });
     },
