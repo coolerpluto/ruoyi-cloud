@@ -1,6 +1,7 @@
 package com.highgo.medium.controller;
 
 import com.highgo.medium.domain.MediumFileInfo;
+import com.highgo.medium.service.IMFileInfoService;
 import com.highgo.medium.service.IMediumFileInfoService;
 import com.ruoyi.common.core.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.web.controller.BaseController;
@@ -30,6 +31,8 @@ public class MediumFileInfoController extends BaseController
 {
     @Autowired
     private IMediumFileInfoService mediumFileInfoService;
+    @Autowired
+    private IMFileInfoService fileInfoService;
 
     /**
      * 查询介质文件信息记录列表
@@ -56,6 +59,12 @@ public class MediumFileInfoController extends BaseController
         util.exportExcel(response, list, "介质文件信息记录数据");
     }
 
+    @RequiresPermissions("medium:medium:download")
+    @Log(title = "介质文件信息记录", businessType = BusinessType.DOWNLOAD)
+    @PostMapping("/download")
+    public void download(HttpServletResponse response, MediumFileInfo mediumFileInfo) {
+        mediumFileInfoService.download(response, mediumFileInfo);
+    }
     /**
      * 获取介质文件信息记录详细信息
      */

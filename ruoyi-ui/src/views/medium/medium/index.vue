@@ -250,7 +250,7 @@
         prop="remark"
         :show-overflow-tooltip="true"
       />
-      <el-table-column
+      <el-table-column  min-width="120px"
         label="操作"
         align="center"
         class-name="small-padding fixed-width"
@@ -271,6 +271,14 @@
             @click="handleDelete(scope.row)"
             v-hasPermi="['medium:medium:remove']"
             >删除</el-button
+          >
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-download"
+            @click="handleDownload(scope.row)"
+            v-hasPermi="['medium:medium:download']"
+            >下载</el-button
           >
         </template>
       </el-table-column>
@@ -625,6 +633,13 @@ export default {
           this.$modal.msgSuccess("删除成功");
         })
         .catch(() => {});
+    },
+    /**
+     * 下载文件
+     */
+    handleDownload(row){
+      const fileName = row.mediumName+".rar";
+      this.download("medium/medium/download",{...row,},fileName);
     },
     /** 导出按钮操作 */
     handleExport() {

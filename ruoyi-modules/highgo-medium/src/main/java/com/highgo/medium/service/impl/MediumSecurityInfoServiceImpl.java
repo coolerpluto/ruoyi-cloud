@@ -1,12 +1,18 @@
 package com.highgo.medium.service.impl;
 
 import java.util.List;
+
+import com.alibaba.fastjson.JSON;
 import com.ruoyi.common.core.utils.DateUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.highgo.medium.mapper.MediumSecurityInfoMapper;
 import com.highgo.medium.domain.MediumSecurityInfo;
 import com.highgo.medium.service.IMediumSecurityInfoService;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 介质安全文件记录Service业务层处理
@@ -17,6 +23,7 @@ import com.highgo.medium.service.IMediumSecurityInfoService;
 @Service
 public class MediumSecurityInfoServiceImpl implements IMediumSecurityInfoService 
 {
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private MediumSecurityInfoMapper mediumSecurityInfoMapper;
 
@@ -92,5 +99,12 @@ public class MediumSecurityInfoServiceImpl implements IMediumSecurityInfoService
     public int deleteMediumSecurityInfoById(Long id)
     {
         return mediumSecurityInfoMapper.deleteMediumSecurityInfoById(id);
+    }
+
+    @Override
+    public void download(HttpServletResponse response, MediumSecurityInfo mediumSecurityInfo) {
+        if (log.isDebugEnabled()){
+            log.debug("MediumSecurityInfoServiceImpl.downLoad req:{}", JSON.toJSONString(mediumSecurityInfo));
+        }
     }
 }

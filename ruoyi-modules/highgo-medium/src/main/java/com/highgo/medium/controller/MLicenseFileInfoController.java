@@ -60,6 +60,14 @@ public class MLicenseFileInfoController extends BaseController
         util.exportExcel(response, list, "License文件记录数据");
     }
 
+    @RequiresPermissions("medium:license:download")
+    @Log(title = "License文件记录", businessType = BusinessType.DOWNLOAD)
+    @PostMapping("/download")
+    public void download(HttpServletResponse response, MLicenseFileInfo mLicenseFileInfo)
+    {
+        mLicenseFileInfoService.download(response,mLicenseFileInfo);
+    }
+
     /**
      * 获取License文件记录详细信息
      */

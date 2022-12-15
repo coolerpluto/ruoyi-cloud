@@ -2,15 +2,20 @@ package com.highgo.medium.service.impl;
 
 import java.util.List;
 
+import com.alibaba.fastjson.JSON;
 import com.highgo.medium.utils.MediumUtil;
 import com.ruoyi.common.core.utils.DateUtils;
 import com.ruoyi.common.security.utils.SecurityUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.highgo.medium.mapper.MFileInfoMapper;
 import com.highgo.medium.domain.MFileInfo;
 import com.highgo.medium.service.IMFileInfoService;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 文件记录Service业务层处理
@@ -21,6 +26,7 @@ import com.highgo.medium.service.IMFileInfoService;
 @Service
 public class MFileInfoServiceImpl implements IMFileInfoService 
 {
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private MFileInfoMapper mFileInfoMapper;
 
@@ -115,5 +121,12 @@ public class MFileInfoServiceImpl implements IMFileInfoService
     public int deleteMFileInfoById(Long id)
     {
         return mFileInfoMapper.deleteMFileInfoById(id);
+    }
+
+    @Override
+    public void download(HttpServletResponse response, MFileInfo mFileInfo) {
+        if (log.isDebugEnabled()){
+            log.debug("MFileInfoServiceImpl.downLoad req:{}", JSON.toJSONString(mFileInfo));
+        }
     }
 }

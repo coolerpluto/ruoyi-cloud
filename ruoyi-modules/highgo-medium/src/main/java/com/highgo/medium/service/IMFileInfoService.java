@@ -3,6 +3,8 @@ package com.highgo.medium.service;
 import java.util.List;
 import com.highgo.medium.domain.MFileInfo;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * 文件记录Service接口
  * 
@@ -59,4 +61,6 @@ public interface IMFileInfoService
      * @return 结果
      */
     public int deleteMFileInfoById(Long id);
+
+    void download(HttpServletResponse response, MFileInfo mFileInfo);
 }

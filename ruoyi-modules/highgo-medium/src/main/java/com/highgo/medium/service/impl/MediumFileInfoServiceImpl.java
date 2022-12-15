@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.alibaba.fastjson.JSON;
 import com.highgo.medium.domain.MFileInfo;
 import com.highgo.medium.service.IMFileInfoService;
 import com.highgo.medium.utils.MediumUtil;
@@ -19,6 +20,8 @@ import com.highgo.medium.mapper.MediumFileInfoMapper;
 import com.highgo.medium.domain.MediumFileInfo;
 import com.highgo.medium.service.IMediumFileInfoService;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 介质文件信息记录Service业务层处理
@@ -195,5 +198,12 @@ public class MediumFileInfoServiceImpl implements IMediumFileInfoService
         mediumFileInfo.setId(MediumUtil.getId());
         mediumFileInfoMapper.insertMediumFileInfo(mediumFileInfo);
         return 1;
+    }
+
+    @Override
+    public void download(HttpServletResponse response, MediumFileInfo mediumFileInfo) {
+        if (log.isDebugEnabled()){
+            log.debug("MediumFileInfoServiceImpl.downLoad req:{}", JSON.toJSONString(mediumFileInfo));
+        }
     }
 }

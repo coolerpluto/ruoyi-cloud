@@ -60,6 +60,13 @@ public class MediumSecurityInfoController extends BaseController
         util.exportExcel(response, list, "介质安全文件记录数据");
     }
 
+    @RequiresPermissions("medium:mediumsecurity:download")
+    @Log(title = "介质安全文件记录", businessType = BusinessType.DOWNLOAD)
+    @PostMapping("/download")
+    public void download(HttpServletResponse response, MediumSecurityInfo mediumSecurityInfo)
+    {
+        mediumSecurityInfoService.download(response, mediumSecurityInfo);
+    }
     /**
      * 获取介质安全文件记录详细信息
      */

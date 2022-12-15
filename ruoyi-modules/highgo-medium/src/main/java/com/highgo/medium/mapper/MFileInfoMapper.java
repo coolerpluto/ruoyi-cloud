@@ -1,7 +1,9 @@
 package com.highgo.medium.mapper;
 
-import java.util.List;
 import com.highgo.medium.domain.MFileInfo;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 文件记录Mapper接口
@@ -18,6 +20,7 @@ public interface MFileInfoMapper
      * @return 文件记录
      */
     public MFileInfo selectMFileInfoById(Long id);
+    List<MFileInfo>  selectMFileInfoByIds(@Param("fileIds") List<String> fileIds);
 
     /**
      * 查询文件记录列表
@@ -34,7 +37,6 @@ public interface MFileInfoMapper
      * @return 结果
      */
     public int insertMFileInfo(MFileInfo mFileInfo);
-    public int insertMFileInfoBath(List<MFileInfo> mFileInfos);
 
     /**
      * 修改文件记录

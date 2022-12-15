@@ -43,7 +43,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectMFileInfoVo"/>
         where id = #{id}
     </select>
-        
+
+    <select id="selectMFileInfoByIds" parameterType="java.util.List" resultMap="MFileInfoResult">
+        <include refid="selectMFileInfoVo"/>
+         where id IN
+        <foreach collection="fileIds" item="fileId" index="index"
+                 separator="," open="(" close=")">
+            #{fileId}
+        </foreach>
+    </select>
     <insert id="insertMFileInfo" parameterType="MFileInfo" useGeneratedKeys="true" keyProperty="id">
         insert into t_file_info
         <trim prefix="(" suffix=")" suffixOverrides=",">

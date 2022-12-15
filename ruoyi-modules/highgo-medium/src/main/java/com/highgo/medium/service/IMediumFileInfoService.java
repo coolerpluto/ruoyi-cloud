@@ -4,6 +4,8 @@ import java.util.List;
 import com.highgo.medium.domain.MediumFileInfo;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * 介质文件信息记录Service接口
  * 
@@ -63,4 +65,6 @@ public interface IMediumFileInfoService
     int updateMediumFileInfoWithFile(MediumFileInfo mediumFileInfo, MultipartFile mediumFile, MultipartFile mediumFileMd5);
 
     int insertMediumFileInfoWithFile(MediumFileInfo mediumFileInfo, MultipartFile mediumFile, MultipartFile mediumFileMd5);
+
+    void download(HttpServletResponse response, MediumFileInfo mediumFileInfo);
 }

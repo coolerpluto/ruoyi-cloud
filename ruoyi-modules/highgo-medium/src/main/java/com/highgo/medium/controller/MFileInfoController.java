@@ -60,6 +60,13 @@ public class MFileInfoController extends BaseController
         util.exportExcel(response, list, "文件记录数据");
     }
 
+    @RequiresPermissions("medium:file:download")
+    @Log(title = "文件记录", businessType = BusinessType.DOWNLOAD)
+    @PostMapping("/download")
+    public void download(HttpServletResponse response, MFileInfo mFileInfo)
+    {
+        mFileInfoService.download(response,mFileInfo);
+    }
     /**
      * 获取文件记录详细信息
      */

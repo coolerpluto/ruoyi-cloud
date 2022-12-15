@@ -3,6 +3,8 @@ package com.highgo.medium.service;
 import java.util.List;
 import com.highgo.medium.domain.MLicenseFileInfo;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * License文件记录Service接口
  * 
@@ -58,4 +60,6 @@ public interface IMLicenseFileInfoService
      * @return 结果
      */
     public int deleteMLicenseFileInfoById(Long id);
+
+    void download(HttpServletResponse response, MLicenseFileInfo mLicenseFileInfo);
 }

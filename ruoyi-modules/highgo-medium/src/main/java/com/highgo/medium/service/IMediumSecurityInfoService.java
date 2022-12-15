@@ -3,6 +3,8 @@ package com.highgo.medium.service;
 import java.util.List;
 import com.highgo.medium.domain.MediumSecurityInfo;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * 介质安全文件记录Service接口
  * 
@@ -58,4 +60,6 @@ public interface IMediumSecurityInfoService
      * @return 结果
      */
     public int deleteMediumSecurityInfoById(Long id);
+
+    void download(HttpServletResponse response, MediumSecurityInfo mediumSecurityInfo);
 }

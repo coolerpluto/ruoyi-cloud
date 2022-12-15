@@ -1,12 +1,18 @@
 package com.highgo.medium.service.impl;
 
 import java.util.List;
+
+import com.alibaba.fastjson.JSON;
 import com.ruoyi.common.core.utils.DateUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.highgo.medium.mapper.MLicenseFileInfoMapper;
 import com.highgo.medium.domain.MLicenseFileInfo;
 import com.highgo.medium.service.IMLicenseFileInfoService;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * License文件记录Service业务层处理
@@ -17,6 +23,8 @@ import com.highgo.medium.service.IMLicenseFileInfoService;
 @Service
 public class MLicenseFileInfoServiceImpl implements IMLicenseFileInfoService 
 {
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     private MLicenseFileInfoMapper mLicenseFileInfoMapper;
 
@@ -92,5 +100,12 @@ public class MLicenseFileInfoServiceImpl implements IMLicenseFileInfoService
     public int deleteMLicenseFileInfoById(Long id)
     {
         return mLicenseFileInfoMapper.deleteMLicenseFileInfoById(id);
+    }
+
+    @Override
+    public void download(HttpServletResponse response, MLicenseFileInfo mLicenseFileInfo) {
+        if (log.isDebugEnabled()){
+            log.debug("MLicenseFileInfoServiceImpl.downLoad req:{}", JSON.toJSONString(mLicenseFileInfo));
+        }
     }
 }
