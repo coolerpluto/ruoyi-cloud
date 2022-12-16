@@ -542,7 +542,7 @@ export default {
         packageType: null,
         mediumFile: null,
         mediumFileMd5: null,
-        status: "0",        
+        status: "0",
         remark: null,
       };
       this.resetForm("form");
@@ -638,8 +638,9 @@ export default {
      * 下载文件
      */
     handleDownload(row){
-      const fileName = row.mediumName+".rar";
-      this.download("medium/medium/download",{...row,},fileName);
+      const fileName = row.mediumName+".zip";
+      // 修改默认时间 1min
+      this.download("medium/medium/download",{...row,},fileName,{timeout: 120000});
     },
     /** 导出按钮操作 */
     handleExport() {
@@ -661,9 +662,9 @@ export default {
 
     handleBeforeUpload(file) {
       const fileSuffix = file.name.substring(file.name.lastIndexOf(".") + 1);
-      const whiteList = ["tar", "deb", "rpm", "zip", "7z", "rar", "txt","md5"];
+      const whiteList = ["tar", "deb", "rpm", "zip","rar", "7z", "rar", "txt","md5"];
       if (whiteList.indexOf(fileSuffix) === -1) {
-        this.$message.error("上传文件只能是 .zip, .7z, .rar, .txt格式");
+        this.$message.error("上传文件只能是特定格式");
         return false;
       }
       const isLtM = file.size / 1024 / 1024 < 500;

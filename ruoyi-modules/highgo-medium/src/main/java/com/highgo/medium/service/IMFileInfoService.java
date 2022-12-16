@@ -20,6 +20,7 @@ public interface IMFileInfoService
      * @return 文件记录
      */
     public MFileInfo selectMFileInfoById(Long id);
+    public List<MFileInfo> selectMFileInfoByIds(List<String> ids);
 
     /**
      * 查询文件记录列表

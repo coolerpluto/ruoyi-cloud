@@ -41,6 +41,11 @@ public class MFileInfoServiceImpl implements IMFileInfoService
     {
         return mFileInfoMapper.selectMFileInfoById(id);
     }
+    @Override
+    public List<MFileInfo> selectMFileInfoByIds(List<String> ids)
+    {
+        return mFileInfoMapper.selectMFileInfoByIds(ids);
+    }
 
     /**
      * 查询文件记录列表

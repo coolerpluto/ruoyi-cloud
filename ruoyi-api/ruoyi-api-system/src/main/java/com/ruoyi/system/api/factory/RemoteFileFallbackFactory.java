@@ -1,6 +1,7 @@
 package com.ruoyi.system.api.factory;
 
 import com.ruoyi.system.api.domain.FileReq;
+import feign.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.openfeign.FallbackFactory;
@@ -10,6 +11,7 @@ import com.ruoyi.common.core.domain.R;
 import com.ruoyi.system.api.RemoteFileService;
 import com.ruoyi.system.api.domain.SysFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
@@ -41,8 +43,9 @@ public class RemoteFileFallbackFactory implements FallbackFactory<RemoteFileServ
             }
 
             @Override
-            public void downLoad(FileReq fileReq) {
+            public Response downLoad(FileReq fileReq) {
                 R.fail("下载文件失败:" + throwable.getMessage());
+                return null;
             }
 
             @Override

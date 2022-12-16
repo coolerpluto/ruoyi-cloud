@@ -1,7 +1,9 @@
 package com.ruoyi.system.api;
 
 import com.ruoyi.system.api.domain.FileReq;
+import feign.Response;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,14 +43,14 @@ public interface RemoteFileService {
     /**
      * 下载文件
      */
-    @GetMapping(value = "/downLoad", consumes = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    public void downLoad(@RequestParam(value = "fileReq") FileReq fileReq);
+    @GetMapping(value = "/downLoad")
+    public Response downLoad(@SpringQueryMap FileReq fileReq);
 
     /**
      * 下载文件流
      */
-    @GetMapping(value = "/downLoadStream", consumes = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    public R<byte[]> downLoadFileData(@RequestParam(value = "fileReq") FileReq fileReq);
+    @GetMapping(value = "/downLoadStream")
+    public R<byte[]> downLoadFileData(@SpringQueryMap FileReq fileReq);
 
     /**
      * 删除文件
@@ -68,5 +70,5 @@ public interface RemoteFileService {
      * @param fileReq 入参
      */
     @GetMapping(value = "/file/previewFile")
-    public R<String> previewFile(@RequestParam(value = "fileReq") FileReq fileReq);
+    public R<String> previewFile(@SpringQueryMap FileReq fileReq);
 }

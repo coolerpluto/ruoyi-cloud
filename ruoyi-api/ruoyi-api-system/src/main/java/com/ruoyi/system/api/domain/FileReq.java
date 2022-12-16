@@ -27,16 +27,7 @@ public class FileReq implements Serializable {
     }
 
     public String getFullFileName() {
-        String fullPath = "";
-        if (StringUtils.isBlank(fullFileName)) {
-            if (!StringUtils.endsWith(filePath, "/") && !StringUtils.startsWith(fileName, "/")) {
-                filePath = filePath + "/";
-            }
-            fullPath = filePath + fileName;
-        } else {
-            fullPath = fullFileName;
-        }
-        return fullPath;
+        return fullFileName;
     }
 
     public void setFullFileName(String fullFileName) {
@@ -51,10 +42,10 @@ public class FileReq implements Serializable {
         this.bucketName = bucketName;
     }
 
-    private String fileName = "default";
+    private String fileName;
     private String filePath;
     private String fullFileName;
-    private String bucketName = "default";
+    private String bucketName;
 
     @Override
     public String toString() {

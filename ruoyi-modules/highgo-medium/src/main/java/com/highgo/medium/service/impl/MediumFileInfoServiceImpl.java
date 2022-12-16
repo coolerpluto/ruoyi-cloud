@@ -1,17 +1,26 @@
 package com.highgo.medium.service.impl;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.zip.ZipOutputStream;
 
 import com.alibaba.fastjson.JSON;
 import com.highgo.medium.domain.MFileInfo;
 import com.highgo.medium.service.IMFileInfoService;
 import com.highgo.medium.utils.MediumUtil;
+import com.highgo.medium.utils.ZipUtil;
 import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.core.utils.DateUtils;
 import com.ruoyi.system.api.RemoteFileService;
+import com.ruoyi.system.api.domain.FileReq;
 import com.ruoyi.system.api.domain.SysFile;
+import feign.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -204,6 +213,56 @@ public class MediumFileInfoServiceImpl implements IMediumFileInfoService
     public void download(HttpServletResponse response, MediumFileInfo mediumFileInfo) {
         if (log.isDebugEnabled()){
             log.debug("MediumFileInfoServiceImpl.downLoad req:{}", JSON.toJSONString(mediumFileInfo));
+        }
+        List<String> fileIds = new ArrayList<>();
+        fileIds.add(mediumFileInfo.getMediumFileId());
+        fileIds.add(mediumFileInfo.getMediumMd5FileId());
+        List<MFileInfo> downloadFileInfo = imFileInfoService.selectMFileInfoByIds(fileIds);
+        // 下载顺序 调整后就不行了  先下小文件再大文件才能成功
+        FileReq fileReq2 = new FileReq();
+        String fileName2 = downloadFileInfo.get(1).getFileName();
+        String filePath2 = downloadFileInfo.get(1).getFilePath();
+        fileReq2.setFileName(fileName2);
+        fileReq2.setFullFileName(filePath2);
+        Response fileResp2 = remoteFileService.downLoad(fileReq2);
+        Response.Body body2 = fileResp2.body();
+
+        FileReq fileReq = new FileReq();
+        String fileName = downloadFileInfo.get(0).getFileName();
+        String filePath = downloadFileInfo.get(0).getFilePath();
+        fileReq.setFileName(fileName);
+        fileReq.setFullFileName(filePath);
+        Response fileResp = remoteFileService.downLoad(fileReq);
+        Response.Body body = fileResp.body();
+
+        //response.setContentType("APPLICATION/OCTET-STREAM");
+        response.setHeader("Content-Disposition","attachment; filename="+mediumFileInfo.getMediumName()+".zip");
+
+        // 创建 ZipOutputStream
+        ZipOutputStream zipOutputStream;
+        // 创建 输出流到 response
+        OutputStream outputStream= null;
+
+        try {
+            outputStream = response.getOutputStream();
+            zipOutputStream = new ZipOutputStream(outputStream);
+            zipOutputStream.setMethod(ZipOutputStream.DEFLATED);
+
+            Map<String,InputStream> fileInputStream = new HashMap<>();
+            fileInputStream.put(fileName,body.asInputStream());
+            fileInputStream.put(fileName2,body2.asInputStream());
+            ZipUtil.zipStream(fileInputStream,outputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            try {
+                if (outputStream!=null){
+                    outputStream.flush();
+                    outputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
