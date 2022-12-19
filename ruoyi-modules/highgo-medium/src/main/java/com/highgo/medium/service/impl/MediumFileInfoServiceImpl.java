@@ -21,6 +21,7 @@ import com.ruoyi.system.api.RemoteFileService;
 import com.ruoyi.system.api.domain.FileReq;
 import com.ruoyi.system.api.domain.SysFile;
 import feign.Response;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -209,32 +210,80 @@ public class MediumFileInfoServiceImpl implements IMediumFileInfoService
         return 1;
     }
 
+    /**
+     * 需要重新构建 确定下再的文件
+     * @param response 返回
+     * @param mediumFileInfo 下载文件的信息
+     */
     @Override
     public void download(HttpServletResponse response, MediumFileInfo mediumFileInfo) {
         if (log.isDebugEnabled()){
             log.debug("MediumFileInfoServiceImpl.downLoad req:{}", JSON.toJSONString(mediumFileInfo));
         }
+        if (StringUtils.isBlank(mediumFileInfo.getMediumFileId()) &&
+                StringUtils.isBlank(mediumFileInfo.getMediumMd5FileId())){
+            if (log.isErrorEnabled()){
+                log.error("MediumFileInfoServiceImpl.downLoad req not right ");
+            }
+            return;
+        }
         List<String> fileIds = new ArrayList<>();
-        fileIds.add(mediumFileInfo.getMediumFileId());
-        fileIds.add(mediumFileInfo.getMediumMd5FileId());
+        FileReq fileMd5Req = null;
+        if (StringUtils.isNotBlank(mediumFileInfo.getMediumMd5FileId())){
+            fileMd5Req = new FileReq();
+            fileMd5Req.setFileName(mediumFileInfo.getMediumMd5FileName());
+            fileIds.add(mediumFileInfo.getMediumMd5FileId());
+        }
+        FileReq fileMReq = null;
+        if (StringUtils.isNotBlank(mediumFileInfo.getMediumFileId())){
+            fileMReq = new FileReq();
+            fileMReq.setFileName(mediumFileInfo.getMediumFileName());
+            fileIds.add(mediumFileInfo.getMediumFileId());
+        }
+        if(fileIds.size()<1){
+            return;
+        }
+
         List<MFileInfo> downloadFileInfo = imFileInfoService.selectMFileInfoByIds(fileIds);
-        // 下载顺序 调整后就不行了  先下小文件再大文件才能成功
-        FileReq fileReq2 = new FileReq();
-        String fileName2 = downloadFileInfo.get(1).getFileName();
-        String filePath2 = downloadFileInfo.get(1).getFilePath();
-        fileReq2.setFileName(fileName2);
-        fileReq2.setFullFileName(filePath2);
-        Response fileResp2 = remoteFileService.downLoad(fileReq2);
-        Response.Body body2 = fileResp2.body();
+        for (MFileInfo fileInfo: downloadFileInfo) {
+            String filePath = fileInfo.getFilePath();
+            String fileNameInDB = fileInfo.getFileName();
 
-        FileReq fileReq = new FileReq();
-        String fileName = downloadFileInfo.get(0).getFileName();
-        String filePath = downloadFileInfo.get(0).getFilePath();
-        fileReq.setFileName(fileName);
-        fileReq.setFullFileName(filePath);
-        Response fileResp = remoteFileService.downLoad(fileReq);
-        Response.Body body = fileResp.body();
+            int index = filePath.lastIndexOf(fileNameInDB);
+            String finalPath = "";
+            if (index==-1|| filePath.endsWith("/")){
+                finalPath = filePath;
+            }else {
+                finalPath = filePath.substring(0,index);
+            }
+            if (StringUtils.equals(mediumFileInfo.getMediumMd5FileId(),(fileInfo.getId()))){
+                //md5文件 到了这里 对象就不会是null了
+                assert fileMd5Req != null;
+                fileMd5Req.setFileName(fileNameInDB);
+                fileMd5Req.setFullFileName(finalPath);
+            }else {
+                //介质文件 到了这里 对象就不会是null了
+                assert fileMReq != null;
+                fileMReq.setFileName(fileNameInDB);
+                fileMReq.setFullFileName(finalPath);
+            }
+        }
+        if (log.isDebugEnabled()){
+            log.debug("MediumFileInfoServiceImpl.downLoad req:fileMReq:{},fileMd5Req:{}.",
+                    JSON.toJSONString(fileMReq),JSON.toJSONString(fileMd5Req));
+        }
 
+
+        Response.Body fileMBody =null;
+        if (fileMReq != null &&StringUtils.isNotBlank(fileMReq.getFullFileName())&&StringUtils.isNotBlank(fileMReq.getFileName())){
+            Response fileMResp = remoteFileService.downLoad(fileMReq);
+            fileMBody = fileMResp.body();
+        }
+        Response.Body fileMd5Body = null;
+        if (fileMd5Req != null &&StringUtils.isNotBlank(fileMd5Req.getFullFileName())&&StringUtils.isNotBlank(fileMd5Req.getFileName())){
+            Response fileMd5Resp = remoteFileService.downLoad(fileMd5Req);
+            fileMd5Body = fileMd5Resp.body();
+        }
         //response.setContentType("APPLICATION/OCTET-STREAM");
         response.setHeader("Content-Disposition","attachment; filename="+mediumFileInfo.getMediumName()+".zip");
 
@@ -249,8 +298,18 @@ public class MediumFileInfoServiceImpl implements IMediumFileInfoService
             zipOutputStream.setMethod(ZipOutputStream.DEFLATED);
 
             Map<String,InputStream> fileInputStream = new HashMap<>();
-            fileInputStream.put(fileName,body.asInputStream());
-            fileInputStream.put(fileName2,body2.asInputStream());
+            if (fileMReq != null &&StringUtils.isNotBlank(fileMReq.getFullFileName())&&StringUtils.isNotBlank(fileMReq.getFileName())){
+                fileInputStream.put(fileMReq.getFileName(),fileMBody.asInputStream());
+            }
+            if (fileMd5Req != null &&StringUtils.isNotBlank(fileMd5Req.getFullFileName())&&StringUtils.isNotBlank(fileMd5Req.getFileName())){
+                fileInputStream.put(fileMd5Req.getFileName(),fileMd5Body.asInputStream());
+            }
+            if (fileInputStream.size()<1){
+                return;
+            }
+            if (log.isDebugEnabled()){
+                log.debug("MediumFileInfoServiceImpl.downLoad Stream is null");
+            }
             ZipUtil.zipStream(fileInputStream,outputStream);
         } catch (IOException e) {
             e.printStackTrace();

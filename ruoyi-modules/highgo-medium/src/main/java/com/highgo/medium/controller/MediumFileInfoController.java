@@ -109,6 +109,7 @@ public class MediumFileInfoController extends BaseController
     {
         mediumFileInfo.setUpdateBy(SecurityUtils.getUsername());
         mediumFileInfo.setUpdateId(SecurityUtils.getUserId());
+        mediumFileInfo.setUpdateTime(new Date());
         return toAjax(mediumFileInfoService.updateMediumFileInfo(mediumFileInfo));
     }
     /**
@@ -123,6 +124,7 @@ public class MediumFileInfoController extends BaseController
     {
         mediumFileInfo.setUpdateBy(SecurityUtils.getUsername());
         mediumFileInfo.setUpdateId(SecurityUtils.getUserId());
+        mediumFileInfo.setUpdateTime(new Date());
         return toAjax(mediumFileInfoService.updateMediumFileInfoWithFile(mediumFileInfo,mediumFile,mediumFileMd5));
     }
     /**
