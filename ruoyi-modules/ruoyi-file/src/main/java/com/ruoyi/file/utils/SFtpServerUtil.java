@@ -25,7 +25,6 @@ public class SFtpServerUtil {
     private SFtpServerConfig ftpServerConfig;
 
     private static SFtpServerUtil instance = null;
-    private Session session = null;
 
     private SFtpServerUtil() {
     }
@@ -34,7 +33,6 @@ public class SFtpServerUtil {
     @PostConstruct
     public void init() {
         instance = this;
-        instance.ftpServerConfig = this.ftpServerConfig;
     }
 
     public static SFtpServerUtil getInstance() {
@@ -52,9 +50,7 @@ public class SFtpServerUtil {
      * @return 返回session
      */
     public Session createSession() throws Exception {
-        if (session != null) {
-            return session;
-        }
+
         Session session;
         JSch jsch = new JSch();
         if (instance.ftpServerConfig.getPort() <= 0) {
@@ -74,7 +70,6 @@ public class SFtpServerUtil {
         session.connect();
 
         log.debug(instance.ftpServerConfig.getIp() + "Session已经完成连接");
-        this.session = session;
         return session;
     }
 
@@ -359,6 +354,7 @@ public class SFtpServerUtil {
         byte[] buffer = new byte[1024];
         BufferedInputStream bis = null;
         InputStream inputStream = null;
+        System.out.println("下载文件流:准备：fileName:"+fileName+":"+System.currentTimeMillis());
         try {
             sftp.cd(instance.ftpServerConfig.getHomeDir());
             sftp.cd(filePath);
@@ -370,9 +366,12 @@ public class SFtpServerUtil {
                 os.write(buffer, 0, i);
                 i = bis.read(buffer);
             }
+            System.out.println("下载文件流:完成：fileName:"+fileName+":"+System.currentTimeMillis());
         } catch (Exception e) {
+            System.out.println("下载文件流:异常：fileName:"+fileName+":"+System.currentTimeMillis());
             e.printStackTrace();
         } finally { // 做关闭操作
+            System.out.println("下载文件流:完成 关闭文件流准备：fileName:"+fileName+":"+System.currentTimeMillis());
             if (bis != null) {
                 try {
                     bis.close();
