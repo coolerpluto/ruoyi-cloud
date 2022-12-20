@@ -76,7 +76,11 @@ public class MFileInfoController extends BaseController
     {
         return success(mFileInfoService.selectMFileInfoById(id));
     }
-
+    @GetMapping(value = "association/{id}")
+    public AjaxResult getAssociationStatus(@PathVariable("id") Long id)
+    {
+        return success(mFileInfoService.getMFileAssociationStatus(id));
+    }
     /**
      * 新增文件记录
      */

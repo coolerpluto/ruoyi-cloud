@@ -1,7 +1,10 @@
 package com.highgo.medium.service;
 
 import java.util.List;
+import java.util.Map;
+
 import com.highgo.medium.domain.MFileInfo;
+import org.apache.ibatis.annotations.Param;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -20,8 +23,26 @@ public interface IMFileInfoService
      * @return 文件记录
      */
     public MFileInfo selectMFileInfoById(Long id);
+
+    /**
+     * 通过表id查询 该id在另个一个表中为要给外部连接
+     */
     public List<MFileInfo> selectMFileInfoByIds(List<String> ids);
 
+    /**
+     * 通过介质的id查询
+     */
+    List<MFileInfo> getMFileInfoByMediumIds(List<String> mediumIds);
+
+    /**
+     * 通过介质附件的id查询
+     */
+    List<MFileInfo> getMFileInfoBySecurityIds(List<String> securityIds);
+
+    /**
+     * 查询文件的关联状态
+     */
+    List<Map<String,Object>>getMFileAssociationStatus(Long id);
     /**
      * 查询文件记录列表
      * 

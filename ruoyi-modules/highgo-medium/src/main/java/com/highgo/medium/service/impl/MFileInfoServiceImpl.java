@@ -1,6 +1,7 @@
 package com.highgo.medium.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import com.alibaba.fastjson.JSON;
 import com.highgo.medium.utils.MediumUtil;
@@ -45,6 +46,21 @@ public class MFileInfoServiceImpl implements IMFileInfoService
     public List<MFileInfo> selectMFileInfoByIds(List<String> ids)
     {
         return mFileInfoMapper.selectMFileInfoByIds(ids);
+    }
+
+    @Override
+    public List<MFileInfo> getMFileInfoByMediumIds(List<String> mediumIds) {
+        return mFileInfoMapper.getMFileInfoByMediumIds(mediumIds);
+    }
+
+    @Override
+    public List<MFileInfo> getMFileInfoBySecurityIds(List<String> securityIds) {
+        return  mFileInfoMapper.getMFileInfoBySecurityIds(securityIds);
+    }
+
+    @Override
+    public List<Map<String, Object>> getMFileAssociationStatus(Long id) {
+        return mFileInfoMapper.getMFileAssociationStatus(id);
     }
 
     /**

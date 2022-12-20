@@ -97,12 +97,12 @@
 
     <el-table v-loading="loading" :data="fileList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="记录ID" align="center" prop="id" :show-overflow-tooltip="true"/>
+      <el-table-column label="记录ID" align="center" prop="id" :show-overflow-tooltip="true" width="180px"/>
       <!-- <el-table-column label="文件服务器" align="center" prop="fileServer" :show-overflow-tooltip="true"/> -->
       <el-table-column label="文件路径" align="center" prop="filePath" :show-overflow-tooltip="true"/>
       <el-table-column label="文件名" align="center" prop="fileName" :show-overflow-tooltip="true"/>
-      <el-table-column label="文件类型" align="center" prop="fileType" />
-      <el-table-column label="记录状态" align="center" prop="status" >
+      <el-table-column label="文件类型" align="center" prop="fileType" width="80px"/>
+      <el-table-column label="记录状态" align="center" prop="status" width="80px">
          <template slot-scope="scope">
           <dict-tag
             :options="dict.type.sys_normal_disable"
@@ -111,13 +111,10 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="创建者名" align="center" prop="createBy" :show-overflow-tooltip="true"/>
-      <el-table-column label="创建时间" align="center" prop="createTime" :show-overflow-tooltip="true"/>
+      <el-table-column label="创建者名" align="center" prop="createBy" :show-overflow-tooltip="true" width="100px"/>
+      <el-table-column label="创建时间" align="center" prop="createTime" :show-overflow-tooltip="true" width="150px"/>
 
-      <el-table-column label="更新者名" align="center" prop="updateBy" :show-overflow-tooltip="true"/>
-      <el-table-column label="更新时间" align="center" prop="updateTime" :show-overflow-tooltip="true"/>
-      <el-table-column label="备注" align="center" prop="remark" :show-overflow-tooltip="true" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width"  width="100px">
         <template slot-scope="scope">
           <el-button
             size="mini"

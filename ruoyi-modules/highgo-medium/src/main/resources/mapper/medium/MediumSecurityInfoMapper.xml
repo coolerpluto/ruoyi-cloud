@@ -7,6 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="MediumSecurityInfo" id="MediumSecurityInfoResult">
         <result property="id"    column="id"    />
         <result property="mediumId"    column="medium_id"    />
+        <result property="securityName"    column="security_name"    />
         <result property="fileType"    column="file_type"    />
         <result property="fileId"    column="file_id"    />
         <result property="md5FileId"    column="md5_file_id"    />
@@ -21,13 +22,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectMediumSecurityInfoVo">
-        select id, medium_id, file_type, file_id, md5_file_id, status, create_id, create_by, create_time, update_id, update_by, update_time, remark from t_medium_security_info
+        select id, medium_id,security_name, file_type, file_id, md5_file_id, status, create_id, create_by, create_time, update_id, update_by, update_time, remark from t_medium_security_info
     </sql>
 
     <select id="selectMediumSecurityInfoList" parameterType="MediumSecurityInfo" resultMap="MediumSecurityInfoResult">
         <include refid="selectMediumSecurityInfoVo"/>
         <where>  
             <if test="mediumId != null "> and medium_id = #{mediumId}</if>
+            <if test="securityName != null  and securityName != ''"> and security_name = #{securityName}</if>
             <if test="fileType != null  and fileType != ''"> and file_type = #{fileType}</if>
             <if test="createBy != null  and createBy != ''"> and create_by like concat('%', #{createBy}, '%')</if>
             <if test="createTime != null "> and create_time &lt;= #{createTime}</if>
@@ -43,6 +45,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         insert into t_medium_security_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="mediumId != null">medium_id,</if>
+            <if test="securityName != null">security_name,</if>
             <if test="fileType != null">file_type,</if>
             <if test="fileId != null">file_id,</if>
             <if test="md5FileId != null">md5_file_id,</if>
@@ -57,6 +60,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="mediumId != null">#{mediumId},</if>
+            <if test="securityName != null">#{securityName},</if>
             <if test="fileType != null">#{fileType},</if>
             <if test="fileId != null">#{fileId},</if>
             <if test="md5FileId != null">#{md5FileId},</if>
@@ -75,6 +79,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update t_medium_security_info
         <trim prefix="SET" suffixOverrides=",">
             <if test="mediumId != null">medium_id = #{mediumId},</if>
+            <if test="securityName != null">security_name = #{securityName},</if>
             <if test="fileType != null">file_type = #{fileType},</if>
             <if test="fileId != null">file_id = #{fileId},</if>
             <if test="md5FileId != null">md5_file_id = #{md5FileId},</if>

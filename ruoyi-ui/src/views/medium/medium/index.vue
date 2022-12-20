@@ -530,6 +530,9 @@ export default {
     cancel() {
       this.open = false;
       this.reset();
+      // 弹框关闭后 清理一下上传文件的列表
+      this.$refs.uploadMediumFile.clearFiles()
+      this.$refs.uploadMediumFileMd5.clearFiles()
     },
     // 表单重置
     reset() {
@@ -617,6 +620,9 @@ export default {
               this.getList();
             });
           }
+          // 弹框关闭后 清理一下上传文件的列表
+          this.$refs.uploadMediumFile.clearFiles()
+          this.$refs.uploadMediumFileMd5.clearFiles()
         }
       });
     },

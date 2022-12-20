@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.highgo.medium.mapper.MFileInfoMapper">
-    
+
     <resultMap type="MFileInfo" id="MFileInfoResult">
         <result property="id"    column="id"    />
         <result property="fileServer"    column="file_server"    />
@@ -26,7 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectMFileInfoList" parameterType="MFileInfo" resultMap="MFileInfoResult">
         <include refid="selectMFileInfoVo"/>
-        <where>  
+        <where>
             <if test="fileServer != null  and fileServer != ''"> and file_server like concat('%', #{fileServer}, '%')</if>
             <if test="filePath != null  and filePath != ''"> and file_path like concat('%', #{filePath}, '%')</if>
             <if test="fileName != null  and fileName != ''"> and file_name like concat('%', #{fileName}, '%')</if>
@@ -38,7 +38,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="remark != null  and remark != ''"> and remark like concat('%', #{remark}, '%')</if>
         </where>
     </select>
-    
+
     <select id="selectMFileInfoById" parameterType="Long" resultMap="MFileInfoResult">
         <include refid="selectMFileInfoVo"/>
         where id = #{id}
@@ -51,6 +51,64 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                  separator="," open="(" close=")">
             #{fileId}
         </foreach>
+    </select>
+    <select id="getMFileInfoByMediumIds" parameterType="java.util.List" resultMap="MFileInfoResult">
+        select
+            tfi.id ,
+            tfi.file_name ,
+            tfi.file_path ,
+            tfi.file_type ,
+            tfi.file_server
+        from
+            t_file_info tfi
+        left join t_medium_info tmi on tmi.medium_file_id = tfi.id or tfi.id = tmi.medium_md5_file_id
+        where tmi.id IN
+        <foreach collection="mediumIds" item="mediumId" index="index"
+                 separator="," open="(" close=")">
+            #{mediumId}
+        </foreach>
+    </select>
+    <select id="getMFileInfoBySecurityIds" parameterType="java.util.List" resultMap="MFileInfoResult">
+        select
+            tfi.id ,
+            tfi.file_name ,
+            tfi.file_path ,
+            tfi.file_type ,
+            tfi.file_server
+        from
+            t_file_info tfi
+        left join t_medium_security_info tmsi on tmsi.file_id  = tfi.id or tfi.id = tmsi.md5_file_id
+        where tmsi.id IN
+        <foreach collection="securityIds" item="securityId" index="index"
+                 separator="," open="(" close=")">
+            #{securityId}
+        </foreach>
+    </select>
+    <select id="getMFileAssociationStatus" parameterType="Long" resultType="java.util.Map">
+        select
+            tfi.id,
+            tfi.file_type,
+            tfi.file_name ,
+            tfi.file_path,
+            (
+                select
+                    tmi.medium_name
+                from
+                    t_medium_info tmi
+                where
+                    tmi .medium_file_id = tfi .id
+                   or tmi.medium_md5_file_id = tfi.id) medium_name,
+            (
+                select
+                    tmsi.security_name
+                from
+                    t_medium_security_info tmsi
+                where
+                    tmsi .file_id = tfi .id
+                   or tmsi.md5_file_id = tfi.id) security_name
+        from
+            t_file_info tfi
+        where tfi.id = #{id}
     </select>
     <insert id="insertMFileInfo" parameterType="MFileInfo" useGeneratedKeys="true" keyProperty="id">
         insert into t_file_info
@@ -110,7 +168,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteMFileInfoByIds" parameterType="String">
-        delete from t_file_info where id in 
+        delete from t_file_info where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>

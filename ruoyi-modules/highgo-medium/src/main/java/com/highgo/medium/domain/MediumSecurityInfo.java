@@ -21,6 +21,8 @@ public class MediumSecurityInfo extends BaseEntity
     /** 介质ID */
     @Excel(name = "介质ID")
     private Long mediumId;
+    @Excel(name = "附件别名")
+    private String securityName;
 
     /** 文件类型 */
     @Excel(name = "文件类型")
@@ -115,6 +117,14 @@ public class MediumSecurityInfo extends BaseEntity
     public Long getUpdateId() 
     {
         return updateId;
+    }
+
+    public String getSecurityName() {
+        return securityName;
+    }
+
+    public void setSecurityName(String securityName) {
+        this.securityName = securityName;
     }
 
     @Override
