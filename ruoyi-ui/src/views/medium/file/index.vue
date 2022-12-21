@@ -25,16 +25,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="文件类型" prop="fileType">
-        <el-select v-model="queryParams.fileType" placeholder="请选择文件类型" clearable>
-          <el-option
-            v-for="dict in dict.type.sys_file_type"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
-      </el-form-item>
       <el-form-item label="创建时间" prop="createTime">
         <el-date-picker clearable
           v-model="queryParams.createTime"
@@ -92,17 +82,18 @@
           v-hasPermi="['medium:file:export']"
         >导出</el-button>
       </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList" :columns="columns"></right-toolbar>
+
     </el-row>
 
     <el-table v-loading="loading" :data="fileList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="记录ID" align="center" prop="id" :show-overflow-tooltip="true" width="180px"/>
-      <!-- <el-table-column label="文件服务器" align="center" prop="fileServer" :show-overflow-tooltip="true"/> -->
-      <el-table-column label="文件路径" align="center" prop="filePath" :show-overflow-tooltip="true"/>
-      <el-table-column label="文件名" align="center" prop="fileName" :show-overflow-tooltip="true"/>
-      <el-table-column label="文件类型" align="center" prop="fileType" width="80px"/>
-      <el-table-column label="记录状态" align="center" prop="status" width="80px">
+      <el-table-column label="记录ID" align="center" prop="id" :show-overflow-tooltip="true" width="180px" v-if="columns[0].visible" />
+      <el-table-column label="文件服务器" align="center" prop="fileServer" :show-overflow-tooltip="true" v-if="columns[1].visible" />
+      <el-table-column label="文件路径" align="center" prop="filePath" :show-overflow-tooltip="true" v-if="columns[2].visible" />
+      <el-table-column label="文件名" align="center" prop="fileName" :show-overflow-tooltip="true" v-if="columns[3].visible" />
+      <el-table-column label="文件类型" align="center" prop="fileType" width="80px" v-if="columns[4].visible" />
+      <el-table-column label="记录状态" align="center" prop="status" width="80px" v-if="columns[5].visible" >
          <template slot-scope="scope">
           <dict-tag
             :options="dict.type.sys_normal_disable"
@@ -111,10 +102,10 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="创建者名" align="center" prop="createBy" :show-overflow-tooltip="true" width="100px"/>
-      <el-table-column label="创建时间" align="center" prop="createTime" :show-overflow-tooltip="true" width="150px"/>
+      <el-table-column label="创建者名" align="center" prop="createBy" :show-overflow-tooltip="true" width="100px" v-if="columns[6].visible" />
+      <el-table-column label="创建时间" align="center" prop="createTime" :show-overflow-tooltip="true" width="150px" v-if="columns[7].visible" />
 
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width"  width="100px">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width"  width="100px" v-if="columns[8].visible">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -159,7 +150,7 @@ import { listFile, getFile, delFile, addFile, updateFile } from "@/api/medium/fi
 
 export default {
   name: "File",
-  dicts: ['sys_file_type','sys_normal_disable'],
+  dicts: ['sys_normal_disable'],
   data() {
     return {
       // 遮罩层
@@ -172,6 +163,18 @@ export default {
       multiple: true,
       // 显示搜索条件
       showSearch: true,
+      // 列信息
+      columns: [
+        { key: 0, label: `记录ID`, visible: true },
+        { key: 1, label: `文件服务器`, visible: false },
+        { key: 2, label: `文件路径`, visible: true },
+        { key: 3, label: `文件名`, visible: true },
+        { key: 4, label: `文件类型`, visible: false },
+        { key: 5, label: `记录状态`, visible: false },
+        { key: 6, label: `创建者名`, visible: false },
+        { key: 7, label: `创建时间`, visible: false },
+        { key: 8, label: `操作列`, visible: true },
+      ],
       // 总条数
       total: 0,
       // 文件记录表格数据
@@ -306,7 +309,7 @@ export default {
     handleDelete(row) {
       const ids = row.id || this.ids;
       //this.$modal.confirm('是否确认删除文件记录编号为"' + ids + '"的数据项？').then(function() {
-      this.$modal.confirm('是否确认删除选择的文件吗？').then(function() {
+      this.$modal.confirm('是否确认删除选择的文件吗？删除后对应下载将会报错请慎重！').then(function() {
         return delFile(ids);
       }).then(() => {
         this.getList();

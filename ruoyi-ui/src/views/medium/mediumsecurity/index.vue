@@ -100,7 +100,7 @@
       <el-table-column label="创建时间" align="center" prop="createTime" :show-overflow-tooltip="true" width="160px"/>
       <el-table-column label="更新人" align="center" prop="updateBy" :show-overflow-tooltip="true" width="80px"/>
       <el-table-column label="更新时间" align="center" prop="updateTime" :show-overflow-tooltip="true" width="160px"/>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" min-width="120px">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="150px">
         <template slot-scope="scope">
           <el-button
             size="mini"
