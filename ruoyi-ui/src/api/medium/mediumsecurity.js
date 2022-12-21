@@ -25,7 +25,31 @@ export function addMediumsecurity(data) {
     data: data
   })
 }
+// 新增介质安全文件记录
+export function addMediumsecurityWithFile(data) {
+  return request({
+    url: '/medium/mediumsecurity/addWithFile',
+    method: 'post',
+    data: data,
+    timeout: 60000,
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+}
 
+// 修改介质安全文件记录
+export function updateMediumsecurityWithFile(data) {
+  return request({
+    url: '/medium/mediumsecurity/editWithFile',
+    method: 'put',
+    data: data,
+    timeout: 60000,
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+}
 // 修改介质安全文件记录
 export function updateMediumsecurity(data) {
   return request({

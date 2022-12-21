@@ -589,7 +589,6 @@ export default {
     },
     /** 提交按钮 */
     submitForm() {
-      debugger;
       // 手动调用上传，这里会调用我们自己定义的
       this.$refs.uploadMediumFileMd5.submit();
       this.$refs.uploadMediumFile.submit();

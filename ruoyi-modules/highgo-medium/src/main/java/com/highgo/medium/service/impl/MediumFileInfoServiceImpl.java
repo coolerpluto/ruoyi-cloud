@@ -135,7 +135,7 @@ public class MediumFileInfoServiceImpl implements IMediumFileInfoService
         List<MFileInfo> list = new ArrayList<>();
         if (mediumFile!=null){
             R<SysFile> upMd = remoteFileService.upload(mediumFile,"medium");
-            if (upMd.getCode()!=200){
+            if (upMd.getCode() != 200) {
                 return 0;
             }
             MFileInfo medium = new MFileInfo();
@@ -152,7 +152,7 @@ public class MediumFileInfoServiceImpl implements IMediumFileInfoService
         }
         if (mediumFileMd5!=null){
             R<SysFile> upMd5res = remoteFileService.upload(mediumFileMd5,"medium");
-            if (upMd5res.getCode()!=200){
+            if (upMd5res.getCode() != 200) {
                 return 0;
             }
             MFileInfo mediumMd5 = new MFileInfo();
@@ -166,6 +166,9 @@ public class MediumFileInfoServiceImpl implements IMediumFileInfoService
             mediumMd5.setCreateBy(mediumFileInfo.getCreateBy());
             list.add(mediumMd5);
             mediumFileInfo.setMediumMd5FileId(mediumMd5.getId());
+        }
+        if (list.size() > 0) {
+            imFileInfoService.insertMFileInfoBath(list);
         }
         mediumFileInfoMapper.updateMediumFileInfo(mediumFileInfo);
         return 1;
@@ -208,7 +211,7 @@ public class MediumFileInfoServiceImpl implements IMediumFileInfoService
             list.add(mediumMd5);
             mediumFileInfo.setMediumMd5FileId(mediumMd5.getId());
         }
-        if(list.size()>0){
+        if (list.size() > 0) {
             imFileInfoService.insertMFileInfoBath(list);
         }
         mediumFileInfo.setId(MediumUtil.getId());

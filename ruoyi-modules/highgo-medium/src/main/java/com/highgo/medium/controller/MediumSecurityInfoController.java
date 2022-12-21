@@ -1,8 +1,11 @@
 package com.highgo.medium.controller;
 
+import java.util.Date;
 import java.util.List;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.common.security.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +24,7 @@ import com.ruoyi.common.core.web.controller.BaseController;
 import com.ruoyi.common.core.web.domain.AjaxResult;
 import com.ruoyi.common.core.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.web.page.TableDataInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 介质安全文件记录Controller
@@ -87,7 +91,17 @@ public class MediumSecurityInfoController extends BaseController
     {
         return toAjax(mediumSecurityInfoService.insertMediumSecurityInfo(mediumSecurityInfo));
     }
-
+    @RequiresPermissions("medium:mediumsecurity:add")
+    @Log(title = "介质安全文件记录", businessType = BusinessType.INSERT)
+    @PostMapping("/addWithFile")
+    public AjaxResult addWithFile(MediumSecurityInfo mediumSecurityInfo,
+                                  MultipartFile securityFile, MultipartFile securityFileMd5)
+    {
+        mediumSecurityInfo.setCreateBy(SecurityUtils.getUsername());
+        mediumSecurityInfo.setCreateId(SecurityUtils.getUserId());
+        mediumSecurityInfo.setCreateTime(new Date());
+        return toAjax(mediumSecurityInfoService.insertMediumSecurityWithFile(mediumSecurityInfo,securityFile,securityFileMd5));
+    }
     /**
      * 修改介质安全文件记录
      */
@@ -98,7 +112,17 @@ public class MediumSecurityInfoController extends BaseController
     {
         return toAjax(mediumSecurityInfoService.updateMediumSecurityInfo(mediumSecurityInfo));
     }
-
+    @RequiresPermissions("medium:mediumsecurity:edit")
+    @Log(title = "介质安全文件记录", businessType = BusinessType.UPDATE)
+    @PutMapping("/editWithFile")
+    public AjaxResult editWithFile(MediumSecurityInfo mediumSecurityInfo,
+                                   MultipartFile securityFile, MultipartFile securityFileMd5)
+    {
+        mediumSecurityInfo.setUpdateBy(SecurityUtils.getUsername());
+        mediumSecurityInfo.setUpdateId(SecurityUtils.getUserId());
+        mediumSecurityInfo.setUpdateTime(new Date());
+        return toAjax(mediumSecurityInfoService.updateMediumSecurityWithFile(mediumSecurityInfo,securityFile,securityFileMd5));
+    }
     /**
      * 删除介质安全文件记录
      */

@@ -2,6 +2,7 @@ package com.highgo.medium.service;
 
 import java.util.List;
 import com.highgo.medium.domain.MediumSecurityInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -60,6 +61,10 @@ public interface IMediumSecurityInfoService
      * @return 结果
      */
     public int deleteMediumSecurityInfoById(Long id);
+
+    int insertMediumSecurityWithFile(MediumSecurityInfo mediumSecurityInfo, MultipartFile file, MultipartFile fileMd5);
+
+    int updateMediumSecurityWithFile(MediumSecurityInfo mediumSecurityInfo, MultipartFile file, MultipartFile fileMd5);
 
     void download(HttpServletResponse response, MediumSecurityInfo mediumSecurityInfo);
 }

@@ -16,11 +16,11 @@ public class MediumSecurityInfo extends BaseEntity
     private static final long serialVersionUID = 1L;
 
     /** 记录ID */
-    private Long id;
+    private String id;
 
     /** 介质ID */
     @Excel(name = "介质ID")
-    private Long mediumId;
+    private String mediumId;
     @Excel(name = "附件别名")
     private String securityName;
 
@@ -30,11 +30,11 @@ public class MediumSecurityInfo extends BaseEntity
 
     /** 文件ID */
     @Excel(name = "文件ID")
-    private Long fileId;
+    private String fileId;
 
     /** md5 ID */
     @Excel(name = "md5 ID")
-    private Long md5FileId;
+    private String md5FileId;
 
     /** 文件状态 */
     @Excel(name = "文件状态")
@@ -46,21 +46,21 @@ public class MediumSecurityInfo extends BaseEntity
     /** 更新者ID */
     private Long updateId;
 
-    public void setId(Long id) 
+    public void setId(String id)
     {
         this.id = id;
     }
 
-    public Long getId() 
+    public String getId()
     {
         return id;
     }
-    public void setMediumId(Long mediumId) 
+    public void setMediumId(String mediumId)
     {
         this.mediumId = mediumId;
     }
 
-    public Long getMediumId() 
+    public String getMediumId()
     {
         return mediumId;
     }
@@ -73,21 +73,21 @@ public class MediumSecurityInfo extends BaseEntity
     {
         return fileType;
     }
-    public void setFileId(Long fileId) 
+    public void setFileId(String fileId)
     {
         this.fileId = fileId;
     }
 
-    public Long getFileId() 
+    public String getFileId()
     {
         return fileId;
     }
-    public void setMd5FileId(Long md5FileId) 
+    public void setMd5FileId(String md5FileId)
     {
         this.md5FileId = md5FileId;
     }
 
-    public Long getMd5FileId() 
+    public String getMd5FileId()
     {
         return md5FileId;
     }
