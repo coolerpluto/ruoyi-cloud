@@ -38,16 +38,6 @@ public enum BusinessType
     EXPORT,
 
     /**
-     * 下载
-     */
-    DOWNLOAD,
-
-    /**
-     * 上传
-     */
-    UPLOAD,
-
-    /**
      * 导入
      */
     IMPORT,
@@ -66,4 +56,14 @@ public enum BusinessType
      * 清空数据
      */
     CLEAN,
+
+    /**
+     * 上传
+     */
+    UPLOAD,
+
+    /**
+     * 下载
+     */
+    DOWNLOAD,
 }
