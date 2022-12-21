@@ -26,6 +26,7 @@ public interface MediumFileInfoMapper
      * @return 介质文件信息记录集合
      */
     public List<MediumFileInfo> selectMediumFileInfoList(MediumFileInfo mediumFileInfo);
+    public List<MediumFileInfo> getMediumSimpleInfo(MediumFileInfo mediumFileInfo);
 
     /**
      * 新增介质文件信息记录

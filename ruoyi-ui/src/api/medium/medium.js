@@ -8,7 +8,14 @@ export function listMedium(query) {
     params: query
   })
 }
-
+// 查询介质文件信息记录列表
+export function simpleMediumList(query) {
+  return request({
+    url: '/medium/medium/simple',
+    method: 'get',
+    params: query
+  })
+}
 // 查询介质文件信息记录详细
 export function getMedium(id) {
   return request({

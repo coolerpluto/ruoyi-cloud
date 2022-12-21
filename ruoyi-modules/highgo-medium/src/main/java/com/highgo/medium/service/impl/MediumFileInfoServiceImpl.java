@@ -74,6 +74,12 @@ public class MediumFileInfoServiceImpl implements IMediumFileInfoService
         return mediumFileInfoMapper.selectMediumFileInfoList(mediumFileInfo);
     }
 
+    @Override
+    public List<MediumFileInfo> getMediumSimpleInfo(MediumFileInfo mediumFileInfo)
+    {
+        return mediumFileInfoMapper.getMediumSimpleInfo(mediumFileInfo);
+    }
+
     /**
      * 新增介质文件信息记录
      * 

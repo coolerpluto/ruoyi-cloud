@@ -24,7 +24,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
         <result property="remark"    column="remark"    />
     </resultMap>
-
+    <select id="getMediumSimpleInfo" parameterType="MediumFileInfo" resultMap="MediumFileInfoResult">
+        select
+            tmi.id ,
+            tmi.medium_name,
+            tmi.medium_type ,
+            tmi.db_version ,
+            tmi.cpu_type ,
+            tmi.package_type
+        from
+            t_medium_info tmi
+        where
+            status = '0'
+        <if test="mediumName != null  and mediumName != ''"> and tmi.medium_name like concat('%', #{mediumName}, '%')</if>
+        <if test="mediumType != null  and mediumType != ''"> and tmi.medium_type like concat('%', #{mediumType}, '%')</if>
+        <if test="dbVersion != null  and dbVersion != ''"> and tmi.db_version like concat('%', #{dbVersion}, '%')</if>
+        <if test="cpuType != null  and cpuType != ''"> and tmi.cpu_type like concat('%', #{cpuType}, '%')</if>
+        <if test="packageType != null  and packageType != ''"> and tmi.package_type like concat('%', #{packageType}, '%')</if>
+    </select>
     <sql id="selectMediumFileInfoVo">
         select tmi.id, tmi.medium_name,tmi.medium_type, tmi.db_version, tmi.cpu_type, tmi.package_type,
                tmi.medium_file_id, (select tfi.file_name from t_file_info tfi where tfi.id=tmi.medium_file_id) medium_file_name,

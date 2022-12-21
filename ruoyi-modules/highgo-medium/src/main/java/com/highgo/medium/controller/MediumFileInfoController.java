@@ -45,6 +45,13 @@ public class MediumFileInfoController extends BaseController
         List<MediumFileInfo> list = mediumFileInfoService.selectMediumFileInfoList(mediumFileInfo);
         return getDataTable(list);
     }
+    @RequiresPermissions("medium:medium:list")
+    @GetMapping("/simple")
+    public TableDataInfo getSimpleInfo(MediumFileInfo mediumFileInfo)
+    {
+        List<MediumFileInfo> list = mediumFileInfoService.getMediumSimpleInfo(mediumFileInfo);
+        return getDataTable(list);
+    }
 
     /**
      * 导出介质文件信息记录列表
