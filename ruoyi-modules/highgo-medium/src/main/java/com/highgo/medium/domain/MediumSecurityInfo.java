@@ -19,8 +19,10 @@ public class MediumSecurityInfo extends BaseEntity
     private String id;
 
     /** 介质ID */
-    @Excel(name = "介质ID")
+    @Excel(name = "对应的介质ID")
     private String mediumId;
+    @Excel(name = "对应的介质")
+    private String mediumName;
     @Excel(name = "附件别名")
     private String securityName;
 
@@ -31,10 +33,14 @@ public class MediumSecurityInfo extends BaseEntity
     /** 文件ID */
     @Excel(name = "文件ID")
     private String fileId;
+    @Excel(name = "文件名")
+    private String fileName;
 
     /** md5 ID */
     @Excel(name = "md5 ID")
     private String md5FileId;
+    @Excel(name = "md5 文件名")
+    private String md5FileName;
 
     /** 文件状态 */
     @Excel(name = "文件状态")
@@ -45,6 +51,30 @@ public class MediumSecurityInfo extends BaseEntity
 
     /** 更新者ID */
     private Long updateId;
+
+    public String getMediumName() {
+        return mediumName;
+    }
+
+    public void setMediumName(String mediumName) {
+        this.mediumName = mediumName;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public String getMd5FileName() {
+        return md5FileName;
+    }
+
+    public void setMd5FileName(String md5FileName) {
+        this.md5FileName = md5FileName;
+    }
 
     public void setId(String id)
     {

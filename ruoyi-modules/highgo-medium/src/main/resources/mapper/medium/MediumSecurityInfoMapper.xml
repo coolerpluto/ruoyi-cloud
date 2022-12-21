@@ -19,26 +19,36 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
         <result property="remark"    column="remark"    />
+        <result property="mediumName"    column="medium_name"    />
+        <result property="md5FileName"    column="md5_file_name"    />
+        <result property="fileName"    column="file_name"    />
     </resultMap>
 
     <sql id="selectMediumSecurityInfoVo">
-        select id, medium_id,security_name, file_type, file_id, md5_file_id, status, create_id, create_by, create_time, update_id, update_by, update_time, remark from t_medium_security_info
-    </sql>
+        select tmsi.id, tmsi.medium_id,tmsi.security_name, tmsi.file_type, tmsi.file_id, tmsi.md5_file_id, tmsi.status,
+               tmsi.create_id, tmsi.create_by, tmsi.create_time, tmsi.update_id, tmsi.update_by, tmsi.update_time, tmsi.remark,
+               tmi.medium_name,
+               tfi.file_name md5_file_name,
+               tfi2.file_name
+        from t_medium_security_info tmsi
+                 left join t_medium_info tmi on tmi.id=tmsi.medium_id
+                 left join  t_file_info tfi   on tfi.id=tmsi.md5_file_id
+                 left join  t_file_info tfi2   on tfi2.id=tmsi.file_id     </sql>
 
     <select id="selectMediumSecurityInfoList" parameterType="MediumSecurityInfo" resultMap="MediumSecurityInfoResult">
         <include refid="selectMediumSecurityInfoVo"/>
         <where>  
-            <if test="mediumId != null "> and medium_id = #{mediumId}</if>
-            <if test="securityName != null  and securityName != ''"> and security_name = #{securityName}</if>
-            <if test="fileType != null  and fileType != ''"> and file_type = #{fileType}</if>
-            <if test="createBy != null  and createBy != ''"> and create_by like concat('%', #{createBy}, '%')</if>
-            <if test="createTime != null "> and create_time &lt;= #{createTime}</if>
+            <if test="mediumId != null "> and tmsi.medium_id = #{mediumId}</if>
+            <if test="securityName != null  and securityName != ''"> and tmsi.security_name = #{securityName}</if>
+            <if test="fileType != null  and fileType != ''"> and tmsi.file_type = #{fileType}</if>
+            <if test="createBy != null  and createBy != ''"> and tmsi.create_by like concat('%', #{createBy}, '%')</if>
+            <if test="createTime != null "> and tmsi.create_time &lt;= #{createTime}</if>
         </where>
     </select>
     
     <select id="selectMediumSecurityInfoById" parameterType="Long" resultMap="MediumSecurityInfoResult">
         <include refid="selectMediumSecurityInfoVo"/>
-        where id = #{id}
+        where tmsi.id = #{id}
     </select>
         
     <insert id="insertMediumSecurityInfo" parameterType="MediumSecurityInfo" useGeneratedKeys="true" keyProperty="id">

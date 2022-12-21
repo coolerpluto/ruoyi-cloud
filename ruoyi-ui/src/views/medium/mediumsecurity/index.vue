@@ -73,8 +73,8 @@
 
     <el-table v-loading="loading" :data="mediumsecurityList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="别名名称" align="center" prop="securityName" :show-overflow-tooltip="true"/>
-      <el-table-column label="文件类型" align="center" prop="fileType" >
+      <el-table-column label="别名名称" align="center" prop="securityName" :show-overflow-tooltip="true" width="180px"/>
+      <el-table-column label="文件类型" align="center" prop="fileType" width="80px">
         <template slot-scope="scope">
           <dict-tag
             :options="dict.type.medium_file_type"
@@ -85,7 +85,7 @@
       
       <el-table-column label="文件名" align="center" prop="fileName" :show-overflow-tooltip="true"/>
       <el-table-column label="md5名称" align="center" prop="md5FileName" :show-overflow-tooltip="true"/>
-      <el-table-column label="文件状态" align="center" prop="status" >
+      <el-table-column label="文件状态" align="center" prop="status" width="80px">
         <template slot-scope="scope">
           <dict-tag
             :options="dict.type.sys_normal_disable"
@@ -96,10 +96,10 @@
 
       <el-table-column label="对应介质" align="center" prop="mediumName" :show-overflow-tooltip="true"/>      
 
-      <el-table-column label="创建人" align="center" prop="createBy" :show-overflow-tooltip="true"/>
-      <el-table-column label="创建时间" align="center" prop="createTime" :show-overflow-tooltip="true" />
-      <el-table-column label="更新人" align="center" prop="updateBy" :show-overflow-tooltip="true"/>
-      <el-table-column label="更新时间" align="center" prop="updateTime" :show-overflow-tooltip="true"/>
+      <el-table-column label="创建人" align="center" prop="createBy" :show-overflow-tooltip="true" width="80px"/>
+      <el-table-column label="创建时间" align="center" prop="createTime" :show-overflow-tooltip="true" width="160px"/>
+      <el-table-column label="更新人" align="center" prop="updateBy" :show-overflow-tooltip="true" width="80px"/>
+      <el-table-column label="更新时间" align="center" prop="updateTime" :show-overflow-tooltip="true" width="160px"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width" min-width="120px">
         <template slot-scope="scope">
           <el-button
@@ -289,6 +289,22 @@
               </el-upload>
             </el-form-item>
           </el-col>
+          <el-col :span="12">
+            <el-form-item label="上次文件名" >
+              <el-input disabled
+                v-model="form.fileName"
+                placeholder="请输入附件别名"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="上次文件名" >
+              <el-input  disabled
+                v-model="form.md5FileName"
+                placeholder="请输入附件别名"
+              />
+            </el-form-item>
+          </el-col>
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -358,6 +374,7 @@ export default {
   },
   created() {
     this.getList();
+    this.getMediumList();
   },
   methods: {
     /** 查询介质安全文件记录列表 */
@@ -368,6 +385,9 @@ export default {
         this.total = response.total;
         this.loading = false;
       });
+      
+    },
+    getMediumList(){
       simpleMediumList({}).then((response) => {
         this.mediumSimpleList = response.rows;
       });
