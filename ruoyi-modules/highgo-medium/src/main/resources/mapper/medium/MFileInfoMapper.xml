@@ -86,7 +86,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     <select id="getMFileAssociationStatus" parameterType="Long" resultType="java.util.Map">
         select
-            tfi.id,
             tfi.file_type,
             tfi.file_name ,
             tfi.file_path,

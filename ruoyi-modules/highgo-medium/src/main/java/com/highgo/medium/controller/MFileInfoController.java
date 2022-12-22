@@ -21,6 +21,7 @@ import com.ruoyi.common.core.web.controller.BaseController;
 import com.ruoyi.common.core.web.domain.AjaxResult;
 import com.ruoyi.common.core.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.web.page.TableDataInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 文件记录Controller
@@ -76,6 +77,16 @@ public class MFileInfoController extends BaseController
     {
         return success(mFileInfoService.selectMFileInfoById(id));
     }
+
+    @GetMapping(value = "mediumIds/{ids}")
+    public AjaxResult getMFileInfoByMediumIds(@PathVariable("ids") List<String> ids) {
+        return success(mFileInfoService.getMFileInfoByMediumIds(ids));
+    }
+
+    @GetMapping(value = "securityIds/{ids}")
+    public AjaxResult getMFileInfoBySecurityIds(@PathVariable("ids") List<String> ids) {
+        return success(mFileInfoService.getMFileInfoBySecurityIds(ids));
+    }
     @GetMapping(value = "association/{id}")
     public AjaxResult getAssociationStatus(@PathVariable("id") Long id)
     {
@@ -92,6 +103,22 @@ public class MFileInfoController extends BaseController
         return toAjax(mFileInfoService.insertMFileInfo(mFileInfo));
     }
 
+    @RequiresPermissions("medium:file:add")
+    @Log(title = "文件记录", businessType = BusinessType.INSERT)
+    @PostMapping("/addWithFile")
+    public AjaxResult addWithFile(MFileInfo mFileInfo, MultipartFile file) {
+        return toAjax(mFileInfoService.insertMFileInfo(mFileInfo));
+    }
+
+    /**
+     * 修改文件记录
+     */
+    @RequiresPermissions("medium:file:edit")
+    @Log(title = "文件记录", businessType = BusinessType.UPDATE)
+    @PutMapping("/editWithFile")
+    public AjaxResult editWithFile(MFileInfo mFileInfo, MultipartFile file) {
+        return toAjax(mFileInfoService.updateMFileInfo(mFileInfo));
+    }
     /**
      * 修改文件记录
      */

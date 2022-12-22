@@ -40,27 +40,7 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['medium:file:add']"
-        >新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['medium:file:edit']"
-        >修改</el-button>
-      </el-col>
+      
       <el-col :span="1.5">
         <el-button
           type="danger"
@@ -105,15 +85,15 @@
       <el-table-column label="创建者名" align="center" prop="createBy" :show-overflow-tooltip="true" width="100px" v-if="columns[6].visible" />
       <el-table-column label="创建时间" align="center" prop="createTime" :show-overflow-tooltip="true" width="150px" v-if="columns[7].visible" />
 
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width"  width="100px" v-if="columns[8].visible">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width"  width="180px" v-if="columns[8].visible">
         <template slot-scope="scope">
           <el-button
             size="mini"
             type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['medium:file:edit']"
-          >修改</el-button>
+            icon="el-icon-zoom-in"
+            @click="handleAssociation(scope.row)"
+          >查看关联</el-button>
+          
           <el-button
             size="mini"
             type="text"
@@ -135,18 +115,42 @@
 
     <!-- 添加或修改文件记录对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="form" :model="form" label-width="80px" disabled>
+        <el-form-item label="文件名字" prop="file_name">
+          <el-input
+            v-model="form.file_name"
+          />
+        </el-form-item>
+        <el-form-item label="文件路径" prop="file_path">
+          <el-input
+            v-model="form.file_path"
+          />
+        </el-form-item>
+        <el-form-item label="文件后缀" prop="file_type">
+          <el-input
+            v-model="form.file_type"
+          />
+        </el-form-item>
+        <el-form-item label="介质别名" prop="medium_name">
+          <el-input
+            v-model="form.medium_name"
+          />
+        </el-form-item>
+        <el-form-item label="附件别名" prop="security_name">
+          <el-input
+            v-model="form.security_name"
+          />
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
+        <el-button @click="cancel">关 闭</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { listFile, getFile, delFile, addFile, updateFile } from "@/api/medium/file";
+import { listFile, getFile, delFile, addFile, updateFile,getFileAssociation } from "@/api/medium/file";
 
 export default {
   name: "File",
@@ -198,22 +202,7 @@ export default {
         remark: null
       },
       // 表单参数
-      form: {},
-      // 表单校验
-      rules: {
-        fileServer: [
-          { required: true, message: "文件服务器不能为空", trigger: "blur" }
-        ],
-        filePath: [
-          { required: true, message: "文件路径不能为空", trigger: "blur" }
-        ],
-        fileName: [
-          { required: true, message: "文件名不能为空", trigger: "blur" }
-        ],
-        fileType: [
-          { required: true, message: "文件类型不能为空", trigger: "change" }
-        ],
-      }
+      form: {},      
     };
   },
   created() {
@@ -237,19 +226,11 @@ export default {
     // 表单重置
     reset() {
       this.form = {
-        id: null,
-        fileServer: null,
-        filePath: null,
-        fileName: null,
-        fileType: null,
-        status: null,
-        createId: null,
-        createBy: null,
-        createTime: null,
-        updateId: null,
-        updateBy: null,
-        updateTime: null,
-        remark: null
+        file_name: null,
+        file_path: null,
+        file_type: null,
+        medium_name:null,
+        security_name:null
       };
       this.resetForm("form");
     },
@@ -269,39 +250,21 @@ export default {
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
-    /** 新增按钮操作 */
-    handleAdd() {
+   
+    handleAssociation(row){
       this.reset();
-      this.open = true;
-      this.title = "添加文件记录";
-    },
-    /** 修改按钮操作 */
-    handleUpdate(row) {
-      this.reset();
-      const id = row.id || this.ids
-      getFile(id).then(response => {
-        this.form = response.data;
-        this.open = true;
-        this.title = "修改文件记录";
-      });
-    },
-    /** 提交按钮 */
-    submitForm() {
-      this.$refs["form"].validate(valid => {
-        if (valid) {
-          if (this.form.id != null) {
-            updateFile(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功");
-              this.open = false;
-              this.getList();
-            });
-          } else {
-            addFile(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功");
-              this.open = false;
-              this.getList();
-            });
+      getFileAssociation(row.id).then(response => {
+        if (200==response.code){
+          if (response.data[0]){
+            this.form = response.data[0];        
+          }else{
+            this.$modal.msgSuccess("暂未发现关联关系")
+            return
           }
+          this.open = true;
+          this.title = "查看文件关联信息";
+        }else{
+          this.$modal.msgError("查询失败，请稍后重试");
         }
       });
     },

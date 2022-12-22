@@ -16,7 +16,13 @@ export function getFile(id) {
     method: 'get'
   })
 }
-
+// 查询文件关联详细
+export function getFileAssociation(id) {
+  return request({
+    url: '/medium/file/association/' + id,
+    method: 'get'
+  })
+}
 // 新增文件记录
 export function addFile(data) {
   return request({
@@ -25,7 +31,31 @@ export function addFile(data) {
     data: data
   })
 }
+// 新增文件记录 带附件模式
+export function addWithFile(data) {
+  return request({
+    url: '/medium/file/addWithFile',
+    method: 'post',
+    data: data,
+    timeout: 60000,
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+}
 
+// 修改文件记录 带附件模式
+export function updateWithFile(data) {
+  return request({
+    url: '/medium/file/editWithFile',
+    method: 'put',
+    data: data,
+    timeout: 60000,
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+}
 // 修改文件记录
 export function updateFile(data) {
   return request({
