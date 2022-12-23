@@ -56,7 +56,7 @@ public interface RemoteFileService {
      * 删除文件
      */
     @DeleteMapping(value = "/file")
-    public R<String> deleteFile(FileReq fileReq);
+    public R<String> deleteFile(@SpringQueryMap FileReq fileReq);
 
     /**
      * 查询目录下的文件

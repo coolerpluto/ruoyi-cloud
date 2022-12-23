@@ -271,13 +271,17 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
+      this.loading = true;
       //this.$modal.confirm('是否确认删除文件记录编号为"' + ids + '"的数据项？').then(function() {
       this.$modal.confirm('是否确认删除选择的文件吗？删除后对应下载将会报错请慎重！').then(function() {
         return delFile(ids);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
-      }).catch(() => {});
+        this.loading = false;
+      }).catch(() => {
+        this.loading = false;
+      });
     },
     /** 导出按钮操作 */
     handleExport() {

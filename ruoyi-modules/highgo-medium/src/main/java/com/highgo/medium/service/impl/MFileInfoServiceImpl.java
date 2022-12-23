@@ -1,22 +1,24 @@
 package com.highgo.medium.service.impl;
 
-import java.util.List;
-import java.util.Map;
-
 import com.alibaba.fastjson.JSON;
+import com.highgo.medium.domain.MFileInfo;
+import com.highgo.medium.mapper.MFileInfoMapper;
+import com.highgo.medium.service.IMFileInfoService;
 import com.highgo.medium.utils.MediumUtil;
 import com.ruoyi.common.core.utils.DateUtils;
 import com.ruoyi.common.security.utils.SecurityUtils;
+import com.ruoyi.system.api.RemoteFileService;
+import com.ruoyi.system.api.domain.FileReq;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.highgo.medium.mapper.MFileInfoMapper;
-import com.highgo.medium.domain.MFileInfo;
-import com.highgo.medium.service.IMFileInfoService;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 文件记录Service业务层处理
@@ -30,7 +32,8 @@ public class MFileInfoServiceImpl implements IMFileInfoService
     private final Logger log = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private MFileInfoMapper mFileInfoMapper;
-
+    @Autowired
+    private RemoteFileService remoteFileService;
     /**
      * 查询文件记录
      * 
@@ -129,9 +132,37 @@ public class MFileInfoServiceImpl implements IMFileInfoService
     @Override
     public int deleteMFileInfoByIds(Long[] ids)
     {
+        List list = Arrays.asList(ids);
+        List files = mFileInfoMapper.selectMFileInfoByIds(list);
+        if(!delFileOnServer(files)){
+            return 0;
+        }
         return mFileInfoMapper.deleteMFileInfoByIds(ids);
     }
-
+    private boolean delFileOnServer(List<MFileInfo> list){
+        log.info("delFileOnServer:{}",JSON.toJSONString(list));
+        try{
+            for (MFileInfo file:list) {
+                String filePath = file.getFilePath();
+                String fileNameInDB = file.getFileName();
+                int index = filePath.lastIndexOf(fileNameInDB);
+                String finalPath = "";
+                if (index==-1|| filePath.endsWith("/")){
+                    finalPath = filePath;
+                }else {
+                    finalPath = filePath.substring(0,index);
+                }
+                FileReq delReq = new FileReq();
+                delReq.setFullFileName(finalPath);
+                delReq.setFileName(fileNameInDB);
+                remoteFileService.deleteFile(delReq);
+            }
+            return true;
+        } catch (Exception e){
+            log.error(e.getMessage());
+        }
+        return false;
+    }
     /**
      * 删除文件记录信息
      * 

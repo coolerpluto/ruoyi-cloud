@@ -592,7 +592,7 @@ export default {
       // 手动调用上传，这里会调用我们自己定义的
       this.$refs.uploadMediumFileMd5.submit();
       this.$refs.uploadMediumFile.submit();
-
+      this.loading = true;
       this.$refs["form"].validate((valid) => {
         if (valid) {
           // 新建form表单
@@ -612,12 +612,14 @@ export default {
           if (this.form.id != null) {
             updateMediumWithFile(fd).then((response) => {
               this.$modal.msgSuccess("修改成功");
+              this.loading = false;
               this.open = false;
               this.getList();
             });
           } else {
             addMediumWithFile(fd).then((response) => {
               this.$modal.msgSuccess("新增成功");
+              this.loading = false;
               this.open = false;
               this.getList();
             });
@@ -625,6 +627,8 @@ export default {
           // 弹框关闭后 清理一下上传文件的列表
           this.$refs.uploadMediumFile.clearFiles()
           this.$refs.uploadMediumFileMd5.clearFiles()
+        }else{
+          this.loading = false;
         }
       });
     },
