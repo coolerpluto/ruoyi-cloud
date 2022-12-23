@@ -1,7 +1,8 @@
 package com.highgo.medium.controller;
 
+import com.highgo.medium.domain.MFileDownHis;
 import com.highgo.medium.domain.MediumFileInfo;
-import com.highgo.medium.service.IMFileInfoService;
+import com.highgo.medium.service.IMFileDownHisService;
 import com.highgo.medium.service.IMediumFileInfoService;
 import com.ruoyi.common.core.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.web.controller.BaseController;
@@ -12,7 +13,14 @@ import com.ruoyi.common.log.enums.BusinessType;
 import com.ruoyi.common.security.annotation.RequiresPermissions;
 import com.ruoyi.common.security.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -32,7 +40,7 @@ public class MediumFileInfoController extends BaseController
     @Autowired
     private IMediumFileInfoService mediumFileInfoService;
     @Autowired
-    private IMFileInfoService fileInfoService;
+    private IMFileDownHisService fileDownHisService;
 
     /**
      * 查询介质文件信息记录列表
@@ -70,6 +78,16 @@ public class MediumFileInfoController extends BaseController
     @Log(title = "介质文件信息记录", businessType = BusinessType.DOWNLOAD)
     @PostMapping("/download")
     public void download(HttpServletResponse response, MediumFileInfo mediumFileInfo) {
+        if (mediumFileInfo.getParams() != null && mediumFileInfo.getParams().get("opportunityNum") != null) {
+            MFileDownHis hisReq = new MFileDownHis();
+            hisReq.setFileId(mediumFileInfo.getMediumFileId());
+            hisReq.setFileType("medium");
+            hisReq.setOpportunityNum((String) mediumFileInfo.getParams().get("opportunityNum"));
+            hisReq.setCreateBy(SecurityUtils.getUsername());
+            hisReq.setCreateId(SecurityUtils.getUserId());
+
+            fileDownHisService.insertMFileDownHis(hisReq);
+        }
         mediumFileInfoService.download(response, mediumFileInfo);
     }
     /**

@@ -1,9 +1,9 @@
 package com.highgo.medium.domain;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.core.annotation.Excel;
 import com.ruoyi.common.core.web.domain.BaseEntity;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * 下载记录对象 t_file_down_his
@@ -24,7 +24,7 @@ public class MFileDownHis extends BaseEntity
 
     /** 文件ID */
     @Excel(name = "文件ID")
-    private Long fileId;
+    private String fileId;
 
     /** 文件类型 */
     @Excel(name = "文件类型")
@@ -54,12 +54,12 @@ public class MFileDownHis extends BaseEntity
     {
         return opportunityNum;
     }
-    public void setFileId(Long fileId) 
+    public void setFileId(String fileId)
     {
         this.fileId = fileId;
     }
 
-    public Long getFileId() 
+    public String getFileId()
     {
         return fileId;
     }
