@@ -384,7 +384,6 @@
   </div>
 </template>
 <script>
-import {listGenerated} from "@/api/medium/licensegenerate";
 
 export default {
   dicts: ["sys_yes_no"],

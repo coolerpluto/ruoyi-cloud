@@ -42,3 +42,12 @@ export function delLicense(id) {
     method: 'delete'
   })
 }
+
+// 生成
+export function generate(data) {
+  return request({
+      url: '/medium/license/generator',
+      method: 'post',
+      data: data
+  })
+}

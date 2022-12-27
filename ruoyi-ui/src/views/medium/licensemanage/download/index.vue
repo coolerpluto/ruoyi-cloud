@@ -1,14 +1,14 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px" >
-      <el-form-item label="商机编号" prop="opportunityId">
-        <el-input v-model="queryParams.opportunityId" placeholder="请输入编号" clearable style="width: 220px" @keyup.enter.native="handleQuery"/>
+      <el-form-item label="商机编号" prop="opportunityNum">
+        <el-input v-model="queryParams.opportunityNum" placeholder="请输入编号" clearable style="width: 220px" @keyup.enter.native="handleQuery"/>
       </el-form-item>
-      <el-form-item label="最终用户" prop="customer">
-        <el-input v-model="queryParams.customer" placeholder="请输入用户名称" clearable style="width: 220px" @keyup.enter.native="handleQuery"/>
+      <el-form-item label="最终用户" prop="customerName">
+        <el-input v-model="queryParams.customerName" placeholder="请输入用户名称" clearable style="width: 220px" @keyup.enter.native="handleQuery"/>
       </el-form-item>
-      <el-form-item label="申请人" prop="applicant">
-        <el-input v-model="queryParams.applicant" placeholder="请输入申请人姓名" clearable style="width: 220px" @keyup.enter.native="handleQuery"/>
+      <el-form-item label="创建人员" prop="createBy">
+        <el-input v-model="queryParams.createBy" placeholder="请输入申请人姓名" clearable style="width: 220px" @keyup.enter.native="handleQuery"/>
       </el-form-item>
       <el-form-item label="申请时间">
         <el-date-picker v-model="dateRange" style="width: 220px" value-format="yyyy-MM-dd" type="daterange"
@@ -19,32 +19,44 @@
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
-
+    <el-row :gutter="10" class="mb8">
+      <el-col :span="1.5">
+        <el-button
+          type="primary"
+          plain
+          icon="el-icon-download"
+          size="mini"
+          @click="handleBatchDownload"
+          v-hasPermi="['medium:license:download']"
+        >批量下载
+        </el-button>
+      </el-col>
+      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList" :columns="columns"></right-toolbar>  
+    </el-row>
     <el-table v-loading="loading" :data="licenseList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="License编号" align="center" prop="licenseId" v-if="false" :show-overflow-tooltip="true"/>
-      <el-table-column label="License文件名" align="center" prop="licenseName" v-if="false" :show-overflow-tooltip="true"/>
-      <el-table-column label="商机编号" align="center" prop="opportunityId" :show-overflow-tooltip="true"/>
-      <el-table-column label="商机名称" align="center" prop="opportunityName" :show-overflow-tooltip="true"/>
-      <el-table-column label="最终用户" align="center" prop="customer" :show-overflow-tooltip="true"/>
-      <el-table-column label="序列编号" align="center" prop="licenseSerial" :show-overflow-tooltip="true"/>
-      <el-table-column label="授权方式" align="center" prop="authType" />
-      <el-table-column label="产品信息" align="center" prop="prodInfo" :show-overflow-tooltip="true"/>
-      <el-table-column label="使用用途" align="center" prop="configType"/>
-      <el-table-column label="申请人" align="center" prop="applicant"/>
-      <el-table-column label="申请时间" align="center" prop="applicationTime" width="180" :show-overflow-tooltip="true">
+      <el-table-column label="Lic序列号" align="center" prop="serial" :show-overflow-tooltip="true" v-if="columns[0].visible"/>
+      <el-table-column label="申请时间" align="center" prop="applyTime" width="180" v-if="columns[1].visible">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.applicationTime) }}</span>
+          <span>{{ parseTime(scope.row.applyTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="有效期限" align="center" prop="effTime" width="180" :show-overflow-tooltip="true">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.effTime) }}</span>
-        </template>
-      </el-table-column>
+      <el-table-column label="商机编号" align="center" prop="opportunityNum" v-if="columns[2].visible" :show-overflow-tooltip="true"/>
+      <el-table-column label="授权方式" align="center" prop="authType" v-if="columns[3].visible"/>
+      <el-table-column label="使用客户" align="center" prop="customerName" v-if="columns[4].visible" :show-overflow-tooltip="true"/>
+      <el-table-column label="使用用途" align="center" prop="purpose" v-if="columns[5].visible"/>
+      <el-table-column label="过期时间" align="center" prop="expireTime" :show-overflow-tooltip="true" v-if="columns[6].visible"/>
+      <el-table-column label="产品类型" align="center" prop="prodType" v-if="columns[7].visible"/>
+      <el-table-column label="数据库版本" align="center" prop="dbVersion" :show-overflow-tooltip="true" v-if="columns[8].visible"/>
+      <el-table-column label="下载连接" align="center" prop="serverUrl" :show-overflow-tooltip="true" v-if="columns[9].visible"/>
+      <el-table-column label="其他参数" align="center" prop="otherParam" v-if="columns[10].visible" :show-overflow-tooltip="true"/>
+      <el-table-column label="文件状态" align="center" prop="status" v-if="columns[11].visible"/>
+      <el-table-column label="创建者名" align="center" prop="createBy" v-if="columns[12].visible"/>
+      <el-table-column label="创建时间" align="center" prop="createTime" v-if="columns[13].visible" :show-overflow-tooltip="true"/>
+      <el-table-column label="备注" align="center" prop="remark" v-if="columns[14].visible"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleDownload(scope.row)" v-hasPermi="['system:config:edit']">
+          <el-button size="mini" type="text" icon="el-icon-download" @click="handleDownload(scope.row)" v-hasPermi="['medium:license:download']">
             下载
           </el-button>
         </template>
@@ -56,7 +68,7 @@
 </template>
 
 <script>
-import {listLicenses,delLicense} from "@/api/medium/licensedownload";
+import { listLicense } from "@/api/medium/license";
 
 export default {
   name: "Licensedownload",
@@ -72,6 +84,24 @@ export default {
       multiple: true,
       // 显示搜索条件
       showSearch: true,
+      // 列信息
+      columns: [
+        { key: 0, label: `Lic序列号`, visible: true },
+        { key: 1, label: `申请时间`, visible: true },
+        { key: 2, label: `商机编号`, visible: true },
+        { key: 3, label: `授权方式`, visible: true },
+        { key: 4, label: `使用客户`, visible: true },
+        { key: 5, label: `使用用途`, visible: false },
+        { key: 6, label: `过期时间`, visible: false },
+        { key: 7, label: `产品类型`, visible: false },
+        { key: 8, label: `数据库版本`, visible: false },
+        { key: 9, label: `下载连接`, visible: false },
+        { key: 10, label: `其他参数`, visible: false },
+        { key: 11, label: `文件状态`, visible: false },
+        { key: 12, label: `创建者名`, visible: false },
+        { key: 13, label: `创建时间`, visible: false },
+        { key: 14, label: `备注`, visible: false },
+      ],
       // 总条数
       total: 0,
       // 表格数据
@@ -82,20 +112,20 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        opportunityId: undefined,
-        customer: undefined,
-        applicant: undefined,
+        opportunityNum: undefined,
+        customerName: undefined,
+        createBy: undefined,
       },
     };
   },
   created() {
-    //this.getList();
+    this.getList();
   },
   methods: {
-    /** 查询参数列表 */
+    /** 查询列表 */
     getList() {
       this.loading = true;
-      listLicenses(this.addDateRange(this.queryParams, this.dateRange)).then(
+      listLicense(this.addDateRange(this.queryParams, this.dateRange)).then(
         (response) => {
           this.licenseList = response.rows;
           this.total = response.total;
@@ -121,37 +151,17 @@ export default {
       this.single = selection.length != 1;
       this.multiple = !selection.length;
     },
-
-    /** 删除按钮操作 */
-    handleDelete(row) {
-      const licenseIds = row.licenseId || this.ids;
-      this.$modal
-        .confirm('是否确认删除参数编号为"' + licenseIds + '"的数据项？')
-        .then(function () {
-          return delLicense(licenseIds);
-        })
-        .then(() => {
-          this.getList();
-          this.$modal.msgSuccess("删除成功");
-        })
-        .catch(() => {});
-    },
-    /** 导出按钮操作 */
-    handleExport() {
-      this.download("medium/licensedownload/export",{
-          ...this.queryParams,
+    /** 下载按钮操作 */
+    handleBatchDownload() {
+      this.download("medium/license/downLoadBatch",{
+          "ids":this.ids
         },
-        `config_${new Date().getTime()}.xlsx`
-      );
+        licenses.zip
+      );      
     },
      /** 下载按钮操作 */
     handleDownload(row) {
-      const fileName = new Date().getTime()+row.licenseName
-      this.download("medium/licensedownload/downLoad",{
-          "licenseId":row.licenseId
-        },
-        fileName
-      );
+      this.download("medium/license/downLoad",row,license.zip);
     },
   },
 };

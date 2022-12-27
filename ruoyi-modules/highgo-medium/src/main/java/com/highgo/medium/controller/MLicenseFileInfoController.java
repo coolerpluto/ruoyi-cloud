@@ -1,8 +1,9 @@
 package com.highgo.medium.controller;
 
 import java.util.List;
-import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
+
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -68,6 +69,14 @@ public class MLicenseFileInfoController extends BaseController
         mLicenseFileInfoService.download(response,mLicenseFileInfo);
     }
 
+    @RequiresPermissions("medium:license:download")
+    @Log(title = "License文件记录", businessType = BusinessType.DOWNLOAD)
+    @PostMapping("/downLoadBatch")
+    public void downLoadBatch(HttpServletResponse response, MLicenseFileInfo mLicenseFileInfo)
+    {
+        mLicenseFileInfoService.downLoadBatch(response,mLicenseFileInfo);
+    }
+
     /**
      * 获取License文件记录详细信息
      */
@@ -89,6 +98,13 @@ public class MLicenseFileInfoController extends BaseController
         return toAjax(mLicenseFileInfoService.insertMLicenseFileInfo(mLicenseFileInfo));
     }
 
+    //@RequiresPermissions("medium:license:generator")
+    @Log(title = "License文件记录", businessType = BusinessType.INSERT)
+    @PostMapping("/generator")
+    public AjaxResult generator(@RequestBody JSONObject json) {
+        MLicenseFileInfo param = JSONObject.toJavaObject(json, MLicenseFileInfo.class);
+        return toAjax(mLicenseFileInfoService.generator(param));
+    }
     /**
      * 修改License文件记录
      */

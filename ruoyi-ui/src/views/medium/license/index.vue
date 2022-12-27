@@ -73,10 +73,10 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="可用文件" prop="status">
+      <el-form-item label="可以下载" prop="status">
         <el-select v-model="queryParams.status" placeholder="请选择文件状态" clearable>
           <el-option
-            v-for="dict in dict.type.sys_yes_no"
+            v-for="dict in dict.type.sys_normal_disable"
             :key="dict.value"
             :label="dict.label"
             :value="dict.value"
@@ -90,17 +90,7 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['medium:license:add']"
-        >新增
-        </el-button>
-      </el-col>
+      
       <el-col :span="1.5">
         <el-button
           type="success"
@@ -136,35 +126,39 @@
         >导出
         </el-button>
       </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList" :columns="columns"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="licenseList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
-      <!--      <el-table-column label="记录ID" align="center" prop="id" />-->
-      <el-table-column label="Lic序列号" align="center" prop="serial" :show-overflow-tooltip="true"/>
-      <el-table-column label="申请时间" align="center" prop="applyTime" width="180">
+      <el-table-column label="Lic序列号" align="center" prop="serial" :show-overflow-tooltip="true" v-if="columns[0].visible"/>
+      <el-table-column label="申请时间" align="center" prop="applyTime" width="180" v-if="columns[1].visible">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.applyTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="商机编号" align="center" prop="opportunityNum" :show-overflow-tooltip="true"/>
-      <el-table-column label="授权方式" align="center" prop="authType"/>
-      <el-table-column label="使用客户" align="center" prop="customerName" :show-overflow-tooltip="true"/>
-      <el-table-column label="使用用途" align="center" prop="purpose"/>
-      <el-table-column label="过期时间" align="center" prop="expireTime" :show-overflow-tooltip="true"/>
-      <el-table-column label="产品类型" align="center" prop="prodType"/>
-      <el-table-column label="数据库版本" align="center" prop="dbVersion" :show-overflow-tooltip="true"/>
-      <el-table-column label="下载连接" align="center" prop="serverUrl" :show-overflow-tooltip="true"/>
-      <el-table-column label="其他参数" align="center" prop="otherParam" v-if="false" :show-overflow-tooltip="true"/>
-      <el-table-column label="文件状态" align="center" prop="status"/>
-      <!--      <el-table-column label="创建者ID" align="center" prop="createId" />-->
-      <el-table-column label="创建者名" align="center" prop="createBy"/>
-      <el-table-column label="创建时间" align="center" prop="createTime" :show-overflow-tooltip="true"/>
-      <!--      <el-table-column label="更新者ID" align="center" prop="updateId" />-->
-      <!--      <el-table-column label="更新者名" align="center" prop="updateBy" />-->
-      <!--      <el-table-column label="更新时间" align="center" prop="updateTime" :show-overflow-tooltip="true"/>-->
-      <el-table-column label="备注" align="center" prop="remark"/>
+      <el-table-column label="商机编号" align="center" prop="opportunityNum" v-if="columns[2].visible" :show-overflow-tooltip="true"/>
+      <el-table-column label="授权方式" align="center" prop="authType" v-if="columns[3].visible"/>
+      <el-table-column label="使用客户" align="center" prop="customerName" v-if="columns[4].visible" :show-overflow-tooltip="true"/>
+      <el-table-column label="使用用途" align="center" prop="purpose" v-if="columns[5].visible"/>
+      <el-table-column label="过期时间" align="center" prop="expireTime" :show-overflow-tooltip="true" v-if="columns[6].visible">
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.expireTime, '{y}-{m}-{d}') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="产品类型" align="center" prop="prodType" v-if="columns[7].visible"/>
+      <el-table-column label="数据库版本" align="center" prop="dbVersion" :show-overflow-tooltip="true" v-if="columns[8].visible"/>
+      <el-table-column label="下载连接" align="center" prop="serverUrl" :show-overflow-tooltip="true" v-if="columns[9].visible"/>
+      <el-table-column label="其他参数" align="center" prop="otherParam" v-if="columns[10].visible" :show-overflow-tooltip="true"/>
+      <el-table-column label="文件状态" align="center" prop="status" v-if="columns[11].visible">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.sys_normal_disable" :value="scope.row.status"/>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="创建者名" align="center" prop="createBy" v-if="columns[12].visible"/>
+      <el-table-column label="创建时间" align="center" prop="createTime" v-if="columns[13].visible" :show-overflow-tooltip="true"/>
+      <el-table-column label="备注" align="center" prop="remark" v-if="columns[14].visible"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -199,12 +193,15 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="申请时间" prop="applyTime">
-          <el-date-picker clearable
-                          v-model="form.applyTime"
-                          type="date"
-                          value-format="yyyy-MM-dd"
-                          placeholder="请选择申请时间">
+          <el-date-picker v-model="form.applyTime" type="date" disabled
+                          value-format="yyyy-MM-dd" placeholder="请选择申请时间">
           </el-date-picker>
+        </el-form-item>
+        <el-form-item label="下载状态" prop="status">
+          <el-select v-model="form.status" placeholder="请选择下载状态" clearable>
+            <el-option v-for="dict in dict.type.sys_normal_disable"
+              :key="dict.value" :label="dict.label" :value="dict.value"/>
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -220,7 +217,7 @@ import {listLicense, getLicense, delLicense, addLicense, updateLicense} from "@/
 
 export default {
   name: "License",
-  dicts: ['sys_yes_no','medium_lic_purposes', 'medium_lic_db_auth_type', 'medium_db_version', 'medium_lic_prod_type'],
+  dicts: ['sys_normal_disable','medium_lic_purposes', 'medium_lic_db_auth_type', 'medium_db_version', 'medium_lic_prod_type'],
   data() {
     return {
       // 遮罩层
@@ -233,6 +230,24 @@ export default {
       multiple: true,
       // 显示搜索条件
       showSearch: true,
+      // 列信息
+      columns: [
+        { key: 0, label: `Lic序列号`, visible: true },
+        { key: 1, label: `申请时间`, visible: true },
+        { key: 2, label: `商机编号`, visible: true },
+        { key: 3, label: `授权方式`, visible: true },
+        { key: 4, label: `使用客户`, visible: true },
+        { key: 5, label: `使用用途`, visible: false },
+        { key: 6, label: `过期时间`, visible: false },
+        { key: 7, label: `产品类型`, visible: false },
+        { key: 8, label: `数据库版本`, visible: false },
+        { key: 9, label: `下载连接`, visible: false },
+        { key: 10, label: `其他参数`, visible: false },
+        { key: 11, label: `文件状态`, visible: true },
+        { key: 12, label: `创建者名`, visible: false },
+        { key: 13, label: `创建时间`, visible: false },
+        { key: 14, label: `备注`, visible: false },
+      ],
       // 总条数
       total: 0,
       // License文件记录表格数据
@@ -297,12 +312,6 @@ export default {
         serverUrl: null,
         otherParam: null,
         status: null,
-        createId: null,
-        createBy: null,
-        createTime: null,
-        updateId: null,
-        updateBy: null,
-        updateTime: null,
         remark: null
       };
       this.resetForm("form");
@@ -323,12 +332,7 @@ export default {
       this.single = selection.length !== 1
       this.multiple = !selection.length
     },
-    /** 新增按钮操作 */
-    handleAdd() {
-      this.reset();
-      this.open = true;
-      this.title = "添加License文件记录";
-    },
+    
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();

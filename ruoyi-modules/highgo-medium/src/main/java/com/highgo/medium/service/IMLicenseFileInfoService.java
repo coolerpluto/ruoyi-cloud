@@ -1,6 +1,8 @@
 package com.highgo.medium.service;
 
 import java.util.List;
+
+import com.alibaba.fastjson.JSONObject;
 import com.highgo.medium.domain.MLicenseFileInfo;
 
 import javax.servlet.http.HttpServletResponse;
@@ -62,4 +64,8 @@ public interface IMLicenseFileInfoService
     public int deleteMLicenseFileInfoById(Long id);
 
     void download(HttpServletResponse response, MLicenseFileInfo mLicenseFileInfo);
+
+    boolean generator(MLicenseFileInfo param);
+
+    void downLoadBatch(HttpServletResponse response, MLicenseFileInfo mLicenseFileInfo);
 }

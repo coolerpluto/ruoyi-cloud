@@ -3,7 +3,9 @@ package com.highgo.medium.service.impl;
 import java.util.List;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.ruoyi.common.core.utils.DateUtils;
+import com.ruoyi.system.api.RemoteFileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +29,8 @@ public class MLicenseFileInfoServiceImpl implements IMLicenseFileInfoService
 
     @Autowired
     private MLicenseFileInfoMapper mLicenseFileInfoMapper;
-
+    @Autowired
+    private RemoteFileService remoteFileService;
     /**
      * 查询License文件记录
      * 
@@ -108,4 +111,18 @@ public class MLicenseFileInfoServiceImpl implements IMLicenseFileInfoService
             log.debug("MLicenseFileInfoServiceImpl.downLoad req:{}", JSON.toJSONString(mLicenseFileInfo));
         }
     }
+    @Override
+    public void downLoadBatch(HttpServletResponse response, MLicenseFileInfo mLicenseFileInfo) {
+
+    }
+    @Override
+    public boolean generator(MLicenseFileInfo param) {
+        if (log.isDebugEnabled()){
+            log.debug("MLicenseFileInfoServiceImpl.downLoad req:{}", JSON.toJSONString(param));
+        }
+
+        return true;
+    }
+
+
 }
