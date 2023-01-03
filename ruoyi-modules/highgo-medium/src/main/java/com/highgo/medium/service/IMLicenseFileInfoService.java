@@ -1,6 +1,7 @@
 package com.highgo.medium.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
 import com.highgo.medium.domain.MLicenseFileInfo;
@@ -65,7 +66,7 @@ public interface IMLicenseFileInfoService
 
     void download(HttpServletResponse response, MLicenseFileInfo mLicenseFileInfo);
 
-    boolean generator(MLicenseFileInfo param);
+    Map<String, Object> generator(JSONObject json);
 
     void downLoadBatch(HttpServletResponse response, MLicenseFileInfo mLicenseFileInfo);
 }

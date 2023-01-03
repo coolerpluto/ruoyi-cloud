@@ -69,14 +69,26 @@ public class MLicenseFileInfo extends BaseEntity
     /** 文件状态 */
     @Excel(name = "文件状态")
     private String status;
-
+    /**
+     * License文件
+     */
+    @Excel(name = "License文件")
+    private String licFileId;
     /** 创建者ID */
     private Long createId;
 
     /** 更新者ID */
     private Long updateId;
 
-    public void setId(Long id) 
+    public String getLicFileId() {
+        return licFileId;
+    }
+
+    public void setLicFileId(String licFileId) {
+        this.licFileId = licFileId;
+    }
+
+    public void setId(Long id)
     {
         this.id = id;
     }

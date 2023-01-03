@@ -7,15 +7,15 @@
             <el-form-item label="商机编号" prop="opportunityNum">
               <el-input v-model="formData.opportunityNum" placeholder="请输入商机编号" clearable :style="{width: '100%'}"></el-input>
             </el-form-item>
-          </el-col>  
-          <el-col :span="8">  
+          </el-col>
+          <el-col :span="8">
             <el-form-item label="数据库授权" prop="authType">
               <el-select v-model="formData.authType" placeholder="请输入数据库授权" clearable :style="{width: '100%'}">
                 <el-option v-for="(item, index) in dict.type.medium_lic_db_auth_type" :key="index" :label="item.label" :value="item.value" :disabled="item.disabled"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="8">  
+          <el-col :span="8">
             <el-form-item label="最终用户" prop="customerName">
               <el-input v-model="formData.customerName" placeholder="请输入最终用户" clearable :style="{width: '100%'}"></el-input>
             </el-form-item>
@@ -24,12 +24,12 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="授权用途" prop="purpose">
-              <el-select v-model="formData.purpose" placeholder="请输入授权用途" clearable :style="{width: '100%'}">
+              <el-select v-model="formData.purpose" placeholder="请输入授权用途" clearable :style="{width: '100%'}" @change="purposeChanged">
                 <el-option v-for="(item, index) in dict.type.medium_lic_purposes" :key="index" :label="item.label" :value="item.value" :disabled="item.disabled"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="8" v-show="formData.purposes != 'o'">
+          <el-col :span="8" v-show="formData.purpose != 'o'">
             <el-form-item label="授权到期日" prop="expireTime">
               <el-date-picker v-model="formData.expireTime" format="yyyy-MM-dd" value-format="yyyy-MM-dd"
                 :style="{width: '100%'}" placeholder="请选择授权到期日" :clearable="false"></el-date-picker>
@@ -39,7 +39,7 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="产品类型" prop="prodType">
-              <el-select v-model="formData.prodType" placeholder="请选择产品类型" clearable :style="{width: '100%'}">
+              <el-select v-model="formData.prodType" placeholder="请选择产品类型" clearable :style="{width: '100%'}" @change="prodTypeChanged">
                 <el-option v-for="(item, index) in dict.type.medium_lic_prod_type" :key="index" :label="item.label" :value="item.value" :disabled="item.disabled"></el-option>
               </el-select>
             </el-form-item>
@@ -136,12 +136,26 @@ export default {
     submitForm() {
       this.$refs['elForm'].validate(valid => {
         if (!valid) return
-        
+
         generate(this.formData).then(response => {
           this.$modal.msgSuccess("生成成功");
           this.resetForm();
         });
       })
+    },
+    purposeChanged(val){
+      if(val==='o'){
+        this.formData.expireTime=null;
+      }else {
+        this.formData.expireTime='2099-12-30';
+      }
+    },
+    prodTypeChanged(val){
+      if(val==='0'){
+        this.formData.dbVersion= 'HGDB-SEE-V';
+      }else {
+        this.formData.dbVersion= null;
+      }
     },
     resetForm() {
       this.$refs['elForm'].resetFields()

@@ -31,29 +31,17 @@ public class SFtpServerConfig {
     private String secretKey;
 
     /**
-     * 定义根目录  /data
+     * 定义文件生成的根目录
      */
     private String homeDir;
     /**
-     * 命令根目录  /data
+     * 命令文件所在的根目录
      */
     private String commandDir;
     /**
      * 执行命令时所在的路径
      */
     private String execHome;
-    /**
-     * 使用连接协议 默认:sftp
-     */
-    private String protocol = "sftp";
-
-    public String getProtocol() {
-        return protocol;
-    }
-
-    public void setProtocol(String protocol) {
-        this.protocol = protocol;
-    }
 
     public String getIp() {
         return ip;

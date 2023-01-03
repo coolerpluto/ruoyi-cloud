@@ -1,6 +1,8 @@
 package com.highgo.medium.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
 import com.alibaba.fastjson.JSONObject;
@@ -102,8 +104,8 @@ public class MLicenseFileInfoController extends BaseController
     @Log(title = "License文件记录", businessType = BusinessType.INSERT)
     @PostMapping("/generator")
     public AjaxResult generator(@RequestBody JSONObject json) {
-        MLicenseFileInfo param = JSONObject.toJavaObject(json, MLicenseFileInfo.class);
-        return toAjax(mLicenseFileInfoService.generator(param));
+        Map<String, Object> generatorRes = mLicenseFileInfoService.generator(json);
+        return success(generatorRes);
     }
     /**
      * 修改License文件记录
