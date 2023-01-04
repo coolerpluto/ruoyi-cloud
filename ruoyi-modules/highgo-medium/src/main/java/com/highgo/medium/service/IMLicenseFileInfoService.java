@@ -64,9 +64,8 @@ public interface IMLicenseFileInfoService
      */
     public int deleteMLicenseFileInfoById(Long id);
 
-    void download(HttpServletResponse response, MLicenseFileInfo mLicenseFileInfo);
+    void download(HttpServletResponse response, String licenseId);
 
     Map<String, Object> generator(JSONObject json);
 
-    void downLoadBatch(HttpServletResponse response, MLicenseFileInfo mLicenseFileInfo);
 }

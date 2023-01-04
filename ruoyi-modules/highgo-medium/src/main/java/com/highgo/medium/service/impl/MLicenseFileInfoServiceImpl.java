@@ -1,33 +1,37 @@
 package com.highgo.medium.service.impl;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.highgo.medium.config.SFtpServerConfig;
 import com.highgo.medium.domain.MFileInfo;
+import com.highgo.medium.domain.MLicenseFileInfo;
+import com.highgo.medium.mapper.MLicenseFileInfoMapper;
 import com.highgo.medium.service.IMFileInfoService;
+import com.highgo.medium.service.IMLicenseFileInfoService;
 import com.highgo.medium.utils.JsonUtils;
 import com.highgo.medium.utils.MediumUtil;
 import com.highgo.medium.utils.SSHLinuxUtil;
+import com.highgo.medium.utils.ZipUtil;
 import com.ruoyi.common.core.utils.DateUtils;
 import com.ruoyi.common.security.utils.SecurityUtils;
 import com.ruoyi.system.api.RemoteFileService;
-import com.sun.deploy.net.proxy.WDefaultBrowserProxyConfig;
-import org.apache.commons.lang3.StringUtils;
+import com.ruoyi.system.api.domain.FileReq;
+import feign.Response;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.highgo.medium.mapper.MLicenseFileInfoMapper;
-import com.highgo.medium.domain.MLicenseFileInfo;
-import com.highgo.medium.service.IMLicenseFileInfoService;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.zip.ZipOutputStream;
 
 /**
  * License文件记录Service业务层处理
@@ -47,6 +51,8 @@ public class MLicenseFileInfoServiceImpl implements IMLicenseFileInfoService {
     private IMFileInfoService fileInfoService;
     @Autowired
     private SFtpServerConfig sFtpServerConfig;
+    @Autowired
+    private IMFileInfoService imFileInfoService;
 
     /**
      * 查询License文件记录
@@ -121,16 +127,61 @@ public class MLicenseFileInfoServiceImpl implements IMLicenseFileInfoService {
     }
 
     @Override
-    public void download(HttpServletResponse response, MLicenseFileInfo mLicenseFileInfo) {
+    public void download(HttpServletResponse response, String licenseId) {
         if (log.isDebugEnabled()) {
-            log.debug("MLicenseFileInfoServiceImpl.downLoad req:{}", JSON.toJSONString(mLicenseFileInfo));
+            log.debug("MLicenseFileInfoServiceImpl.downLoad req:{}", JSON.toJSONString(licenseId));
         }
-        // TODO
-    }
+        List<MLicenseFileInfo> licenseInfo = mLicenseFileInfoMapper.selectMLicenseFileInfoByIds(licenseId);
+        if (log.isDebugEnabled()) {
+            log.debug("MLicenseFileInfoServiceImpl.downLoad licenseInfo:{}", JSON.toJSONString(licenseInfo));
+        }
+        if (licenseInfo.size()==0){
+            return;
+        }
+        String fileId = licenseInfo.get(0).getLicFileId();
+        String serial = licenseInfo.get(0).getSerial();
+        MFileInfo fileInfo = imFileInfoService.selectMFileInfoById(Long.valueOf(fileId));
+        String fileNameInDB = fileInfo.getFileName();
+        String filePath = fileInfo.getFilePath();
 
-    @Override
-    public void downLoadBatch(HttpServletResponse response, MLicenseFileInfo mLicenseFileInfo) {
-        // TODO
+        String finalPath = "";
+        int index = filePath.lastIndexOf(fileNameInDB);
+        if (index==-1|| filePath.endsWith("/")){
+            finalPath = filePath;
+        }else {
+            finalPath = filePath.substring(0,index);
+        }
+        // 准备下载
+        FileReq fileMReq = new FileReq();
+        fileMReq.setFileName(fileNameInDB);
+        fileMReq.setFullFileName(finalPath);
+        Response fileMResp = remoteFileService.downLoad(fileMReq);
+        Response.Body fileMBody = fileMResp.body();
+        // 准备压缩
+        response.setHeader("Content-Disposition","attachment; filename="+serial+".zip");
+        // 创建 ZipOutputStream
+        ZipOutputStream zipOutputStream;
+        // 创建 输出流到 response
+        OutputStream outputStream= null;
+        try {
+            outputStream = response.getOutputStream();
+            zipOutputStream = new ZipOutputStream(outputStream);
+            zipOutputStream.setMethod(ZipOutputStream.DEFLATED);
+            Map<String, InputStream> fileInputStream = new HashMap<>();
+            fileInputStream.put(serial+"_"+fileNameInDB,fileMBody.asInputStream());
+            ZipUtil.zipStream(fileInputStream,outputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            try {
+                if (outputStream!=null){
+                    outputStream.flush();
+                    outputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override

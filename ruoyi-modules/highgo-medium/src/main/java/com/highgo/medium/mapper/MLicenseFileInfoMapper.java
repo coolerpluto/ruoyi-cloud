@@ -58,4 +58,6 @@ public interface MLicenseFileInfoMapper
      * @return 结果
      */
     public int deleteMLicenseFileInfoByIds(Long[] ids);
+
+    public List<MLicenseFileInfo> selectMLicenseFileInfoByIds(String ids);
 }

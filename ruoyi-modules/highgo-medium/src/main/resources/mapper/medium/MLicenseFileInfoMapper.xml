@@ -36,6 +36,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectMLicenseFileInfoVo"/>
         <where>  
             <if test="applyTime != null "> and apply_time = #{applyTime}</if>
+            <if test="params.beginApplyTime != null "> and #{params.beginApplyTime} &lt;= apply_time</if>
+            <if test="params.endApplyTime != null "> and apply_time &lt;= #{params.endApplyTime}</if>
+            <if test="createBy != null "> and create_by like concat('%',  #{createBy}, '%')</if>
             <if test="opportunityNum != null  and opportunityNum != ''"> and opportunity_num like concat('%', #{opportunityNum}, '%')</if>
             <if test="authType != null  and authType != ''"> and auth_type = #{authType}</if>
             <if test="customerName != null  and customerName != ''"> and customer_name like concat('%', #{customerName}, '%')</if>
@@ -53,7 +56,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectMLicenseFileInfoVo"/>
         where id = #{id}
     </select>
-        
+    <select id="selectMLicenseFileInfoByIds" parameterType="String" resultMap="MLicenseFileInfoResult">
+        select id,
+               serial,
+               apply_time,
+               opportunity_num,
+               auth_type,
+               customer_name,
+               purpose,
+               expire_time,
+               prod_type,
+               db_version,
+               server_url,
+               create_id,
+               lic_file_id
+        from t_license_info
+        where status = 0 and id in (#{ids})
+    </select>
     <insert id="insertMLicenseFileInfo" parameterType="MLicenseFileInfo" useGeneratedKeys="true" keyProperty="id">
         insert into t_license_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
