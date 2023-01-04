@@ -101,6 +101,7 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
+        status: 0,
         opportunityNum: undefined,
         customerName: undefined,
         createBy: undefined,

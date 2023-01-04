@@ -46,8 +46,8 @@ public class MLicenseFileInfo extends BaseEntity
     private String purpose;
 
     /** 过期时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "过期时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "过期时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date expireTime;
 
     /** 产品类型 */

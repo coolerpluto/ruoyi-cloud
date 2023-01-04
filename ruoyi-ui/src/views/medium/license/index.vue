@@ -48,9 +48,10 @@
       <el-form-item label="过期时间" prop="expireTime">
         <el-date-picker clearable
                         v-model="queryParams.expireTime"
-                        type="date"
-                        value-format="yyyy-MM-dd"
-                        placeholder="请选择过期时间">
+                        type="datetime"
+                        value-format="yyyy-MM-dd HH:mm:ss"
+                        default-time="23:59:59"
+                        placeholder="请选择最后过期时间">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="产品类型" prop="prodType">
@@ -66,7 +67,7 @@
       <el-form-item label="数据库版本" prop="dbVersion">
         <el-select v-model="queryParams.dbVersion" placeholder="请选择数据库版本" clearable>
           <el-option
-            v-for="dict in dict.type.medium_db_version"
+            v-for="dict in dict.type.medium_lic_db_version"
             :key="dict.value"
             :label="dict.label"
             :value="dict.value"
@@ -90,7 +91,7 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      
+
       <el-col :span="1.5">
         <el-button
           type="success"
@@ -190,7 +191,7 @@
     />
 
     <!-- 添加或修改License文件记录对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="fit-content" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="申请时间" prop="applyTime">
           <el-date-picker v-model="form.applyTime" type="date" disabled
@@ -217,7 +218,7 @@ import {listLicense, getLicense, delLicense, addLicense, updateLicense} from "@/
 
 export default {
   name: "License",
-  dicts: ['sys_normal_disable','medium_lic_purposes', 'medium_lic_db_auth_type', 'medium_db_version', 'medium_lic_prod_type'],
+  dicts: ['sys_normal_disable','medium_lic_purposes', 'medium_lic_db_auth_type', 'medium_lic_db_version', 'medium_lic_prod_type'],
   data() {
     return {
       // 遮罩层
@@ -332,7 +333,7 @@ export default {
       this.single = selection.length !== 1
       this.multiple = !selection.length
     },
-    
+
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();

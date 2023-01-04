@@ -31,8 +31,8 @@
           </el-col>
           <el-col :span="8" v-show="formData.purpose != 'o'">
             <el-form-item label="授权到期日" prop="expireTime">
-              <el-date-picker v-model="formData.expireTime" format="yyyy-MM-dd" value-format="yyyy-MM-dd"
-                :style="{width: '100%'}" placeholder="请选择授权到期日" :clearable="false"></el-date-picker>
+              <el-date-picker v-model="formData.expireTime" format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss"
+                :style="{width: '100%'}" placeholder="请选择授权到期日" :clearable="false" type="datetime"></el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
@@ -97,7 +97,7 @@ export default {
         authType: 'esl',
         customerName: undefined,
         purpose: 't',
-        expireTime: '2099-12-30',
+        expireTime: '2099-12-30 23:59:59',
         prodType: '0',
         dbVersion: 'HGDB-SEE-V',
       },
@@ -147,7 +147,7 @@ export default {
       if(val==='o'){
         this.formData.expireTime=null;
       }else {
-        this.formData.expireTime='2099-12-30';
+        this.formData.expireTime='2099-12-30 23:59:59';
       }
     },
     prodTypeChanged(val){
