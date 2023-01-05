@@ -36,6 +36,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectMLicenseFileInfoVo"/>
         <where>  
             <if test="applyTime != null "> and apply_time = #{applyTime}</if>
+            <if test="serial != null "> and serial = #{serial}</if>
             <if test="params.beginApplyTime != null "> and #{params.beginApplyTime} &lt;= apply_time</if>
             <if test="params.endApplyTime != null "> and apply_time &lt;= #{params.endApplyTime}</if>
             <if test="createBy != null "> and create_by like concat('%',  #{createBy}, '%')</if>
