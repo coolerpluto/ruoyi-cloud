@@ -67,7 +67,7 @@
       <el-form-item label="数据库版本" prop="dbVersion">
         <el-select v-model="queryParams.dbVersion" placeholder="请选择数据库版本" clearable>
           <el-option
-            v-for="dict in dict.type.medium_lic_db_version"
+            v-for="dict in dict.type.medium_db_version"
             :key="dict.value"
             :label="dict.label"
             :value="dict.value"
@@ -218,7 +218,7 @@ import {listLicense, getLicense, delLicense, addLicense, updateLicense} from "@/
 
 export default {
   name: "License",
-  dicts: ['sys_normal_disable','medium_lic_purposes', 'medium_lic_db_auth_type', 'medium_lic_db_version', 'medium_lic_prod_type'],
+  dicts: ['sys_normal_disable','medium_lic_purposes', 'medium_lic_db_auth_type', 'medium_db_version', 'medium_lic_prod_type'],
   data() {
     return {
       // 遮罩层

@@ -47,7 +47,7 @@
           <el-col :span="8" v-show="formData.prodType == '0'">
             <el-form-item label="数据库版本" prop="dbVersion">
               <el-select v-model="formData.dbVersion" placeholder="请选择数据库版本" filterable  :style="{width: '100%'}">
-                <el-option v-for="(item, index) in dict.type.medium_lic_db_version" :key="index" :label="item.label" :value="item.value" :disabled="item.disabled"></el-option>
+                <el-option v-for="(item, index) in dict.type.medium_db_version" :key="index" :label="item.label" :value="item.value" :disabled="item.disabled"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -86,7 +86,7 @@
 import {generate} from "@/api/medium/license";
 
 export default {
-  dicts: ["medium_lic_db_auth_type","medium_lic_purposes","medium_lic_prod_type","medium_lic_db_version"],
+  dicts: ["medium_lic_db_auth_type","medium_lic_purposes","medium_lic_prod_type","medium_db_version"],
   name: "LicenseGenerate",
   components: {},
   props: [],

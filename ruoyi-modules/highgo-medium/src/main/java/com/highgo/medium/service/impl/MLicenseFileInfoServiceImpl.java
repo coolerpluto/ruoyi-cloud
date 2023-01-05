@@ -261,11 +261,20 @@ public class MLicenseFileInfoServiceImpl implements IMLicenseFileInfoService {
         param.setSerial((String) licenseFile.get("serial"));
         param.setApplyTime(DateUtils.dateTime(DateUtils.YYYY_MM_DD_HH_MM_SS,(String)licenseFile.get("product_time")));
 
+        StringBuilder serverUrl = new StringBuilder(sFtpServerConfig.getLicUrlTemplate());
+        int firstParamIndex = serverUrl.indexOf("{1}");
+        serverUrl.replace(firstParamIndex, firstParamIndex + 3, param.getSerial());
+        int secParamIndex = serverUrl.indexOf("{2}");
+        serverUrl.replace(secParamIndex, secParamIndex + 3, param.getDbVersion());
+        param.setServerUrl(serverUrl.toString());
+        licenseFile.put("serverUrl",serverUrl);
+
         insertMLicenseFileInfo(param);
         // 构造返回数据
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("response", licenseFile);
-        resultMap.put("request", json);
+        // 传进来的暂时不传回去
+        //resultMap.put("request", json);
         resultMap.put("code", 200);
         return resultMap;
     }

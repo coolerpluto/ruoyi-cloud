@@ -42,6 +42,18 @@ public class SFtpServerConfig {
      * 执行命令时所在的路径
      */
     private String execHome;
+    /**
+     * License 文件下载连接模板
+     */
+    private String licUrlTemplate;
+
+    public String getLicUrlTemplate() {
+        return licUrlTemplate;
+    }
+
+    public void setLicUrlTemplate(String licUrlTemplate) {
+        this.licUrlTemplate = licUrlTemplate;
+    }
 
     public String getIp() {
         return ip;
