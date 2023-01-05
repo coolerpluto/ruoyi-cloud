@@ -651,7 +651,7 @@ export default {
      */
     handleDownload(row){
       const fileName = row.mediumName+".zip";
-      // 修改默认时间 1min
+      // 修改默认时间 2min
       this.download("medium/medium/download",{...row,},fileName,{timeout: 120000});
     },
     /** 导出按钮操作 */

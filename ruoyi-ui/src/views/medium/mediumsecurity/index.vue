@@ -82,7 +82,7 @@
           />
         </template>
       </el-table-column>
-      
+
       <el-table-column label="文件名" align="center" prop="fileName" :show-overflow-tooltip="true"/>
       <el-table-column label="md5名称" align="center" prop="md5FileName" :show-overflow-tooltip="true"/>
       <el-table-column label="文件状态" align="center" prop="status" width="80px">
@@ -94,7 +94,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="对应介质" align="center" prop="mediumName" :show-overflow-tooltip="true"/>      
+      <el-table-column label="对应介质" align="center" prop="mediumName" :show-overflow-tooltip="true"/>
 
       <el-table-column label="创建人" align="center" prop="createBy" :show-overflow-tooltip="true" width="80px"/>
       <el-table-column label="创建时间" align="center" prop="createTime" :show-overflow-tooltip="true" width="160px"/>
@@ -150,7 +150,7 @@
                   v-for="medium in mediumSimpleList"
                   :key="medium.id"
                   :label="medium.mediumName"
-                  :value="medium.id"                  
+                  :value="medium.id"
                 >
                 <span style="float: left">{{ medium.mediumName }}</span>
                 <span style="float: right; color: #8492a6; font-size: 13px">{{ medium.cpuType }}</span>
@@ -184,9 +184,9 @@
               :value="item.value">
               </el-option>
             </el-select>
-          </el-form-item>  
+          </el-form-item>
           </el-col>
-          <el-col :span="8">      
+          <el-col :span="8">
           <el-form-item label="打包方式">
             <el-select v-model="mediumSelect.packageType" disabled placeholder="请选择">
               <el-option
@@ -385,7 +385,7 @@ export default {
         this.total = response.total;
         this.loading = false;
       });
-      
+
     },
     getMediumList(){
       simpleMediumList({}).then((response) => {
@@ -405,8 +405,8 @@ export default {
       this.form = {
         id: null,
         securityName:null,
-        mediumId: null,   
-        securityFile:null,     
+        mediumId: null,
+        securityFile:null,
         fileType: null,
         fileId: null,
         md5FileId: null,
@@ -548,7 +548,7 @@ export default {
      */
     handleDownload(row){
       const fileName = row.securityName+".zip";
-      // 修改默认时间 1min
+      // 修改默认时间 2min
       this.download("medium/mediumsecurity/download",{...row,},fileName,{timeout: 120000});
     },
     /** 导出按钮操作 */
