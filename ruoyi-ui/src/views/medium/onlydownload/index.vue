@@ -125,25 +125,23 @@
           </el-select>
         </el-form-item>
         <el-form-item label="上传时间" prop="createTime">
-          <el-date-picker clearable v-model="mediumQueryParams.createTime" type="date" value-format="yyyy-MM-dd"
-                          placeholder="请选择创建时间">
+          <el-date-picker clearable v-model="mediumQueryParams.createTime" type="datetime"
+                          value-format="yyyy-MM-dd HH:mm:ss" default-time="23:59:59" placeholder="请选择创建时间">
           </el-date-picker>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" icon="el-icon-search" size="mini" @click="mediumHandleQuery">搜索</el-button>
           <el-button icon="el-icon-refresh" size="mini" @click="mediumResetQuery">重置</el-button>
         </el-form-item>
-        <el-form-item prop="licOpportunityNum" label-width="180px">
-          <span slot="label">
-            <span>关联的商机编号</span>
-            <span style="color: red">(下载必填)</span>
-          </span>
-          <el-input v-model="licOpportunityNum" placeholder="可以点击Lic条目自动填入" style="width: 210px" show-word-limit
-                    maxlength="16"/>
-        </el-form-item>
       </el-form>
       <el-row :gutter="10" class="mb8">
         <span style="margin-left: 15px;">介质下载模块</span>
+        <span style="margin-left: 30%;">
+          <span>关联的商机编号</span>
+          <span style="color: red">(下载必填) </span>
+        </span>
+        <el-input v-model="licOpportunityNum" placeholder="可以点击Lic条目自动填入" style="width: 210px" show-word-limit
+                  maxlength="16"/>
         <right-toolbar :showSearch.sync="mediumShowSearch" @queryTable="mediumGetList"
                        :columns="mediumColumns"></right-toolbar>
       </el-row>
@@ -212,8 +210,8 @@
           </el-select>
         </el-form-item>
         <el-form-item label="创建时间" prop="createTime">
-          <el-date-picker clearable v-model="securityQueryParams.createTime" type="date" value-format="yyyy-MM-dd"
-                          placeholder="请选择创建时间">
+          <el-date-picker clearable v-model="securityQueryParams.createTime" type="datetime"
+                          value-format="yyyy-MM-dd HH:mm:ss" default-time="23:59:59" placeholder="请选择创建时间">
           </el-date-picker>
         </el-form-item>
         <el-form-item>
@@ -230,7 +228,7 @@
       <el-table v-loading="securityLoading" :data="securityList" @selection-change="securityHandleSelectionChange">
         <el-table-column label="别名名称" align="center" prop="securityName" :show-overflow-tooltip="true" width="180px"
                          v-if="securityColumns[0].visible"/>
-        <el-table-column label="文件类型" align="center" prop="fileType" width="80px" v-if="securityColumns[1].visible">
+        <el-table-column label="文件类型" align="center" prop="fileType" width="100px" v-if="securityColumns[1].visible">
           <template slot-scope="scope">
             <dict-tag :options="dict.type.medium_file_type" :value="scope.row.fileType"/>
           </template>
@@ -290,7 +288,8 @@ export default {
       activeNames: [],// 若是默认不展开就置空["showMediumDesc"]
       // 点击的行的 lic opportunityNum
       licOpportunityNum: undefined,
-
+      // 承接路由里面的参数
+      routeQuery: undefined,
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -379,7 +378,7 @@ export default {
         createBy: null,
         createTime: null,
         updateBy: null,
-        params:{hasSignature:null,hasPostgis:null},
+        params: {hasSignature: null, hasPostgis: null},
       },
 
       //介质附件参数
@@ -425,12 +424,21 @@ export default {
     };
   },
   created() {
+    // URL格式1 http://localhost/medium/onlydownload?licSerial=A20210420N001852739031%26dbVersion=v4.5.8
+    // URL格式2 http://localhost/medium/onlydownload%3FlicSerial%3DA20210420N001852739031%26dbVersion%3Dv4.5.8
+    // URL格式3 http://localhost/medium/onlydownload?licSerial%3DA20210420N001852739031%26dbVersion%3Dv4.5.8
+    this.routeQuery = this.$route && this.$route.query;
+    console.log(this.routeQuery);
     this.licGetList();
   },
   methods: {
     /** 查询lic列表 */
     licGetList() {
       this.licLoading = true;
+      if (this.routeQuery && this.routeQuery.licSerial) {
+        this.licQueryParams.serial = this.routeQuery.licSerial;
+        this.licShowSearch = false
+      }
       listLicense(this.addDateRange(this.licQueryParams, this.licDateRange, 'ApplyTime')).then(
         (response) => {
           this.licenseList = response.rows;
@@ -438,6 +446,11 @@ export default {
           this.licLoading = false;
         }
       );
+      if (this.routeQuery && this.routeQuery.dbVersion) {
+        this.mediumQueryParams.dbVersion = this.routeQuery.dbVersion;
+        this.mediumShowSearch = false
+        this.mediumHandleQuery()
+      }
     },
     /** 查询介质文件信息记录列表 */
     mediumGetList() {
