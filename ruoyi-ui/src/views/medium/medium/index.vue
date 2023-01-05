@@ -65,8 +65,11 @@
         </el-select>
       </el-form-item>
       <el-form-item label="含postgis" prop="hasPostgis">
+        <el-tooltip content="含签名和含postgis 一个是一个否时,结果以是的查询为结果" placement="top">
+          <i class="el-icon-question"></i>
+        </el-tooltip>
         <el-select
-          v-model="queryParams.hasPostgis"
+          v-model="queryParams.params.hasPostgis"
           placeholder="请选择"
           clearable
         >
@@ -79,8 +82,11 @@
         </el-select>
       </el-form-item>
       <el-form-item label="含签名" prop="hasSignature">
+        <el-tooltip content="含签名和含postgis 一个是一个否时,结果以是的查询为结果" placement="top">
+          <i class="el-icon-question"></i>
+        </el-tooltip>
         <el-select
-          v-model="queryParams.hasSignature"
+          v-model="queryParams.params.hasSignature"
           placeholder="请选择"
           clearable
         >
@@ -489,6 +495,7 @@ export default {
         createBy: null,
         createTime: null,
         updateBy: null,
+        params:{hasSignature:null,hasPostgis:null},
       },
       // 表单参数
       form: {},

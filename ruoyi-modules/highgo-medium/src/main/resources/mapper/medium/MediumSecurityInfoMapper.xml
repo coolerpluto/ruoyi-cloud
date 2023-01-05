@@ -43,6 +43,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="fileType != null  and fileType != ''"> and tmsi.file_type = #{fileType}</if>
             <if test="createBy != null  and createBy != ''"> and tmsi.create_by like concat('%', #{createBy}, '%')</if>
             <if test="createTime != null "> and tmsi.create_time &lt;= #{createTime}</if>
+            <if test="status != null "> and tmsi.status = #{status}</if>
         </where>
     </select>
     

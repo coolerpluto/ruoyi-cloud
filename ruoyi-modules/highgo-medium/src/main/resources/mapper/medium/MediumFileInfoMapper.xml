@@ -43,10 +43,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="packageType != null  and packageType != ''"> and tmi.package_type like concat('%', #{packageType}, '%')</if>
     </select>
     <sql id="selectMediumFileInfoVo">
-        select tmi.id, tmi.medium_name,tmi.medium_type, tmi.db_version, tmi.cpu_type, tmi.package_type,
+        select distinct(tmi.id), tmi.medium_name,tmi.medium_type, tmi.db_version, tmi.cpu_type, tmi.package_type,
                tmi.medium_file_id, (select tfi.file_name from t_file_info tfi where tfi.id=tmi.medium_file_id) medium_file_name,
                tmi.medium_md5_file_id, (select tfi2.file_name from t_file_info tfi2 where tfi2.id=tmi.medium_md5_file_id) medium_md5_file_name,
                tmi.status, tmi.create_id, tmi.create_by, tmi.create_time, tmi.update_id, tmi.update_by, tmi.update_time, tmi.remark from t_medium_info tmi
+             left join  t_medium_security_info tmsi on tmi.id = tmsi.medium_id
     </sql>
 
     <select id="selectMediumFileInfoList" parameterType="MediumFileInfo" resultMap="MediumFileInfoResult">
@@ -61,6 +62,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createBy != null  and createBy != ''"> and tmi.create_by like concat('%', #{createBy}, '%')</if>
             <if test="createTime != null "> and tmi.create_time &lt;= #{createTime}</if>
             <if test="updateBy != null  and updateBy != ''"> and tmi.update_by like concat('%', #{updateBy}, '%')</if>
+            <if test="params.hasSignature != null or  params.hasPostgis != null">
+                <if test='params.hasSignature == "Y" or params.hasPostgis == "Y"'>
+                    and tmsi.file_type in (
+                    <if test='params.hasPostgis == "Y"'>'PostGis'</if>
+                    <if test='params.hasSignature == "Y" and params.hasPostgis == "Y"'>,</if>
+                    <if test='params.hasSignature == "Y"'>'Sign'</if>
+                    )
+                </if>
+                <if test='params.hasSignature == "N" or params.hasPostgis == "N"'>
+                    and tmsi.file_type not in (
+                    <if test='params.hasPostgis == "N"'>'PostGis'</if>
+                    <if test='params.hasPostgis == "N" and params.hasSignature == "N"'>,</if>
+                    <if test='params.hasSignature == "N"'>'Sign'</if>
+                    )
+                </if>
+            </if>
         </where>
     </select>
     
