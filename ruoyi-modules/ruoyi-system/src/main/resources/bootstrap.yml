@@ -2,6 +2,14 @@
 server:
   port: 9201
 
+# nacos
+nacos:
+  server-addr: 192.168.110.201:8848
+  # 命名空间选择
+  namespace-dev: cdbcb16d-3531-49c2-a205-c3c1c52270a9
+  namespace-uat: b57afa1a-893b-43f6-bc6b-09a3515758bd
+  namespace-pro: 558c4710-85fd-4dbc-8da1-68ed478c9395
+
 # Spring
 spring: 
   application:
@@ -14,12 +22,48 @@ spring:
     nacos:
       discovery:
         # 服务注册地址
-        server-addr: 192.168.110.201:8848
+        server-addr: ${nacos.server-addr}
       config:
         # 配置中心地址
-        server-addr: 192.168.110.201:8848
+        server-addr: ${nacos.server-addr}
         # 配置文件格式
         file-extension: yml
         # 共享配置
         shared-configs:
           - application-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+---
+# Spring
+spring:
+  config:
+    activate:
+      on-profile: dev
+  cloud:
+    nacos:
+      discovery:
+        namespace: ${nacos.namespace-dev}
+      config:
+        namespace: ${nacos.namespace-dev}
+---
+# Spring
+spring:
+  config:
+    activate:
+      on-profile: uat
+  cloud:
+    nacos:
+      discovery:
+        namespace: ${nacos.namespace-uat}
+      config:
+        namespace: ${nacos.namespace-uat}
+---
+# Spring
+spring:
+  config:
+    activate:
+      on-profile: prod
+  cloud:
+    nacos:
+      discovery:
+        namespace: ${nacos.namespace-pro}
+      config:
+        namespace: ${nacos.namespace-pro}
