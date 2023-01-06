@@ -8,6 +8,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="id"    column="id"    />
         <result property="opportunityNum"    column="opportunity_num"    />
         <result property="fileId"    column="file_id"    />
+        <result property="fileName"    column="file_name"    />
         <result property="fileType"    column="file_type"    />
         <result property="createId"    column="create_id"    />
         <result property="createBy"    column="create_by"    />
@@ -19,26 +20,38 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectMFileDownHisVo">
-        select id, opportunity_num, file_id, file_type, create_id, create_by, create_time, update_id, update_by, update_time, remark from t_file_down_his
+        select
+            tfdh.id,
+            opportunity_num,
+            file_id,
+            tfi.file_name ,
+            tfdh.file_type,
+            tfdh.create_id,
+            tfdh.create_by,
+            tfdh.create_time,
+            tfdh.remark
+        from
+            t_file_down_his tfdh
+            left join t_file_info tfi on tfdh.file_id = tfi.id
     </sql>
 
     <select id="selectMFileDownHisList" parameterType="MFileDownHis" resultMap="MFileDownHisResult">
         <include refid="selectMFileDownHisVo"/>
         <where>  
-            <if test="opportunityNum != null  and opportunityNum != ''"> and opportunity_num like concat('%', #{opportunityNum}, '%')</if>
-            <if test="fileId != null "> and file_id = #{fileId}</if>
-            <if test="fileType != null  and fileType != ''"> and file_type = #{fileType}</if>
-            <if test="createBy != null  and createBy != ''"> and create_by like concat('%', #{createBy}, '%')</if>
-            <if test="createTime != null  and createTime != ''"> and create_time &lt;= #{createTime}</if>
-            <if test="updateBy != null "> and update_by like concat('%', #{updateBy}, '%')</if>
-            <if test="updateTime != null "> and update_time &lt;= #{updateTime}</if>
-            <if test="remark != null  and remark != ''"> and remark like concat('%', #{remark}, '%')</if>
+            <if test="opportunityNum != null  and opportunityNum != ''"> and tfdh.opportunity_num like concat('%', #{opportunityNum}, '%')</if>
+            <if test="fileId != null "> and tfdh.file_id = #{fileId}</if>
+            <if test="fileType != null  and fileType != ''"> and tfdh.file_type = #{fileType}</if>
+            <if test="createBy != null  and createBy != ''"> and tfdh.create_by like concat('%', #{createBy}, '%')</if>
+            <if test="createTime != null  and createTime != ''"> and tfdh.create_time &lt;= #{createTime}</if>
+            <if test="updateBy != null "> and tfdh.update_by like concat('%', #{updateBy}, '%')</if>
+            <if test="updateTime != null "> and tfdh.update_time &lt;= #{updateTime}</if>
+            <if test="remark != null  and remark != ''"> and tfdh.remark like concat('%', #{remark}, '%')</if>
         </where>
     </select>
     
     <select id="selectMFileDownHisById" parameterType="Long" resultMap="MFileDownHisResult">
         <include refid="selectMFileDownHisVo"/>
-        where id = #{id}
+        where tfdh.id = #{id}
     </select>
         
     <insert id="insertMFileDownHis" parameterType="MFileDownHis" useGeneratedKeys="true" keyProperty="id">

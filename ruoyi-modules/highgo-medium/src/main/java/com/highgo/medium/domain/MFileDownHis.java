@@ -26,17 +26,39 @@ public class MFileDownHis extends BaseEntity
     @Excel(name = "文件ID")
     private String fileId;
 
+    @Excel(name = "文件名")
+    private String fileName;
+
     /** 文件类型 */
     @Excel(name = "文件类型")
     private String fileType;
 
     /** 创建者ID */
     private Long createId;
-
+    @Excel(name = "下载人")
+    private String createBy;
     /** 更新者ID */
     private Long updateId;
 
-    public void setId(Long id) 
+    @Override
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    @Override
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public void setId(Long id)
     {
         this.id = id;
     }

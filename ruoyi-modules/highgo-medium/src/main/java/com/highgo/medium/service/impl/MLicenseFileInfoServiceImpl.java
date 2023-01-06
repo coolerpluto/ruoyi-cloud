@@ -3,9 +3,11 @@ package com.highgo.medium.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.highgo.medium.config.SFtpServerConfig;
+import com.highgo.medium.domain.MFileDownHis;
 import com.highgo.medium.domain.MFileInfo;
 import com.highgo.medium.domain.MLicenseFileInfo;
 import com.highgo.medium.mapper.MLicenseFileInfoMapper;
+import com.highgo.medium.service.IMFileDownHisService;
 import com.highgo.medium.service.IMFileInfoService;
 import com.highgo.medium.service.IMLicenseFileInfoService;
 import com.highgo.medium.utils.JsonUtils;
@@ -53,7 +55,8 @@ public class MLicenseFileInfoServiceImpl implements IMLicenseFileInfoService {
     private SFtpServerConfig sFtpServerConfig;
     @Autowired
     private IMFileInfoService imFileInfoService;
-
+    @Autowired
+    private IMFileDownHisService fileDownHisService;
     /**
      * 查询License文件记录
      *
@@ -182,6 +185,15 @@ public class MLicenseFileInfoServiceImpl implements IMLicenseFileInfoService {
                 e.printStackTrace();
             }
         }
+        // 单独保存下载记录 供专门菜单统计
+        MFileDownHis hisReq = new MFileDownHis();
+        hisReq.setFileId(fileId);
+        hisReq.setFileType("license");
+        hisReq.setOpportunityNum(licenseInfo.get(0).getOpportunityNum());
+        hisReq.setCreateBy(SecurityUtils.getUsername());
+        hisReq.setCreateId(SecurityUtils.getUserId());
+        hisReq.setRemark(licenseInfo.get(0).getSerial());
+        fileDownHisService.insertMFileDownHis(hisReq);
     }
 
     @Override

@@ -79,13 +79,14 @@ public class MediumFileInfoController extends BaseController
     @PostMapping("/download")
     public void download(HttpServletResponse response, MediumFileInfo mediumFileInfo) {
         if (mediumFileInfo.getParams() != null && mediumFileInfo.getParams().get("opportunityNum") != null) {
+            // 单独保存下载记录 供专门菜单统计
             MFileDownHis hisReq = new MFileDownHis();
             hisReq.setFileId(mediumFileInfo.getMediumFileId());
             hisReq.setFileType("medium");
             hisReq.setOpportunityNum((String) mediumFileInfo.getParams().get("opportunityNum"));
             hisReq.setCreateBy(SecurityUtils.getUsername());
             hisReq.setCreateId(SecurityUtils.getUserId());
-
+            hisReq.setRemark(mediumFileInfo.getDbVersion());
             fileDownHisService.insertMFileDownHis(hisReq);
         }
         mediumFileInfoService.download(response, mediumFileInfo);
