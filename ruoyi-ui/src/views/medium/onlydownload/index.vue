@@ -44,17 +44,29 @@
         <el-table-column label="授权方式" align="center" prop="authType" v-if="licColumns[3].visible"/>
         <el-table-column label="使用客户" align="center" prop="customerName" v-if="licColumns[4].visible"
                          :show-overflow-tooltip="true"/>
-        <el-table-column label="使用用途" align="center" prop="purpose" v-if="licColumns[5].visible"/>
+        <el-table-column label="使用用途" align="center" prop="purpose" v-if="licColumns[5].visible">
+          <template slot-scope="scope">
+            <dict-tag :options="dict.type.medium_lic_purposes" :value="scope.row.purpose"/>
+          </template>
+        </el-table-column>
         <el-table-column label="过期时间" align="center" prop="expireTime" :show-overflow-tooltip="true"
                          v-if="licColumns[6].visible"/>
-        <el-table-column label="产品类型" align="center" prop="prodType" v-if="licColumns[7].visible"/>
+        <el-table-column label="产品类型" align="center" prop="prodType" v-if="licColumns[7].visible">
+          <template slot-scope="scope">
+            <dict-tag :options="dict.type.medium_lic_prod_type" :value="scope.row.prodType"/>
+          </template>
+        </el-table-column>
         <el-table-column label="数据库版本" align="center" prop="dbVersion" :show-overflow-tooltip="true"
                          v-if="licColumns[8].visible"/>
         <el-table-column label="下载连接" align="center" prop="serverUrl" :show-overflow-tooltip="true"
                          v-if="licColumns[9].visible"/>
         <el-table-column label="其他参数" align="center" prop="otherParam" v-if="licColumns[10].visible"
                          :show-overflow-tooltip="true"/>
-        <el-table-column label="文件状态" align="center" prop="status" v-if="licColumns[11].visible"/>
+        <el-table-column label="文件状态" align="center" prop="status" v-if="licColumns[11].visible">
+          <template slot-scope="scope">
+            <dict-tag :options="dict.type.sys_normal_disable" :value="scope.row.status"/>
+          </template>
+        </el-table-column>
         <el-table-column label="申请人账户" align="center" prop="createBy" v-if="licColumns[12].visible"/>
         <el-table-column label="创建时间" align="center" prop="createTime" v-if="licColumns[13].visible"
                          :show-overflow-tooltip="true"/>
@@ -68,7 +80,7 @@
         </el-table-column>
       </el-table>
       <pagination v-show="lictTotal > 0" :total="lictTotal" :page.sync="licQueryParams.pageNum"
-                  :limit.sync="licQueryParams.pageSize" @pagination="licGetList"/>
+                  :pageSizes="[3,5,8]" :limit.sync="licQueryParams.pageSize" @pagination="licGetList"/>
     </div>
     <div id="mediumDescArea" style="text-align: center;">
       <el-collapse v-model="activeNames">
@@ -198,7 +210,7 @@
         </el-table-column>
       </el-table>
       <pagination v-show="mediumTotal > 0" :total="mediumTotal" :page.sync="mediumQueryParams.pageNum"
-                  :limit.sync="mediumQueryParams.pageSize" @pagination="mediumGetList"/>
+                  :pageSizes="[3,5,8]" :limit.sync="mediumQueryParams.pageSize" @pagination="mediumGetList"/>
     </div>
     <el-dialog :title="securityTitle" :visible.sync="securityOpen" width="1000px" append-to-body>
       <el-form :model="securityQueryParams" ref="securityQueryForm" size="small" :inline="true"
@@ -277,6 +289,8 @@ export default {
   dicts: [
     "sys_yes_no",
     "sys_normal_disable",
+    "medium_lic_purposes",
+    "medium_lic_prod_type",
     'medium_file_type',
     "medium_package_type",
     "medium_version_type",
@@ -329,7 +343,7 @@ export default {
       // 查询参数
       licQueryParams: {
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 5,
         status: 0,
         opportunityNum: undefined,
         customerName: undefined,
@@ -369,7 +383,7 @@ export default {
       // 查询参数
       mediumQueryParams: {
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 5,
         mediumType: null,
         dbVersion: null,
         cpuType: null,

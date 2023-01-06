@@ -31,15 +31,31 @@
         </template>
       </el-table-column>
       <el-table-column label="商机编号" align="center" prop="opportunityNum" v-if="columns[2].visible" :show-overflow-tooltip="true"/>
-      <el-table-column label="授权方式" align="center" prop="authType" v-if="columns[3].visible"/>
+      <el-table-column label="授权方式" align="center" prop="authType" v-if="columns[3].visible">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.medium_lic_db_auth_type" :value="scope.row.authType"/>
+        </template>
+      </el-table-column>
       <el-table-column label="使用客户" align="center" prop="customerName" v-if="columns[4].visible" :show-overflow-tooltip="true"/>
-      <el-table-column label="使用用途" align="center" prop="purpose" v-if="columns[5].visible"/>
+      <el-table-column label="使用用途" align="center" prop="purpose" v-if="columns[5].visible">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.medium_lic_purposes" :value="scope.row.purpose"/>
+        </template>
+      </el-table-column>
       <el-table-column label="过期时间" align="center" prop="expireTime" :show-overflow-tooltip="true" v-if="columns[6].visible"/>
-      <el-table-column label="产品类型" align="center" prop="prodType" v-if="columns[7].visible"/>
+      <el-table-column label="产品类型" align="center" prop="prodType" v-if="columns[7].visible">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.medium_lic_prod_type" :value="scope.row.prodType"/>
+        </template>
+      </el-table-column>
       <el-table-column label="数据库版本" align="center" prop="dbVersion" :show-overflow-tooltip="true" v-if="columns[8].visible"/>
       <el-table-column label="下载连接" align="center" prop="serverUrl" :show-overflow-tooltip="true" v-if="columns[9].visible"/>
       <el-table-column label="其他参数" align="center" prop="otherParam" v-if="columns[10].visible" :show-overflow-tooltip="true"/>
-      <el-table-column label="文件状态" align="center" prop="status" v-if="columns[11].visible"/>
+      <el-table-column label="文件状态" align="center" prop="status" v-if="columns[11].visible">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.sys_normal_disable" :value="scope.row.status"/>
+        </template>
+      </el-table-column>
       <el-table-column label="申请人账户" align="center" prop="createBy" v-if="columns[12].visible"/>
       <el-table-column label="创建时间" align="center" prop="createTime" v-if="columns[13].visible" :show-overflow-tooltip="true"/>
       <el-table-column label="备注" align="center" prop="remark" v-if="columns[14].visible"/>
@@ -61,6 +77,12 @@ import { listLicense } from "@/api/medium/license";
 
 export default {
   name: "Licensedownload",
+  dicts: [
+    "sys_normal_disable",
+    "medium_lic_purposes",
+    "medium_lic_prod_type",
+    "medium_lic_db_auth_type",
+  ],
   data() {
     return {
       // 遮罩层
