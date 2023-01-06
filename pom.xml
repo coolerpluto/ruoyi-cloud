@@ -259,6 +259,33 @@
         </dependency>
     </dependencies>
 
+    <profiles>
+        <profile>
+            <!-- 生产环境 -->
+            <id>prod</id>
+            <properties>
+                <imageProfile>prod</imageProfile>
+            </properties>
+        </profile>
+        <profile>
+            <!-- 本地开发环境 -->
+            <id>dev</id>
+            <properties>
+                <imageProfile>dev</imageProfile>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <!-- 测试环境 -->
+            <id>uat</id>
+            <properties>
+                <imageProfile>uat</imageProfile>
+            </properties>
+        </profile>
+    </profiles>
+
     <build>
         <plugins>
             <plugin>
@@ -288,7 +315,7 @@
                 <!--     </executions>-->
                 <configuration>
                     <!--指定生成的镜像名-->
-                    <imageName>unity/${project.artifactId}</imageName>
+                    <imageName>unity/${project.artifactId}-${imageProfile}</imageName>
                     <!--指定标签-->
                     <imageTags>
                         <imageTag>latest</imageTag>
