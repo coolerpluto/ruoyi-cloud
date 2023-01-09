@@ -30,7 +30,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectNoticeList" parameterType="SysNotice" resultMap="SysNoticeResult">
         <include refid="selectNoticeVo"/>
         <where>
-			<if test="noticeTitle != null and noticeTitle != ''">
+            <if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+            <if test="noticeTitle != null and noticeTitle != ''">
 				AND notice_title like concat('%', #{noticeTitle}, '%')
 			</if>
 			<if test="noticeType != null and noticeType != ''">
@@ -40,6 +43,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				AND create_by like concat('%', #{createBy}, '%')
 			</if>
 		</where>
+        order by create_time  desc
     </select>
     
     <insert id="insertNotice" parameterType="SysNotice">

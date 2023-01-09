@@ -126,7 +126,9 @@ export const loadView = (view) => {
     return (resolve) => require([`@/views/${view}`], resolve)
   } else {
     // 使用 import 实现生产环境的路由懒加载
-    return () => import(`@/views/${view}`)
+    //return () => import(`@/views/${view}`)
+    // 部署后无法进行路由跳跃 改成下面的 暂时不用懒加载
+    return (resolve) => require([`@/views/${view}`], resolve)
   }
 }
 
