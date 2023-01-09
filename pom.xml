@@ -265,6 +265,7 @@
             <id>prod</id>
             <properties>
                 <imageProfile>prod</imageProfile>
+                <envDockerServer>http://192.168.110.231:2375</envDockerServer>
             </properties>
         </profile>
         <profile>
@@ -272,6 +273,7 @@
             <id>dev</id>
             <properties>
                 <imageProfile>dev</imageProfile>
+                <envDockerServer>http://192.168.10.237:2375</envDockerServer>
             </properties>
             <activation>
                 <activeByDefault>true</activeByDefault>
@@ -282,6 +284,7 @@
             <id>uat</id>
             <properties>
                 <imageProfile>uat</imageProfile>
+                <envDockerServer>http://192.168.110.204:2375</envDockerServer>
             </properties>
         </profile>
     </profiles>
@@ -323,7 +326,7 @@
                     <!-- 指定 Dockerfile 路径-->
                     <dockerDirectory>${project.basedir}/src/main/docker</dockerDirectory>
                     <!--指定远程 docker api地址-->
-                    <dockerHost>http://192.168.10.237:2375</dockerHost>
+                    <dockerHost>${envDockerServer}</dockerHost>
                     <!-- 这里是复制 jar 包到 docker 容器指定目录配置 -->
                     <resources>
                         <resource>
