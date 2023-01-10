@@ -265,7 +265,9 @@
             <id>prod</id>
             <properties>
                 <imageProfile>prod</imageProfile>
-                <envDockerServer>http://192.168.110.231:2375</envDockerServer>
+                <!--<envDockerServer>http://192.168.110.231:2375</envDockerServer>-->
+                <!--生产环境不直接放上去,手动拉去指定的几个即可,发布镜像时先构建到本地,之后推送到仓库-->
+                <envDockerServer>http://192.168.10.237:2375</envDockerServer>
             </properties>
         </profile>
         <profile>
@@ -273,6 +275,7 @@
             <id>dev</id>
             <properties>
                 <imageProfile>dev</imageProfile>
+                <!--开发环境直接放上去,开发完成后,发布镜像到测试服务器-->
                 <envDockerServer>http://192.168.10.237:2375</envDockerServer>
             </properties>
             <activation>
@@ -284,6 +287,7 @@
             <id>uat</id>
             <properties>
                 <imageProfile>uat</imageProfile>
+                <!--测试环境直接放上去,测试完成后,发布镜像推送到仓库,若使用则按需拉取-->
                 <envDockerServer>http://192.168.110.204:2375</envDockerServer>
             </properties>
         </profile>
@@ -362,18 +366,32 @@
         <repository>
             <id>public</id>
             <name>aliyun nexus</name>
-            <url>https://maven.aliyun.com/repository/public</url>
+            <!--<url>https://maven.aliyun.com/repository/public</url>-->
+            <url>http://192.168.110.238:8081/repository/maven-public/</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
         </repository>
     </repositories>
-
+    <!-- 项目发布管理 -->
+    <distributionManagement>
+        <repository>
+            <id>releases</id>
+            <name>User Project Release</name>
+            <url>http://192.168.110.238:8081/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>User Project SNAPSHOTS</name>
+            <url>http://192.168.110.238:8081/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
     <pluginRepositories>
         <pluginRepository>
             <id>public</id>
             <name>aliyun nexus</name>
-            <url>https://maven.aliyun.com/repository/public</url>
+            <!--<url>http://192.168.110.238:8081/repository/maven-public/</url>-->
+            <url>http://192.168.110.238:8081/repository/maven-public/</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
