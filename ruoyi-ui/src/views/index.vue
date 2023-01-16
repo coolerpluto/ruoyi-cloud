@@ -59,7 +59,7 @@ export default {
   data() {
     return {
       // 版本号
-      version: "3.6.1",
+      version: "3.6.2",
       currentTime: new Date(),
       activeName: '1',
       // 公告表格数据
