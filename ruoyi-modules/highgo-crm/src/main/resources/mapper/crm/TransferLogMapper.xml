@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.highgo.crm.mapper.TransferLogMapper">
+    
+    <resultMap type="TransferLog" id="TransferLogResult">
+        <result property="id"    column="id"    />
+        <result property="model"    column="model"    />
+        <result property="userFrom"    column="user_from"    />
+        <result property="userTo"    column="user_to"    />
+        <result property="recordIds"    column="record_ids"    />
+        <result property="quantity"    column="quantity"    />
+        <result property="reason"    column="reason"    />
+        <result property="actionTime"    column="action_time"    />
+    </resultMap>
+
+    <sql id="selectTransferLogVo">
+        select id, model, user_from, user_to, record_ids, quantity, reason, action_time from t_transfer_log
+    </sql>
+
+    <select id="selectTransferLogList" parameterType="TransferLog" resultMap="TransferLogResult">
+        <include refid="selectTransferLogVo"/>
+        <where>  
+            <if test="model != null  and model != ''"> and model = #{model}</if>
+            <if test="userFrom != null  and userFrom != ''"> and user_from = #{userFrom}</if>
+            <if test="userTo != null  and userTo != ''"> and user_to = #{userTo}</if>
+            <if test="actionTime != null "> and action_time &lt;= #{actionTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectTransferLogById" parameterType="String" resultMap="TransferLogResult">
+        <include refid="selectTransferLogVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTransferLog" parameterType="TransferLog">
+        insert into t_transfer_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="model != null">model,</if>
+            <if test="userFrom != null">user_from,</if>
+            <if test="userTo != null">user_to,</if>
+            <if test="recordIds != null">record_ids,</if>
+            <if test="quantity != null">quantity,</if>
+            <if test="reason != null">reason,</if>
+            <if test="actionTime != null">action_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="model != null">#{model},</if>
+            <if test="userFrom != null">#{userFrom},</if>
+            <if test="userTo != null">#{userTo},</if>
+            <if test="recordIds != null">#{recordIds},</if>
+            <if test="quantity != null">#{quantity},</if>
+            <if test="reason != null">#{reason},</if>
+            <if test="actionTime != null">#{actionTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTransferLog" parameterType="TransferLog">
+        update t_transfer_log
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="model != null">model = #{model},</if>
+            <if test="userFrom != null">user_from = #{userFrom},</if>
+            <if test="userTo != null">user_to = #{userTo},</if>
+            <if test="recordIds != null">record_ids = #{recordIds},</if>
+            <if test="quantity != null">quantity = #{quantity},</if>
+            <if test="reason != null">reason = #{reason},</if>
+            <if test="actionTime != null">action_time = #{actionTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTransferLogById" parameterType="String">
+        delete from t_transfer_log where id = #{id}
+    </delete>
+
+    <delete id="deleteTransferLogByIds" parameterType="String">
+        delete from t_transfer_log where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

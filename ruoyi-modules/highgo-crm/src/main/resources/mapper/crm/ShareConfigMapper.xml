@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.highgo.crm.mapper.ShareConfigMapper">
+    
+    <resultMap type="ShareConfig" id="ShareConfigResult">
+        <result property="id"    column="id"    />
+        <result property="dataModel"    column="data_model"    />
+        <result property="sourceIds"    column="source_ids"    />
+        <result property="sourceType"    column="source_type"    />
+        <result property="targetIds"    column="target_ids"    />
+        <result property="targetType"    column="target_type"    />
+        <result property="permission"    column="permission"    />
+        <result property="expTime"    column="exp_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectShareConfigVo">
+        select id, data_model, source_ids, source_type, target_ids, target_type, permission, exp_time, create_by, create_time, update_by, update_time from t_share_config
+    </sql>
+
+    <select id="selectShareConfigList" parameterType="ShareConfig" resultMap="ShareConfigResult">
+        <include refid="selectShareConfigVo"/>
+        <where>  
+            <if test="dataModel != null  and dataModel != ''"> and data_model = #{dataModel}</if>
+            <if test="sourceIds != null  and sourceIds != ''"> and source_ids = #{sourceIds}</if>
+            <if test="sourceType != null  and sourceType != ''"> and source_type = #{sourceType}</if>
+            <if test="targetIds != null  and targetIds != ''"> and target_ids = #{targetIds}</if>
+            <if test="targetType != null  and targetType != ''"> and target_type = #{targetType}</if>
+        </where>
+    </select>
+    
+    <select id="selectShareConfigById" parameterType="String" resultMap="ShareConfigResult">
+        <include refid="selectShareConfigVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertShareConfig" parameterType="ShareConfig">
+        insert into t_share_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="dataModel != null and dataModel != ''">data_model,</if>
+            <if test="sourceIds != null and sourceIds != ''">source_ids,</if>
+            <if test="sourceType != null and sourceType != ''">source_type,</if>
+            <if test="targetIds != null and targetIds != ''">target_ids,</if>
+            <if test="targetType != null and targetType != ''">target_type,</if>
+            <if test="permission != null and permission != ''">permission,</if>
+            <if test="expTime != null">exp_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="dataModel != null and dataModel != ''">#{dataModel},</if>
+            <if test="sourceIds != null and sourceIds != ''">#{sourceIds},</if>
+            <if test="sourceType != null and sourceType != ''">#{sourceType},</if>
+            <if test="targetIds != null and targetIds != ''">#{targetIds},</if>
+            <if test="targetType != null and targetType != ''">#{targetType},</if>
+            <if test="permission != null and permission != ''">#{permission},</if>
+            <if test="expTime != null">#{expTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateShareConfig" parameterType="ShareConfig">
+        update t_share_config
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dataModel != null and dataModel != ''">data_model = #{dataModel},</if>
+            <if test="sourceIds != null and sourceIds != ''">source_ids = #{sourceIds},</if>
+            <if test="sourceType != null and sourceType != ''">source_type = #{sourceType},</if>
+            <if test="targetIds != null and targetIds != ''">target_ids = #{targetIds},</if>
+            <if test="targetType != null and targetType != ''">target_type = #{targetType},</if>
+            <if test="permission != null and permission != ''">permission = #{permission},</if>
+            <if test="expTime != null">exp_time = #{expTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteShareConfigById" parameterType="String">
+        delete from t_share_config where id = #{id}
+    </delete>
+
+    <delete id="deleteShareConfigByIds" parameterType="String">
+        delete from t_share_config where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

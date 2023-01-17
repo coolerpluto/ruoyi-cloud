@@ -1,13 +1,14 @@
 <template>
   <div class="app-container">
-  商机管理占个坑
+看板
+
   </div>
 </template>
 
 <script>
 
 export default {
-  name: "Opportunity",
+  name: "dashboard",
   dicts: [],
   data() {
     return {
