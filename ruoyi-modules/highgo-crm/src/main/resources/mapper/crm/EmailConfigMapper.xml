@@ -1,43 +1,56 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.highgo.crm.mapper.EmailConfigMapper">
-    
+
     <resultMap type="EmailConfig" id="EmailConfigResult">
-        <result property="id"    column="id"    />
-        <result property="server"    column="server"    />
-        <result property="port"    column="port"    />
-        <result property="secretKey"    column="secretKey"    />
-        <result property="accessKey"    column="accessKey"    />
-        <result property="nickName"    column="nick_name"    />
-        <result property="status"    column="status"    />
-        <result property="createBy"    column="create_by"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="updateBy"    column="update_by"    />
-        <result property="updateTime"    column="update_time"    />
-        <result property="remark"    column="remark"    />
+        <result property="id" column="id"/>
+        <result property="server" column="server"/>
+        <result property="port" column="port"/>
+        <result property="secretKey" column="secretKey"/>
+        <result property="accessKey" column="accessKey"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
     </resultMap>
 
     <sql id="selectEmailConfigVo">
-        select id, server, port, secretKey, accessKey, nick_name, status, create_by, create_time, update_by, update_time, remark from t_mail_config
+        select id,
+               server,
+               port,
+               secretKey,
+               accessKey,
+               nick_name,
+               status,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark
+        from t_mail_config
     </sql>
 
     <select id="selectEmailConfigList" parameterType="EmailConfig" resultMap="EmailConfigResult">
         <include refid="selectEmailConfigVo"/>
-        <where>  
-            <if test="server != null  and server != ''"> and server like concat('%', #{server}, '%')</if>
-            <if test="secretKey != null  and secretKey != ''"> and secretKey like concat('%', #{secretKey}, '%')</if>
-            <if test="nickName != null  and nickName != ''"> and nick_name like concat('%', #{nickName}, '%')</if>
-            <if test="status != null  and status != ''"> and status = #{status}</if>
+        <where>
+            <if test="server != null  and server != ''">and server like concat('%', #{server}, '%')</if>
+            <if test="secretKey != null  and secretKey != ''">and secretKey like concat('%', #{secretKey}, '%')</if>
+            <if test="nickName != null  and nickName != ''">and nick_name like concat('%', #{nickName}, '%')</if>
+            <if test="status != null  and status != ''">and status = #{status}</if>
         </where>
+        order by update_time desc, create_time desc
     </select>
-    
+
     <select id="selectEmailConfigById" parameterType="String" resultMap="EmailConfigResult">
         <include refid="selectEmailConfigVo"/>
         where id = #{id}
     </select>
-        
+
     <insert id="insertEmailConfig" parameterType="EmailConfig">
         insert into t_mail_config
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -53,7 +66,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="remark != null">remark,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
             <if test="server != null and server != ''">#{server},</if>
@@ -67,7 +80,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="remark != null">#{remark},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateEmailConfig" parameterType="EmailConfig">
@@ -89,11 +102,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteEmailConfigById" parameterType="String">
-        delete from t_mail_config where id = #{id}
+        delete
+        from t_mail_config
+        where id = #{id}
     </delete>
 
     <delete id="deleteEmailConfigByIds" parameterType="String">
-        delete from t_mail_config where id in 
+        delete from t_mail_config where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>

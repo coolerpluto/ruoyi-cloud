@@ -46,19 +46,26 @@
 
     <el-table v-loading="loading" :data="mailconfigList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
-      <el-table-column label="邮件服务器" align="center" prop="server" v-if="columns[0].visible"/>
-      <el-table-column label="邮箱账户" align="center" prop="secretKey" v-if="columns[1].visible"/>
-      <el-table-column label="昵称" align="center" prop="nickName" v-if="columns[2].visible"/>
+      <el-table-column label="邮件服务器" align="center" prop="server" :show-overflow-tooltip="true"
+                       v-if="columns[0].visible"/>
+      <el-table-column label="邮箱账户" align="center" prop="secretKey" :show-overflow-tooltip="true"
+                       v-if="columns[1].visible"/>
+      <el-table-column label="昵称" align="center" prop="nickName" :show-overflow-tooltip="true"
+                       v-if="columns[2].visible"/>
       <el-table-column label="是否启用" align="center" prop="status" v-if="columns[3].visible">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_normal_disable" :value="scope.row.status"/>
         </template>
       </el-table-column>
-      <el-table-column label="创建者" align="center" prop="createBy" v-if="columns[4].visible"/>
-      <el-table-column label="创建时间" align="center" prop="createTime" v-if="columns[5].visible"/>
-      <el-table-column label="更新人员" align="center" prop="updateBy" v-if="columns[6].visible"/>
-      <el-table-column label="更新时间" align="center" prop="updateTime" v-if="columns[7].visible"/>
-      <el-table-column label="备注" align="center" prop="remark" v-if="columns[8].visible"/>
+      <el-table-column label="创建者" align="center" prop="createBy" :show-overflow-tooltip="true"
+                       v-if="columns[4].visible"/>
+      <el-table-column label="创建时间" align="center" prop="createTime" :show-overflow-tooltip="true"
+                       v-if="columns[5].visible"/>
+      <el-table-column label="更新人员" align="center" prop="updateBy" :show-overflow-tooltip="true"
+                       v-if="columns[6].visible"/>
+      <el-table-column label="更新时间" align="center" prop="updateTime" :show-overflow-tooltip="true"
+                       v-if="columns[7].visible"/>
+      <el-table-column label="备注" align="center" prop="remark" :show-overflow-tooltip="true" v-if="columns[8].visible"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
@@ -85,7 +92,8 @@
                   v-for="dict in dict.type.sys_normal_disable"
                   :key="dict.value"
                   :label="dict.value"
-                >{{dict.label}}</el-radio>
+                >{{ dict.label }}
+                </el-radio>
               </el-radio-group>
             </el-form-item>
           </el-col>
@@ -180,7 +188,8 @@ export default {
           {required: true, message: "邮件发送服务器不能为空", trigger: "blur"}
         ],
         secretKey: [
-          {required: true, message: "邮箱账户不能为空", trigger: "blur"}
+          {required: true, message: "邮箱账户不能为空", trigger: "blur"},
+          {type: "email", message: "请输入正确的邮箱地址", trigger: ["blur", "change"]}
         ],
         accessKey: [
           {required: true, message: "账户密码不能为空", trigger: "blur"}
