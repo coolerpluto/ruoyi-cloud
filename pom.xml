@@ -39,6 +39,7 @@
         <poi.version>4.1.2</poi.version>
         <commons-collections.version>3.2.2</commons-collections.version>
         <transmittable-thread-local.version>2.13.2</transmittable-thread-local.version>
+        <maven.build.timestamp.format>yyyyMMdd</maven.build.timestamp.format>
     </properties>
 
     <!-- 依赖声明 -->
@@ -322,7 +323,7 @@
                 <!--     </executions>-->
                 <configuration>
                     <!--指定生成的镜像名-->
-                    <imageName>unity/${project.artifactId}-${imageProfile}</imageName>
+                    <imageName>unity/${project.artifactId}-${imageProfile}-${maven.build.timestamp}</imageName>
                     <!--指定标签-->
                     <imageTags>
                         <imageTag>latest</imageTag>
