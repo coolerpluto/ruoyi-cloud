@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.highgo.crm.mapper.PolicyFileMapper">
+
+    <resultMap type="PolicyFile" id="PolicyFileResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="fileNum"    column="file_num"    />
+        <result property="filePath"    column="file_path"    />
+        <result property="releaseDate"    column="release_date"    />
+        <result property="releaseOffice"    column="release_office"    />
+        <result property="releaseYear"    column="release_year"    />
+        <result property="province"    column="province"    />
+        <result property="city"    column="city"    />
+        <result property="remark"    column="remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="ownerId"    column="owner_id"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectPolicyFileVo">
+        select id, name, file_num, file_path, release_date, release_office, release_year, province, city, remark, create_by, create_time, update_by, update_time, dept_id, owner_id, status from t_policy_file
+    </sql>
+
+    <select id="selectPolicyFileList" parameterType="PolicyFile" resultMap="PolicyFileResult">
+        <include refid="selectPolicyFileVo"/>
+        <where>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="fileNum != null  and fileNum != ''"> and file_num like concat('%', #{fileNum}, '%')</if>
+            <if test="params.beginReleaseDate != null and params.beginReleaseDate != '' and params.endReleaseDate != null and params.endReleaseDate != ''"> and release_date between #{params.beginReleaseDate} and #{params.endReleaseDate}</if>
+            <if test="releaseOffice != null  and releaseOffice != ''"> and release_office like concat('%', #{releaseOffice}, '%')</if>
+            <if test="releaseYear != null "> and release_year &lt;= #{releaseYear}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectPolicyFileById" parameterType="Integer" resultMap="PolicyFileResult">
+        <include refid="selectPolicyFileVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertPolicyFile" parameterType="PolicyFile">
+        insert into t_policy_file
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="name != null">name,</if>
+            <if test="fileNum != null">file_num,</if>
+            <if test="filePath != null">file_path,</if>
+            <if test="releaseDate != null">release_date,</if>
+            <if test="releaseOffice != null">release_office,</if>
+            <if test="releaseYear != null">release_year,</if>
+            <if test="province != null">province,</if>
+            <if test="city != null">city,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="ownerId != null">owner_id,</if>
+            <if test="status != null">status,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="name != null">#{name},</if>
+            <if test="fileNum != null">#{fileNum},</if>
+            <if test="filePath != null">#{filePath},</if>
+            <if test="releaseDate != null">#{releaseDate},</if>
+            <if test="releaseOffice != null">#{releaseOffice},</if>
+            <if test="releaseYear != null">#{releaseYear},</if>
+            <if test="province != null">#{province},</if>
+            <if test="city != null">#{city},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="ownerId != null">#{ownerId},</if>
+            <if test="status != null">#{status},</if>
+        </trim>
+    </insert>
+
+    <update id="updatePolicyFile" parameterType="PolicyFile">
+        update t_policy_file
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="fileNum != null">file_num = #{fileNum},</if>
+            <if test="filePath != null">file_path = #{filePath},</if>
+            <if test="releaseDate != null">release_date = #{releaseDate},</if>
+            <if test="releaseOffice != null">release_office = #{releaseOffice},</if>
+            <if test="releaseYear != null">release_year = #{releaseYear},</if>
+            <if test="province != null">province = #{province},</if>
+            <if test="city != null">city = #{city},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="ownerId != null">owner_id = #{ownerId},</if>
+            <if test="status != null">status = #{status},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePolicyFileById" parameterType="Integer">
+        delete from t_policy_file where id = #{id}
+    </delete>
+
+    <delete id="deletePolicyFileByIds" parameterType="String">
+        delete from t_policy_file where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
