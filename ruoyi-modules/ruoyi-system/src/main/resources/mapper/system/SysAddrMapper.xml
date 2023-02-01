@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysAddrMapper">
+    
+    <resultMap type="SysAddr" id="SysAddrResult">
+        <result property="id"    column="id"    />
+        <result property="code"    column="code"    />
+        <result property="name"    column="name"    />
+        <result property="parent"    column="parent"    />
+        <result property="level"    column="level"    />
+        <result property="status"    column="status"    />
+        <result property="sort"    column="sort"    />
+        <result property="lat"    column="lat"    />
+        <result property="lng"    column="lng"    />
+    </resultMap>
+
+    <sql id="selectSysAddrVo">
+        select id, code, name, parent, level, status, sort, lat, lng from sys_addr
+    </sql>
+
+    <select id="selectSysAddrList" parameterType="SysAddr" resultMap="SysAddrResult">
+        <include refid="selectSysAddrVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="parent != null  and parent != ''"> and parent like concat('%', #{parent}, '%')</if>
+            <if test="level != null  and level != ''"> and level = #{level}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysAddrById" parameterType="String" resultMap="SysAddrResult">
+        <include refid="selectSysAddrVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSysAddr" parameterType="SysAddr">
+        insert into sys_addr
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="code != null">code,</if>
+            <if test="name != null">name,</if>
+            <if test="parent != null">parent,</if>
+            <if test="level != null">level,</if>
+            <if test="status != null">status,</if>
+            <if test="sort != null">sort,</if>
+            <if test="lat != null">lat,</if>
+            <if test="lng != null">lng,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="code != null">#{code},</if>
+            <if test="name != null">#{name},</if>
+            <if test="parent != null">#{parent},</if>
+            <if test="level != null">#{level},</if>
+            <if test="status != null">#{status},</if>
+            <if test="sort != null">#{sort},</if>
+            <if test="lat != null">#{lat},</if>
+            <if test="lng != null">#{lng},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysAddr" parameterType="SysAddr">
+        update sys_addr
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="code != null">code = #{code},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="parent != null">parent = #{parent},</if>
+            <if test="level != null">level = #{level},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="lat != null">lat = #{lat},</if>
+            <if test="lng != null">lng = #{lng},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysAddrById" parameterType="String">
+        delete from sys_addr where id = #{id}
+    </delete>
+
+    <delete id="deleteSysAddrByIds" parameterType="String">
+        delete from sys_addr where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
