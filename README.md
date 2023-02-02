@@ -1,9 +1,9 @@
-<h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">在commitId=d936ce76的基础上修改构建CRM系统,后期根据需要同步更新关键代码</h1>
+<h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">在commitId=d936ce76的基础上修改构建统一管理系统,后期根据需要同步更新关键代码</h1>
 
 <p align="center">
 	<img alt="logo" src="https://oscimg.oschina.net/oscnet/up-b99b286755aef70355a7084753f89cdb7c9.png">
 </p>
-<h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">RuoYi v3.6.1</h1>
+<h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">RuoYi v3.6.2</h1>
 <h4 align="center">基于 Vue/Element UI 和 Spring Boot/Spring Cloud & Alibaba 前后端分离的分布式微服务架构</h4>
 
 
@@ -39,6 +39,7 @@ com.ruoyi
 │       └── ruoyi-common-swagger                      // 系统接口
 ├── ruoyi-modules         // 业务模块
 │       └── highgo-crm                                // 新增CRM模块 [9401]
+│       └── highgo-medium                             // 新增介质管理模块 [9402]
 │       └── ruoyi-system                              // 系统模块 [9201]
 │       └── ruoyi-gen                                 // 代码生成 [9202]
 │       └── ruoyi-job                                 // 定时任务 [9203]
@@ -76,7 +77,7 @@ com.ruoyi
 
 - admin/admin123  
 
-演示地址：http://ruoyi.vip  
+
 
 ## 演示图
 
