@@ -2,31 +2,17 @@
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="地址名字" prop="name">
-        <el-input
-          v-model="queryParams.name"
-          placeholder="请输入地址名字"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.name" placeholder="请输入地址名字" clearable @keyup.enter.native="handleQuery"/>
       </el-form-item>
       <el-form-item label="地址级别" prop="level">
         <el-select v-model="queryParams.level" placeholder="请选择地址级别" clearable>
-          <el-option
-            v-for="item in addLevelOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
+          <el-option v-for="item in addLevelOptions" :key="item.value" :label="item.label" :value="item.value"/>
         </el-select>
       </el-form-item>
       <el-form-item label="地址状态" prop="status">
         <el-select v-model="queryParams.status" placeholder="请选择地址记录状态" clearable>
-          <el-option
-            v-for="dict in dict.type.sys_normal_disable"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
+          <el-option v-for="dict in dict.type.sys_normal_disable" :key="dict.value" :label="dict.label"
+                     :value="dict.value"/>
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -37,35 +23,21 @@
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['system:addr:add']"
-        >新增
+        <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd"
+                   v-hasPermi="['system:addr:add']">新增
         </el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table
-      v-if="refreshTable"
-      v-loading="loading"
-      :data="addrList"
-      row-key="code"
-      lazy
-      :load="loadChild"
-      :default-expand-all="isExpandAll"
-      :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
-    >
+    <el-table v-if="refreshTable" v-loading="loading" :data="addrList" row-key="code" lazy :load="loadChild"
+              :default-expand-all="isExpandAll" :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
       <el-table-column label="唯一code" prop="code"/>
       <el-table-column label="地址名字" align="center" prop="name"/>
       <el-table-column label="地址级别" align="center" prop="level">
         <template slot-scope="{ row }">
            <span v-for="(item, index) in addLevelOptions" :key="index">
-             {{ row.level == item.value? item.label: "" }}
+             {{ row.level == item.value ? item.label : "" }}
            </span>
         </template>
       </el-table-column>
@@ -77,29 +49,14 @@
       <el-table-column label="同级排序" align="center" prop="sort"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:addr:edit']"
-          >修改
+          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
+                     v-hasPermi="['system:addr:edit']">修改
           </el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-plus"
-            @click="handleAdd(scope.row)"
-            v-hasPermi="['system:addr:add']"
-          >新增
+          <el-button size="mini" type="text" icon="el-icon-plus" @click="handleAdd(scope.row)"
+                     v-hasPermi="['system:addr:add']">新增
           </el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['system:addr:remove']"
-          >删除
+          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
+                     v-hasPermi="['system:addr:remove']">删除
           </el-button>
         </template>
       </el-table-column>
@@ -118,22 +75,14 @@
         </el-form-item>
         <el-form-item label="地址级别" prop="level">
           <el-select v-model="form.level" placeholder="请选择地址级别">
-            <el-option
-              v-for="item in addLevelOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
+            <el-option v-for="item in addLevelOptions" :key="item.value" :label="item.label"
+                       :value="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="地址状态" prop="status">
           <el-select v-model="form.status" placeholder="请选择地址记录状态">
-            <el-option
-              v-for="dict in dict.type.sys_normal_disable"
-              :key="dict.value"
-              :label="dict.label"
-              :value="dict.value"
-            ></el-option>
+            <el-option v-for="dict in dict.type.sys_normal_disable" :key="dict.value" :label="dict.label"
+                       :value="dict.value"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -146,7 +95,7 @@
 </template>
 
 <script>
-import {listAddr,listPageAddr, getAddr, delAddr, addAddr, updateAddr} from "@/api/system/addr";
+import {listAddr, listPageAddr, getAddr, delAddr, addAddr, updateAddr} from "@/api/system/addr";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
@@ -216,44 +165,44 @@ export default {
         //this.addrList = this.handleTree(response.data, "code", "parent");
         this.addrListCopy = this.handleTree(response.data, "code", "parent");
         console.log(this.addrListCopy);
-        for(let i =0; i<this.addrListCopy.length; i++){
+        for (let i = 0; i < this.addrListCopy.length; i++) {
           this.addrList.push({
-            id:this.addrListCopy[i].id,
-            code:this.addrListCopy[i].code,
-            name:this.addrListCopy[i].name,
-            level:this.addrListCopy[i].level,
-            status:this.addrListCopy[i].status,
-            sort:this.addrListCopy[i].sort,
-            children:null,
-            hasChildren:this.addrListCopy[i].children && this.addrListCopy[i].children.length>0,
+            id: this.addrListCopy[i].id,
+            code: this.addrListCopy[i].code,
+            name: this.addrListCopy[i].name,
+            level: this.addrListCopy[i].level,
+            status: this.addrListCopy[i].status,
+            sort: this.addrListCopy[i].sort,
+            children: null,
+            hasChildren: this.addrListCopy[i].children && this.addrListCopy[i].children.length > 0,
           })
         }
         this.loading = false;
       });
       this.getTreeselect();
     },
-    loadChild(tree, treeNode, resolve){
+    loadChild(tree, treeNode, resolve) {
       // 层级关系备份
-      tree.idList = tree.idList||[tree.code]
+      tree.idList = tree.idList || [tree.code]
       const idCopy = JSON.parse(JSON.stringify(tree.idList))
       // 查找下一层数据
       let resolveArr = this.addrListCopy
-      let code =tree.code
+      let code = tree.code
       while (code = tree.idList.shift()) {
         const tarItem = resolveArr.find(item => item.code === code)
         //tarItem.loadedChildren = true
         //resolveArr = tarItem.children
         const tempArr = [];
-        for(let i =0; i< tarItem.children.length; i++){
+        for (let i = 0; i < tarItem.children.length; i++) {
           tempArr.push({
-            id:tarItem.children[i].id,
-            code:tarItem.children[i].code,
-            name:tarItem.children[i].name,
-            level:tarItem.children[i].level,
-            status:tarItem.children[i].status,
-            sort:tarItem.children[i].sort,
-            children:tarItem.children[i].children,
-            hasChildren:tarItem.children[i].children && tarItem.children[i].children.length>0,
+            id: tarItem.children[i].id,
+            code: tarItem.children[i].code,
+            name: tarItem.children[i].name,
+            level: tarItem.children[i].level,
+            status: tarItem.children[i].status,
+            sort: tarItem.children[i].sort,
+            children: tarItem.children[i].children,
+            hasChildren: tarItem.children[i].children && tarItem.children[i].children.length > 0,
           })
         }
         resolveArr = tempArr
