@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.highgo.crm.mapper.CompanyMapper">
+    
+    <resultMap type="Company" id="CompanyResult">
+        <result property="id"    column="id"    />
+        <result property="companyName"    column="company_name"    />
+        <result property="properties"    column="properties"    />
+        <result property="industry"    column="industry"    />
+        <result property="legal"    column="legal"    />
+        <result property="capitalReg"    column="capital_reg"    />
+        <result property="capitalPayType"    column="capital_pay_type"    />
+        <result property="sourceType"    column="source_type"    />
+        <result property="website"    column="website"    />
+        <result property="addr"    column="addr"    />
+        <result property="businessScope"    column="business_scope"    />
+        <result property="remark"    column="remark"    />
+        <result property="sourceId"    column="source_id"    />
+        <result property="ownerId"    column="owner_id"    />
+        <result property="ownerName"    column="owner_Name"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="deptName"    column="dept_Name"    />
+        <result property="createId"    column="create_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateId"    column="update_id"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectCompanyVo">
+        select id, company_name, properties, industry, legal, capital_reg, capital_pay_type, source_type, website, addr, business_scope, remark, source_id, owner_id, dept_id, create_id, create_by, create_time, update_id, update_by, update_time from t_company
+    </sql>
+
+    <select id="selectCompanyList" parameterType="Company" resultMap="CompanyResult">
+        <include refid="selectCompanyVo"/>
+        <where>  
+            <if test="companyName != null  and companyName != ''"> and company_name like concat('%', #{companyName}, '%')</if>
+            <if test="properties != null  and properties != ''"> and properties like concat('%', #{properties}, '%')</if>
+            <if test="industry != null  and industry != ''"> and industry = #{industry}</if>
+            <if test="legal != null  and legal != ''"> and legal like concat('%', #{legal}, '%')</if>
+            <if test="capitalReg != null  and capitalReg != ''"> and capital_reg = #{capitalReg}</if>
+            <if test="capitalPayType != null  and capitalPayType != ''"> and capital_pay_type = #{capitalPayType}</if>
+            <if test="sourceType != null  and sourceType != ''"> and source_type = #{sourceType}</if>
+            <if test="website != null  and website != ''"> and website = #{website}</if>
+            <if test="addr != null  and addr != ''"> and addr = #{addr}</if>
+            <if test="businessScope != null  and businessScope != ''"> and business_scope like concat('%', #{businessScope}, '%')</if>
+            <if test="remark != null  and remark != ''"> and remark = #{remark}</if>
+            <if test="sourceId != null  and sourceId != ''"> and source_id = #{sourceId}</if>
+            <if test="ownerId != null  and ownerId != ''"> and owner_id = #{ownerId}</if>
+            <if test="deptId != null  and deptId != ''"> and dept_id = #{deptId}</if>
+            <if test="createId != null  and createId != ''"> and create_id = #{createId}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
+            <if test="createTime != null "> and create_time = #{createTime}</if>
+            <if test="updateId != null  and updateId != ''"> and update_id = #{updateId}</if>
+            <if test="updateBy != null  and updateBy != ''"> and update_by = #{updateBy}</if>
+            <if test="updateTime != null "> and update_time = #{updateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectCompanyById" parameterType="String" resultMap="CompanyResult">
+        <include refid="selectCompanyVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertCompany" parameterType="Company">
+        insert into t_company
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="companyName != null">company_name,</if>
+            <if test="properties != null">properties,</if>
+            <if test="industry != null">industry,</if>
+            <if test="legal != null">legal,</if>
+            <if test="capitalReg != null">capital_reg,</if>
+            <if test="capitalPayType != null">capital_pay_type,</if>
+            <if test="sourceType != null">source_type,</if>
+            <if test="website != null">website,</if>
+            <if test="addr != null">addr,</if>
+            <if test="businessScope != null">business_scope,</if>
+            <if test="remark != null">remark,</if>
+            <if test="sourceId != null">source_id,</if>
+            <if test="ownerId != null">owner_id,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="createId != null">create_id,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateId != null">update_id,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="companyName != null">#{companyName},</if>
+            <if test="properties != null">#{properties},</if>
+            <if test="industry != null">#{industry},</if>
+            <if test="legal != null">#{legal},</if>
+            <if test="capitalReg != null">#{capitalReg},</if>
+            <if test="capitalPayType != null">#{capitalPayType},</if>
+            <if test="sourceType != null">#{sourceType},</if>
+            <if test="website != null">#{website},</if>
+            <if test="addr != null">#{addr},</if>
+            <if test="businessScope != null">#{businessScope},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="sourceId != null">#{sourceId},</if>
+            <if test="ownerId != null">#{ownerId},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="createId != null">#{createId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateId != null">#{updateId},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCompany" parameterType="Company">
+        update t_company
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="companyName != null">company_name = #{companyName},</if>
+            <if test="properties != null">properties = #{properties},</if>
+            <if test="industry != null">industry = #{industry},</if>
+            <if test="legal != null">legal = #{legal},</if>
+            <if test="capitalReg != null">capital_reg = #{capitalReg},</if>
+            <if test="capitalPayType != null">capital_pay_type = #{capitalPayType},</if>
+            <if test="sourceType != null">source_type = #{sourceType},</if>
+            <if test="website != null">website = #{website},</if>
+            <if test="addr != null">addr = #{addr},</if>
+            <if test="businessScope != null">business_scope = #{businessScope},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="sourceId != null">source_id = #{sourceId},</if>
+            <if test="ownerId != null">owner_id = #{ownerId},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="createId != null">create_id = #{createId},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateId != null">update_id = #{updateId},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+    <update id="changeCompanyOwners">
+        update t_company set owner_id = #{targetOwnerId} where id in
+        <foreach collection="companyResIds" open="(" close=")" separator="," item="item" index="index" >
+            #{item}
+        </foreach>
+    </update>
+    <delete id="deleteCompanyById" parameterType="String">
+        delete from t_company where id = #{id}
+    </delete>
+
+    <delete id="deleteCompanyByIds" parameterType="String">
+        delete from t_company where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

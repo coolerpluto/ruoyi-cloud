@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.highgo.crm.mapper.ApplicationMapper">
+
+    <resultMap type="Application" id="ApplicationResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="version"    column="version"    />
+        <result property="category"    column="category"    />
+        <result property="isv"    column="isv"    />
+        <result property="isvContactId"    column="isv_contact_id"    />
+        <result property="baseEnviron"    column="base_environ"    />
+        <result property="opeartSys"    column="opeart_sys"    />
+        <result property="middleSoft"    column="middle_soft"    />
+        <result property="dataBase"    column="data_base"    />
+        <result property="dbSelectionModel"    column="db_selection_model"    />
+        <result property="deployType"    column="deploy_type"    />
+        <result property="deployLevel"    column="deploy_level"    />
+        <result property="sysBuildMoney"    column="sys_build_money"    />
+        <result property="sourceId"    column="source_id"    />
+        <result property="sourceType"    column="source_type"    />
+        <result property="devStatus"    column="dev_status"    />
+        <result property="dbAdaptStatus"    column="db_adapt_status"    />
+        <result property="remark"    column="remark"    />
+        <result property="ownerId"    column="owner_id"    />
+        <result property="ownerName"    column="owner_Name"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="deptName"    column="dept_Name"    />
+        <result property="createId"    column="create_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateId"    column="update_id"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectApplicationVo">
+        select id, name, version, category, isv, isv_contact_id, base_environ, opeart_sys, middle_soft, data_base, db_selection_model, deploy_type, deploy_level, sys_build_money, source_id, source_type, dev_status, db_adapt_status, remark, owner_id, dept_id, create_id, create_by, create_time, update_id, update_by, update_time from t_application
+    </sql>
+
+    <select id="selectApplicationList" parameterType="Application" resultMap="ApplicationResult">
+        <include refid="selectApplicationVo"/>
+        <where>
+            <if test="name != null  and name != ''"> and name = #{name}</if>
+            <if test="version != null  and version != ''"> and version = #{version}</if>
+            <if test="category != null  and category != ''"> and category = #{category}</if>
+            <if test="isv != null  and isv != ''"> and isv = #{isv}</if>
+            <if test="isvContactId != null  and isvContactId != ''"> and isv_contact_id = #{isvContactId}</if>
+            <if test="baseEnviron != null  and baseEnviron != ''"> and base_environ = #{baseEnviron}</if>
+            <if test="opeartSys != null  and opeartSys != ''"> and opeart_sys = #{opeartSys}</if>
+            <if test="middleSoft != null  and middleSoft != ''"> and middle_soft = #{middleSoft}</if>
+            <if test="dataBase != null  and dataBase != ''"> and data_base = #{dataBase}</if>
+            <if test="dbSelectionModel != null  and dbSelectionModel != ''"> and db_selection_model = #{dbSelectionModel}</if>
+            <if test="deployType != null  and deployType != ''"> and deploy_type = #{deployType}</if>
+            <if test="deployLevel != null  and deployLevel != ''"> and deploy_level = #{deployLevel}</if>
+            <if test="sysBuildMoney != null  and sysBuildMoney != ''"> and sys_build_money = #{sysBuildMoney}</if>
+            <if test="sourceId != null  and sourceId != ''"> and source_id = #{sourceId}</if>
+            <if test="sourceType != null  and sourceType != ''"> and source_type = #{sourceType}</if>
+            <if test="devStatus != null  and devStatus != ''"> and dev_status = #{devStatus}</if>
+            <if test="dbAdaptStatus != null  and dbAdaptStatus != ''"> and db_adapt_status = #{dbAdaptStatus}</if>
+            <if test="remark != null  and remark != ''"> and remark = #{remark}</if>
+            <if test="ownerId != null  and ownerId != ''"> and owner_id = #{ownerId}</if>
+            <if test="deptId != null  and deptId != ''"> and dept_id = #{deptId}</if>
+            <if test="createId != null  and createId != ''"> and create_id = #{createId}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
+            <if test="createTime != null "> and create_time = #{createTime}</if>
+            <if test="updateId != null  and updateId != ''"> and update_id = #{updateId}</if>
+            <if test="updateBy != null  and updateBy != ''"> and update_by = #{updateBy}</if>
+            <if test="updateTime != null "> and update_time = #{updateTime}</if>
+        </where>
+    </select>
+
+    <select id="selectApplicationById" parameterType="String" resultMap="ApplicationResult">
+        <include refid="selectApplicationVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertApplication" parameterType="Application">
+        insert into t_application
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="name != null">name,</if>
+            <if test="version != null">version,</if>
+            <if test="category != null">category,</if>
+            <if test="isv != null">isv,</if>
+            <if test="isvContactId != null">isv_contact_id,</if>
+            <if test="baseEnviron != null">base_environ,</if>
+            <if test="opeartSys != null">opeart_sys,</if>
+            <if test="middleSoft != null">middle_soft,</if>
+            <if test="dataBase != null">data_base,</if>
+            <if test="dbSelectionModel != null">db_selection_model,</if>
+            <if test="deployType != null">deploy_type,</if>
+            <if test="deployLevel != null">deploy_level,</if>
+            <if test="sysBuildMoney != null">sys_build_money,</if>
+            <if test="sourceId != null">source_id,</if>
+            <if test="sourceType != null">source_type,</if>
+            <if test="devStatus != null">dev_status,</if>
+            <if test="dbAdaptStatus != null">db_adapt_status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="ownerId != null">owner_id,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="createId != null">create_id,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateId != null">update_id,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="name != null">#{name},</if>
+            <if test="version != null">#{version},</if>
+            <if test="category != null">#{category},</if>
+            <if test="isv != null">#{isv},</if>
+            <if test="isvContactId != null">#{isvContactId},</if>
+            <if test="baseEnviron != null">#{baseEnviron},</if>
+            <if test="opeartSys != null">#{opeartSys},</if>
+            <if test="middleSoft != null">#{middleSoft},</if>
+            <if test="dataBase != null">#{dataBase},</if>
+            <if test="dbSelectionModel != null">#{dbSelectionModel},</if>
+            <if test="deployType != null">#{deployType},</if>
+            <if test="deployLevel != null">#{deployLevel},</if>
+            <if test="sysBuildMoney != null">#{sysBuildMoney},</if>
+            <if test="sourceId != null">#{sourceId},</if>
+            <if test="sourceType != null">#{sourceType},</if>
+            <if test="devStatus != null">#{devStatus},</if>
+            <if test="dbAdaptStatus != null">#{dbAdaptStatus},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="ownerId != null">#{ownerId},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="createId != null">#{createId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateId != null">#{updateId},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateApplication" parameterType="Application">
+        update t_application
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="version != null">version = #{version},</if>
+            <if test="category != null">category = #{category},</if>
+            <if test="isv != null">isv = #{isv},</if>
+            <if test="isvContactId != null">isv_contact_id = #{isvContactId},</if>
+            <if test="baseEnviron != null">base_environ = #{baseEnviron},</if>
+            <if test="opeartSys != null">opeart_sys = #{opeartSys},</if>
+            <if test="middleSoft != null">middle_soft = #{middleSoft},</if>
+            <if test="dataBase != null">data_base = #{dataBase},</if>
+            <if test="dbSelectionModel != null">db_selection_model = #{dbSelectionModel},</if>
+            <if test="deployType != null">deploy_type = #{deployType},</if>
+            <if test="deployLevel != null">deploy_level = #{deployLevel},</if>
+            <if test="sysBuildMoney != null">sys_build_money = #{sysBuildMoney},</if>
+            <if test="sourceId != null">source_id = #{sourceId},</if>
+            <if test="sourceType != null">source_type = #{sourceType},</if>
+            <if test="devStatus != null">dev_status = #{devStatus},</if>
+            <if test="dbAdaptStatus != null">db_adapt_status = #{dbAdaptStatus},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="ownerId != null">owner_id = #{ownerId},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="createId != null">create_id = #{createId},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateId != null">update_id = #{updateId},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteApplicationById" parameterType="String">
+        delete from t_application where id = #{id}
+    </delete>
+
+    <delete id="deleteApplicationByIds" parameterType="String">
+        delete from t_application where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

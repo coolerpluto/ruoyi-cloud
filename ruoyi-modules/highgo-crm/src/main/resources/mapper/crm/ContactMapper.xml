@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.highgo.crm.mapper.ContactMapper">
+
+    <resultMap type="Contact" id="ContactResult">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="sex" column="sex"/>
+        <result property="company" column="company"/>
+        <result property="roleInCompany" column="role_in_company"/>
+        <result property="postInCompany" column="post_in_company"/>
+        <result property="deptInCompany" column="dept_in_company"/>
+        <result property="priPhone" column="pri_phone"/>
+        <result property="secPhone" column="sec_phone"/>
+        <result property="priEmail" column="pri_email"/>
+        <result property="secEmail" column="sec_email"/>
+        <result property="addr" column="addr"/>
+        <result property="category" column="category"/>
+        <result property="sourceType" column="source_type"/>
+        <result property="remark" column="remark"/>
+        <result property="sourceId" column="source_id"/>
+        <result property="ownerId" column="owner_id"/>
+        <result property="ownerName" column="owner_Name"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="deptName" column="dept_Name"/>
+        <result property="createId" column="create_id"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateId" column="update_id"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectContactVo">
+        select id,
+               name,
+               sex,
+               company,
+               role_in_company,
+               post_in_company,
+               dept_in_company,
+               pri_phone,
+               sec_phone,
+               pri_email,
+               sec_email,
+               addr,
+               category,
+               source_type,
+               remark,
+               source_id,
+               owner_id,
+               dept_id,
+               create_id,
+               create_by,
+               create_time,
+               update_id,
+               update_by,
+               update_time
+        from t_contact
+    </sql>
+
+    <select id="selectContactList" parameterType="Contact" resultMap="ContactResult">
+        <include refid="selectContactVo"/>
+        <where>
+            <if test="name != null  and name != ''">and name like concat('%', #{name}, '%')</if>
+            <if test="sex != null  and sex != ''">and sex = #{sex}</if>
+            <if test="company != null  and company != ''">and company like concat('%', #{company}, '%')</if>
+            <if test="roleInCompany != null  and roleInCompany != ''">and role_in_company = #{roleInCompany}</if>
+            <if test="postInCompany != null  and postInCompany != ''">and post_in_company = #{postInCompany}</if>
+            <if test="deptInCompany != null  and deptInCompany != ''">and dept_in_company = #{deptInCompany}</if>
+            <if test="priPhone != null  and priPhone != ''">and pri_phone like concat('%', #{priPhone}, '%')</if>
+            <if test="secPhone != null  and secPhone != ''">and sec_phone = #{secPhone}</if>
+            <if test="priEmail != null  and priEmail != ''">and pri_email = #{priEmail}</if>
+            <if test="secEmail != null  and secEmail != ''">and sec_email = #{secEmail}</if>
+            <if test="addr != null  and addr != ''">and addr = #{addr}</if>
+            <if test="category != null  and category != ''">and category = #{category}</if>
+            <if test="sourceType != null  and sourceType != ''">and source_type = #{sourceType}</if>
+            <if test="remark != null  and remark != ''">and remark = #{remark}</if>
+            <if test="sourceId != null  and sourceId != ''">and source_id = #{sourceId}</if>
+            <if test="ownerId != null  and ownerId != ''">and owner_id = #{ownerId}</if>
+            <if test="deptId != null  and deptId != ''">and dept_id = #{deptId}</if>
+            <if test="createId != null  and createId != ''">and create_id = #{createId}</if>
+            <if test="createBy != null  and createBy != ''">and create_by = #{createBy}</if>
+            <if test="createTime != null ">and create_time = #{createTime}</if>
+            <if test="updateId != null  and updateId != ''">and update_id = #{updateId}</if>
+            <if test="updateBy != null  and updateBy != ''">and update_by = #{updateBy}</if>
+            <if test="updateTime != null ">and update_time = #{updateTime}</if>
+        </where>
+    </select>
+
+    <select id="selectContactById" parameterType="String" resultMap="ContactResult">
+        <include refid="selectContactVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertContact" parameterType="Contact">
+        insert into t_contact
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="sex != null and sex != ''">sex,</if>
+            <if test="company != null and company != ''">company,</if>
+            <if test="roleInCompany != null">role_in_company,</if>
+            <if test="postInCompany != null">post_in_company,</if>
+            <if test="deptInCompany != null">dept_in_company,</if>
+            <if test="priPhone != null and priPhone != ''">pri_phone,</if>
+            <if test="secPhone != null">sec_phone,</if>
+            <if test="priEmail != null">pri_email,</if>
+            <if test="secEmail != null">sec_email,</if>
+            <if test="addr != null">addr,</if>
+            <if test="category != null">category,</if>
+            <if test="sourceType != null">source_type,</if>
+            <if test="remark != null">remark,</if>
+            <if test="sourceId != null">source_id,</if>
+            <if test="ownerId != null">owner_id,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="createId != null">create_id,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateId != null">update_id,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="sex != null and sex != ''">#{sex},</if>
+            <if test="company != null and company != ''">#{company},</if>
+            <if test="roleInCompany != null">#{roleInCompany},</if>
+            <if test="postInCompany != null">#{postInCompany},</if>
+            <if test="deptInCompany != null">#{deptInCompany},</if>
+            <if test="priPhone != null and priPhone != ''">#{priPhone},</if>
+            <if test="secPhone != null">#{secPhone},</if>
+            <if test="priEmail != null">#{priEmail},</if>
+            <if test="secEmail != null">#{secEmail},</if>
+            <if test="addr != null">#{addr},</if>
+            <if test="category != null">#{category},</if>
+            <if test="sourceType != null">#{sourceType},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="sourceId != null">#{sourceId},</if>
+            <if test="ownerId != null">#{ownerId},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="createId != null">#{createId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateId != null">#{updateId},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateContact" parameterType="Contact">
+        update t_contact
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="sex != null and sex != ''">sex = #{sex},</if>
+            <if test="company != null and company != ''">company = #{company},</if>
+            <if test="roleInCompany != null">role_in_company = #{roleInCompany},</if>
+            <if test="postInCompany != null">post_in_company = #{postInCompany},</if>
+            <if test="deptInCompany != null">dept_in_company = #{deptInCompany},</if>
+            <if test="priPhone != null and priPhone != ''">pri_phone = #{priPhone},</if>
+            <if test="secPhone != null">sec_phone = #{secPhone},</if>
+            <if test="priEmail != null">pri_email = #{priEmail},</if>
+            <if test="secEmail != null">sec_email = #{secEmail},</if>
+            <if test="addr != null">addr = #{addr},</if>
+            <if test="category != null">category = #{category},</if>
+            <if test="sourceType != null">source_type = #{sourceType},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="sourceId != null">source_id = #{sourceId},</if>
+            <if test="ownerId != null">owner_id = #{ownerId},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="createId != null">create_id = #{createId},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateId != null">update_id = #{updateId},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+    <update id="changeContactOwners">
+        update t_contact set owner_id = #{targetOwnerId} where id in
+        <foreach collection="contactResIds" open="(" close=")" separator="," item="item" index="index">
+            #{item}
+        </foreach>
+    </update>
+    <delete id="deleteContactById" parameterType="String">
+        delete
+        from t_contact
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteContactByIds" parameterType="String">
+        delete from t_contact where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
