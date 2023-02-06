@@ -1,10 +1,10 @@
 package com.highgo.crm.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.highgo.crm.utils.CRMUtil;
 import com.ruoyi.common.core.utils.DateUtils;
+import com.ruoyi.common.datascope.annotation.CrmDataScope;
 import com.ruoyi.common.security.utils.SecurityUtils;
 import com.ruoyi.system.api.domain.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +42,7 @@ public class CompanyServiceImpl implements ICompanyService {
      * @return 公司
      */
     @Override
+    @CrmDataScope(deptAlias = "sd", userAlias = "su")
     public List<Company> selectCompanyList(Company company) {
         return companyMapper.selectCompanyList(company);
     }

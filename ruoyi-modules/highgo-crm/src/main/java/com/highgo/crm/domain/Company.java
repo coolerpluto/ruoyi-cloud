@@ -18,6 +18,8 @@ public class Company extends BaseEntity {
      * 记录ID
      */
     private String id;
+    @Excel(name = "客户编码")
+    private String code;
 
     /**
      * 公司名称
@@ -72,6 +74,8 @@ public class Company extends BaseEntity {
      */
     @Excel(name = "公司地址")
     private String addr;
+    @Excel(name = "详细地址")
+    private String addrDetail;
 
     /**
      * 公司业务
@@ -108,6 +112,22 @@ public class Company extends BaseEntity {
      * 更新者ID
      */
     private Long updateId;
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getAddrDetail() {
+        return addrDetail;
+    }
+
+    public void setAddrDetail(String addrDetail) {
+        this.addrDetail = addrDetail;
+    }
 
     public String getOwnerName() {
         return ownerName;
