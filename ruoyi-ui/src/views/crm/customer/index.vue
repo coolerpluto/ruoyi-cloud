@@ -782,6 +782,7 @@ export default {
     /** 查询列表 */
     getList() {
       this.loading = true;
+      this.queryParams.sourceType = "customer";
       listCompany(this.queryParams).then(response => {
         this.companyList = response.rows;
         this.total = response.total;
@@ -962,6 +963,7 @@ export default {
             });
           } else {
             this.form.code = 'CUSTOMER_' + Date.parse(new Date());
+            this.form.sourceType = "customer";
             addCompany(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
