@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.InputStream;
+
 /**
  * FastDFS 文件存储
  *
@@ -32,10 +34,12 @@ public class FastDfsSysFileServiceImpl extends ASysFileService {
      * @throws Exception
      */
     @Override
-    public String uploadFile(MultipartFile file) throws Exception {
-        StorePath storePath = storageClient.uploadFile(file.getInputStream(), file.getSize(),
+    public String uploadFile(MultipartFile file) throws Exception
+    {
+        InputStream inputStream = file.getInputStream();
+        StorePath storePath = storageClient.uploadFile(inputStream, file.getSize(),
                 FileTypeUtils.getExtension(file), null);
+        inputStream.close();
         return domain + "/" + storePath.getFullPath();
     }
-
 }
