@@ -161,6 +161,20 @@ export const dynamicRoutes = [
         meta: { title: '修改生成配置', activeMenu: '/tool/gen' }
       }
     ]
+  },
+  {
+    path: '/crm/opportunity-data',
+    component: Layout,
+    hidden: true,
+    permissions: ['crm:opportunity:list'],
+    children: [
+      {
+        path: 'index/:id(\\d+)',
+        component: () => import('@/views/crm/opportunity/detailData'),
+        name: 'DetailData',
+        meta: { title: '商机详细数据', activeMenu: '/crm/opportunity' }
+      }
+    ]
   }
 ]
 

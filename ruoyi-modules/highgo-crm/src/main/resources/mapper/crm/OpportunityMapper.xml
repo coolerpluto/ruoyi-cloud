@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.highgo.crm.mapper.OpportunityMapper">
+    
+    <resultMap type="Opportunity" id="OpportunityResult">
+        <result property="id"    column="id"    />
+        <result property="code"    column="code"    />
+        <result property="name"    column="name"    />
+        <result property="custId"    column="cust_id"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="ownerId"    column="owner_id"    />
+        <result property="sharedId"    column="shared_id"    />
+        <result property="sharedDeptId"    column="shared_dept_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectOpportunityVo">
+        select id, code, name, cust_id, dept_id, owner_id, shared_id, shared_dept_id, create_by, create_time, update_by, update_time, remark from t_opportunity
+    </sql>
+
+    <select id="selectOpportunityList" parameterType="Opportunity" resultMap="OpportunityResult">
+        <include refid="selectOpportunityVo"/>
+        <where>  
+            <if test="createBy != null  and createBy != ''"> and create_by like concat('%', #{createBy}, '%')</if>
+            <if test="updateTime != null "> and update_time &lt; #{updateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectOpportunityById" parameterType="Long" resultMap="OpportunityResult">
+        <include refid="selectOpportunityVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertOpportunity" parameterType="Opportunity">
+        insert into t_opportunity
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="code != null">code,</if>
+            <if test="name != null">name,</if>
+            <if test="custId != null">cust_id,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="ownerId != null">owner_id,</if>
+            <if test="sharedId != null">shared_id,</if>
+            <if test="sharedDeptId != null">shared_dept_id,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="code != null">#{code},</if>
+            <if test="name != null">#{name},</if>
+            <if test="custId != null">#{custId},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="ownerId != null">#{ownerId},</if>
+            <if test="sharedId != null">#{sharedId},</if>
+            <if test="sharedDeptId != null">#{sharedDeptId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateOpportunity" parameterType="Opportunity">
+        update t_opportunity
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="code != null">code = #{code},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="custId != null">cust_id = #{custId},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="ownerId != null">owner_id = #{ownerId},</if>
+            <if test="sharedId != null">shared_id = #{sharedId},</if>
+            <if test="sharedDeptId != null">shared_dept_id = #{sharedDeptId},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteOpportunityById" parameterType="Long">
+        delete from t_opportunity where id = #{id}
+    </delete>
+
+    <delete id="deleteOpportunityByIds" parameterType="String">
+        delete from t_opportunity where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
