@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.highgo.crm.mapper.OpportunityStageTransferConfigMapper">
+    
+    <resultMap type="OpportunityStageTransferConfig" id="OpportunityStageTransferConfigResult">
+        <result property="id"    column="id"    />
+        <result property="sourceStage"    column="source_stage"    />
+        <result property="targetStage"    column="target_stage"    />
+        <result property="status"    column="status"    />
+        <result property="conditions"    column="conditions"    />
+    </resultMap>
+
+    <sql id="selectOpportunityStageTransferConfigVo">
+        select id, source_stage, target_stage, status, conditions from t_opportunity_stage_transfer_config
+    </sql>
+
+    <select id="selectOpportunityStageTransferConfigList" parameterType="OpportunityStageTransferConfig" resultMap="OpportunityStageTransferConfigResult">
+        <include refid="selectOpportunityStageTransferConfigVo"/>
+        <where>  
+            <if test="sourceStage != null  and sourceStage != ''"> and source_stage = #{sourceStage}</if>
+            <if test="targetStage != null  and targetStage != ''"> and target_stage = #{targetStage}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectOpportunityStageTransferConfigById" parameterType="String" resultMap="OpportunityStageTransferConfigResult">
+        <include refid="selectOpportunityStageTransferConfigVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertOpportunityStageTransferConfig" parameterType="OpportunityStageTransferConfig">
+        insert into t_opportunity_stage_transfer_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="sourceStage != null">source_stage,</if>
+            <if test="targetStage != null">target_stage,</if>
+            <if test="status != null">status,</if>
+            <if test="conditions != null">conditions,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="sourceStage != null">#{sourceStage},</if>
+            <if test="targetStage != null">#{targetStage},</if>
+            <if test="status != null">#{status},</if>
+            <if test="conditions != null">#{conditions},</if>
+         </trim>
+    </insert>
+
+    <update id="updateOpportunityStageTransferConfig" parameterType="OpportunityStageTransferConfig">
+        update t_opportunity_stage_transfer_config
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="sourceStage != null">source_stage = #{sourceStage},</if>
+            <if test="targetStage != null">target_stage = #{targetStage},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="conditions != null">conditions = #{conditions},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteOpportunityStageTransferConfigById" parameterType="String">
+        delete from t_opportunity_stage_transfer_config where id = #{id}
+    </delete>
+
+    <delete id="deleteOpportunityStageTransferConfigByIds" parameterType="String">
+        delete from t_opportunity_stage_transfer_config where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

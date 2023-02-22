@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.highgo.crm.mapper.OpportunityStageChangeHisMapper">
+    
+    <resultMap type="OpportunityStageChangeHis" id="OpportunityStageChangeHisResult">
+        <result property="id"    column="id"    />
+        <result property="opportunityCode"    column="opportunity_code"    />
+        <result property="sourceStage"    column="source_stage"    />
+        <result property="targetStage"    column="target_stage"    />
+        <result property="changeTime"    column="change_time"    />
+        <result property="operatorId"    column="operator_id"    />
+        <result property="operatorName"    column="operator_name"    />
+    </resultMap>
+
+    <sql id="selectOpportunityStageChangeHisVo">
+        select id, opportunity_code, source_stage, target_stage, change_time, operator_id, operator_name from t_opportunity_stage_change_his
+    </sql>
+
+    <select id="selectOpportunityStageChangeHisList" parameterType="OpportunityStageChangeHis" resultMap="OpportunityStageChangeHisResult">
+        <include refid="selectOpportunityStageChangeHisVo"/>
+        <where>  
+            <if test="opportunityCode != null  and opportunityCode != ''"> and opportunity_code like concat('%', #{opportunityCode}, '%')</if>
+            <if test="sourceStage != null  and sourceStage != ''"> and source_stage = #{sourceStage}</if>
+            <if test="targetStage != null  and targetStage != ''"> and target_stage = #{targetStage}</if>
+            <if test="changeTime != null "> and change_time &lt;= #{changeTime}</if>
+            <if test="operatorName != null  and operatorName != ''"> and operator_name like concat('%', #{operatorName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectOpportunityStageChangeHisById" parameterType="Long" resultMap="OpportunityStageChangeHisResult">
+        <include refid="selectOpportunityStageChangeHisVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertOpportunityStageChangeHis" parameterType="OpportunityStageChangeHis">
+        insert into t_opportunity_stage_change_his
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="opportunityCode != null">opportunity_code,</if>
+            <if test="sourceStage != null">source_stage,</if>
+            <if test="targetStage != null">target_stage,</if>
+            <if test="changeTime != null">change_time,</if>
+            <if test="operatorId != null">operator_id,</if>
+            <if test="operatorName != null">operator_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="opportunityCode != null">#{opportunityCode},</if>
+            <if test="sourceStage != null">#{sourceStage},</if>
+            <if test="targetStage != null">#{targetStage},</if>
+            <if test="changeTime != null">#{changeTime},</if>
+            <if test="operatorId != null">#{operatorId},</if>
+            <if test="operatorName != null">#{operatorName},</if>
+         </trim>
+    </insert>
+
+    <update id="updateOpportunityStageChangeHis" parameterType="OpportunityStageChangeHis">
+        update t_opportunity_stage_change_his
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="opportunityCode != null">opportunity_code = #{opportunityCode},</if>
+            <if test="sourceStage != null">source_stage = #{sourceStage},</if>
+            <if test="targetStage != null">target_stage = #{targetStage},</if>
+            <if test="changeTime != null">change_time = #{changeTime},</if>
+            <if test="operatorId != null">operator_id = #{operatorId},</if>
+            <if test="operatorName != null">operator_name = #{operatorName},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteOpportunityStageChangeHisById" parameterType="Long">
+        delete from t_opportunity_stage_change_his where id = #{id}
+    </delete>
+
+    <delete id="deleteOpportunityStageChangeHisByIds" parameterType="String">
+        delete from t_opportunity_stage_change_his where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

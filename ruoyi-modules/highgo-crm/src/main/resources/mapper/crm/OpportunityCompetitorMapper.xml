@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.highgo.crm.mapper.OpportunityCompetitorMapper">
+    
+    <resultMap type="OpportunityCompetitor" id="OpportunityCompetitorResult">
+        <result property="id"    column="id"    />
+        <result property="opportunity_code"    column="opportunity_code"    />
+        <result property="competitorId"    column="competitor_id"    />
+        <result property="competitorName"    column="competitor_name"    />
+        <result property="product"    column="product"    />
+        <result property="unitPrice"    column="unit_price"    />
+        <result property="advantage"    column="advantage"    />
+        <result property="hasSameAdvantage"    column="has_same_advantage"    />
+        <result property="memo"    column="memo"    />
+        <result property="tenderPrice"    column="tender_price"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectOpportunityCompetitorVo">
+        select id, opportunity_code, competitor_id, competitor_name, product, unit_price, advantage, has_same_advantage, memo, tender_price, create_time, update_time from t_opportunity_competitor
+    </sql>
+
+    <select id="selectOpportunityCompetitorList" parameterType="OpportunityCompetitor" resultMap="OpportunityCompetitorResult">
+        <include refid="selectOpportunityCompetitorVo"/>
+        <where>  
+            <if test="opportunity_code != null  and opportunity_code != ''"> and opportunity_code = #{opportunity_code}</if>
+            <if test="competitorName != null  and competitorName != ''"> and competitor_name like concat('%', #{competitorName}, '%')</if>
+            <if test="product != null  and product != ''"> and product like concat('%', #{product}, '%')</if>
+            <if test="hasSameAdvantage != null  and hasSameAdvantage != ''"> and has_same_advantage = #{hasSameAdvantage}</if>
+        </where>
+    </select>
+    
+    <select id="selectOpportunityCompetitorById" parameterType="Long" resultMap="OpportunityCompetitorResult">
+        <include refid="selectOpportunityCompetitorVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertOpportunityCompetitor" parameterType="OpportunityCompetitor">
+        insert into t_opportunity_competitor
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="opportunity_code != null">opportunity_code,</if>
+            <if test="competitorId != null">competitor_id,</if>
+            <if test="competitorName != null">competitor_name,</if>
+            <if test="product != null">product,</if>
+            <if test="unitPrice != null">unit_price,</if>
+            <if test="advantage != null">advantage,</if>
+            <if test="hasSameAdvantage != null">has_same_advantage,</if>
+            <if test="memo != null">memo,</if>
+            <if test="tenderPrice != null">tender_price,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="opportunity_code != null">#{opportunity_code},</if>
+            <if test="competitorId != null">#{competitorId},</if>
+            <if test="competitorName != null">#{competitorName},</if>
+            <if test="product != null">#{product},</if>
+            <if test="unitPrice != null">#{unitPrice},</if>
+            <if test="advantage != null">#{advantage},</if>
+            <if test="hasSameAdvantage != null">#{hasSameAdvantage},</if>
+            <if test="memo != null">#{memo},</if>
+            <if test="tenderPrice != null">#{tenderPrice},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateOpportunityCompetitor" parameterType="OpportunityCompetitor">
+        update t_opportunity_competitor
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="opportunity_code != null">opportunity_code = #{opportunity_code},</if>
+            <if test="competitorId != null">competitor_id = #{competitorId},</if>
+            <if test="competitorName != null">competitor_name = #{competitorName},</if>
+            <if test="product != null">product = #{product},</if>
+            <if test="unitPrice != null">unit_price = #{unitPrice},</if>
+            <if test="advantage != null">advantage = #{advantage},</if>
+            <if test="hasSameAdvantage != null">has_same_advantage = #{hasSameAdvantage},</if>
+            <if test="memo != null">memo = #{memo},</if>
+            <if test="tenderPrice != null">tender_price = #{tenderPrice},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteOpportunityCompetitorById" parameterType="Long">
+        delete from t_opportunity_competitor where id = #{id}
+    </delete>
+
+    <delete id="deleteOpportunityCompetitorByIds" parameterType="String">
+        delete from t_opportunity_competitor where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

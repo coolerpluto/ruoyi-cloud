@@ -27,6 +27,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectOpportunityList" parameterType="Opportunity" resultMap="OpportunityResult">
         <include refid="selectOpportunityVo"/>
         <where>  
+            <if test="code != null  and code != ''"> and code like concat('%', #{code}, '%')</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
             <if test="createBy != null  and createBy != ''"> and create_by like concat('%', #{createBy}, '%')</if>
             <if test="updateTime != null "> and update_time &lt; #{updateTime}</if>
         </where>

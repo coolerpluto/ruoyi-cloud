@@ -9,34 +9,41 @@ import com.ruoyi.common.core.web.domain.BaseEntity;
  * 商机管理对象 t_opportunity
  * 
  * @author eszhang
- * @date 2023-02-13
+ * @date 2023-02-22
  */
 public class Opportunity extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
-    /** $column.columnComment */
+    /** 主键 */
     private Long id;
 
-    /** $column.columnComment */
+    /** 商机Code */
+    @Excel(name = "商机Code")
     private String code;
 
-    /** $column.columnComment */
+    /** 商机名称 */
+    @Excel(name = "商机名称")
     private String name;
 
-    /** $column.columnComment */
+    /** 客户ID */
+    @Excel(name = "客户ID")
     private Long custId;
 
-    /** $column.columnComment */
+    /** 所在部门 */
+    @Excel(name = "所在部门")
     private Long deptId;
 
-    /** $column.columnComment */
+    /** 维护人员 */
+    @Excel(name = "维护人员")
     private Long ownerId;
 
-    /** $column.columnComment */
+    /** 共享到人 */
+    @Excel(name = "共享到人")
     private String sharedId;
 
-    /** $column.columnComment */
+    /** 共享到部门 */
+    @Excel(name = "共享到部门")
     private String sharedDeptId;
 
     public void setId(Long id) 

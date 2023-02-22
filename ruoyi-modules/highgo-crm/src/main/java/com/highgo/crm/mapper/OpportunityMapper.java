@@ -7,7 +7,7 @@ import com.highgo.crm.domain.Opportunity;
  * 商机管理Mapper接口
  * 
  * @author eszhang
- * @date 2023-02-13
+ * @date 2023-02-22
  */
 public interface OpportunityMapper 
 {

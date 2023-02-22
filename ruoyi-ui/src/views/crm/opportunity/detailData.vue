@@ -20,7 +20,7 @@
           {{ targetPreStageName }}
         </el-button>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item v-for="item in targetPreStageList" :command="item.value">{{
+          <el-dropdown-item v-for="item in targetPreStageList" :key="item.value" :command="item.value">{{
               item.label
             }}
           </el-dropdown-item>
@@ -49,7 +49,7 @@
           <i class="el-icon-arrow-right el-icon--right"></i>
         </el-button>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item v-for="item in targetNextStageList" :command="item.value">{{
+          <el-dropdown-item v-for="item in targetNextStageList" :key="item.value" :command="item.value">{{
               item.label
             }}
           </el-dropdown-item>
@@ -73,7 +73,7 @@
           {{ targetPreStageName }}
         </el-button>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item v-for="item in targetPreStageList" :command="item.value">{{
+          <el-dropdown-item v-for="item in targetPreStageList" :key="item.value" :command="item.value">{{
               item.label
             }}
           </el-dropdown-item>
@@ -102,7 +102,7 @@
           <i class="el-icon-arrow-right el-icon--right"></i>
         </el-button>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item v-for="item in targetNextStageList" :command="item.value">{{
+          <el-dropdown-item v-for="item in targetNextStageList" :key="item.value" :command="item.value">{{
               item.label
             }}
           </el-dropdown-item>

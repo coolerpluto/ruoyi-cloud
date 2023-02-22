@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.highgo.crm.mapper.OpportunityPropertyMapper">
+    
+    <resultMap type="OpportunityProperty" id="OpportunityPropertyResult">
+        <result property="id"    column="id"    />
+        <result property="propertyKey"    column="property_key"    />
+        <result property="propertyVal"    column="property_val"    />
+        <result property="opportunityCode"    column="opportunity_code"    />
+        <result property="model"    column="model"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectOpportunityPropertyVo">
+        select id, property_key, property_val, opportunity_code, model, status from t_opportunity_property
+    </sql>
+
+    <select id="selectOpportunityPropertyList" parameterType="OpportunityProperty" resultMap="OpportunityPropertyResult">
+        <include refid="selectOpportunityPropertyVo"/>
+        <where>  
+            <if test="propertyKey != null  and propertyKey != ''"> and property_key like concat('%', #{propertyKey}, '%')</if>
+            <if test="opportunityCode != null  and opportunityCode != ''"> and opportunity_code like concat('%', #{opportunityCode}, '%')</if>
+            <if test="model != null  and model != ''"> and model = #{model}</if>
+        </where>
+    </select>
+    
+    <select id="selectOpportunityPropertyById" parameterType="Long" resultMap="OpportunityPropertyResult">
+        <include refid="selectOpportunityPropertyVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertOpportunityProperty" parameterType="OpportunityProperty">
+        insert into t_opportunity_property
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="propertyKey != null">property_key,</if>
+            <if test="propertyVal != null">property_val,</if>
+            <if test="opportunityCode != null">opportunity_code,</if>
+            <if test="model != null">model,</if>
+            <if test="status != null">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="propertyKey != null">#{propertyKey},</if>
+            <if test="propertyVal != null">#{propertyVal},</if>
+            <if test="opportunityCode != null">#{opportunityCode},</if>
+            <if test="model != null">#{model},</if>
+            <if test="status != null">#{status},</if>
+         </trim>
+    </insert>
+
+    <update id="updateOpportunityProperty" parameterType="OpportunityProperty">
+        update t_opportunity_property
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="propertyKey != null">property_key = #{propertyKey},</if>
+            <if test="propertyVal != null">property_val = #{propertyVal},</if>
+            <if test="opportunityCode != null">opportunity_code = #{opportunityCode},</if>
+            <if test="model != null">model = #{model},</if>
+            <if test="status != null">status = #{status},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteOpportunityPropertyById" parameterType="Long">
+        delete from t_opportunity_property where id = #{id}
+    </delete>
+
+    <delete id="deleteOpportunityPropertyByIds" parameterType="String">
+        delete from t_opportunity_property where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,6 +1,12 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="85px">
+      <el-form-item label="商机编码" prop="code">
+        <el-input v-model="queryParams.code" placeholder="请输入商机编码" clearable @keyup.enter.native="handleQuery"/>
+      </el-form-item>
+      <el-form-item label="商机名称" prop="name">
+        <el-input v-model="queryParams.name" placeholder="请输入商机名称" clearable @keyup.enter.native="handleQuery"/>
+      </el-form-item>
       <el-form-item label="客户公司" prop="companyName">
         <el-input v-model="queryParams.companyName" placeholder="请输入公司名称" clearable @keyup.enter.native="handleQuery"/>
       </el-form-item>
@@ -156,11 +162,13 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
+        code: null,
+        name: null,
+        companyName: null,
+        deptIds: null,
         createIds: null,
         ownerIds: null,
         stages: null,
-        createBy: null,
-        updateTime: null,
       },
       // 表单参数
       form: {},
@@ -273,7 +281,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
-      this.$modal.confirm('是否确认删除商机管理编号为"' + ids + '"的数据项？').then(function () {
+      this.$modal.confirm('是否确认删除商机管理编号为"' + ids + '"的数据项？').then(function() {
         return delOpportunity(ids);
       }).then(() => {
         this.getList();

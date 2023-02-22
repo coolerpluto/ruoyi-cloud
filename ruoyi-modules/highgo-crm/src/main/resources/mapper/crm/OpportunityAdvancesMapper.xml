@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.highgo.crm.mapper.OpportunityAdvancesMapper">
+    
+    <resultMap type="OpportunityAdvances" id="OpportunityAdvancesResult">
+        <result property="id"    column="id"    />
+        <result property="opportunityCode"    column="opportunity_code"    />
+        <result property="stage"    column="stage"    />
+        <result property="advances"    column="advances"    />
+        <result property="advancesDate"    column="advances_date"    />
+        <result property="creator"    column="creator"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectOpportunityAdvancesVo">
+        select id, opportunity_code, stage, advances, advances_date, creator, create_time from t_opportunity_advances
+    </sql>
+
+    <select id="selectOpportunityAdvancesList" parameterType="OpportunityAdvances" resultMap="OpportunityAdvancesResult">
+        <include refid="selectOpportunityAdvancesVo"/>
+        <where>  
+            <if test="opportunityCode != null  and opportunityCode != ''"> and opportunity_code like concat('%', #{opportunityCode}, '%')</if>
+            <if test="stage != null  and stage != ''"> and stage = #{stage}</if>
+            <if test="advancesDate != null "> and advances_date = #{advancesDate}</if>
+            <if test="creator != null "> and creator like concat('%', #{creator}, '%')</if>
+            <if test="createTime != null "> and create_time = #{createTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectOpportunityAdvancesById" parameterType="Long" resultMap="OpportunityAdvancesResult">
+        <include refid="selectOpportunityAdvancesVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertOpportunityAdvances" parameterType="OpportunityAdvances">
+        insert into t_opportunity_advances
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="opportunityCode != null">opportunity_code,</if>
+            <if test="stage != null">stage,</if>
+            <if test="advances != null">advances,</if>
+            <if test="advancesDate != null">advances_date,</if>
+            <if test="creator != null">creator,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="opportunityCode != null">#{opportunityCode},</if>
+            <if test="stage != null">#{stage},</if>
+            <if test="advances != null">#{advances},</if>
+            <if test="advancesDate != null">#{advancesDate},</if>
+            <if test="creator != null">#{creator},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateOpportunityAdvances" parameterType="OpportunityAdvances">
+        update t_opportunity_advances
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="opportunityCode != null">opportunity_code = #{opportunityCode},</if>
+            <if test="stage != null">stage = #{stage},</if>
+            <if test="advances != null">advances = #{advances},</if>
+            <if test="advancesDate != null">advances_date = #{advancesDate},</if>
+            <if test="creator != null">creator = #{creator},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteOpportunityAdvancesById" parameterType="Long">
+        delete from t_opportunity_advances where id = #{id}
+    </delete>
+
+    <delete id="deleteOpportunityAdvancesByIds" parameterType="String">
+        delete from t_opportunity_advances where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

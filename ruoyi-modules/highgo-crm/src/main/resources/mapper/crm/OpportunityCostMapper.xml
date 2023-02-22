@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.highgo.crm.mapper.OpportunityCostMapper">
+    
+    <resultMap type="OpportunityCost" id="OpportunityCostResult">
+        <result property="id"    column="id"    />
+        <result property="opportunityCode"    column="opportunity_code"    />
+        <result property="cost"    column="cost"    />
+        <result property="inputUserId"    column="input_user_id"    />
+        <result property="useTime"    column="use_time"    />
+        <result property="reason"    column="reason"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="creatorId"    column="creator_id"    />
+        <result property="operatorId"    column="operator_id"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectOpportunityCostVo">
+        select id, opportunity_code, cost, input_user_id, use_time, reason, create_time, creator_id, operator_id, update_time from t_opportunity_cost
+    </sql>
+
+    <select id="selectOpportunityCostList" parameterType="OpportunityCost" resultMap="OpportunityCostResult">
+        <include refid="selectOpportunityCostVo"/>
+        <where>  
+            <if test="opportunityCode != null  and opportunityCode != ''"> and opportunity_code like concat('%', #{opportunityCode}, '%')</if>
+            <if test="cost != null "> and cost &lt;= #{cost}</if>
+            <if test="useTime != null "> and use_time &lt;= #{useTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectOpportunityCostById" parameterType="Long" resultMap="OpportunityCostResult">
+        <include refid="selectOpportunityCostVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertOpportunityCost" parameterType="OpportunityCost">
+        insert into t_opportunity_cost
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="opportunityCode != null">opportunity_code,</if>
+            <if test="cost != null">cost,</if>
+            <if test="inputUserId != null">input_user_id,</if>
+            <if test="useTime != null">use_time,</if>
+            <if test="reason != null">reason,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="creatorId != null">creator_id,</if>
+            <if test="operatorId != null">operator_id,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="opportunityCode != null">#{opportunityCode},</if>
+            <if test="cost != null">#{cost},</if>
+            <if test="inputUserId != null">#{inputUserId},</if>
+            <if test="useTime != null">#{useTime},</if>
+            <if test="reason != null">#{reason},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="creatorId != null">#{creatorId},</if>
+            <if test="operatorId != null">#{operatorId},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateOpportunityCost" parameterType="OpportunityCost">
+        update t_opportunity_cost
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="opportunityCode != null">opportunity_code = #{opportunityCode},</if>
+            <if test="cost != null">cost = #{cost},</if>
+            <if test="inputUserId != null">input_user_id = #{inputUserId},</if>
+            <if test="useTime != null">use_time = #{useTime},</if>
+            <if test="reason != null">reason = #{reason},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="creatorId != null">creator_id = #{creatorId},</if>
+            <if test="operatorId != null">operator_id = #{operatorId},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteOpportunityCostById" parameterType="Long">
+        delete from t_opportunity_cost where id = #{id}
+    </delete>
+
+    <delete id="deleteOpportunityCostByIds" parameterType="String">
+        delete from t_opportunity_cost where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
