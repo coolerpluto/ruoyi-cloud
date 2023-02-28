@@ -7,6 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="Opportunity" id="OpportunityResult">
         <result property="id"    column="id"    />
         <result property="code"    column="code"    />
+        <result property="currentStage"    column="current_stage"    />
         <result property="name"    column="name"    />
         <result property="custId"    column="cust_id"    />
         <result property="deptId"    column="dept_id"    />
@@ -21,7 +22,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectOpportunityVo">
-        select id, code, name, cust_id, dept_id, owner_id, shared_id, shared_dept_id, create_by, create_time, update_by, update_time, remark from t_opportunity
+        select id, code, current_stage,name, cust_id, dept_id, owner_id, shared_id, shared_dept_id, create_by, create_time, update_by, update_time, remark from t_opportunity
     </sql>
 
     <select id="selectOpportunityList" parameterType="Opportunity" resultMap="OpportunityResult">
@@ -44,6 +45,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">id,</if>
             <if test="code != null">code,</if>
+            <if test="currentStage != null">current_stage,</if>
             <if test="name != null">name,</if>
             <if test="custId != null">cust_id,</if>
             <if test="deptId != null">dept_id,</if>
@@ -59,6 +61,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
             <if test="code != null">#{code},</if>
+            <if test="currentStage != null">#{currentStage},</if>
             <if test="name != null">#{name},</if>
             <if test="custId != null">#{custId},</if>
             <if test="deptId != null">#{deptId},</if>
@@ -77,6 +80,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update t_opportunity
         <trim prefix="SET" suffixOverrides=",">
             <if test="code != null">code = #{code},</if>
+            <if test="currentStage != null">code = #{current_stage},</if>
             <if test="name != null">name = #{name},</if>
             <if test="custId != null">cust_id = #{custId},</if>
             <if test="deptId != null">dept_id = #{deptId},</if>

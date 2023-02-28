@@ -66,4 +66,9 @@ public enum BusinessType
      * 下载
      */
     DOWNLOAD,
+
+    /**
+     * 转移
+     */
+    TRANSFER,
 }

@@ -6,15 +6,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <resultMap type="OpportunityProperty" id="OpportunityPropertyResult">
         <result property="id"    column="id"    />
+        <result property="propertyLabel"    column="property_label"    />
         <result property="propertyKey"    column="property_key"    />
         <result property="propertyVal"    column="property_val"    />
         <result property="opportunityCode"    column="opportunity_code"    />
         <result property="model"    column="model"    />
         <result property="status"    column="status"    />
+        <result property="dataType"    column="data_type"    />
     </resultMap>
 
     <sql id="selectOpportunityPropertyVo">
-        select id, property_key, property_val, opportunity_code, model, status from t_opportunity_property
+        select id, property_label, property_key, property_val, opportunity_code, model, status, data_type from t_opportunity_property
     </sql>
 
     <select id="selectOpportunityPropertyList" parameterType="OpportunityProperty" resultMap="OpportunityPropertyResult">
@@ -40,6 +42,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="opportunityCode != null">opportunity_code,</if>
             <if test="model != null">model,</if>
             <if test="status != null">status,</if>
+            <if test="dataType != null">data_type,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
@@ -48,6 +51,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="opportunityCode != null">#{opportunityCode},</if>
             <if test="model != null">#{model},</if>
             <if test="status != null">#{status},</if>
+            <if test="dataType != null">#{dataType},</if>
          </trim>
     </insert>
 
@@ -59,6 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="opportunityCode != null">opportunity_code = #{opportunityCode},</if>
             <if test="model != null">model = #{model},</if>
             <if test="status != null">status = #{status},</if>
+            <if test="dataType != null">data_type = #{dataType},</if>
         </trim>
         where id = #{id}
     </update>

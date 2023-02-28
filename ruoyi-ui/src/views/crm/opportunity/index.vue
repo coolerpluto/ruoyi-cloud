@@ -1,26 +1,26 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="85px">
+    <el-form :model="queryParams.params" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="85px">
       <el-form-item label="商机编码" prop="code">
-        <el-input v-model="queryParams.code" placeholder="请输入商机编码" clearable @keyup.enter.native="handleQuery"/>
+        <el-input v-model="queryParams.params.code" placeholder="请输入商机编码" clearable @keyup.enter.native="handleQuery"/>
       </el-form-item>
       <el-form-item label="商机名称" prop="name">
-        <el-input v-model="queryParams.name" placeholder="请输入商机名称" clearable @keyup.enter.native="handleQuery"/>
+        <el-input v-model="queryParams.params.name" placeholder="请输入商机名称" clearable @keyup.enter.native="handleQuery"/>
       </el-form-item>
       <el-form-item label="客户公司" prop="companyName">
-        <el-input v-model="queryParams.companyName" placeholder="请输入公司名称" clearable @keyup.enter.native="handleQuery"/>
+        <el-input v-model="queryParams.params.companyName" placeholder="请输入公司名称" clearable @keyup.enter.native="handleQuery"/>
       </el-form-item>
       <el-form-item label="创建者部门" prop="deptIds">
-        <el-input v-model="queryParams.deptIds" placeholder="请选择创建者部门" clearable @keyup.enter.native="handleQuery"/>
+        <el-input v-model="queryParams.params.deptIds" placeholder="请选择创建者部门" clearable @keyup.enter.native="handleQuery"/>
       </el-form-item>
       <el-form-item label="创建者" prop="createIds">
-        <el-input v-model="queryParams.createIds" placeholder="请选择创建者" clearable @keyup.enter.native="handleQuery"/>
+        <el-input v-model="queryParams.params.createIds" placeholder="请选择创建者" clearable @keyup.enter.native="handleQuery"/>
       </el-form-item>
       <el-form-item label="归属者" prop="ownerIds">
-        <el-input v-model="queryParams.ownerIds" placeholder="请选择归属者" clearable @keyup.enter.native="handleQuery"/>
+        <el-input v-model="queryParams.params.ownerIds" placeholder="请选择归属者" clearable @keyup.enter.native="handleQuery"/>
       </el-form-item>
       <el-form-item label="商机阶段" prop="stages">
-        <el-select v-model="queryParams.stages" placeholder="请选择商机阶段" clearable multiple collapse-tags>
+        <el-select v-model="queryParams.params.stages" placeholder="请选择商机阶段" clearable multiple collapse-tags>
           <el-option v-for="dict in dict.type.crm_opportunity_status" :key="dict.value" :label="dict.label"
                      :value="dict.value"/>
         </el-select>
@@ -72,19 +72,23 @@
 
     <el-table v-loading="loading" :data="opportunityList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
-      <el-table-column label="编号" align="center" fixed prop="id" :show-overflow-tooltip="true"/>
+      <el-table-column label="编号" align="center" fixed prop="id" width="75" :show-overflow-tooltip="true"/>
       <el-table-column label="商机编码" align="center" prop="code" :show-overflow-tooltip="true" v-if="columns[0].visible"/>
       <el-table-column label="商机名称" align="center" prop="name" :show-overflow-tooltip="true" v-if="columns[1].visible"/>
       <el-table-column label="客户名称" align="center" prop="custName" :show-overflow-tooltip="true" v-if="columns[2].visible"/>
       <el-table-column label="当前阶段" align="center" prop="currentStage" :show-overflow-tooltip="true"
-                       v-if="columns[3].visible"/>
+                       v-if="columns[3].visible">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.crm_opportunity_status" :value="scope.row.currentStage"/>
+        </template>
+      </el-table-column>
       <el-table-column label="归属者" align="center" prop="ownerName" :show-overflow-tooltip="true"
                        v-if="columns[4].visible"/>
-      <el-table-column label="投标时间" align="center" prop="tenderTime" :show-overflow-tooltip="true"
+      <el-table-column label="投标时间" align="center" prop="tenderTime" value-format="yyyy-MM-dd" :show-overflow-tooltip="true"
                        v-if="columns[5].visible"/>
       <el-table-column label="预签单时间" align="center" prop="preSignedTime" :show-overflow-tooltip="true"
                        v-if="columns[6].visible"/>
-      <el-table-column label="预合同金额" align="center" prop="preContractAmount" :show-overflow-tooltip="true"
+      <el-table-column label="预合同金额(元)" align="center" prop="preContractAmount" :show-overflow-tooltip="true"
                        v-if="columns[7].visible"/>
       <el-table-column label="创建时间" align="center" prop="createTime" :show-overflow-tooltip="true"
                        v-if="columns[8].visible"/>
@@ -121,7 +125,7 @@
       </div>
     </el-dialog>
     商机管理开发中。。。<br>
-    完成：<br>
+    完成：列表查询<br>
     待完成：商机各个模块的：新增、删除、修改、查看(仅查看)、转交、导出
   </div>
 </template>
@@ -135,8 +139,16 @@ import {
   updateOpportunity
 } from "@/api/crm/opportunity";
 
+import {
+  listUnitedOpp,
+  getUnitedOpp,
+  delUnitedOpp,
+  addUnitedOpp,
+  updateUnitedOpp
+}  from "@/api/crm/oppUnitedInfo"
+
 export default {
-  name: "Opportunity",
+  name: "OpportunityUnited",
   dicts: ['crm_opportunity_status'],
   data() {
     return {
@@ -162,13 +174,15 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        code: null,
-        name: null,
-        companyName: null,
-        deptIds: null,
-        createIds: null,
-        ownerIds: null,
-        stages: null,
+        params:{
+          code: null,
+          name: null,
+          companyName: null,
+          deptIds: null,
+          createIds: null,
+          ownerIds: null,
+          stages: null,
+        },
       },
       // 表单参数
       form: {},
@@ -187,7 +201,7 @@ export default {
         {key: 7, label: `预合同金额`, visible: true},
         {key: 8, label: `创建时间`, visible: true},
         {key: 9, label: `更新时间`, visible: true},
-        {key: 10, label: `待定`, visible: true},
+        {key: 10, label: `待定`, visible: false},
       ],
     };
   },
@@ -198,17 +212,15 @@ export default {
     /** 查询商机管理列表 */
     getList() {
       this.loading = true;
-
-      this.queryParams.params = {};
-      if (null != this.rangeCreateDate && '' != this.rangeCreateDate) {
+      if (this.rangeCreateDate) {
         this.queryParams.params["beginCreateDate"] = this.rangeCreateDate[0];
         this.queryParams.params["endCreateDate"] = this.rangeCreateDate[1];
       }
-      if (null != this.rangeUpdateDate && '' != this.rangeUpdateDate) {
+      if (this.rangeUpdateDate) {
         this.queryParams.params["beginUpdateDate"] = this.rangeUpdateDate[0];
         this.queryParams.params["endUpdateDate"] = this.rangeUpdateDate[1];
       }
-      listOpportunity(this.queryParams).then(response => {
+      listUnitedOpp(this.queryParams).then(response => {
         this.opportunityList = response.rows;
         this.total = response.total;
         this.loading = false;
@@ -302,9 +314,9 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('crm/opportunity/export', {
+      this.download('crm/oppUnited/export', {
         ...this.queryParams
-      }, `opportunity_${new Date().getTime()}.xlsx`)
+      }, `商机_${new Date().getTime()}.xlsx`)
     }
   }
 };

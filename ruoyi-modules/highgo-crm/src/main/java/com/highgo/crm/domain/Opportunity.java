@@ -21,6 +21,8 @@ public class Opportunity extends BaseEntity
     /** 商机Code */
     @Excel(name = "商机Code")
     private String code;
+    @Excel(name = "当前阶段")
+    private String currentStage;
 
     /** 商机名称 */
     @Excel(name = "商机名称")
@@ -46,7 +48,17 @@ public class Opportunity extends BaseEntity
     @Excel(name = "共享到部门")
     private String sharedDeptId;
 
-    public void setId(Long id) 
+    public String getCurrentStage()
+    {
+        return currentStage;
+    }
+
+    public void setCurrentStage(String currentStage)
+    {
+        this.currentStage = currentStage;
+    }
+
+    public void setId(Long id)
     {
         this.id = id;
     }

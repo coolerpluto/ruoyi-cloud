@@ -19,6 +19,9 @@ public class OpportunityProperty extends BaseEntity
     private Long id;
 
     /** 字段名 */
+    @Excel(name = "字段名称")
+    private String propertyLabel;
+    /** 字段名 */
     @Excel(name = "字段名")
     private String propertyKey;
 
@@ -38,7 +41,30 @@ public class OpportunityProperty extends BaseEntity
     @Excel(name = "是否启用")
     private String status;
 
-    public void setId(Long id) 
+    /** 属性数据类型*/
+    private String dataType;
+
+    public String getPropertyLabel()
+    {
+        return propertyLabel;
+    }
+
+    public void setPropertyLabel(String propertyLabel)
+    {
+        this.propertyLabel = propertyLabel;
+    }
+
+    public String getDataType()
+    {
+        return dataType;
+    }
+
+    public void setDataType(String dataType)
+    {
+        this.dataType = dataType;
+    }
+
+    public void setId(Long id)
     {
         this.id = id;
     }
