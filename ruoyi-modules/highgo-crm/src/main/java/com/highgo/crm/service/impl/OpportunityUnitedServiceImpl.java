@@ -6,6 +6,7 @@ import com.highgo.crm.service.IOpportunityUnitedService;
 import com.ruoyi.common.core.utils.DateUtils;
 import com.ruoyi.common.datascope.annotation.CrmDataScope;
 import com.ruoyi.common.security.utils.SecurityUtils;
+import com.ruoyi.system.api.domain.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,8 +46,9 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
     @CrmDataScope(deptAlias = "sd", userAlias = "su")
     public List<OpportunityUnited> selectOpportunityUnitedList(OpportunityUnited opportunity)
     {
-        opportunity.getParams().put("sharedId", SecurityUtils.getUserId());
-        opportunity.getParams().put("properties", "tenderTime,preSignedTime,preContractAmount");
+        SysUser currentUser = SecurityUtils.getLoginUser().getSysUser();
+        opportunity.getParams().put("sharedId", currentUser.getUserId());
+        opportunity.getParams().put("sharedDeptId", currentUser.getDeptId());
         return opportunityUnitedMapper.selectOpportunityList(opportunity);
     }
 

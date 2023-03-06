@@ -1,6 +1,8 @@
 package com.highgo.crm.service;
 
 import java.util.List;
+import java.util.Map;
+
 import com.highgo.crm.domain.OpportunityStageTransferConfig;
 
 /**
@@ -58,4 +60,6 @@ public interface IOpportunityStageTransferConfigService
      * @return 结果
      */
     public int deleteOpportunityStageTransferConfigById(String id);
+
+    Map<Integer, String> stageTransferConfig();
 }

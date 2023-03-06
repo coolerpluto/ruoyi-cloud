@@ -27,6 +27,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="changeTime != null "> and change_time &lt;= #{changeTime}</if>
             <if test="operatorName != null  and operatorName != ''"> and operator_name like concat('%', #{operatorName}, '%')</if>
         </where>
+        order by change_time desc
     </select>
     
     <select id="selectOpportunityStageChangeHisById" parameterType="Long" resultMap="OpportunityStageChangeHisResult">

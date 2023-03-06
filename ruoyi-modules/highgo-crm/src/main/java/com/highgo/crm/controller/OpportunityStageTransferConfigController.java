@@ -2,6 +2,7 @@ package com.highgo.crm.controller;
 
 import java.util.List;
 import java.io.IOException;
+import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -68,6 +69,13 @@ public class OpportunityStageTransferConfigController extends BaseController
     public AjaxResult getInfo(@PathVariable("id") String id)
     {
         return success(opportunityStageTransferConfigService.selectOpportunityStageTransferConfigById(id));
+    }
+
+    @GetMapping(value = "/stageTransferConfig")
+    public AjaxResult stageTransferConfig(OpportunityStageTransferConfig oppStageTransferConfig)
+    {
+        Map<Integer,String> activeConfig = opportunityStageTransferConfigService.stageTransferConfig();
+        return success(activeConfig);
     }
 
     /**

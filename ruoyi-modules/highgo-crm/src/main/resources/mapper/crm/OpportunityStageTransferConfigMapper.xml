@@ -69,4 +69,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
+
+    <select id="stageTransferConfig" resultType="java.util.HashMap">
+        select source_stage sourceStage,group_concat(target_stage) targetStage  from t_opportunity_stage_transfer_config tostc  where status ='Y' group by source_stage
+    </select>
 </mapper>

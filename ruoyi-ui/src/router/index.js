@@ -169,7 +169,7 @@ export const dynamicRoutes = [
     permissions: ['crm:opportunity:list'],
     children: [
       {
-        path: 'index/:id(\\d+)',
+        path: 'index/:code/:action',
         component: () => import('@/views/crm/opportunity/detailData'),
         name: 'DetailData',
         meta: { title: '商机详细数据', activeMenu: '/crm/opportunity' }

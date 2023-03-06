@@ -76,10 +76,12 @@
             <if test="name != null  and name != ''">and tc.name like concat('%', #{name}, '%')</if>
             <if test="createBy != null  and createBy != ''">and tc.create_by like concat('%', #{createBy}, '%')</if>
             <if test="updateTime != null ">and tc.update_time &lt; #{updateTime}</if>
+            <!--下面的是商机必须已经设置过的属性-->
             <if test="params.properties != null and params.properties != ''">and find_in_set(top.property_key,#{params.properties})</if>
             ${params.crmDataScope}
             <!--下面的时共享过来的判读-->
-            <if test="params.sharedId != null and params.sharedId != ''"> or find_in_set( #{sharedId} , tc.shared_id))</if>
+            <if test="params.sharedId != null and params.sharedId != ''"> or find_in_set( #{sharedId} , tc.shared_id)</if>
+            <if test="params.sharedDeptId != null and params.sharedDeptId != ''"> or find_in_set( #{sharedDeptId} , tc.shared_dept_id)</if>
         </where>
         group by tc.code
     </select>

@@ -156,6 +156,7 @@ export default {
       loading: true,
       // 选中数组
       ids: [],
+      codes: [],
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -249,6 +250,7 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
+      this.codes = selection.map(item => item.code)
       this.single = selection.length !== 1
       this.multiple = !selection.length
     },
@@ -257,18 +259,18 @@ export default {
       //this.reset();
       //this.open = true;
       //this.title = "添加商机管理";
-      this.$router.push("/crm/opportunity-data/index/0");
+      this.$router.push("/crm/opportunity-data/index/0/A");
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       //this.reset();
-      const id = row.id || this.ids
+      const code = row.code || this.codes
       // getOpportunity(id).then(response => {
       //   this.form = response.data;
       //   this.open = true;
       //   this.title = "修改商机管理";
       // });
-      this.$router.push("/crm/opportunity-data/index/" + id);
+      this.$router.push("/crm/opportunity-data/index/" + code+"/M");
     },
     /** 提交按钮 */
     submitForm() {

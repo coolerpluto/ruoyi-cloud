@@ -78,4 +78,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
+    <select id="getPropertyListByOppCode" parameterType="String" resultMap="OpportunityPropertyResult">
+
+    </select>
 </mapper>

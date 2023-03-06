@@ -1,7 +1,10 @@
 package com.highgo.crm.mapper;
 
 import java.util.List;
+import java.util.Map;
+
 import com.highgo.crm.domain.OpportunityStageTransferConfig;
+import org.apache.ibatis.annotations.MapKey;
 
 /**
  * 商机阶段流转配置Mapper接口
@@ -58,4 +61,7 @@ public interface OpportunityStageTransferConfigMapper
      * @return 结果
      */
     public int deleteOpportunityStageTransferConfigByIds(String[] ids);
+
+    @MapKey("sourceStage")
+    Map<Integer, String> stageTransferConfig();
 }

@@ -9,6 +9,23 @@ export function listUnitedOpp(query) {
   })
 }
 
+// 查询阶段配置和阶段信息
+export function stageConfigAndInfo(query) {
+  return request({
+    url: '/crm/oppUnited/stageConfigAndInfo',
+    method: 'get',
+    params: query
+  })
+}
+// 查询全部属性配置
+export function getPropertiesMap(query) {
+  return request({
+    url: '/crm/oppUnited/getPropertiesMap',
+    method: 'get',
+    params: query
+  })
+}
+
 // 查询详细
 export function getUnitedOpp(id) {
   return request({

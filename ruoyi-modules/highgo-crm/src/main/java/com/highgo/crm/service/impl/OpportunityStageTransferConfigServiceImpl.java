@@ -1,6 +1,8 @@
 package com.highgo.crm.service.impl;
 
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.highgo.crm.mapper.OpportunityStageTransferConfigMapper;
@@ -89,5 +91,11 @@ public class OpportunityStageTransferConfigServiceImpl implements IOpportunitySt
     public int deleteOpportunityStageTransferConfigById(String id)
     {
         return opportunityStageTransferConfigMapper.deleteOpportunityStageTransferConfigById(id);
+    }
+
+    @Override
+    public Map<Integer, String> stageTransferConfig()
+    {
+        return opportunityStageTransferConfigMapper.stageTransferConfig();
     }
 }

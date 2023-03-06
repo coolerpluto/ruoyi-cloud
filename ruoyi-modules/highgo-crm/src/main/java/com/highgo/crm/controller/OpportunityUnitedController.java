@@ -1,7 +1,13 @@
 package com.highgo.crm.controller;
 
+import com.highgo.crm.domain.OpportunityProperty;
+import com.highgo.crm.domain.OpportunityStageChangeHis;
 import com.highgo.crm.domain.OpportunityUnited;
+import com.highgo.crm.service.IOpportunityPropertyService;
+import com.highgo.crm.service.IOpportunityStageChangeHisService;
+import com.highgo.crm.service.IOpportunityStageTransferConfigService;
 import com.highgo.crm.service.IOpportunityUnitedService;
+import com.ruoyi.common.core.utils.StringUtils;
 import com.ruoyi.common.core.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.web.controller.BaseController;
 import com.ruoyi.common.core.web.domain.AjaxResult;
@@ -21,7 +27,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 商机管理Controller
@@ -48,6 +59,49 @@ public class OpportunityUnitedController extends BaseController
         return getDataTable(list);
     }
 
+    @Autowired
+    private IOpportunityStageTransferConfigService opportunityStageTransferConfigService;
+    @Autowired
+    private IOpportunityStageChangeHisService opportunityStageChangeHisService;
+    @GetMapping("/stageConfigAndInfo")
+    public AjaxResult stageConfigAndInfo(OpportunityUnited opportunity)
+    {
+        Map<String, Object> res = new HashMap<>();
+        Map<Integer, String> activeConfig = opportunityStageTransferConfigService.stageTransferConfig();
+        res.put("activeConfig", activeConfig);
+        Map<String, Object> stageInfo = new HashMap<>();
+        if (opportunity.getCode()!=null && !StringUtils.equals(opportunity.getCode(),"0")){
+            OpportunityStageChangeHis reqHis = new OpportunityStageChangeHis();
+            reqHis.setOpportunityCode(opportunity.getCode());
+            List<OpportunityStageChangeHis> stageHisList = opportunityStageChangeHisService.selectOpportunityStageChangeHisList(reqHis);
+            stageInfo.put("currentStage",stageHisList.get(0).getTargetStage());
+            stageInfo.put("stageHisList",stageHisList);
+            Set<String> temp = stageHisList.stream().map(OpportunityStageChangeHis::getTargetStage).collect(Collectors.toSet());
+            stageInfo.put("stageHis",temp.toArray());
+        }else {
+            stageInfo.put("currentStage","1");
+            stageInfo.put("stageHis",new String[]{"1"});
+        }
+        res.put("stageInfo", stageInfo);
+        return success(res);
+    }
+    @Autowired
+    private IOpportunityPropertyService opportunityPropertyService;
+    @GetMapping("/getPropertiesMap")
+    public AjaxResult getPropertiesMap(OpportunityUnited opportunity){
+        Map<String, Object> res = new HashMap<>();
+        OpportunityProperty opportunityProperty = new OpportunityProperty();
+        opportunityProperty.setOpportunityCode(opportunity.getCode());
+        List<OpportunityProperty> properties = opportunityPropertyService.selectOpportunityPropertyList(opportunityProperty);
+        for (OpportunityProperty property:properties)
+        {
+            if (!StringUtils.equals(property.getStatus(),"1")){
+                continue;
+            }
+            res.put(property.getPropertyKey(),property);
+        }
+        return success(res);
+    }
     /**
      * 导出商机统一管理列表
      */
