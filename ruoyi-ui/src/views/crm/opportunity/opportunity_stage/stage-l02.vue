@@ -35,6 +35,13 @@ export default {
     OppDesc,
     keyStandBy,
     KeyContacts
+  },created() {
+    console.log("l02-created")
+    this.initL02();
+  },methods:{
+    initL02(){
+      this.$parent.getOppCompetitorInfo();
+    }
   }
 }
 </script>

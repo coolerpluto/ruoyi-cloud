@@ -74,7 +74,8 @@ stageComponent.keys().forEach(fileName => {
 });
 import {
   stageConfigAndInfo,
-  getPropertiesMap,
+  getPropertiesMap,getOppBaseInfo,getOppUserInfo,getOppPolicyInfo,
+  getOppAdvancesInfo,getOppCostInfo,getOppCompetitorInfo,
   listUnitedOpp,
   getUnitedOpp,
   delUnitedOpp,
@@ -92,8 +93,14 @@ export default {
         opportunityCode:"",
         currentStage:"",
         propertyMap:"",
+        baseInfo:undefined,
+        userInfo:undefined,
+        policyInfo:undefined,
+        advancesInfo:undefined,
+        costInfo:undefined,
+        competitorInfo:undefined,
       },
-      stageActive: 1,
+      stageActive: undefined,
       modelActive: 1,
       stageShowList:[1],
       targetNextStage: 0,// 向下新的阶段
@@ -127,6 +134,7 @@ export default {
   },
   methods: {
     init(){
+      //商机当前阶段、走过的阶段以及阶段跳转配置信息
       stageConfigAndInfo({code:this.inputReq.opportunityCode}).then(response => {
         if (response.code != 200){
           this.$modal.msgError(response.msg);
@@ -153,6 +161,7 @@ export default {
         this.loading = false;
       });
     },
+    // 商机属性查询
     getProperties(){
       if (this.inputReq.propertyMap){
         return
@@ -163,6 +172,78 @@ export default {
           return
         }
         this.inputReq.propertyMap = response.data;
+      })
+    },
+    getOppBaseInfo(){
+      if(!this.inputReq.opportunityCode||this.inputReq.opportunityCode == 0||this.inputReq.baseInfo){
+        return
+      }
+      getOppBaseInfo({code:this.inputReq.opportunityCode}).then(response => {
+        if (response.code != 200){
+          this.$modal.msgError(response.msg);
+          return
+        }
+        this.inputReq.baseInfo = response.data;
+      })
+    },
+    getOppUserInfo(){
+      if(!this.inputReq.opportunityCode||this.inputReq.opportunityCode == 0||this.inputReq.userInfo){
+        return
+      }
+      getOppUserInfo({code:this.inputReq.opportunityCode}).then(response => {
+        if (response.code != 200){
+          this.$modal.msgError(response.msg);
+          return
+        }
+        this.inputReq.userInfo = response.data;
+      })
+    },
+    getOppPolicyInfo(){
+      if(!this.inputReq.opportunityCode||this.inputReq.opportunityCode == 0||this.inputReq.policyInfo){
+        return
+      }
+      getOppPolicyInfo({code:this.inputReq.opportunityCode}).then(response => {
+        if (response.code != 200){
+          this.$modal.msgError(response.msg);
+          return
+        }
+        this.inputReq.policyInfo = response.data;
+      })
+    },
+    getOppAdvancesInfo(){
+      if(!this.inputReq.opportunityCode||this.inputReq.opportunityCode == 0||this.inputReq.advancesInfo){
+        return
+      }
+      getOppAdvancesInfo({code:this.inputReq.opportunityCode}).then(response => {
+        if (response.code != 200){
+          this.$modal.msgError(response.msg);
+          return
+        }
+        this.inputReq.advancesInfo = response.data;
+      })
+    },
+    getOppCostInfo(){
+      if(!this.inputReq.opportunityCode||this.inputReq.opportunityCode == 0||this.inputReq.costInfo){
+        return
+      }
+      getOppCostInfo({code:this.inputReq.opportunityCode}).then(response => {
+        if (response.code != 200){
+          this.$modal.msgError(response.msg);
+          return
+        }
+        this.inputReq.costInfo = response.data;
+      })
+    },
+    getOppCompetitorInfo(){
+      if(!this.inputReq.opportunityCode||this.inputReq.opportunityCode == 0||this.inputReq.competitorInfo){
+        return
+      }
+      getOppCompetitorInfo({code:this.inputReq.opportunityCode}).then(response => {
+        if (response.code != 200){
+          this.$modal.msgError(response.msg);
+          return
+        }
+        this.inputReq.competitorInfo = response.data;
       })
     },
     refreshNextStageList(){
@@ -176,9 +257,7 @@ export default {
       })
       this.targetNextStageList = this.stageList.filter(item=> nextStageIdList.includes(item.value))
     },
-    getList() {
-    },
-
+    //步骤条跳转
     changeStage(targetStage) {
       if(this.stageActive === targetStage){
         this.$modal.msg("已在选择目标阶段，无需跳转");
@@ -195,13 +274,13 @@ export default {
         this.refreshNextStageList()
       }
     },
+    //下拉阶段选择
     handleNextStageCommand(command) {
       let nextStageInfo = this.targetNextStageList.find(item => item.value === command)
       console.log(nextStageInfo)
       this.targetStageName = nextStageInfo.label
       this.targetNextStage = nextStageInfo.value
     },
-
   }
 }
 </script>

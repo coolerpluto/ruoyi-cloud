@@ -30,6 +30,18 @@ export default {
     baseInfo,
     policyStandBy,
   },
+  created() {
+    console.log("l01-created")
+    this.initL01();
+  },methods:{
+    initL01(){
+      this.$parent.getOppUserInfo();
+      this.$parent.getOppBaseInfo();
+      this.$parent.getOppPolicyInfo();
+      this.$parent.getOppAdvancesInfo();
+    }
+
+  }
 }
 </script>
 

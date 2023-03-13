@@ -1,5 +1,11 @@
 package com.highgo.crm.service;
 
+import com.highgo.crm.domain.Company;
+import com.highgo.crm.domain.OpportunityAdvances;
+import com.highgo.crm.domain.OpportunityCompetitor;
+import com.highgo.crm.domain.OpportunityCost;
+import com.highgo.crm.domain.OpportunityPolicy;
+import com.highgo.crm.domain.OpportunitySoftwareOperation;
 import com.highgo.crm.domain.OpportunityUnited;
 
 import java.util.List;
@@ -59,4 +65,18 @@ public interface IOpportunityUnitedService
      * @return 结果
      */
     public int deleteOpportunityUnitedById(Long id);
+
+    OpportunityUnited queryOpportunityInfoByCode(String oppCode);
+
+    List<OpportunitySoftwareOperation> querySoftwareOperationByCode(String oppCode);
+
+    Company queryCompanyByOppCode(String oppCode);
+
+    List<OpportunityPolicy> queryPolicyByOppCode(String oppCode);
+
+    List<OpportunityAdvances> queryAdvanceByOppCode(String oppCode);
+
+    List<OpportunityCost> queryCostByOppCode(String oppCode);
+
+    List<OpportunityCompetitor> queryCompetitorByOppCode(String oppCode);
 }

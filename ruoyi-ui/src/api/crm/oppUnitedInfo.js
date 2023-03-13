@@ -25,7 +25,54 @@ export function getPropertiesMap(query) {
     params: query
   })
 }
-
+// 查询商机基础信息
+export function getOppBaseInfo(query) {
+  return request({
+    url: '/crm/oppUnited/getOppBaseInfo',
+    method: 'get',
+    params: query
+  })
+}
+// 查询商机基础信息
+export function getOppUserInfo(query) {
+  return request({
+    url: '/crm/oppUnited/getOppUserInfo',
+    method: 'get',
+    params: query
+  })
+}
+// 查询政策支持信息
+export function getOppPolicyInfo(query) {
+  return request({
+    url: '/crm/oppUnited/getOppPolicyInfo',
+    method: 'get',
+    params: query
+  })
+}
+// 查询商机进展信息
+export function getOppAdvancesInfo(query) {
+  return request({
+    url: '/crm/oppUnited/getOppAdvancesInfo',
+    method: 'get',
+    params: query
+  })
+}
+// 查询商机花费信息
+export function getOppCostInfo(query) {
+  return request({
+    url: '/crm/oppUnited/getOppCostInfo',
+    method: 'get',
+    params: query
+  })
+}
+// 查询商机竞争对手信息
+export function getOppCompetitorInfo(query) {
+  return request({
+    url: '/crm/oppUnited/getOppCompetitorInfo',
+    method: 'get',
+    params: query
+  })
+}
 // 查询详细
 export function getUnitedOpp(id) {
   return request({

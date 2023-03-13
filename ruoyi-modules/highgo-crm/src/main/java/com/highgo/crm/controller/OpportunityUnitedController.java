@@ -1,9 +1,18 @@
 package com.highgo.crm.controller;
 
+import com.highgo.crm.domain.Company;
+import com.highgo.crm.domain.OpportunityAdvances;
+import com.highgo.crm.domain.OpportunityCompetitor;
+import com.highgo.crm.domain.OpportunityCost;
+import com.highgo.crm.domain.OpportunityPolicy;
 import com.highgo.crm.domain.OpportunityProperty;
+import com.highgo.crm.domain.OpportunitySoftwareOperation;
 import com.highgo.crm.domain.OpportunityStageChangeHis;
 import com.highgo.crm.domain.OpportunityUnited;
+import com.highgo.crm.domain.PolicyFile;
+import com.highgo.crm.service.ICompanyService;
 import com.highgo.crm.service.IOpportunityPropertyService;
+import com.highgo.crm.service.IOpportunityService;
 import com.highgo.crm.service.IOpportunityStageChangeHisService;
 import com.highgo.crm.service.IOpportunityStageTransferConfigService;
 import com.highgo.crm.service.IOpportunityUnitedService;
@@ -101,6 +110,72 @@ public class OpportunityUnitedController extends BaseController
             res.put(property.getPropertyKey(),property);
         }
         return success(res);
+    }
+
+    @GetMapping("/getOppBaseInfo")
+    public AjaxResult getOppBaseInfo(OpportunityUnited opportunity){
+        Map<String, Object> res = new HashMap<>();
+        String code = opportunity.getCode();
+        if(StringUtils.isBlank(code)){
+            return success(res);
+        }
+
+        OpportunityUnited info = opportunityService.queryOpportunityInfoByCode(code);
+        res.put("oppInfo",info);
+        List<OpportunitySoftwareOperation> operations =opportunityService.querySoftwareOperationByCode(code);
+        res.put("operations",operations);
+        return success(res);
+    }
+
+    @GetMapping("/getOppUserInfo")
+    public AjaxResult getOppUserInfo(OpportunityUnited opportunity){
+        String code = opportunity.getCode();
+        if(StringUtils.isBlank(code)){
+            return success();
+        }
+
+        Company userInfo = opportunityService.queryCompanyByOppCode(code);
+        return success(userInfo);
+    }
+    @GetMapping("/getOppPolicyInfo")
+    public AjaxResult getOppPolicyInfo(OpportunityUnited opportunity){
+        String code = opportunity.getCode();
+        if(StringUtils.isBlank(code)){
+            return success();
+        }
+
+        List<OpportunityPolicy> policyList = opportunityService.queryPolicyByOppCode(code);
+        return success(policyList);
+    }
+    @GetMapping("/getOppAdvancesInfo")
+    public AjaxResult getOppAdvancesInfo(OpportunityUnited opportunity){
+        String code = opportunity.getCode();
+        if(StringUtils.isBlank(code)){
+            return success();
+        }
+
+        List<OpportunityAdvances> advancesList = opportunityService.queryAdvanceByOppCode(code);
+        return success(advancesList);
+    }
+    @GetMapping("/getOppCostInfo")
+    public AjaxResult getOppCostInfo(OpportunityUnited opportunity){
+        String code = opportunity.getCode();
+        if(StringUtils.isBlank(code)){
+            return success();
+        }
+
+        List<OpportunityCost> costList = opportunityService.queryCostByOppCode(code);
+        return success(costList);
+    }
+    @GetMapping("/getOppCompetitorInfo")
+    public AjaxResult getOppCompetitorInfo(OpportunityUnited opportunity){
+        String code = opportunity.getCode();
+        if(StringUtils.isBlank(code)){
+            return success();
+        }
+
+        List<OpportunityCompetitor> competitorList = opportunityService.queryCompetitorByOppCode(code);
+        return success(competitorList);
     }
     /**
      * 导出商机统一管理列表

@@ -17,7 +17,15 @@ import SummaryInfo from "../opportunity_data_model/summaryInfo";
 export default {
   name: "stage_L06",
   components: {CostInfo,ActionReason,
-    SummaryInfo,}
+    SummaryInfo,},
+  created() {
+    console.log("l06-created")
+    this.initL06();
+  },methods:{
+    initL06(){
+      this.$parent.getOppCostInfo();
+    }
+  }
 }
 </script>
 
