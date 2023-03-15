@@ -96,7 +96,7 @@
                        v-if="columns[9].visible"/>
       <el-table-column label="操作选项" align="center" fixed="right" width="220" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button size="mini" type="text" icon="el-icon-zoom-in" @click="handleUpdate(scope.row)">
+          <el-button size="mini" type="text" icon="el-icon-zoom-in" @click="handleView(scope.row)">
             查看
           </el-button>
           <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
@@ -271,6 +271,17 @@ export default {
       //   this.title = "修改商机管理";
       // });
       this.$router.push("/crm/opportunity-data/index/" + code+"/M");
+    },
+    /** 修改按钮操作 */
+    handleView(row) {
+      //this.reset();
+      const code = row.code || this.codes
+      // getOpportunity(id).then(response => {
+      //   this.form = response.data;
+      //   this.open = true;
+      //   this.title = "修改商机管理";
+      // });
+      this.$router.push("/crm/opportunity-data/index/" + code+"/V");
     },
     /** 提交按钮 */
     submitForm() {

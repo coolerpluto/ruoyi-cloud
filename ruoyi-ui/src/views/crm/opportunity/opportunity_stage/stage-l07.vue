@@ -13,8 +13,19 @@ import SummaryInfo from "../opportunity_data_model/summaryInfo";
 
 export default {
   name: "stage_L07",
-  components: {CostInfo,ActionReason,
-    SummaryInfo,}
+  components: {
+    CostInfo,ActionReason,
+    SummaryInfo,
+  },
+  created() {
+    console.log("l07-created")
+    this.initL07();
+  },
+  methods:{
+    initL07(){
+      this.$parent.getOppCostInfo();
+    }
+  }
 }
 </script>
 

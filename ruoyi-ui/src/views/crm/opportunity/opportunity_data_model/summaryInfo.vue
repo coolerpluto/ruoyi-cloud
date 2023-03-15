@@ -60,7 +60,7 @@
 <script>
 export default {
   name: "summaryInfo",
-  dicts:['crm_fund_source_type'],
+  dicts:[],
   props: {
     stageShow: {
       type: Number,

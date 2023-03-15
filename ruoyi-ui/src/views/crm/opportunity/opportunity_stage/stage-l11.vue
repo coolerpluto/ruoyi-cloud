@@ -13,8 +13,19 @@ import ActionReason from "../opportunity_data_model/actionReason";
 import SummaryInfo from "../opportunity_data_model/summaryInfo";
 export default {
   name: "stage_L11",
-  components: {ActionReason,
-    SummaryInfo,}
+  components: {
+    ActionReason,
+    SummaryInfo,
+  },
+  created() {
+    console.log("l11-created")
+    this.initL11();
+  },
+  methods:{
+    initL11(){
+      this.$parent.getOppCostInfo();
+    }
+  }
 
 }
 </script>

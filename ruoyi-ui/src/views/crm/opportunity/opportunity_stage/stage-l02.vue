@@ -42,6 +42,9 @@ export default {
     initL02(){
       this.$parent.getOppCompetitorInfo();
       this.$parent.getOppQuotationInfo();
+      this.$parent.getOppContactsInfo();
+      this.$parent.getOppAdvancesInfo();
+      this.$parent.getOppSupportInfo();
     }
   }
 }

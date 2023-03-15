@@ -77,11 +77,7 @@ import {
   getPropertiesMap,getOppBaseInfo,getOppUserInfo,getOppPolicyInfo,
   getOppAdvancesInfo,getOppCostInfo,getOppCompetitorInfo,
   getOppQuotationInfo,getOppSupportInfo,getOppContactsInfo,
-  listUnitedOpp,
-  getUnitedOpp,
-  delUnitedOpp,
-  addUnitedOpp,
-  updateUnitedOpp
+  listUnitedOpp,getUnitedOpp,delUnitedOpp,addUnitedOpp,updateUnitedOpp
 }  from "@/api/crm/oppUnitedInfo"
 export default {
   name: "detailData",
@@ -93,7 +89,7 @@ export default {
         action:"A",
         opportunityCode:"",
         currentStage:"",
-        propertyMap:"",
+        propertyMap:undefined,
         baseInfo:undefined,
         userInfo:undefined,
         policyInfo:undefined,
@@ -140,7 +136,7 @@ export default {
     init(){
       //商机当前阶段、走过的阶段以及阶段跳转配置信息
       stageConfigAndInfo({code:this.inputReq.opportunityCode}).then(response => {
-        if (response.code != 200){
+        if (response.code !== 200){
           this.$modal.msgError(response.msg);
           return
         }
@@ -167,11 +163,14 @@ export default {
     },
     // 商机属性查询
     getProperties(){
-      if (this.inputReq.propertyMap){
+      if(!this.inputReq.opportunityCode||this.inputReq.opportunityCode === '0'){
         return
       }
+      if(this.inputReq.propertyMap && Object.keys(this.inputReq.propertyMap).length !==0){
+        return;
+      }
       getPropertiesMap({code:this.inputReq.opportunityCode}).then(response => {
-        if (response.code != 200){
+        if (response.code !== 200){
           this.$modal.msgError(response.msg);
           return
         }
@@ -179,11 +178,14 @@ export default {
       })
     },
     getOppBaseInfo(){
-      if(!this.inputReq.opportunityCode||this.inputReq.opportunityCode == 0||this.inputReq.baseInfo){
+      if(!this.inputReq.opportunityCode||this.inputReq.opportunityCode === '0'){
         return
       }
+      if(this.inputReq.baseInfo && Object.keys(this.inputReq.baseInfo).length !==0){
+        return;
+      }
       getOppBaseInfo({code:this.inputReq.opportunityCode}).then(response => {
-        if (response.code != 200){
+        if (response.code !== 200){
           this.$modal.msgError(response.msg);
           return
         }
@@ -191,11 +193,14 @@ export default {
       })
     },
     getOppUserInfo(){
-      if(!this.inputReq.opportunityCode||this.inputReq.opportunityCode == 0||this.inputReq.userInfo){
+      if(!this.inputReq.opportunityCode||this.inputReq.opportunityCode === '0'){
         return
       }
+      if(this.inputReq.userInfo && Object.keys(this.inputReq.userInfo).length !==0){
+        return;
+      }
       getOppUserInfo({code:this.inputReq.opportunityCode}).then(response => {
-        if (response.code != 200){
+        if (response.code !== 200){
           this.$modal.msgError(response.msg);
           return
         }
@@ -203,11 +208,14 @@ export default {
       })
     },
     getOppPolicyInfo(){
-      if(!this.inputReq.opportunityCode||this.inputReq.opportunityCode == 0||this.inputReq.policyInfo){
+      if(!this.inputReq.opportunityCode||this.inputReq.opportunityCode === '0'){
         return
       }
+      if(this.inputReq.policyInfo && Object.keys(this.inputReq.policyInfo).length !==0){
+        return;
+      }
       getOppPolicyInfo({code:this.inputReq.opportunityCode}).then(response => {
-        if (response.code != 200){
+        if (response.code !== 200){
           this.$modal.msgError(response.msg);
           return
         }
@@ -215,11 +223,14 @@ export default {
       })
     },
     getOppAdvancesInfo(){
-      if(!this.inputReq.opportunityCode||this.inputReq.opportunityCode == '0'||this.inputReq.advancesInfo){
+      if(!this.inputReq.opportunityCode||this.inputReq.opportunityCode === '0'){
         return
       }
+      if(this.inputReq.advancesInfo && Object.keys(this.inputReq.advancesInfo).length !==0){
+        return;
+      }
       getOppAdvancesInfo({code:this.inputReq.opportunityCode}).then(response => {
-        if (response.code != 200){
+        if (response.code !== 200){
           this.$modal.msgError(response.msg);
           return
         }
@@ -227,14 +238,14 @@ export default {
       })
     },
     getOppCostInfo(){
-      if(!this.inputReq.opportunityCode||this.inputReq.opportunityCode == 0){
+      if(!this.inputReq.opportunityCode||this.inputReq.opportunityCode === '0'){
         return
       }
-      if(Object.keys(this.inputReq.userInfo).length !==0){
+      if(this.inputReq.costInfo && Object.keys(this.inputReq.costInfo).length !==0){
         return;
       }
       getOppCostInfo({code:this.inputReq.opportunityCode}).then(response => {
-        if (response.code != 200){
+        if (response.code !== 200){
           this.$modal.msgError(response.msg);
           return
         }
@@ -242,14 +253,14 @@ export default {
       })
     },
     getOppCompetitorInfo(){
-      if(!this.inputReq.opportunityCode||this.inputReq.opportunityCode == 0||this.inputReq.competitorInfo){
+      if(!this.inputReq.opportunityCode||this.inputReq.opportunityCode === '0'){
         return
       }
-      if(Object.keys(this.inputReq.userInfo).length !==0){
+      if(this.inputReq.competitorInfo && Object.keys(this.inputReq.competitorInfo).length !== 0){
         return;
       }
       getOppCompetitorInfo({code:this.inputReq.opportunityCode}).then(response => {
-        if (response.code != 200){
+        if (response.code !== 200){
           this.$modal.msgError(response.msg);
           return
         }
@@ -257,14 +268,14 @@ export default {
       })
     },
     getOppQuotationInfo(){
-      if(!this.inputReq.opportunityCode||this.inputReq.opportunityCode == 0||this.inputReq.quotationInfo){
+      if(!this.inputReq.opportunityCode||this.inputReq.opportunityCode === '0'){
         return
       }
-      if(Object.keys(this.inputReq.userInfo).length !==0){
+      if(this.inputReq.quotationInfo && Object.keys(this.inputReq.quotationInfo).length !==0){
         return;
       }
       getOppQuotationInfo({code:this.inputReq.opportunityCode}).then(response => {
-        if (response.code != 200){
+        if (response.code !== 200){
           this.$modal.msgError(response.msg);
           return
         }
@@ -272,14 +283,14 @@ export default {
       })
     },
     getOppSupportInfo(){
-      if(!this.inputReq.opportunityCode||this.inputReq.opportunityCode == 0||this.inputReq.supportInfo){
+      if(!this.inputReq.opportunityCode||this.inputReq.opportunityCode === '0'){
         return
       }
-      if(Object.keys(this.inputReq.userInfo).length !==0){
+      if(this.inputReq.supportInfo && Object.keys(this.inputReq.supportInfo).length !== 0){
         return;
       }
       getOppSupportInfo({code:this.inputReq.opportunityCode}).then(response => {
-        if (response.code != 200){
+        if (response.code !== 200){
           this.$modal.msgError(response.msg);
           return
         }
@@ -287,14 +298,14 @@ export default {
       })
     },
     getOppContactsInfo(){
-      if(!this.inputReq.opportunityCode||this.inputReq.opportunityCode == 0||this.inputReq.contactsInfo){
+      if(!this.inputReq.opportunityCode||this.inputReq.opportunityCode === '0'){
         return
       }
-      if(Object.keys(this.inputReq.userInfo).length !==0){
+      if(this.inputReq.contactsInfo && Object.keys(this.inputReq.contactsInfo).length !== 0){
         return;
       }
       getOppContactsInfo({code:this.inputReq.opportunityCode}).then(response => {
-        if (response.code != 200){
+        if (response.code !== 200){
           this.$modal.msgError(response.msg);
           return
         }

@@ -35,6 +35,17 @@ export default {
     OppDesc,
     keyStandBy,
     KeyContacts
+  },created() {
+    console.log("l03-created")
+    this.initL03();
+  },methods:{
+    initL03(){
+      this.$parent.getOppCompetitorInfo();
+      this.$parent.getOppQuotationInfo();
+      this.$parent.getOppContactsInfo();
+      this.$parent.getOppAdvancesInfo();
+      this.$parent.getOppSupportInfo();
+    }
   }
 }
 </script>

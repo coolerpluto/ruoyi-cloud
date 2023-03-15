@@ -27,6 +27,15 @@ export default {
 
     AdvancesInfo,
     keyStandBy,
+  },created() {
+    console.log("l05-created")
+    this.initL05();
+  },methods:{
+    initL05(){
+      this.$parent.getOppQuotationInfo();
+      this.$parent.getOppAdvancesInfo();
+      this.$parent.getOppSupportInfo();
+    }
   }
 }
 </script>

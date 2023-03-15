@@ -26,6 +26,17 @@ export default {
 
     AdvancesInfo,
     keyStandBy,
+  },
+  created() {
+    console.log("l09-created")
+    this.initL09();
+  },
+  methods:{
+    initL09(){
+      this.$parent.getOppQuotationInfo();
+      this.$parent.getOppAdvancesInfo();
+      this.$parent.getOppSupportInfo();
+    }
   }
 }
 </script>

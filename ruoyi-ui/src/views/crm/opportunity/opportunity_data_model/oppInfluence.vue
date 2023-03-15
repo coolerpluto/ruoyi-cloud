@@ -20,7 +20,7 @@
 <script>
 export default {
   name: "oppInfluence",
-  dicts:['crm_fund_source_type'],
+  dicts:[],
   props: {
     stageShow: {
       type: Number,

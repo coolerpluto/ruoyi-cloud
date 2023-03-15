@@ -15,8 +15,19 @@ import SummaryInfo from "../opportunity_data_model/summaryInfo";
 import WinningBidding from "../opportunity_data_model/winningBidding";
 export default {
   name: "stage_L08",
-  components: {CostInfo,ActionReason,WinningBidding,
-    SummaryInfo,}
+  components: {
+    CostInfo,ActionReason,
+    WinningBidding,SummaryInfo,
+  },
+  created() {
+    console.log("l08-created")
+    this.initL08();
+  },
+  methods:{
+    initL08(){
+      this.$parent.getOppCostInfo();
+    }
+  }
 }
 </script>
 
