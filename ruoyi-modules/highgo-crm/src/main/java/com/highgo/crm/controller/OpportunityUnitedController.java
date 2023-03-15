@@ -1,13 +1,16 @@
 package com.highgo.crm.controller;
 
 import com.highgo.crm.domain.Company;
+import com.highgo.crm.domain.Contact;
 import com.highgo.crm.domain.OpportunityAdvances;
 import com.highgo.crm.domain.OpportunityCompetitor;
 import com.highgo.crm.domain.OpportunityCost;
 import com.highgo.crm.domain.OpportunityPolicy;
 import com.highgo.crm.domain.OpportunityProperty;
+import com.highgo.crm.domain.OpportunityQuotation;
 import com.highgo.crm.domain.OpportunitySoftwareOperation;
 import com.highgo.crm.domain.OpportunityStageChangeHis;
+import com.highgo.crm.domain.OpportunitySupport;
 import com.highgo.crm.domain.OpportunityUnited;
 import com.highgo.crm.domain.PolicyFile;
 import com.highgo.crm.service.ICompanyService;
@@ -176,6 +179,36 @@ public class OpportunityUnitedController extends BaseController
 
         List<OpportunityCompetitor> competitorList = opportunityService.queryCompetitorByOppCode(code);
         return success(competitorList);
+    }
+    @GetMapping("/getOppQuotationInfo")
+    public AjaxResult getOppQuotationInfo(OpportunityUnited opportunity){
+        String code = opportunity.getCode();
+        if(StringUtils.isBlank(code)){
+            return success();
+        }
+
+        List<OpportunityQuotation> quotationList = opportunityService.queryQuotationByOppCode(code);
+        return success(quotationList);
+    }
+    @GetMapping("/getOppSupportInfo")
+    public AjaxResult getOppSupportInfo(OpportunityUnited opportunity){
+        String code = opportunity.getCode();
+        if(StringUtils.isBlank(code)){
+            return success();
+        }
+
+        List<OpportunitySupport> supportList = opportunityService.querySupportByOppCode(code);
+        return success(supportList);
+    }
+    @GetMapping("/getOppContactsInfo")
+    public AjaxResult getOppContactsInfo(OpportunityUnited opportunity){
+        String code = opportunity.getCode();
+        if(StringUtils.isBlank(code)){
+            return success();
+        }
+
+        List<Contact> contactList = opportunityService.queryContactsByOppCode(code);
+        return success(contactList);
     }
     /**
      * 导出商机统一管理列表

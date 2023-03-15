@@ -1,11 +1,14 @@
 package com.highgo.crm.mapper;
 
 import com.highgo.crm.domain.Company;
+import com.highgo.crm.domain.Contact;
 import com.highgo.crm.domain.OpportunityAdvances;
 import com.highgo.crm.domain.OpportunityCompetitor;
 import com.highgo.crm.domain.OpportunityCost;
 import com.highgo.crm.domain.OpportunityPolicy;
+import com.highgo.crm.domain.OpportunityQuotation;
 import com.highgo.crm.domain.OpportunitySoftwareOperation;
+import com.highgo.crm.domain.OpportunitySupport;
 import com.highgo.crm.domain.OpportunityUnited;
 
 import java.util.List;
@@ -79,4 +82,10 @@ public interface OpportunityUnitedMapper
     List<OpportunityCost> queryCostByOppCode(String oppCode);
 
     List<OpportunityCompetitor> queryCompetitorByOppCode(String oppCode);
+
+    List<OpportunityQuotation> queryQuotationByOppCode(String oppCode);
+
+    List<OpportunitySupport> querySupportByOppCode(String oppCode);
+
+    List<Contact> queryContactsByOppCode(String oppCode);
 }

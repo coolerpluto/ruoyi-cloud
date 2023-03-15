@@ -192,5 +192,30 @@
         where opportunity_code = #{oppCode}
         order by create_time desc,update_time desc
     </select>
+  <select id="queryQuotationByOppCode" parameterType="String" resultMap="com.highgo.crm.mapper.OpportunityQuotationMapper.OpportunityQuotationResult">
+      select id, opportunity_code, quotation_json, opportunity_stage, create_by, create_time, update_by, update_time, remark from t_opportunity_quotation
+        where opportunity_code = #{oppCode}
+        order by create_time desc,update_time desc
+    </select>
+  <select id="querySupportByOppCode" parameterType="String" resultMap="com.highgo.crm.mapper.OpportunitySupportMapper.OpportunitySupportResult">
+      select id, opportunity_code, opportunity_stage, support_id, support_name, support_val, create_by, create_time, update_by, update_time, remark from t_opportunity_support
+        where opportunity_code = #{oppCode}
+        order by create_time desc,update_time desc
+    </select>
+  <select id="queryContactsByOppCode" parameterType="String" resultMap="com.highgo.crm.mapper.ContactMapper.ContactResult">
+      select id, name, sex,
+             company, company_code,
+             role_in_company, post_in_company, dept_in_company,
+             pri_phone, sec_phone,
+             pri_email, sec_email,
+             addr, category, remark,
+
+             source_id, owner_id, dept_id,
+             create_id, create_by, create_time,
+             update_id, update_by, update_time
+      from t_contact
+        where source_type = 'opportunity' and source_id = #{oppCode}
+        order by create_time desc,update_time desc
+    </select>
 
 </mapper>

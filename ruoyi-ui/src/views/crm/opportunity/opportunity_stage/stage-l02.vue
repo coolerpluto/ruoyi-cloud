@@ -41,6 +41,7 @@ export default {
   },methods:{
     initL02(){
       this.$parent.getOppCompetitorInfo();
+      this.$parent.getOppQuotationInfo();
     }
   }
 }

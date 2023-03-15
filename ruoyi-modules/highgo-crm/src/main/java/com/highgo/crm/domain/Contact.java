@@ -36,6 +36,7 @@ public class Contact extends BaseEntity {
      */
     @Excel(name = "所属公司")
     private String company;
+    private String companyCode;
 
     /**
      * 公司内角色
@@ -101,7 +102,7 @@ public class Contact extends BaseEntity {
      * 数据归属
      */
     @Excel(name = "数据归属")
-    private Long sourceId;
+    private String sourceId;
 
     /**
      * 所有者
@@ -173,6 +174,16 @@ public class Contact extends BaseEntity {
 
     public String getCompany() {
         return company;
+    }
+
+    public String getCompanyCode()
+    {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode)
+    {
+        this.companyCode = companyCode;
     }
 
     public void setRoleInCompany(String roleInCompany) {
@@ -255,11 +266,11 @@ public class Contact extends BaseEntity {
         return sourceType;
     }
 
-    public Long getSourceId() {
+    public String getSourceId() {
         return sourceId;
     }
 
-    public void setSourceId(Long sourceId) {
+    public void setSourceId(String sourceId) {
         this.sourceId = sourceId;
     }
 

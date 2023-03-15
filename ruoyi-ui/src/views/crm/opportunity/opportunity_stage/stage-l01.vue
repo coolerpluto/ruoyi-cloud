@@ -39,6 +39,8 @@ export default {
       this.$parent.getOppBaseInfo();
       this.$parent.getOppPolicyInfo();
       this.$parent.getOppAdvancesInfo();
+      this.$parent.getOppSupportInfo();
+      this.$parent.getOppContactsInfo();
     }
 
   }

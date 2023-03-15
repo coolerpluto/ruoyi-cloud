@@ -1,11 +1,14 @@
 package com.highgo.crm.service.impl;
 
 import com.highgo.crm.domain.Company;
+import com.highgo.crm.domain.Contact;
 import com.highgo.crm.domain.OpportunityAdvances;
 import com.highgo.crm.domain.OpportunityCompetitor;
 import com.highgo.crm.domain.OpportunityCost;
 import com.highgo.crm.domain.OpportunityPolicy;
+import com.highgo.crm.domain.OpportunityQuotation;
 import com.highgo.crm.domain.OpportunitySoftwareOperation;
+import com.highgo.crm.domain.OpportunitySupport;
 import com.highgo.crm.domain.OpportunityUnited;
 import com.highgo.crm.mapper.OpportunityUnitedMapper;
 import com.highgo.crm.service.IOpportunityUnitedService;
@@ -148,6 +151,24 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
     public List<OpportunityCompetitor> queryCompetitorByOppCode(String oppCode)
     {
         return opportunityUnitedMapper.queryCompetitorByOppCode(oppCode);
+    }
+
+    @Override
+    public List<OpportunityQuotation> queryQuotationByOppCode(String oppCode)
+    {
+        return opportunityUnitedMapper.queryQuotationByOppCode(oppCode);
+    }
+
+    @Override
+    public List<OpportunitySupport> querySupportByOppCode(String oppCode)
+    {
+        return opportunityUnitedMapper.querySupportByOppCode(oppCode);
+    }
+
+    @Override
+    public List<Contact> queryContactsByOppCode(String oppCode)
+    {
+        return opportunityUnitedMapper.queryContactsByOppCode(oppCode);
     }
 
 }

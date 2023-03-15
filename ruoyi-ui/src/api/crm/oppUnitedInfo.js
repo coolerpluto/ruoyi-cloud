@@ -73,6 +73,30 @@ export function getOppCompetitorInfo(query) {
     params: query
   })
 }
+// 查询商机报价信息
+export function getOppQuotationInfo(query) {
+  return request({
+    url: '/crm/oppUnited/getOppQuotationInfo',
+    method: 'get',
+    params: query
+  })
+}
+// 查询商机支持人信息
+export function getOppSupportInfo(query) {
+  return request({
+    url: '/crm/oppUnited/getOppSupportInfo',
+    method: 'get',
+    params: query
+  })
+}
+// 查询商机联系人信息
+export function getOppContactsInfo(query) {
+  return request({
+    url: '/crm/oppUnited/getOppContactsInfo',
+    method: 'get',
+    params: query
+  })
+}
 // 查询详细
 export function getUnitedOpp(id) {
   return request({
