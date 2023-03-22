@@ -8,25 +8,24 @@
                @click.native="changeStage(item.value)"/>
     </el-steps>
     <div style="text-align: center;">
-      <div>
+      <div id="currentStageButArea" v-if="inputReq.currentStage === stageActive">
         <el-button-group>
           <el-button type="primary" icon="el-icon-unlock" v-if="[6,7,8,11].includes(stageActive)" @click="changeStage(2)">
             重新激活到L2
           </el-button>
-          <el-button type="primary" icon="el-icon-unlock">
+          <el-button type="primary" icon="el-icon-finished">
             保存并更新
           </el-button>
           <el-button type="primary" v-if="![6,7,8,9,11].includes(stageActive)" @click="changeStage(targetNextStage)">
             下一步
-            <i class="el-icon-arrow-right el-icon--right"></i>
-            <i class="el-icon-arrow-right el-icon--right"></i>
+            <i class="el-icon-d-arrow-right el-icon--right"></i>
           </el-button>
         </el-button-group>
         &nbsp;&nbsp;&nbsp;&nbsp;
         <el-dropdown v-show="![6,7,8,9,11].includes(stageActive)" @command="handleNextStageCommand">
           <el-button type="primary">
             {{ targetStageName }}
-            <i class="el-icon-arrow-right el-icon--right"></i>
+            <i class="el-icon-arrow-down el-icon--right"></i>
           </el-button>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item v-for="item in targetNextStageList"
@@ -37,6 +36,13 @@
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
+      </div>
+      <div id="hisStageButArea" v-if="inputReq.currentStage !== stageActive && flag.showUpdateBut">
+        <el-button-group>
+          <el-button type="primary" icon="el-icon-finished">
+            更新信息
+          </el-button>
+        </el-button-group>
       </div>
     </div>
     <stage-l01 v-if="stageActive ===1"/>
@@ -81,7 +87,7 @@ import {
 }  from "@/api/crm/oppUnitedInfo"
 export default {
   name: "detailData",
-  dicts: ['crm_opportunity_status'],
+  dicts: ['crm_opportunity_updataeverystage_person'],
   components: comObj,
   data() {
     return {
@@ -99,6 +105,13 @@ export default {
         quotationInfo:undefined,
         supportInfo:undefined,
         contactsInfo:undefined,
+        updateEverStagePerson:[],
+      },
+      flag:{
+        showReActiveBut:false,
+        showSaveUpdateBut:false,
+        showNextBut:false,
+        showNextStageOptions:false,
       },
       stageActive: undefined,
       modelActive: 1,
@@ -133,6 +146,17 @@ export default {
     this.init();
   },
   methods: {
+    refreshBut() {
+      this.flag.showReActiveBut = false;
+      this.flag.showSaveUpdateBut = false;
+      this.flag.showNextBut = false;
+      this.flag.showNextStageOptions = false;
+
+      this.inputReq.updateEverStagePerson = this.dict.type.crm_opportunity_updataeverystage_person.map((item)=>{
+        return item.value
+      })
+      this.flag.showUpdateBut = this.inputReq.updateEverStagePerson.includes(this.$store.getters.name)
+    },
     init(){
       //商机当前阶段、走过的阶段以及阶段跳转配置信息
       stageConfigAndInfo({code:this.inputReq.opportunityCode}).then(response => {
@@ -337,6 +361,7 @@ export default {
         });
         this.targetStageName = '选择阶段'
         this.targetNextStage = 0
+        this.refreshBut()
         this.refreshNextStageList()
       }
     },
