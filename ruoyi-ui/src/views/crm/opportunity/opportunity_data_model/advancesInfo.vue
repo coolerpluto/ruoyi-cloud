@@ -1,8 +1,9 @@
 <template>
-  <div class="app-container" :style="{pointerEvents:oppdata.action=='V'?'none':'unset'}">
+  <div class="app-container" :style="{ pointerEvents: oppdata.action == 'V' ? 'none' : 'unset' }">
     <h3>商机进展</h3>
-    <el-divider/>
-    <el-form ref="advancesInfoForm" :model="advancesInfoForm" size="medium" v-loading="flag.advancesInfoLoading" label-width="220px">
+    <el-divider />
+    <el-form ref="advancesInfoForm" :model="advancesInfoForm" size="medium" v-loading="flag.advancesInfoLoading"
+      label-width="220px">
       <el-button style="float:right;" type="info" @click="openDialog" icon="el-icon-plus">添加新进展</el-button>
       <el-table :data="advancesInfoForm.advancesInfo">
         <el-table-column align="center" fixed prop="advances" :show-overflow-tooltip="true" width="500">
@@ -10,10 +11,10 @@
             <label placeholder="自动生产商机编码">进展内容<span style="color: red;">(必须注明和我方业务相关瓶颈、建议和意见)</span></label>
           </template>
         </el-table-column>
-        <el-table-column label="进展阶段" align="center" prop="stage" :show-overflow-tooltip="true"/>
-        <el-table-column label="进展日期" align="center" prop="advancesDate" :show-overflow-tooltip="true"/>
-        <el-table-column label="填报人" align="center" prop="creator" :show-overflow-tooltip="true"/>
-        <el-table-column label="填报时间" align="center" prop="createTime" :show-overflow-tooltip="true"/>
+        <el-table-column label="进展阶段" align="center" prop="stage" :show-overflow-tooltip="true" />
+        <el-table-column label="进展日期" align="center" prop="advancesDate" :show-overflow-tooltip="true" />
+        <el-table-column label="填报人" align="center" prop="creator" :show-overflow-tooltip="true" />
+        <el-table-column label="填报时间" align="center" prop="createTime" :show-overflow-tooltip="true" />
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button size="mini" type="text" @click="editAdvances(scope.row)" icon="el-icon-edit">修改</el-button>
@@ -39,7 +40,7 @@
 </template>
 
 <script>
-import { getOppAdvancesInfo }  from "@/api/crm/oppUnitedInfo"
+import { getOppAdvancesInfo } from "@/api/crm/oppUnitedInfo"
 export default {
   name: "advancesInfo",
   props: {
@@ -54,14 +55,14 @@ export default {
       }
     },
   },
-  data(){
+  data() {
     return {
-      advancesInfoForm:{advancesInfo:[],},
-      advancesInfoModified:{},
-      advancesInfoOriginBak:{},
-      flag:{
+      advancesInfoForm: { advancesInfo: [], },
+      advancesInfoModified: {},
+      advancesInfoOriginBak: {},
+      flag: {
         advancesInfoLoading: false,
-        advancesNumVerify:false,
+        advancesNumVerify: false,
       },
       //组件弹框承载
       advancesDialog: {
@@ -74,35 +75,35 @@ export default {
       },
     }
   },
-  created(){
-this.initAdvancesInfo()
+  created() {
+    this.initAdvancesInfo()
   },
-  methods:{
-    initAdvancesInfo(){
+  methods: {
+    initAdvancesInfo() {
       var _this = this
       //console.log("advancesInfoForm:",_this.oppdata)
       // 开启遮盖层
       this.flag.advancesInfoLoading = true;
-      this.getOppAdvancesInfo(function(){
+      this.getOppAdvancesInfo(function () {
         _this.flag.advancesInfoLoading = false;
       })
     },
-    getOppAdvancesInfo(func){
-      if(!this.oppdata.opportunityCode||this.oppdata.opportunityCode === '0'){
-        if (typeof func == 'function'){
+    getOppAdvancesInfo(func) {
+      if (!this.oppdata.opportunityCode || this.oppdata.opportunityCode === '0') {
+        if (typeof func == 'function') {
           func();
         }
         return
-      }      
-      getOppAdvancesInfo({code:this.oppdata.opportunityCode}).then(response => {
-        if (response.code !== 200){
+      }
+      getOppAdvancesInfo({ code: this.oppdata.opportunityCode }).then(response => {
+        if (response.code !== 200) {
           this.$modal.msgError(response.msg);
           return
         }
         this.advancesInfoForm.advancesInfo = response.data;
         this.advancesInfoOriginBak = JSON.parse(JSON.stringify(this.advancesInfoForm))
 
-        if (typeof func == 'function'){
+        if (typeof func == 'function') {
           func();
         }
       })
@@ -141,21 +142,21 @@ this.initAdvancesInfo()
       return flag;
     },
     // 提供本组件的全部数据
-    collectInfo() {      
+    collectInfo() {
       return {
-              currentData:this.advancesInfoForm,//最新展示数据
-              modifyedData:this.advancesInfoModified,//改动部分
-              originData:this.advancesInfoOriginBak,//原始数据
-            };
+        currentData: this.advancesInfoForm,//最新展示数据
+        modifyedData: this.advancesInfoModified,//改动部分
+        originData: this.advancesInfoOriginBak,//原始数据
+      };
     },
   },
 }
 </script>
 
 <style scoped>
-#advancesNumVerify{
+#advancesNumVerify {
   color: #ff4949;
-    font-size: 12px;
-    line-height: 3;
+  font-size: 12px;
+  line-height: 3;
 }
 </style>

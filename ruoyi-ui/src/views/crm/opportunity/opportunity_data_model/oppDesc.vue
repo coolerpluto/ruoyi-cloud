@@ -122,6 +122,7 @@
             <el-form-item label="预计合同金额" prop="preContractVal.propertyVal">
               <el-input v-model="oppDescForm.preContractVal.propertyVal" placeholder="请输入预计合同金额" clearable>
               </el-input>
+              {{ convertCurrencyDX(oppDescForm.preContractVal.propertyVal||0) }}
             </el-form-item>
           </el-col>
         </el-row>
@@ -168,7 +169,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="预计签单日期" prop="preSignDate">
+            <el-form-item label="预计签单日期" prop="preSignDate.propertyVal">
               <el-date-picker
                 v-model="oppDescForm.preSignDate.propertyVal"
                 type="date" value-format="yyyy-MM-dd"

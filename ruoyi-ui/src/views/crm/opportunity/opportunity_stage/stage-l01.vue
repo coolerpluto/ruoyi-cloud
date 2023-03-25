@@ -1,7 +1,7 @@
 <template>
   <div>
     <baseInfo ref="baseInfo" :stage-show="1" :oppdata="oppdata"></baseInfo>
-    <KeyContacts ref="KeyContacts" :stage-show="1" stage-title="至少要填写商机提供人员" :oppdata="oppdata"></KeyContacts>
+    <KeyContacts ref="keyContacts" :stage-show="1" stage-title="至少要填写商机提供人员" :oppdata="oppdata"></KeyContacts>
     <cust-info :oppdata="oppdata" ref="custInfo"></cust-info>
     <policyStandBy :oppdata="oppdata" ref="policyStandBy"></policyStandBy>
     <opp-desc :oppdata="oppdata" ref="oppDesc" :stage-show="1"></opp-desc>
@@ -30,23 +30,21 @@ export default {
     baseInfo,
     policyStandBy,
   },
-  props:{
-    oppdata:{
+  props: {
+    oppdata: {
       type: Object,
-      default () {
+      default() {
         return {}
       }
     }
   },
   created() {
     this.initL01();
-  },methods:{
-    initL01(){
+  }, methods: {
+    initL01() {
     }
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
