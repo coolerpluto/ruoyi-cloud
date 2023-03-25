@@ -7,22 +7,22 @@
                v-if="stageShowList.includes(item.value)"
                @click.native="changeStage(item.value)"/>
     </el-steps>
-    <div style="text-align: center;">
+    <div style="text-align: center;" v-if="inputReq.action!='V'">
       <div id="currentStageButArea" v-if="inputReq.currentStage === stageActive">
         <el-button-group>
-          <el-button type="primary" icon="el-icon-unlock" v-if="[6,7,8,11].includes(stageActive)" @click="changeStage(2)">
+          <el-button type="primary" icon="el-icon-unlock" v-if="flag.showReActiveBut" @click="reActiveOpportunity()">
             重新激活到L2
           </el-button>
-          <el-button type="primary" icon="el-icon-finished">
+          <el-button type="primary" icon="el-icon-finished" v-if="flag.showSaveUpdateBut" @click="saveOrupdateOpportunityData()">
             保存并更新
           </el-button>
-          <el-button type="primary" v-if="![6,7,8,9,11].includes(stageActive)" @click="changeStage(targetNextStage)">
+          <el-button type="primary" v-if="flag.showNextBut" @click="changeOpportunityStage()">
             下一步
             <i class="el-icon-d-arrow-right el-icon--right"></i>
           </el-button>
         </el-button-group>
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        <el-dropdown v-show="![6,7,8,9,11].includes(stageActive)" @command="handleNextStageCommand">
+        &nbsp;
+        <el-dropdown v-show="flag.showNextStageOptions" @command="handleNextStageCommand">
           <el-button type="primary">
             {{ targetStageName }}
             <i class="el-icon-arrow-down el-icon--right"></i>
@@ -37,24 +37,24 @@
           </el-dropdown-menu>
         </el-dropdown>
       </div>
-      <div id="hisStageButArea" v-if="inputReq.currentStage !== stageActive && flag.showUpdateBut">
+      <div id="hisStageButArea" v-if="flag.showUpdateBut">
         <el-button-group>
-          <el-button type="primary" icon="el-icon-finished">
+          <el-button type="primary" icon="el-icon-finished" @click="updateOpportunityData()">
             更新信息
           </el-button>
         </el-button-group>
       </div>
     </div>
-    <stage-l01 v-if="stageActive ===1"/>
-    <stage-l02 v-if="stageActive ===2"/>
-    <stage-l03 v-if="stageActive ===3"/>
-    <stage-l04 v-if="stageActive ===4"/>
-    <stage-l05 v-if="stageActive ===5"/>
-    <stage-l06 v-if="stageActive ===6"/>
-    <stage-l07 v-if="stageActive ===7"/>
-    <stage-l08 v-if="stageActive ===8"/>
-    <stage-l09 v-if="stageActive ===9"/>
-    <stage-l11 v-if="stageActive ===11"/>
+    <stage-l01 ref="stage01" v-if="stageActive ===1" :oppdata="inputReq"/>
+    <stage-l02 ref="stage02" v-if="stageActive ===2" :oppdata="inputReq"/>
+    <stage-l03 ref="stage03" v-if="stageActive ===3" :oppdata="inputReq"/>
+    <stage-l04 ref="stage04" v-if="stageActive ===4" :oppdata="inputReq"/>
+    <stage-l05 ref="stage05" v-if="stageActive ===5" :oppdata="inputReq"/>
+    <stage-l06 ref="stage06" v-if="stageActive ===6" :oppdata="inputReq"/>
+    <stage-l07 ref="stage07" v-if="stageActive ===7" :oppdata="inputReq"/>
+    <stage-l08 ref="stage08" v-if="stageActive ===8" :oppdata="inputReq"/>
+    <stage-l09 ref="stage09" v-if="stageActive ===9" :oppdata="inputReq"/>
+    <stage-l11 ref="stage11" v-if="stageActive ===11" :oppdata="inputReq"/>
 
   </div>
 </template>
@@ -80,10 +80,10 @@ stageComponent.keys().forEach(fileName => {
 });
 import {
   stageConfigAndInfo,
-  getPropertiesMap,getOppBaseInfo,getOppUserInfo,getOppPolicyInfo,
-  getOppAdvancesInfo,getOppCostInfo,getOppCompetitorInfo,
-  getOppQuotationInfo,getOppSupportInfo,getOppContactsInfo,
-  listUnitedOpp,getUnitedOpp,delUnitedOpp,addUnitedOpp,updateUnitedOpp
+  getPropertiesMap,getOppUserInfo,
+  getOppCostInfo,getOppCompetitorInfo,
+  getOppQuotationInfo,getOppSupportInfo,
+  addUnitedOpp,updateUnitedOpp
 }  from "@/api/crm/oppUnitedInfo"
 export default {
   name: "detailData",
@@ -94,27 +94,19 @@ export default {
       inputReq:{
         action:"A",
         opportunityCode:"",
-        currentStage:"",
-        propertyMap:undefined,
-        baseInfo:undefined,
-        userInfo:undefined,
-        policyInfo:undefined,
-        advancesInfo:undefined,
-        costInfo:undefined,
-        competitorInfo:undefined,
-        quotationInfo:undefined,
-        supportInfo:undefined,
-        contactsInfo:undefined,
-        updateEverStagePerson:[],
+        currentStage:"",        
       },
       flag:{
         showReActiveBut:false,
         showSaveUpdateBut:false,
         showNextBut:false,
         showNextStageOptions:false,
+        showUpdateBut:false,
+        hasSaveOrUpdate:false,
       },
       stageActive: undefined,
       modelActive: 1,
+      updateEveryStagePerson:[],
       stageShowList:[1],
       targetNextStage: 0,// 向下新的阶段
       targetStageName: '选择阶段',
@@ -147,15 +139,16 @@ export default {
   },
   methods: {
     refreshBut() {
-      this.flag.showReActiveBut = false;
-      this.flag.showSaveUpdateBut = false;
-      this.flag.showNextBut = false;
-      this.flag.showNextStageOptions = false;
-
-      this.inputReq.updateEverStagePerson = this.dict.type.crm_opportunity_updataeverystage_person.map((item)=>{
+      this.flag.showReActiveBut = [6,7,8,11].includes(this.stageActive);
+      this.flag.showSaveUpdateBut = true;
+      // 新建时不显示下一步的操作按钮
+      this.flag.showNextBut = this.inputReq.action=="A"?false:![6,7,8,9,11].includes(this.stageActive);
+      this.flag.showNextStageOptions = this.inputReq.action=="A"?false:![6,7,8,9,11].includes(this.stageActive);
+      // 特殊人员每个阶段都能更新
+      this.updateEveryStagePerson = this.dict.type.crm_opportunity_updataeverystage_person.map((item)=>{
         return item.value
       })
-      this.flag.showUpdateBut = this.inputReq.updateEverStagePerson.includes(this.$store.getters.name)
+      this.flag.showUpdateBut = this.inputReq.currentStage !== this.stageActive && this.updateEveryStagePerson.includes(this.$store.getters.name)
     },
     init(){
       //商机当前阶段、走过的阶段以及阶段跳转配置信息
@@ -179,18 +172,22 @@ export default {
         // 获取当前阶段的跳转
         // 将字符串转成数字数组
         this.refreshNextStageList()
-        if (response.data.stageInfo && response.data.stageInfo.stageHisList){
-          this.getProperties()
-        }
+        this.refreshBut()
         this.loading = false;
       });
     },
     // 商机属性查询
-    getProperties(){
+    getProperties(func){
       if(!this.inputReq.opportunityCode||this.inputReq.opportunityCode === '0'){
+        if (typeof func == 'function'){
+          func();
+        }
         return
       }
       if(this.inputReq.propertyMap && Object.keys(this.inputReq.propertyMap).length !==0){
+        if (typeof func == 'function'){
+          func();
+        }
         return;
       }
       getPropertiesMap({code:this.inputReq.opportunityCode}).then(response => {
@@ -199,28 +196,22 @@ export default {
           return
         }
         this.inputReq.propertyMap = response.data;
-      })
-    },
-    getOppBaseInfo(){
-      if(!this.inputReq.opportunityCode||this.inputReq.opportunityCode === '0'){
-        return
-      }
-      if(this.inputReq.baseInfo && Object.keys(this.inputReq.baseInfo).length !==0){
-        return;
-      }
-      getOppBaseInfo({code:this.inputReq.opportunityCode}).then(response => {
-        if (response.code !== 200){
-          this.$modal.msgError(response.msg);
-          return
+        if (typeof func == 'function'){
+          func();
         }
-        this.inputReq.baseInfo = response.data;
       })
     },
-    getOppUserInfo(){
+    getOppUserInfo(func){
       if(!this.inputReq.opportunityCode||this.inputReq.opportunityCode === '0'){
+        if (typeof func == 'function'){
+          func();
+        }
         return
       }
       if(this.inputReq.userInfo && Object.keys(this.inputReq.userInfo).length !==0){
+        if (typeof func == 'function'){
+          func();
+        }
         return;
       }
       getOppUserInfo({code:this.inputReq.opportunityCode}).then(response => {
@@ -229,43 +220,23 @@ export default {
           return
         }
         this.inputReq.userInfo = response.data;
-      })
-    },
-    getOppPolicyInfo(){
-      if(!this.inputReq.opportunityCode||this.inputReq.opportunityCode === '0'){
-        return
-      }
-      if(this.inputReq.policyInfo && Object.keys(this.inputReq.policyInfo).length !==0){
-        return;
-      }
-      getOppPolicyInfo({code:this.inputReq.opportunityCode}).then(response => {
-        if (response.code !== 200){
-          this.$modal.msgError(response.msg);
-          return
+        if (typeof func == 'function'){
+          func();
         }
-        this.inputReq.policyInfo = response.data;
       })
     },
-    getOppAdvancesInfo(){
+    
+    getOppCostInfo(func){
       if(!this.inputReq.opportunityCode||this.inputReq.opportunityCode === '0'){
-        return
-      }
-      if(this.inputReq.advancesInfo && Object.keys(this.inputReq.advancesInfo).length !==0){
-        return;
-      }
-      getOppAdvancesInfo({code:this.inputReq.opportunityCode}).then(response => {
-        if (response.code !== 200){
-          this.$modal.msgError(response.msg);
-          return
+        if (typeof func == 'function'){
+          func();
         }
-        this.inputReq.advancesInfo = response.data;
-      })
-    },
-    getOppCostInfo(){
-      if(!this.inputReq.opportunityCode||this.inputReq.opportunityCode === '0'){
         return
       }
       if(this.inputReq.costInfo && Object.keys(this.inputReq.costInfo).length !==0){
+        if (typeof func == 'function'){
+          func();
+        }
         return;
       }
       getOppCostInfo({code:this.inputReq.opportunityCode}).then(response => {
@@ -274,13 +245,22 @@ export default {
           return
         }
         this.inputReq.costInfo = response.data;
+        if (typeof func == 'function'){
+          func();
+        }
       })
     },
-    getOppCompetitorInfo(){
+    getOppCompetitorInfo(func){
       if(!this.inputReq.opportunityCode||this.inputReq.opportunityCode === '0'){
+        if (typeof func == 'function'){
+          func();
+        }
         return
       }
       if(this.inputReq.competitorInfo && Object.keys(this.inputReq.competitorInfo).length !== 0){
+        if (typeof func == 'function'){
+          func();
+        }
         return;
       }
       getOppCompetitorInfo({code:this.inputReq.opportunityCode}).then(response => {
@@ -289,13 +269,22 @@ export default {
           return
         }
         this.inputReq.competitorInfo = response.data;
+        if (typeof func == 'function'){
+          func();
+        }
       })
     },
-    getOppQuotationInfo(){
+    getOppQuotationInfo(func){
       if(!this.inputReq.opportunityCode||this.inputReq.opportunityCode === '0'){
+        if (typeof func == 'function'){
+          func();
+        }
         return
       }
       if(this.inputReq.quotationInfo && Object.keys(this.inputReq.quotationInfo).length !==0){
+        if (typeof func == 'function'){
+          func();
+        }
         return;
       }
       getOppQuotationInfo({code:this.inputReq.opportunityCode}).then(response => {
@@ -304,13 +293,22 @@ export default {
           return
         }
         this.inputReq.quotationInfo = response.data;
+        if (typeof func == 'function'){
+          func();
+        }
       })
     },
-    getOppSupportInfo(){
+    getOppSupportInfo(func){
       if(!this.inputReq.opportunityCode||this.inputReq.opportunityCode === '0'){
+        if (typeof func == 'function'){
+          func();
+        }
         return
       }
       if(this.inputReq.supportInfo && Object.keys(this.inputReq.supportInfo).length !== 0){
+        if (typeof func == 'function'){
+          func();
+        }
         return;
       }
       getOppSupportInfo({code:this.inputReq.opportunityCode}).then(response => {
@@ -319,23 +317,12 @@ export default {
           return
         }
         this.inputReq.supportInfo = response.data;
-      })
-    },
-    getOppContactsInfo(){
-      if(!this.inputReq.opportunityCode||this.inputReq.opportunityCode === '0'){
-        return
-      }
-      if(this.inputReq.contactsInfo && Object.keys(this.inputReq.contactsInfo).length !== 0){
-        return;
-      }
-      getOppContactsInfo({code:this.inputReq.opportunityCode}).then(response => {
-        if (response.code !== 200){
-          this.$modal.msgError(response.msg);
-          return
+        if (typeof func == 'function'){
+          func();
         }
-        this.inputReq.contactsInfo = response.data;
       })
     },
+    
     refreshNextStageList(){
       // 将字符串转成数字数组
       let _this=this
@@ -372,6 +359,44 @@ export default {
       this.targetStageName = nextStageInfo.label
       this.targetNextStage = nextStageInfo.value
     },
+    updateOpportunityData(){
+      console.log(this.inputReq);
+    },
+    saveOrupdateOpportunityData(){
+      this.flag.hasSaveOrUpdate = true;
+      console.log(this.inputReq);
+      
+      console.log("baseInfo.infoVerify:",this.$refs.stage01.$refs.baseInfo.infoVerify())
+      console.log("baseInfo.collectInfo:",this.$refs.stage01.$refs.baseInfo.collectInfo())
+
+      console.log("KeyContacts.infoVerify:",this.$refs.stage01.$refs.KeyContacts.infoVerify())
+      console.log("KeyContacts.collectInfo:",this.$refs.stage01.$refs.KeyContacts.collectInfo())
+
+      console.log("custInfo.infoVerify:",this.$refs.stage01.$refs.custInfo.infoVerify())
+      console.log("custInfo.collectInfo:",this.$refs.stage01.$refs.custInfo.collectInfo())
+      
+      console.log("policyStandBy.infoVerify:",this.$refs.stage01.$refs.policyStandBy.infoVerify())
+      console.log("policyStandBy.collectInfo:",this.$refs.stage01.$refs.policyStandBy.collectInfo())
+    
+      console.log("oppDesc.infoVerify:",this.$refs.stage01.$refs.oppDesc.infoVerify())
+      console.log("oppDesc.collectInfo:",this.$refs.stage01.$refs.oppDesc.collectInfo())
+    
+      console.log("advancesInfo.infoVerify:",this.$refs.stage01.$refs.advancesInfo.infoVerify())
+      console.log("advancesInfo.collectInfo:",this.$refs.stage01.$refs.advancesInfo.collectInfo())
+    
+      console.log("keyStandBy.infoVerify:",this.$refs.stage01.$refs.keyStandBy.infoVerify())
+      console.log("keyStandBy.collectInfo:",this.$refs.stage01.$refs.keyStandBy.collectInfo())
+    
+    },
+    changeOpportunityStage(){
+      console.log(this.inputReq);
+      this.changeStage(this.targetNextStage)
+      this.flag.hasSaveOrUpdate = false;
+    },
+    reActiveOpportunity(){
+      console.log(this.inputReq);
+      this.changeStage(2);
+    }
   }
 }
 </script>

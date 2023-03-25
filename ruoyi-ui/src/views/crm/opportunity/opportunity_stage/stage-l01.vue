@@ -1,12 +1,12 @@
 <template>
   <div>
-    <baseInfo :stage-show="1"></baseInfo>
-    <KeyContacts :stage-show="1" stage-title="(至少要填写商机提供人员)"></KeyContacts>
-    <cust-info></cust-info>
-    <policyStandBy></policyStandBy>
-    <opp-desc :stage-show="1"></opp-desc>
-    <advances-info stage-show="1"></advances-info>
-    <key-stand-by stage-show="1"></key-stand-by>
+    <baseInfo ref="baseInfo" :stage-show="1" :oppdata="oppdata"></baseInfo>
+    <KeyContacts ref="KeyContacts" :stage-show="1" stage-title="至少要填写商机提供人员" :oppdata="oppdata"></KeyContacts>
+    <cust-info :oppdata="oppdata" ref="custInfo"></cust-info>
+    <policyStandBy :oppdata="oppdata" ref="policyStandBy"></policyStandBy>
+    <opp-desc :oppdata="oppdata" ref="oppDesc" :stage-show="1"></opp-desc>
+    <advances-info :oppdata="oppdata" ref="advancesInfo" :stage-show="1"></advances-info>
+    <key-stand-by :oppdata="oppdata" ref="keyStandBy" :stage-show="1"></key-stand-by>
   </div>
 </template>
 
@@ -30,19 +30,19 @@ export default {
     baseInfo,
     policyStandBy,
   },
+  props:{
+    oppdata:{
+      type: Object,
+      default () {
+        return {}
+      }
+    }
+  },
   created() {
-    console.log("l01-created")
     this.initL01();
   },methods:{
     initL01(){
-      this.$parent.getOppUserInfo();
-      this.$parent.getOppBaseInfo();
-      this.$parent.getOppPolicyInfo();
-      this.$parent.getOppAdvancesInfo();
-      this.$parent.getOppSupportInfo();
-      this.$parent.getOppContactsInfo();
     }
-
   }
 }
 </script>

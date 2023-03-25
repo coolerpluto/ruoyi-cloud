@@ -21,8 +21,8 @@ export function stageConfigAndInfo(query) {
 export function getPropertiesMap(query) {
   return request({
     url: '/crm/oppUnited/getPropertiesMap',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: query
   })
 }
 // 查询商机基础信息
