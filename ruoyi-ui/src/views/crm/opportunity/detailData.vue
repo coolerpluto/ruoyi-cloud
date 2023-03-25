@@ -79,8 +79,7 @@ import {
   stageConfigAndInfo,
   getPropertiesMap, getOppUserInfo,
   getOppCostInfo, 
-  getOppSupportInfo,
-  addUnitedOpp, updateUnitedOpp
+  addUnitedOpp, updateUnitedOpps
 } from "@/api/crm/oppUnitedInfo"
 export default {
   name: "detailData",
@@ -247,32 +246,6 @@ export default {
         }
       })
     },
-    
-    
-    getOppSupportInfo(func) {
-      if (!this.inputReq.opportunityCode || this.inputReq.opportunityCode === '0') {
-        if (typeof func == 'function') {
-          func();
-        }
-        return
-      }
-      if (this.inputReq.supportInfo && Object.keys(this.inputReq.supportInfo).length !== 0) {
-        if (typeof func == 'function') {
-          func();
-        }
-        return;
-      }
-      getOppSupportInfo({ code: this.inputReq.opportunityCode }).then(response => {
-        if (response.code !== 200) {
-          this.$modal.msgError(response.msg);
-          return
-        }
-        this.inputReq.supportInfo = response.data;
-        if (typeof func == 'function') {
-          func();
-        }
-      })
-    },
 
     refreshNextStageList() {
       // 将字符串转成数字数组
@@ -371,6 +344,26 @@ export default {
           console.log("keyStandBy.collectInfo:", this.$refs.stage02.$refs.keyStandBy.collectInfo())
           break;
         case 3:
+          console.log("oppDesc.infoVerify:", this.$refs.stage03.$refs.oppDesc.infoVerify())
+          console.log("oppDesc.collectInfo:", this.$refs.stage03.$refs.oppDesc.collectInfo())
+          
+          console.log("oppImplement.infoVerify:", this.$refs.stage03.$refs.oppImplement.infoVerify())
+          console.log("oppImplement.collectInfo:", this.$refs.stage03.$refs.oppImplement.collectInfo())
+
+          console.log("competitorInfo.infoVerify:", this.$refs.stage03.$refs.competitorInfo.infoVerify())
+          console.log("competitorInfo.collectInfo:", this.$refs.stage03.$refs.competitorInfo.collectInfo())
+
+          console.log("KeyContacts.infoVerify:", this.$refs.stage03.$refs.keyContacts.infoVerify())
+          console.log("KeyContacts.collectInfo:", this.$refs.stage03.$refs.keyContacts.collectInfo())
+          
+          console.log("quotationInfo.infoVerify:", this.$refs.stage03.$refs.quotationInfo.infoVerify())
+          console.log("quotationInfo.collectInfo:", this.$refs.stage03.$refs.quotationInfo.collectInfo())
+          
+          console.log("advancesInfo.infoVerify:", this.$refs.stage03.$refs.advancesInfo.infoVerify())
+          console.log("advancesInfo.collectInfo:", this.$refs.stage03.$refs.advancesInfo.collectInfo())
+
+          console.log("keyStandBy.infoVerify:", this.$refs.stage03.$refs.keyStandBy.infoVerify())
+          console.log("keyStandBy.collectInfo:", this.$refs.stage03.$refs.keyStandBy.collectInfo())
           break;
         case 4:
           break;

@@ -1,7 +1,7 @@
 <template>
   <div class="app-container" :style="{ pointerEvents: oppdata.action == 'V' ? 'none' : 'unset' }">
     <h3>{{ stageTitle }}</h3><el-divider />
-    <el-form ref="summaryInfoForm" :rules="rules" :model="summaryInfoForm" size="medium" label-width="220px">
+    <el-form ref="summaryInfoForm" :rules="rules" v-loading="flag.summaryInfoLoading" :model="summaryInfoForm" size="medium" label-width="220px">
       <div v-if="[2].includes(stageShow)">
         <el-row :gutter="15">
           <el-col :span="8">

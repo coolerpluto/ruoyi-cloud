@@ -1,12 +1,12 @@
 <template>
   <div class="app-container">
-    <opp-desc :stage-show="3" :stage-title="'用户需求分析'"></opp-desc>
-    <opp-implement :stage-show="3" ></opp-implement>
-    <competitor-info></competitor-info>
-    <KeyContacts :stage-show="3" stage-title="(至少要填写招标方案撰写者)"></KeyContacts>
-    <quotation-info></quotation-info>
-    <advances-info></advances-info>
-    <key-stand-by></key-stand-by>
+    <opp-desc :oppdata="oppdata" ref="oppDesc" :stage-show="3" :stage-title="'用户需求分析'"></opp-desc>
+    <opp-implement :oppdata="oppdata" ref="oppImplement" :stage-show="3" ></opp-implement>
+    <competitor-info :oppdata="oppdata" ref="competitorInfo" :stage-show="3"></competitor-info>
+    <KeyContacts ref="keyContacts" :oppdata="oppdata" :stage-show="3" stage-title="至少要填写招标方案撰写者"></KeyContacts>
+    <quotation-info :oppdata="oppdata" ref="quotationInfo" :stage-show="3"></quotation-info>
+    <advances-info :oppdata="oppdata" ref="advancesInfo" :stage-show="3"></advances-info>
+    <key-stand-by :oppdata="oppdata" ref="keyStandBy" :stage-show="3"></key-stand-by>
   </div>
 </template>
 
@@ -35,16 +35,20 @@ export default {
     OppDesc,
     keyStandBy,
     KeyContacts
-  },created() {
-    console.log("l03-created")
+  },
+  props: {
+    oppdata: {
+      type: Object,
+      default() {
+        return {}
+      }
+    }
+  },
+  created() {
     this.initL03();
   },methods:{
     initL03(){
-      this.$parent.getOppCompetitorInfo();
-      this.$parent.getOppQuotationInfo();
-      this.$parent.getOppContactsInfo();
-      this.$parent.getOppAdvancesInfo();
-      this.$parent.getOppSupportInfo();
+      
     }
   }
 }
