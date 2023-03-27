@@ -366,6 +366,32 @@ export default {
           console.log("keyStandBy.collectInfo:", this.$refs.stage03.$refs.keyStandBy.collectInfo())
           break;
         case 4:
+          console.log("oppDesc.infoVerify:", this.$refs.stage04.$refs.oppDesc.infoVerify())
+          console.log("oppDesc.collectInfo:", this.$refs.stage04.$refs.oppDesc.collectInfo())
+          
+          console.log("biddingInfo.infoVerify:", this.$refs.stage04.$refs.biddingInfo.infoVerify())
+          console.log("biddingInfo.collectInfo:", this.$refs.stage04.$refs.biddingInfo.collectInfo())
+          
+          console.log("competitorInfo.infoVerify:", this.$refs.stage04.$refs.competitorInfo.infoVerify())
+          console.log("competitorInfo.collectInfo:", this.$refs.stage04.$refs.competitorInfo.collectInfo())
+
+          console.log("KeyContacts.infoVerify:", this.$refs.stage04.$refs.keyContacts.infoVerify())
+          console.log("KeyContacts.collectInfo:", this.$refs.stage04.$refs.keyContacts.collectInfo())
+          
+          console.log("quotationInfo.infoVerify:", this.$refs.stage04.$refs.quotationInfo.infoVerify())
+          console.log("quotationInfo.collectInfo:", this.$refs.stage04.$refs.quotationInfo.collectInfo())
+          
+          console.log("winningBidding.infoVerify:", this.$refs.stage04.$refs.winningBidding.infoVerify())
+          console.log("winningBidding.collectInfo:", this.$refs.stage04.$refs.winningBidding.collectInfo())
+          
+          console.log("summaryInfo.infoVerify:", this.$refs.stage04.$refs.summaryInfo.infoVerify())
+          console.log("summaryInfo.collectInfo:", this.$refs.stage04.$refs.summaryInfo.collectInfo())
+             
+          console.log("advancesInfo.infoVerify:", this.$refs.stage04.$refs.advancesInfo.infoVerify())
+          console.log("advancesInfo.collectInfo:", this.$refs.stage04.$refs.advancesInfo.collectInfo())
+
+          console.log("keyStandBy.infoVerify:", this.$refs.stage04.$refs.keyStandBy.infoVerify())
+          console.log("keyStandBy.collectInfo:", this.$refs.stage04.$refs.keyStandBy.collectInfo())
           break;
         case 5:
           break;

@@ -1,15 +1,15 @@
 <template>
   <div class="app-container">
-    <opp-desc :stage-show="4" :stage-title="'商机日期描述'"></opp-desc>
-    <bidding-info :stage-show="4"></bidding-info>
-    <competitor-info :stage-show="4"></competitor-info>
-    <KeyContacts :stage-show="4" stage-title="(至少要填写评标专家关键人)"></KeyContacts>
-    <quotation-info :stage-show="4"></quotation-info>
-    <winning-bidding :stage-show="4" :stage-title="'中标结论'"></winning-bidding>
+    <opp-desc :oppdata="oppdata" ref="oppDesc" :stage-show="4" :stage-title="'商机日期描述'"></opp-desc>
+    <bidding-info :oppdata="oppdata" ref="biddingInfo" :stage-show="4"></bidding-info>
+    <competitor-info :oppdata="oppdata" ref="competitorInfo" :stage-show="4"></competitor-info>
+    <KeyContacts :oppdata="oppdata" ref="keyContacts" :stage-show="4" stage-title="至少要填写评标专家关键人"></KeyContacts>
+    <quotation-info :oppdata="oppdata" ref="quotationInfo" :stage-show="4"></quotation-info>
+    <winning-bidding :oppdata="oppdata" ref="winningBidding" :stage-show="4" :stage-title="'中标结论'"></winning-bidding>
 <!--    <competitive-bidding :stage-show="4"></competitive-bidding>-->
-    <summary-info :stage-show="4"></summary-info>
-    <advances-info :stage-show="4"></advances-info>
-    <key-stand-by :stage-show="4"></key-stand-by>
+    <summary-info ref="summaryInfo" :oppdata="oppdata" :stage-show="4"></summary-info>
+    <advances-info :oppdata="oppdata" ref="advancesInfo" :stage-show="4"></advances-info>
+    <key-stand-by :oppdata="oppdata" ref="keyStandBy" :stage-show="4"></key-stand-by>
   </div>
 </template>
 
@@ -38,16 +38,19 @@ export default {
     OppDesc,
     keyStandBy,
     KeyContacts
-  },created() {
-    console.log("l04-created")
+  },
+  props: {
+    oppdata: {
+      type: Object,
+      default() {
+        return {}
+      }
+    }
+  },
+  created() {
     this.initL04();
   },methods:{
     initL04(){
-      this.$parent.getOppCompetitorInfo();
-      this.$parent.getOppQuotationInfo();
-      this.$parent.getOppContactsInfo();
-      this.$parent.getOppAdvancesInfo();
-      this.$parent.getOppSupportInfo();
     }
   }
 }

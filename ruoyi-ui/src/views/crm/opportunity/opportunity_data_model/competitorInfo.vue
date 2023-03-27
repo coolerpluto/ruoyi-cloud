@@ -11,6 +11,7 @@
           <template slot-scope="scope">{{ scope.row.unitPrice }} / {{ scope.row.tenderPrice }}</template>
         </el-table-column>
         <el-table-column label="对方优势" align="center" prop="advantage" :show-overflow-tooltip="true"/>
+        <el-table-column label="投标总价" align="center" prop="tenderTotalPrice" :show-overflow-tooltip="true"/>
         <el-table-column label="我方具备情况" align="center" prop="hasSameAdvantage" :show-overflow-tooltip="true"/>
         <el-table-column align="center" prop="memo" :show-overflow-tooltip="true">
           <template slot="header" slot-scope="scope">
