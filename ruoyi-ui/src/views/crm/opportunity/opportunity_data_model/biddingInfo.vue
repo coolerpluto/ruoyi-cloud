@@ -7,6 +7,7 @@
       <div v-if="[4].includes(stageShow)">
         <el-button style="float:right;" type="info" icon="el-icon-plus">添加新的对手</el-button>
         <el-table :data="biddingInfoForm.biddingInfo">
+          <el-table-column label="对应系统" align="center" prop="stage" :show-overflow-tooltip="true" />
           <el-table-column label="厂商名称" align="center" prop="stage" :show-overflow-tooltip="true" />
           <el-table-column label="是否参与投标" align="center" prop="stage" :show-overflow-tooltip="true" />
           <el-table-column label="支持的数据库厂商" align="center" prop="stage" :show-overflow-tooltip="true" />

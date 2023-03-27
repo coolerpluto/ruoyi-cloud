@@ -91,7 +91,7 @@ export default {
         //console.log("winningBiddingForm:",_this.winningBiddingForm)
         _this.flag.winningBiddingLoading = false;
       })
-      // TODO 还需要获得竞标公司的列表 
+      // TODO 还需要获得竞争对手公司的列表 
     },
     // 商机属性查询
     getProperties(func) {

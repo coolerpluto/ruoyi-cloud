@@ -3,7 +3,7 @@
     <el-row :gutter="20">
       <el-col :sm="24" style="padding-left: 20px">
         <div style="width: 100%;text-align: center;" >
-          <span style="font-size: xx-large;color: darkorchid;" >欢迎进入统一管理系统</span>
+          <span style="font-size: xx-large;color: darkorchid;" >欢迎进入综合管理系统</span>
         </div>
         <div style="width: 100%;">
           <p style="float: left;">
@@ -104,7 +104,7 @@ export default {
       var date = new Date()
       var year = date.getFullYear()
       // 在日期格式中，月份是从0开始的
-      // 使用三元表达式在小于10的前面加0，以达到格式统一  如 09:11:05
+      // 使用三元表达式在小于10的前面加0，以达到格式综合  如 09:11:05
       var month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1
       var day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
       var hours = date.getHours() < 10 ? '0' + date.getHours() : date.getHours()

@@ -35,7 +35,7 @@ export default {
   },
   data() {
     return {
-      title: '统一管理系统',
+      title: '综合管理系统',
       logo: logoImg
     }
   }
