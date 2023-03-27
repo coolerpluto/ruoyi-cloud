@@ -1,11 +1,11 @@
 <template>
   <div class="app-container" style="pointer-events: none;">
-    <quotation-info :stage-show="9"></quotation-info>
-    <action-reason :stage-show="9"></action-reason>
-    <summary-info :stage-show="9" stage-title="项目经验总结"></summary-info>
-    <sign-info></sign-info>
-    <advances-info :stage-show="9"></advances-info>
-    <key-stand-by :stage-show="9"></key-stand-by>
+    <quotation-info :oppdata="oppdata" ref="quotationInfo" :stage-show="9"></quotation-info>
+    <action-reason :oppdata="oppdata" ref="actionReason" :stage-show="5"></action-reason>
+    <summary-info ref="summaryInfo" :oppdata="oppdata" :stage-show="9" stage-title="项目经验总结"></summary-info>
+    <sign-info :oppdata="oppdata" ref="signInfo"></sign-info>
+    <advances-info :oppdata="oppdata" ref="advancesInfo" :stage-show="9"></advances-info>
+    <key-stand-by :oppdata="oppdata" ref="keyStandBy" :stage-show="9"></key-stand-by>
   </div>
 </template>
 
@@ -27,15 +27,19 @@ export default {
     AdvancesInfo,
     keyStandBy,
   },
+  props: {
+    oppdata: {
+      type: Object,
+      default() {
+        return {}
+      }
+    }
+  },
   created() {
-    console.log("l09-created")
     this.initL09();
   },
   methods:{
     initL09(){
-      this.$parent.getOppQuotationInfo();
-      this.$parent.getOppAdvancesInfo();
-      this.$parent.getOppSupportInfo();
     }
   }
 }

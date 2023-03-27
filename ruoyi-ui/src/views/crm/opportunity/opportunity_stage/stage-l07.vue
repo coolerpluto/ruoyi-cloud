@@ -1,8 +1,8 @@
 <template>
   <div class="app-container">
-    <action-reason :stage-show="7" stage-title="停止原因分析" reason-dict-code="crm_opportunity_stop_reason"></action-reason>
-    <summary-info :stage-show="7" stage-title="总结说明"></summary-info>
-    <cost-info :stage-show="7" stage-title="费用支出"></cost-info>
+    <action-reason :oppdata="oppdata" ref="actionReason" :stage-show="7" stage-title="停止原因分析" reason-dict-code="crm_opportunity_stop_reason"></action-reason>
+    <summary-info  ref="summaryInfo" :oppdata="oppdata" :stage-show="7" stage-title="总结说明"></summary-info>
+    <cost-info  ref="costInfo" :oppdata="oppdata" :stage-show="7" stage-title="费用支出"></cost-info>
   </div>
 </template>
 
@@ -17,13 +17,19 @@ export default {
     CostInfo,ActionReason,
     SummaryInfo,
   },
+  props: {
+    oppdata: {
+      type: Object,
+      default() {
+        return {}
+      }
+    }
+  },
   created() {
-    console.log("l07-created")
     this.initL07();
   },
   methods:{
     initL07(){
-      this.$parent.getOppCostInfo();
     }
   }
 }

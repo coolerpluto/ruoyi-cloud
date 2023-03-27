@@ -78,7 +78,6 @@ stageComponent.keys().forEach(fileName => {
 import {
   stageConfigAndInfo,
   getPropertiesMap, getOppUserInfo,
-  getOppCostInfo, 
   addUnitedOpp, updateUnitedOpps
 } from "@/api/crm/oppUnitedInfo"
 export default {
@@ -216,31 +215,6 @@ export default {
           return
         }
         this.inputReq.userInfo = response.data;
-        if (typeof func == 'function') {
-          func();
-        }
-      })
-    },
-
-    getOppCostInfo(func) {
-      if (!this.inputReq.opportunityCode || this.inputReq.opportunityCode === '0') {
-        if (typeof func == 'function') {
-          func();
-        }
-        return
-      }
-      if (this.inputReq.costInfo && Object.keys(this.inputReq.costInfo).length !== 0) {
-        if (typeof func == 'function') {
-          func();
-        }
-        return;
-      }
-      getOppCostInfo({ code: this.inputReq.opportunityCode }).then(response => {
-        if (response.code !== 200) {
-          this.$modal.msgError(response.msg);
-          return
-        }
-        this.inputReq.costInfo = response.data;
         if (typeof func == 'function') {
           func();
         }
@@ -413,14 +387,64 @@ export default {
           console.log("keyStandBy.collectInfo:", this.$refs.stage05.$refs.keyStandBy.collectInfo())
           break;
         case 6:
+          console.log("actionReason.infoVerify:", this.$refs.stage06.$refs.actionReason.infoVerify())
+          console.log("actionReason.collectInfo:", this.$refs.stage06.$refs.actionReason.collectInfo())
+          
+          console.log("summaryInfo.infoVerify:", this.$refs.stage06.$refs.summaryInfo.infoVerify())
+          console.log("summaryInfo.collectInfo:", this.$refs.stage06.$refs.summaryInfo.collectInfo())
+          
+          console.log("costInfo.infoVerify:", this.$refs.stage06.$refs.costInfo.infoVerify())
+          console.log("costInfo.collectInfo:", this.$refs.stage06.$refs.costInfo.collectInfo())
           break;
         case 7:
+          console.log("actionReason.infoVerify:", this.$refs.stage07.$refs.actionReason.infoVerify())
+          console.log("actionReason.collectInfo:", this.$refs.stage07.$refs.actionReason.collectInfo())
+          
+          console.log("summaryInfo.infoVerify:", this.$refs.stage07.$refs.summaryInfo.infoVerify())
+          console.log("summaryInfo.collectInfo:", this.$refs.stage07.$refs.summaryInfo.collectInfo())
+          
+          console.log("costInfo.infoVerify:", this.$refs.stage07.$refs.costInfo.infoVerify())
+          console.log("costInfo.collectInfo:", this.$refs.stage07.$refs.costInfo.collectInfo())
           break;
         case 8:
+          console.log("actionReason.infoVerify:", this.$refs.stage08.$refs.actionReason.infoVerify())
+          console.log("actionReason.collectInfo:", this.$refs.stage08.$refs.actionReason.collectInfo())
+          
+          console.log("winningBidding.infoVerify:", this.$refs.stage08.$refs.winningBidding.infoVerify())
+          console.log("winningBidding.collectInfo:", this.$refs.stage08.$refs.winningBidding.collectInfo())
+          
+          console.log("summaryInfo.infoVerify:", this.$refs.stage08.$refs.summaryInfo.infoVerify())
+          console.log("summaryInfo.collectInfo:", this.$refs.stage08.$refs.summaryInfo.collectInfo())
+          
+          console.log("costInfo.infoVerify:", this.$refs.stage06.$refs.costInfo.infoVerify())
+          console.log("costInfo.collectInfo:", this.$refs.stage06.$refs.costInfo.collectInfo())
+         
           break;
         case 9:
+          console.log("quotationInfo.infoVerify:", this.$refs.stage09.$refs.quotationInfo.infoVerify())
+          console.log("quotationInfo.collectInfo:", this.$refs.stage09.$refs.quotationInfo.collectInfo())
+          
+          console.log("actionReason.infoVerify:", this.$refs.stage09.$refs.actionReason.infoVerify())
+          console.log("actionReason.collectInfo:", this.$refs.stage09.$refs.actionReason.collectInfo())
+          
+          console.log("summaryInfo.infoVerify:", this.$refs.stage09.$refs.summaryInfo.infoVerify())
+          console.log("summaryInfo.collectInfo:", this.$refs.stage09.$refs.summaryInfo.collectInfo())
+             
+          console.log("signInfo.infoVerify:", this.$refs.stage09.$refs.signInfo.infoVerify())
+          console.log("signInfo.collectInfo:", this.$refs.stage09.$refs.signInfo.collectInfo())
+             
+          console.log("advancesInfo.infoVerify:", this.$refs.stage09.$refs.advancesInfo.infoVerify())
+          console.log("advancesInfo.collectInfo:", this.$refs.stage09.$refs.advancesInfo.collectInfo())
+
+          console.log("keyStandBy.infoVerify:", this.$refs.stage09.$refs.keyStandBy.infoVerify())
+          console.log("keyStandBy.collectInfo:", this.$refs.stage09.$refs.keyStandBy.collectInfo())
           break;
         case 11:
+          console.log("actionReason.infoVerify:", this.$refs.stage11.$refs.actionReason.infoVerify())
+          console.log("actionReason.collectInfo:", this.$refs.stage11.$refs.actionReason.collectInfo())
+          
+          console.log("summaryInfo.infoVerify:", this.$refs.stage11.$refs.summaryInfo.infoVerify())
+          console.log("summaryInfo.collectInfo:", this.$refs.stage11.$refs.summaryInfo.collectInfo())          
           break;
       }
     },

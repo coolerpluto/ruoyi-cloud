@@ -1,6 +1,6 @@
 <template>
   <div class="app-container" :style="{ pointerEvents: oppdata.action == 'V' ? 'none' : 'unset' }">
-    <h3>{{ stageTitle }}（必须勾选三项或以上）</h3>
+    <h3>{{ stageTitle }}</h3>
     <el-divider/>
     <el-form ref="actionReasonForm" :model="actionReasonForm" size="medium" label-width="220px">
       <el-row :gutter="15">
@@ -44,8 +44,7 @@ export default {
     }
   },
   data() {
-    return {
-      
+    return {      
       actionReasonForm: {
         reasons: {
           propertyVal:[]
@@ -63,7 +62,7 @@ export default {
   },
   created() {
     this.initReasonList();
-this.initActionReason();
+    this.initActionReason();
   },
   methods: {
     initReasonList() {
@@ -75,13 +74,13 @@ this.initActionReason();
     },
     changeReasonSelect(obj) {
       console.log(obj)
-      console.log(this.actionReasonForm)
+      //console.log(this.actionReasonForm)
     },
     initActionReason() {
       var _this = this;
       this.flag.actionReasonLoading = true;
       this.getProperties(function () {
-        console.log("actionReasonForm:",_this.actionReasonForm)
+        //console.log("actionReasonForm:",_this.actionReasonForm)
         _this.flag.actionReasonLoading = false;
       })
     },
@@ -120,6 +119,10 @@ this.initActionReason();
     // 提供本组件的数据校验
     infoVerify() {
       let flag = true
+      // if (this.actionReasonForm["reasons"].propertyVal.length<3){
+      //   this.flag.actionReasonVerify = true
+      //   flag = false
+      // }
       this.$refs["actionReasonForm"].validate(valid => {
         if (!valid) {
           flag = false
@@ -140,5 +143,9 @@ this.initActionReason();
 </script>
 
 <style scoped>
-
+#actionReasonVerify{
+  color: #ff4949;
+    font-size: 12px;
+    line-height: 3;
+}
 </style>
