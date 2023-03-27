@@ -394,6 +394,23 @@ export default {
           console.log("keyStandBy.collectInfo:", this.$refs.stage04.$refs.keyStandBy.collectInfo())
           break;
         case 5:
+          console.log("quotationInfo.infoVerify:", this.$refs.stage05.$refs.quotationInfo.infoVerify())
+          console.log("quotationInfo.collectInfo:", this.$refs.stage05.$refs.quotationInfo.collectInfo())
+          
+          console.log("actionReason.infoVerify:", this.$refs.stage05.$refs.actionReason.infoVerify())
+          console.log("actionReason.collectInfo:", this.$refs.stage05.$refs.actionReason.collectInfo())
+          
+          console.log("summaryInfo.infoVerify:", this.$refs.stage05.$refs.summaryInfo.infoVerify())
+          console.log("summaryInfo.collectInfo:", this.$refs.stage05.$refs.summaryInfo.collectInfo())
+             
+          console.log("signInfo.infoVerify:", this.$refs.stage05.$refs.signInfo.infoVerify())
+          console.log("signInfo.collectInfo:", this.$refs.stage05.$refs.signInfo.collectInfo())
+             
+          console.log("advancesInfo.infoVerify:", this.$refs.stage05.$refs.advancesInfo.infoVerify())
+          console.log("advancesInfo.collectInfo:", this.$refs.stage05.$refs.advancesInfo.collectInfo())
+
+          console.log("keyStandBy.infoVerify:", this.$refs.stage05.$refs.keyStandBy.infoVerify())
+          console.log("keyStandBy.collectInfo:", this.$refs.stage05.$refs.keyStandBy.collectInfo())
           break;
         case 6:
           break;

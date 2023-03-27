@@ -117,7 +117,7 @@ export default {
       this.flag.biddingInfoLoading = true;
       this.getProperties(function(){
         _this.flag.biddingInfoLoading = false;
-        console.log("this.biddingInfoForm:",_this.biddingInfoForm);
+        //console.log("this.biddingInfoForm:",_this.biddingInfoForm);
       })
     },
     // 商机属性查询

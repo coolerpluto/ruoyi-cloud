@@ -1,11 +1,11 @@
 <template>
   <div class="app-container">
-    <quotation-info :stage-show="5"></quotation-info>
-    <action-reason :stage-show="5"></action-reason>
-    <summary-info :stage-show="5" stage-title="项目经验总结"></summary-info>
-    <sign-info></sign-info>
-    <advances-info :stage-show="5"></advances-info>
-    <key-stand-by :stage-show="5"></key-stand-by>
+    <quotation-info :oppdata="oppdata" ref="quotationInfo" :stage-show="5"></quotation-info>
+    <action-reason :oppdata="oppdata" ref="actionReason" :stage-show="5"></action-reason>
+    <summary-info ref="summaryInfo" :oppdata="oppdata" :stage-show="5" stage-title="项目经验总结"></summary-info>
+    <sign-info :oppdata="oppdata" ref="signInfo" :stage-show="5"></sign-info>
+    <advances-info :oppdata="oppdata" ref="advancesInfo" :stage-show="5"></advances-info>
+    <key-stand-by :oppdata="oppdata" ref="keyStandBy"  :stage-show="5"></key-stand-by>
   </div>
 </template>
 
@@ -27,14 +27,19 @@ export default {
 
     AdvancesInfo,
     keyStandBy,
-  },created() {
-    console.log("l05-created")
+  },
+  props: {
+    oppdata: {
+      type: Object,
+      default() {
+        return {}
+      }
+    }
+  },
+  created() {
     this.initL05();
   },methods:{
     initL05(){
-      this.$parent.getOppQuotationInfo();
-      this.$parent.getOppAdvancesInfo();
-      this.$parent.getOppSupportInfo();
     }
   }
 }
