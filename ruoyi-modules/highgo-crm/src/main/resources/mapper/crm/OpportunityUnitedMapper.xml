@@ -188,7 +188,7 @@
         order by create_time desc,update_time desc
     </select>
    <select id="queryCompetitorByOppCode" parameterType="String" resultMap="com.highgo.crm.mapper.OpportunityCompetitorMapper.OpportunityCompetitorResult">
-       select id, opportunity_code, competitor_id, competitor_name, product, unit_price, advantage, has_same_advantage, memo, tender_price, create_time, update_time from t_opportunity_competitor
+       select id, opportunity_code, competitor_id, competitor_name, product, unit_price, advantage, has_same_advantage, memo, tender_price, tender_total_price, create_time, update_time from t_opportunity_competitor
         where opportunity_code = #{oppCode}
         order by create_time desc,update_time desc
     </select>

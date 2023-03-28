@@ -53,8 +53,20 @@ public class OpportunityCompetitor extends BaseEntity
     /** 投标价格 */
     @Excel(name = "投标价格")
     private BigDecimal tenderPrice;
+    @Excel(name = "投标总价")
+    private BigDecimal tenderTotalPrice;
 
-    public void setId(Long id) 
+    public BigDecimal getTenderTotalPrice()
+    {
+        return tenderTotalPrice;
+    }
+
+    public void setTenderTotalPrice(BigDecimal tenderTotalPrice)
+    {
+        this.tenderTotalPrice = tenderTotalPrice;
+    }
+
+    public void setId(Long id)
     {
         this.id = id;
     }
