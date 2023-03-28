@@ -171,6 +171,8 @@
         <result property="currentAdaptedProgress"    column="current_adapted_progress"    />
         <result property="operationalId"    column="operational_id"    />
         <result property="operationalName"    column="operational_name"    />
+        <result property="operationalTender"    column="operational_tender"    />
+        <result property="operationalSupportDb"    column="operational_support_db"    />
         <result property="isvId"    column="isv_id"    />
         <result property="isv"    column="isv"    />
         <result property="category"    column="category"    />

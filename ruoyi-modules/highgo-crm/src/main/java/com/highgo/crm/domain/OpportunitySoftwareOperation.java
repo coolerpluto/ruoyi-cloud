@@ -66,6 +66,10 @@ public class OpportunitySoftwareOperation extends BaseEntity
     @Excel(name = "运作主体名字")
     private String operationalName;
 
+    private String operationalTender;
+
+    private String operationalSupportDb;
+
     /**
      * 系统开发商ID
      */
@@ -80,6 +84,26 @@ public class OpportunitySoftwareOperation extends BaseEntity
      * 软件分类
      */
     private String category;
+
+    public String getOperationalTender()
+    {
+        return operationalTender;
+    }
+
+    public void setOperationalTender(String operationalTender)
+    {
+        this.operationalTender = operationalTender;
+    }
+
+    public String getOperationalSupportDb()
+    {
+        return operationalSupportDb;
+    }
+
+    public void setOperationalSupportDb(String operationalSupportDb)
+    {
+        this.operationalSupportDb = operationalSupportDb;
+    }
 
     public String getIsvId()
     {
