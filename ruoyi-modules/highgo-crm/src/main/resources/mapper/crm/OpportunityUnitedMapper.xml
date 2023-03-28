@@ -161,13 +161,35 @@
         <include refid="selectOpportunityVo"/>
         where code = #{code}
     </select>
-    <sql id="selectOpportunitySoftwareOperationVo">
-        select id, opportunity_code, application_id, application_name, isv_need_adapted, target_adapted_progress, current_adapted_progress, operational_id, operational_name, create_by, create_time, update_by, update_time, remark from t_opportunity_software_operation
-    </sql>
+    <resultMap type="OpportunitySoftwareOperation" id="OpportunitySoftwareOperationResult">
+        <result property="id"    column="id"    />
+        <result property="opportunityCode"    column="opportunity_code"    />
+        <result property="applicationId"    column="application_id"    />
+        <result property="applicationName"    column="application_name"    />
+        <result property="isvNeedAdapted"    column="isv_need_adapted"    />
+        <result property="targetAdaptedProgress"    column="target_adapted_progress"    />
+        <result property="currentAdaptedProgress"    column="current_adapted_progress"    />
+        <result property="operationalId"    column="operational_id"    />
+        <result property="operationalName"    column="operational_name"    />
+        <result property="isvId"    column="isv_id"    />
+        <result property="isv"    column="isv"    />
+        <result property="category"    column="category"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
     <select id="querySoftwareOperationByCode" parameterType="String"
-            resultMap="com.highgo.crm.mapper.OpportunitySoftwareOperationMapper.OpportunitySoftwareOperationResult">
-        <include refid="selectOpportunitySoftwareOperationVo"/>
-        where opportunity_code = #{code}
+            resultMap="OpportunitySoftwareOperationResult">
+        select tc.company_name isv, tc.id isv_id, ta.category, toso.*
+        from t_opportunity_software_operation toso,
+             t_application ta,
+             t_company tc
+        where toso.application_id = ta.id
+          and ta.isv = tc.id
+          and tc.business_scope = 'ISV'
+          and toso.opportunity_code = #{code}
     </select>
     <select id="queryCompanyByOppCode" parameterType="String" resultMap="com.highgo.crm.mapper.CompanyMapper.CompanyResult">
         select tc.* from t_company tc ,t_opportunity to2
