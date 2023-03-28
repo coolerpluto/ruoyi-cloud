@@ -99,11 +99,16 @@ public class OpportunityUnitedController extends BaseController
     }
     @Autowired
     private IOpportunityPropertyService opportunityPropertyService;
-    @GetMapping("/getPropertiesMap")
-    public AjaxResult getPropertiesMap(OpportunityUnited opportunity){
+    @PostMapping("/getPropertiesMap")
+    public AjaxResult getPropertiesMap(@RequestBody OpportunityUnited opportunity){
         Map<String, Object> res = new HashMap<>();
         OpportunityProperty opportunityProperty = new OpportunityProperty();
         opportunityProperty.setOpportunityCode(opportunity.getCode());
+        opportunityProperty.setParams(opportunity.getParams());
+        List<String> propertyKeysReq = (List<String>) opportunity.getParams().get("propertyKeys");
+        for (String propertyKey:propertyKeysReq){
+            res.put(propertyKey,new OpportunityProperty());
+        }
         List<OpportunityProperty> properties = opportunityPropertyService.selectOpportunityPropertyList(opportunityProperty);
         for (OpportunityProperty property:properties)
         {

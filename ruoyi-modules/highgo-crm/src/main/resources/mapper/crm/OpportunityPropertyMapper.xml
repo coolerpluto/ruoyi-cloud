@@ -25,6 +25,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="propertyKey != null  and propertyKey != ''"> and property_key like concat('%', #{propertyKey}, '%')</if>
             <if test="opportunityCode != null  and opportunityCode != ''"> and opportunity_code like concat('%', #{opportunityCode}, '%')</if>
             <if test="model != null  and model != ''"> and model = #{model}</if>
+            <if test="params.propertyKeys != null and params.propertyKeys.size() >0 ">
+                and property_key in
+                <foreach collection="params.propertyKeys" item="key" index="index" separator="," open="(" close=")">
+                    #{key}
+                </foreach>
+             </if>
+            <if test="params.model != null and params.model!=''"> and model = #{params.model} </if>
         </where>
     </select>
     
