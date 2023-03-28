@@ -5,26 +5,19 @@
     <el-form ref="biddingInfoForm" v-loading="flag.biddingInfoLoading" :rules="rules" :model="biddingInfoForm"
       size="medium" label-width="220px">
       <div v-if="[4].includes(stageShow)">
-        <el-button style="float:right;" type="info" icon="el-icon-plus">添加新的对手</el-button>
+        <!-- <el-button style="float:right;" type="info" icon="el-icon-plus">添加新的对手</el-button> -->
         <el-table :data="biddingInfoForm.biddingInfo">
-          <el-table-column label="对应系统" align="center" prop="stage" :show-overflow-tooltip="true" />
-          <el-table-column label="厂商名称" align="center" prop="stage" :show-overflow-tooltip="true" />
-          <el-table-column label="是否参与投标" align="center" prop="stage" :show-overflow-tooltip="true" />
-          <el-table-column label="支持的数据库厂商" align="center" prop="stage" :show-overflow-tooltip="true" />
-          <el-table-column align="center" prop="stage" :show-overflow-tooltip="true">
-            <template slot="header" slot-scope="scope">
-              <label>本次投标总价(元)<br><span style="color: red;">(中标结论重要依据)</span></label>
-            </template>
+          <el-table-column label="对应系统" align="center" prop="applicationName" :show-overflow-tooltip="true" />
+          <el-table-column label="厂商名称 / 运作主体" align="center" prop="operationalName" :show-overflow-tooltip="true">
+            <template slot-scope="scope">{{ scope.row.isv || '未选择' }} / {{ scope.row.operationalName || '未选择'
+            }}</template>
           </el-table-column>
-          <el-table-column align="center" prop="stage" :show-overflow-tooltip="true">
-            <template slot="header" slot-scope="scope">
-              <label>备注<br><span style="color: red;">(销售人员对该竞争对手的其他描述)</span></label>
-            </template>
-          </el-table-column>
+          <el-table-column label="是否参与投标" align="center" prop="operationalTender" :show-overflow-tooltip="true" />
+          <el-table-column label="支持的数据库厂商" align="center" prop="operationalSupportDb" :show-overflow-tooltip="true" />
           <el-table-column label="操作" align="center">
             <template slot-scope="scope">
-              <el-button size="mini" type="text" icon="el-icon-edit">修改</el-button>
-              <el-button size="mini" type="text" icon="el-icon-delete">删除</el-button>
+              <el-button size="mini" type="text" @click="editApplication(scope.row)" icon="el-icon-edit">修改</el-button>
+              <!-- <el-button size="mini" type="text" icon="el-icon-delete">删除</el-button> -->
             </template>
           </el-table-column>
         </el-table>
@@ -52,13 +45,25 @@
         </el-row>
       </div>
     </el-form>
-
+    <!-- 添加或修改信息记录对话框 -->
+    <el-dialog :title="biddingInfoDialog.title" :visible.sync="biddingInfoDialog.open" width="1000px" append-to-body>
+      <el-form ref="biddingInfoDialog.form" :model="biddingInfoDialog.form" :rules="biddingInfoDialog.rules"
+        label-width="100px">
+        <el-row>
+          <el-col :span="8"></el-col>
+        </el-row>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitDialogForm">确 定</el-button>
+        <el-button @click="cancelDialog">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { mergeRecursive } from "@/utils/ruoyi";
-import { getPropertiesMap } from "@/api/crm/oppUnitedInfo"
+import { getPropertiesMap, getOppBaseInfo } from "@/api/crm/oppUnitedInfo"
 
 export default {
   name: "biddingInfo",
@@ -84,7 +89,7 @@ export default {
         "knowExpertList", "supportByExpert"
       ],
       biddingInfoForm: {
-        biddingInfo:[],
+        biddingInfo: [],
         "knowExpertList": {}, "supportByExpert": {}
       },
       biddingInfoModified: {},
@@ -106,19 +111,48 @@ export default {
           ],
         },
       },
+      //组件弹框承载
+      biddingInfoDialog: {
+        // 弹出层标题
+        title: "",
+        // 是否显示弹出层
+        open: false,
+        form: {},
+        rules: {},
+      },
     }
   },
-  created(){
+  created() {
     this.initBiddingInfo();
-    // TODO 待列表数据完善
   },
-  methods:{
-    initBiddingInfo(){
+  methods: {
+    initBiddingInfo() {
       var _this = this;
       this.flag.biddingInfoLoading = true;
-      this.getProperties(function(){
-        _this.flag.biddingInfoLoading = false;
-        //console.log("this.biddingInfoForm:",_this.biddingInfoForm);
+      this.getOppBaseInfo(function () {
+        _this.getProperties(function () {
+          _this.flag.biddingInfoLoading = false;
+          //console.log("this.biddingInfoForm:", _this.biddingInfoForm);
+        })
+      })
+    },
+    //获取最新显示信息
+    getOppBaseInfo(func) {
+      if (!this.oppdata.opportunityCode || this.oppdata.opportunityCode === '0') {
+        if (typeof func == 'function') {
+          func();
+        }
+        return
+      }
+      getOppBaseInfo({ code: this.oppdata.opportunityCode }).then(response => {
+        if (response.code !== 200) {
+          this.$modal.msgError(response.msg);
+          return
+        }
+        this.biddingInfoForm.biddingInfo = response.data ? response.data.operations : [];
+        if (typeof func == 'function') {
+          func();
+        }
       })
     },
     // 商机属性查询
@@ -151,6 +185,20 @@ export default {
           func();
         }
       })
+    },
+    editApplication(row) {
+      this.biddingInfoDialog.open = true;
+      this.biddingInfoDialog.title = "修改投标分析信息";
+    },
+    openDialog() {
+      this.biddingInfoDialog.open = true;
+      this.biddingInfoDialog.title = "添加投标分析信息";
+    },
+    submitDialogForm() {
+      this.biddingInfoDialog.open = false;
+    },
+    cancelDialog() {
+      this.biddingInfoDialog.open = false;
     },
     // 提供本组件的数据校验
     infoVerify() {

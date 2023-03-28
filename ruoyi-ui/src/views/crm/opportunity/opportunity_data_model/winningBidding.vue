@@ -8,20 +8,26 @@
         <el-col :span="8">
           <el-form-item label="中标公司名称" prop="winBiddingCompanyName.propertyVal">
             <el-select v-model="winningBiddingForm.winBiddingCompanyName.propertyVal" filterable placeholder="请选择中标公司"
-              clearable>
-              <el-option v-for="item in dict.type.crm_fund_source_type" :key="item.value" :label="item.label"
-                :value="item.value"></el-option>
+              @change="changeWinBidding" @visible-change="selectInit">
+              <el-option v-for="item in companyOptions" :key="item.id" :label="item.competitorName"
+                :value="item.competitorId"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="中标公司报价" prop="winBiddingTenderPrice.propertyVal">
-            <label>{{ winningBiddingForm.winBiddingTenderPrice.propertyVal }}</label>
+            <el-input v-model="winningBiddingForm.winBiddingTenderPrice.propertyVal" type="number"
+              placeholder="请输入系统项目总预算金额">
+            </el-input>
+            {{ convertCurrencyDX(winningBiddingForm.winBiddingTenderPrice.propertyVal || 0) }}
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="中标公司报价总价" prop="winBiddingTotalPrice.propertyVal">
-            <label>{{ winningBiddingForm.winBiddingTotalPrice.propertyVal }}</label>
+            <el-input v-model="winningBiddingForm.winBiddingTotalPrice.propertyVal" type="number"
+              placeholder="请输入系统项目总预算金额">
+            </el-input>
+            {{ convertCurrencyDX(winningBiddingForm.winBiddingTotalPrice.propertyVal || 0) }}
           </el-form-item>
         </el-col>
       </el-row>
@@ -31,6 +37,7 @@
 
 <script>
 import { getPropertiesMap } from "@/api/crm/oppUnitedInfo"
+import { mergeRecursive } from "@/utils/ruoyi";
 
 export default {
   name: "winningBidding",
@@ -91,7 +98,6 @@ export default {
         //console.log("winningBiddingForm:",_this.winningBiddingForm)
         _this.flag.winningBiddingLoading = false;
       })
-      // TODO 还需要获得竞争对手公司的列表 
     },
     // 商机属性查询
     getProperties(func) {
@@ -123,6 +129,19 @@ export default {
           func();
         }
       })
+    },
+    changeWinBidding(competitorId) {
+      debugger
+      const arr1 = this.companyOptions.find(item => item.competitorId == competitorId)
+      //console.log(arr1)
+      this.winningBiddingForm.winBiddingTenderPrice.propertyVal = arr1.tenderPrice;
+      this.winningBiddingForm.winBiddingTotalPrice.propertyVal = arr1.tenderTotalPrice;
+    },
+    selectInit(action) {
+      if (!action) {
+        return
+      }
+      this.companyOptions = [{ id: 0, competitorName: "我司", competitorId: 0 }].concat(this.$parent.$refs.competitorInfo.competitorInfoForm.competitorInfo)
     },
     // 提供本组件的数据校验
     infoVerify() {
