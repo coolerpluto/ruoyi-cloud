@@ -12,7 +12,11 @@
           </template>
         </el-table-column>
         <el-table-column label="支持人员" align="center" prop="supportName" :show-overflow-tooltip="true" />
-        <el-table-column label="介入阶段" align="center" prop="opportunityStage" :show-overflow-tooltip="true" />
+        <el-table-column label="介入阶段" align="center" prop="opportunityStage" :show-overflow-tooltip="true" >
+          <template slot-scope="scope">
+            <dict-tag :options="dict.type.crm_opportunity_status" :value="scope.row.opportunityStage"/>
+          </template>
+        </el-table-column>
         <el-table-column label="填报人" align="center" prop="createBy" :show-overflow-tooltip="true" />
         <el-table-column label="填报时间" align="center" prop="createTime" :show-overflow-tooltip="true" />
         <el-table-column label="操作" align="center">
@@ -44,6 +48,7 @@ import { getOppSupportInfo } from "@/api/crm/oppUnitedInfo"
 
 export default {
   name: "keyStandBy",
+  dicts:['crm_opportunity_status'],
   props: {
     stageShow: {
       type: Number,

@@ -11,7 +11,11 @@
             <label placeholder="自动生产商机编码">进展内容<span style="color: red;">(必须注明和我方业务相关瓶颈、建议和意见)</span></label>
           </template>
         </el-table-column>
-        <el-table-column label="进展阶段" align="center" prop="stage" :show-overflow-tooltip="true" />
+        <el-table-column label="进展阶段" align="center" prop="stage" :show-overflow-tooltip="true" >
+          <template slot-scope="scope">
+            <dict-tag :options="dict.type.crm_opportunity_status" :value="scope.row.stage"/>
+          </template>
+        </el-table-column>
         <el-table-column label="进展日期" align="center" prop="advancesDate" :show-overflow-tooltip="true" />
         <el-table-column label="填报人" align="center" prop="creator" :show-overflow-tooltip="true" />
         <el-table-column label="填报时间" align="center" prop="createTime" :show-overflow-tooltip="true" />
@@ -43,6 +47,7 @@
 import { getOppAdvancesInfo } from "@/api/crm/oppUnitedInfo"
 export default {
   name: "advancesInfo",
+  dicts:["crm_opportunity_status"],
   props: {
     stageShow: {
       type: Number,

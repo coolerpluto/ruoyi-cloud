@@ -10,9 +10,13 @@
         <el-table-column label="单价/报价" align="center" :show-overflow-tooltip="true">
           <template slot-scope="scope">{{ scope.row.unitPrice }} / {{ scope.row.tenderPrice }}</template>
         </el-table-column>
-        <el-table-column label="对方优势" align="center" prop="advantage" :show-overflow-tooltip="true"/>
         <el-table-column label="投标总价" align="center" prop="tenderTotalPrice" :show-overflow-tooltip="true"/>
-        <el-table-column label="我方具备情况" align="center" prop="hasSameAdvantage" :show-overflow-tooltip="true"/>
+        <el-table-column label="对方优势" align="center" prop="advantage" :show-overflow-tooltip="true"/>
+        <el-table-column label="我方是否具备" align="center" prop="hasSameAdvantage" :show-overflow-tooltip="true">
+          <template slot-scope="scope">
+            <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.hasSameAdvantage"/>
+          </template>
+        </el-table-column>
         <el-table-column align="center" prop="memo" :show-overflow-tooltip="true">
           <template slot="header" slot-scope="scope">
             <label>备注<br><span style="color: red;">(销售人员对该竞争对手的其他描述)</span></label>
@@ -46,6 +50,7 @@
 import { getOppCompetitorInfo } from "@/api/crm/oppUnitedInfo"
 export default {
   name: "competitorInfo",
+  dicts:['sys_yes_no'],
   props: {
     stageShow: {
       type: Number,

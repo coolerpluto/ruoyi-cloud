@@ -13,9 +13,11 @@
       <el-row :gutter="15" v-if="signInfoForm.signStatus.propertyVal == 'Y'">
         <el-col :span="8">
           <el-form-item label="签约渠道" prop="signChannel.propertyVal">
-            <el-select v-model="signInfoForm.signChannel.propertyVal" filterable placeholder="请选择中标公司" clearable>
-              <el-option v-for="item in dict.type.crm_fund_source_type" :key="item.value" :label="item.label"
-                         :value="item.value"></el-option>
+            <el-select v-model="signInfoForm.signChannel.propertyVal" filterable placeholder="请选择签约渠道" clearable>
+              <el-option v-for="item in signChannelList" :key="item.id" :label="item.operationalName" :value="item.operationalId+''" width="300px">
+                <span style="float: left">{{ item.operationalName }}</span>
+                <span style="float: right; color: #8492a6; font-size: 13px">isv:{{ item.isv }}</span>
+              </el-option>
             </el-select>
           </el-form-item>
         </el-col>
@@ -44,11 +46,10 @@
 </template>
 
 <script>
-import { getPropertiesMap } from "@/api/crm/oppUnitedInfo"
+import { getPropertiesMap,getOppBaseInfo } from "@/api/crm/oppUnitedInfo"
 
 export default {
   name: "signInfo",
-  dicts: ['crm_fund_source_type'],
   props: {
     oppdata: {
       type: Object,
@@ -106,9 +107,30 @@ export default {
     initSignInfo() {
       var _this = this;
       this.flag.signInfoLoading = true;
-      this.getProperties(function () {
-        //console.log("signInfoForm:",_this.signInfoForm)
-        _this.flag.signInfoLoading = false;
+      this.getOperationInfo(function(){
+        _this.getProperties(function () {
+          //console.log("signInfoForm:",_this.signInfoForm)
+          _this.flag.signInfoLoading = false;
+        })
+      });      
+    },
+    //获取运营最新信息
+    getOperationInfo(func) {
+      if (!this.oppdata.opportunityCode || this.oppdata.opportunityCode === '0') {
+        if (typeof func == 'function') {
+          func();
+        }
+        return
+      }
+      getOppBaseInfo({ code: this.oppdata.opportunityCode }).then(response => {
+        if (response.code !== 200) {
+          this.$modal.msgError(response.msg);
+          return
+        }
+        this.signChannelList = response.data ? response.data.operations : [];
+        if (typeof func == 'function') {
+          func();
+        }
       })
     },
     // 商机属性查询
@@ -145,6 +167,7 @@ export default {
     // 提供本组件的数据校验
     infoVerify() {
       let flag = true
+      console.log("5",this.signInfoForm)
       this.$refs["signInfoForm"].validate(valid => {
         if (!valid) {
           flag = false

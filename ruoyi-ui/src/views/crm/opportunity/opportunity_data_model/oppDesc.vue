@@ -113,7 +113,7 @@
           <el-col :span="8">
             <el-form-item label="预计招标类型" prop="preInviteTenderType.propertyVal">
               <el-select v-model="oppDescForm.preInviteTenderType.propertyVal" filterable placeholder="请选择招标类型" clearable>
-                <el-option v-for="item in dict.type.crm_fund_source_type" :key="item.value" :label="item.label"
+                <el-option v-for="item in dict.type.crm_opportunity_bidding_type" :key="item.value" :label="item.label"
                            :value="item.value"></el-option>
               </el-select>
             </el-form-item>
@@ -188,7 +188,7 @@ import {getPropertiesMap}  from "@/api/crm/oppUnitedInfo"
 
 export default {
   name: "oppDesc",
-  dicts: ['crm_fund_source_type','crm_opportunity_main_product'],
+  dicts: ['crm_fund_source_type','crm_opportunity_main_product','crm_opportunity_bidding_type'],
   props: {
     stageShow: {
       type: Number,

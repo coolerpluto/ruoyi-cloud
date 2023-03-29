@@ -11,7 +11,11 @@
         <el-table-column label="数量" align="center" prop="quotationMap.productCount" :show-overflow-tooltip="true" />
         <el-table-column label="单价" align="center" prop="quotationMap.productPrice" :show-overflow-tooltip="true" />
         <el-table-column label="总价" align="center" prop="quotationMap.productTotalPrice" :show-overflow-tooltip="true" />
-        <el-table-column label="报价阶段" align="center" prop="quotationMap.quotationStage" :show-overflow-tooltip="true" />
+        <el-table-column label="报价阶段" align="center" prop="quotationMap.quotationStage" :show-overflow-tooltip="true" >
+          <template slot-scope="scope">
+            <dict-tag :options="dict.type.crm_opportunity_status" :value="scope.row.quotationMap.quotationStage"/>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button size="mini" type="text" @click="editQuotation(scope.row)" icon="el-icon-edit">修改</el-button>
@@ -41,6 +45,7 @@
 import { getOppQuotationInfo } from "@/api/crm/oppUnitedInfo"
 export default {
   name: "quotationInfo",
+  dicts:['crm_opportunity_status'],
   props: {
     stageShow: {
       type: Number,
