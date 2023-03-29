@@ -12,7 +12,11 @@
             <template slot-scope="scope">{{ scope.row.isv || '未选择' }} / {{ scope.row.operationalName || '未选择'
             }}</template>
           </el-table-column>
-          <el-table-column label="是否参与投标" align="center" prop="operationalTender" :show-overflow-tooltip="true" />
+          <el-table-column label="是否参与投标" align="center" prop="operationalTender" :show-overflow-tooltip="true" >
+            <template slot-scope="scope">
+              <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.operationalTender"/>
+            </template>
+          </el-table-column>
           <el-table-column label="支持的数据库厂商" align="center" prop="operationalSupportDb" :show-overflow-tooltip="true" />
           <el-table-column label="操作" align="center">
             <template slot-scope="scope">
@@ -67,6 +71,7 @@ import { getPropertiesMap, getOppBaseInfo } from "@/api/crm/oppUnitedInfo"
 
 export default {
   name: "biddingInfo",
+  dicts:['sys_yes_no'],
   props: {
     stageShow: {
       type: Number,

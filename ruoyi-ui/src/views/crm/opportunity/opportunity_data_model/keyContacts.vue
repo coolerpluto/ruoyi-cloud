@@ -6,13 +6,21 @@
       <el-button style="float:right;" type="info" icon="el-icon-plus" @click="openDialog">添加新联系人</el-button>
       <el-table :data="keyContactForm.keyContacts">
         <el-table-column label="姓名" align="center" prop="name" :show-overflow-tooltip="true"/>
-        <el-table-column label="性别" align="center" prop="sex" :show-overflow-tooltip="true"/>
+        <el-table-column label="性别" align="center" prop="sex" :show-overflow-tooltip="true">
+          <template slot-scope="scope">
+              <dict-tag :options="dict.type.sys_user_sex" :value="scope.row.sex"/>
+            </template>
+        </el-table-column>
         <el-table-column label="单位名称" align="center" prop="company" :show-overflow-tooltip="true"/>
-        <el-table-column label="单位性质" align="center" prop="companyType" :show-overflow-tooltip="true"/>
-        <el-table-column label="人员角色" align="center" prop="role" :show-overflow-tooltip="true"/>
-        <el-table-column label="人员职务" align="center" prop="post" :show-overflow-tooltip="true"/>
-        <el-table-column label="所在部门" align="center" prop="dept" :show-overflow-tooltip="true"/>
-        <el-table-column align="center" prop="pri_phone" :show-overflow-tooltip="true">
+        <el-table-column label="单位性质" align="center" prop="companyProperty" :show-overflow-tooltip="true">
+          <template slot-scope="scope">
+              <dict-tag :options="dict.type.crm_company_properties_type" :value="scope.row.companyProperty"/>
+            </template>
+        </el-table-column>
+        <el-table-column label="人员角色" align="center" prop="roleInCompany" :show-overflow-tooltip="true"/>
+        <el-table-column label="人员职务" align="center" prop="postInCompany" :show-overflow-tooltip="true"/>
+        <el-table-column label="所在部门" align="center" prop="deptInCompany" :show-overflow-tooltip="true"/>
+        <el-table-column align="center" prop="priPhone" :show-overflow-tooltip="true">
           <template slot="header" slot-scope="scope">
             <label>联系方式<br><span style="color: red;">(首选手机号)</span></label>
           </template>
@@ -23,8 +31,12 @@
           </template>
         </el-table-column>
         <el-table-column label="关系程度" align="center" prop="relationship" :show-overflow-tooltip="true"/>
-        <el-table-column label="关键人意向厂商" align="center" prop="intention" :show-overflow-tooltip="true"/>
-        <el-table-column label="对方是否会面对手" align="center" prop="sideVisited" :show-overflow-tooltip="true"/>
+        <el-table-column label="意向厂商" align="center" prop="intention" :show-overflow-tooltip="true"/>
+        <el-table-column label="是否会面对手" align="center" prop="sideVisited" :show-overflow-tooltip="true">
+          <template slot-scope="scope">
+              <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.sideVisited"/>
+            </template>
+        </el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button size="mini" type="text" icon="el-icon-edit" @click="editKeyContact(scope.row)">修改</el-button>
@@ -55,6 +67,9 @@ import {
 }  from "@/api/crm/oppUnitedInfo"
 export default {
   name: "KeyContacts",
+  dicts: [
+    'sys_yes_no','sys_user_sex','crm_company_properties_type'
+  ],
   props: {
     stageShow: {
       type: Number,

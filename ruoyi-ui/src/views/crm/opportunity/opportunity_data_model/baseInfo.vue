@@ -26,9 +26,18 @@
               <el-table-column label="客户系统名称" align="center" fixed prop="applicationName" :show-overflow-tooltip="true" />
               <el-table-column label="系统开发商" align="center" fixed prop="isv" :show-overflow-tooltip="true" />
               <el-table-column label="适配进度" align="center" fixed prop="currentAdaptedProgress"
-                :show-overflow-tooltip="true" />
+                :show-overflow-tooltip="true" >
+                <template slot-scope="scope">
+                <dict-tag :options="dict.type.sys_work_progress" :value="scope.row.currentAdaptedProgress"/>
+              </template>
+              </el-table-column>
+
               <el-table-column label="招标前必须完成度" align="center" fixed prop="targetAdaptedProgress"
-                :show-overflow-tooltip="true" />
+                :show-overflow-tooltip="true" >
+                <template slot-scope="scope">
+                  <dict-tag :options="dict.type.sys_work_progress" :value="scope.row.targetAdaptedProgress"/>
+                </template>
+              </el-table-column>
               <el-table-column label="软件分类" align="center" fixed prop="category" :show-overflow-tooltip="true" />
               <el-table-column label="项目运作主体" align="center" fixed prop="operationalName" :show-overflow-tooltip="true" />
               <el-table-column label="操作" align="center" fixed>
@@ -66,7 +75,7 @@ import {
 } from "@/api/crm/oppUnitedInfo"
 export default {
   name: "baseInfo",
-  components: {},
+  dicts:['sys_work_progress'],
   props: {
     oppdata: {
       type: Object,

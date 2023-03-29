@@ -84,17 +84,17 @@
       </el-table-column>
       <el-table-column label="归属者" align="center" prop="ownerName" :show-overflow-tooltip="true"
                        v-if="columns[4].visible"/>
-      <el-table-column label="投标时间" align="center" prop="tenderTime" value-format="yyyy-MM-dd" :show-overflow-tooltip="true"
+      <el-table-column label="投标时间" align="center" prop="preTenderDate" value-format="yyyy-MM-dd" :show-overflow-tooltip="true"
                        v-if="columns[5].visible"/>
-      <el-table-column label="预签单时间" align="center" prop="preSignedTime" :show-overflow-tooltip="true"
+      <el-table-column label="预签单时间" align="center" prop="preSignDate" :show-overflow-tooltip="true"
                        v-if="columns[6].visible"/>
-      <el-table-column label="预合同金额(元)" align="center" prop="preContractAmount" :show-overflow-tooltip="true"
+      <el-table-column label="预合同金额(元)" align="center" prop="preContractVal" :show-overflow-tooltip="true"
                        v-if="columns[7].visible"/>
       <el-table-column label="创建时间" align="center" prop="createTime" :show-overflow-tooltip="true"
                        v-if="columns[8].visible"/>
       <el-table-column label="更新时间" align="center" prop="updateTime" :show-overflow-tooltip="true"
                        v-if="columns[9].visible"/>
-      <el-table-column label="操作选项" align="center" fixed="right" width="220" class-name="small-padding fixed-width">
+      <el-table-column label="操作选项" align="center" fixed="right" width="260" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button size="mini" type="text" icon="el-icon-zoom-in" @click="handleView(scope.row)">
             查看
