@@ -39,16 +39,16 @@ public class OpportunityUnited  extends BaseEntity
      * 投标时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date tenderTime;
+    private Date preTenderDate;
     /**
      * 预签单时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date preSignedTime;
+    private Date preSignDate;
     /**
      * 预合同金额
      */
-    private BigDecimal preContractAmount;
+    private BigDecimal preContractVal;
 
     // 下面未商机附属表信息
     /**
@@ -85,34 +85,34 @@ public class OpportunityUnited  extends BaseEntity
      */
     private List<OpportunityStageChangeHis> stageChangeHis;
 
-    public Date getTenderTime()
+    public Date getPreTenderDate()
     {
-        return tenderTime;
+        return preTenderDate;
     }
 
-    public void setTenderTime(Date tenderTime)
+    public void setPreTenderDate(Date preTenderDate)
     {
-        this.tenderTime = tenderTime;
+        this.preTenderDate = preTenderDate;
     }
 
-    public Date getPreSignedTime()
+    public Date getPreSignDate()
     {
-        return preSignedTime;
+        return preSignDate;
     }
 
-    public void setPreSignedTime(Date preSignedTime)
+    public void setPreSignDate(Date preSignDate)
     {
-        this.preSignedTime = preSignedTime;
+        this.preSignDate = preSignDate;
     }
 
-    public BigDecimal getPreContractAmount()
+    public BigDecimal getPreContractVal()
     {
-        return preContractAmount;
+        return preContractVal;
     }
 
-    public void setPreContractAmount(BigDecimal preContractAmount)
+    public void setPreContractVal(BigDecimal preContractVal)
     {
-        this.preContractAmount = preContractAmount;
+        this.preContractVal = preContractVal;
     }
 
     public String getCurrentStage()

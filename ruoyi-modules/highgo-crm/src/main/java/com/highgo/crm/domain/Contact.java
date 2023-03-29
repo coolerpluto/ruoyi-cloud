@@ -37,6 +37,7 @@ public class Contact extends BaseEntity {
     @Excel(name = "所属公司")
     private String company;
     private String companyCode;
+    private String companyProperty;
 
     /**
      * 公司内角色
@@ -114,9 +115,9 @@ public class Contact extends BaseEntity {
     /**
      * 所有者部门
      */
-    private Long deptId;
+    private Long ownerDeptId;
     @Excel(name = "所有者部门")
-    private String deptName;
+    private String ownerDeptName;
 
     /**
      * 创建者ID
@@ -136,12 +137,24 @@ public class Contact extends BaseEntity {
         this.ownerName = ownerName;
     }
 
-    public String getDeptName() {
-        return deptName;
+    public Long getOwnerDeptId()
+    {
+        return ownerDeptId;
     }
 
-    public void setDeptName(String deptName) {
-        this.deptName = deptName;
+    public void setOwnerDeptId(Long ownerDeptId)
+    {
+        this.ownerDeptId = ownerDeptId;
+    }
+
+    public String getOwnerDeptName()
+    {
+        return ownerDeptName;
+    }
+
+    public void setOwnerDeptName(String ownerDeptName)
+    {
+        this.ownerDeptName = ownerDeptName;
     }
 
     public void setId(String id) {
@@ -184,6 +197,16 @@ public class Contact extends BaseEntity {
     public void setCompanyCode(String companyCode)
     {
         this.companyCode = companyCode;
+    }
+
+    public String getCompanyProperty()
+    {
+        return companyProperty;
+    }
+
+    public void setCompanyProperty(String companyProperty)
+    {
+        this.companyProperty = companyProperty;
     }
 
     public void setRoleInCompany(String roleInCompany) {
@@ -282,14 +305,6 @@ public class Contact extends BaseEntity {
         this.ownerId = ownerId;
     }
 
-    public Long getDeptId() {
-        return deptId;
-    }
-
-    public void setDeptId(Long deptId) {
-        this.deptId = deptId;
-    }
-
     public Long getCreateId() {
         return createId;
     }
@@ -326,7 +341,6 @@ public class Contact extends BaseEntity {
                 .append("remark", getRemark())
                 .append("sourceId", getSourceId())
                 .append("ownerId", getOwnerId())
-                .append("deptId", getDeptId())
                 .append("createId", getCreateId())
                 .append("createBy", getCreateBy())
                 .append("createTime", getCreateTime())

@@ -28,9 +28,9 @@
         <result property="remark" column="remark"/>
 
         <!--属性中拎出来用来展示-->
-        <result property="preSignedTime" column="preSignedTime"/>
-        <result property="tenderTime" column="tenderTime"/>
-        <result property="preContractAmount" column="preContractAmount"/>
+        <result property="preSignDate" column="preSignDate"/>
+        <result property="preTenderDate" column="preTenderDate"/>
+        <result property="preContractVal" column="preContractVal"/>
 
         <!--select子查询， column 传给子查询的参数-->
 <!--        <collection property="properties" ofType="OpportunityProperty" select="queryProperties"-->
@@ -53,9 +53,9 @@
             tc.dept_id,tc.owner_id,su.nick_name owner_name,
             tc.shared_id,tc.shared_dept_id,
             tc.create_time,tc.update_time,tc.remark,
-            max(case when top.property_key = 'tenderTime' then top.property_val end) tenderTime,
-            max(case when top.property_key = 'preSignedTime' then top.property_val end) preSignedTime,
-            max(case when top.property_key = 'preContractAmount' then top.property_val end) preContractAmount
+            max(case when top.property_key = 'preTenderDate' then top.property_val end) preTenderDate,
+            max(case when top.property_key = 'preSignDate' then top.property_val end) preSignDate,
+            max(case when top.property_key = 'preContractVal' then top.property_val end) preContractVal
         from
             t_opportunity tc
         left join t_company tc2 on tc.cust_id = tc2.id
@@ -226,20 +226,56 @@
         where opportunity_code = #{oppCode}
         order by create_time desc,update_time desc
     </select>
-  <select id="queryContactsByOppCode" parameterType="String" resultMap="com.highgo.crm.mapper.ContactMapper.ContactResult">
-      select id, name, sex,
-             company, company_code,
-             role_in_company, post_in_company, dept_in_company,
-             pri_phone, sec_phone,
-             pri_email, sec_email,
-             addr, category, remark,
-
-             source_id, owner_id, dept_id,
-             create_id, create_by, create_time,
-             update_id, update_by, update_time
-      from t_contact
-        where source_type = 'opportunity' and source_id = #{oppCode}
-        order by create_time desc,update_time desc
+    <resultMap type="OpportunityContactInfo" id="OpportunityContactInfoResult">
+        <result property="keyId" column="key_id"/>
+        <result property="opportunityCode" column="opportunity_code"/>
+        <result property="contactId" column="contact_id"/>
+        <result property="exposure" column="exposure"/>
+        <result property="relationship" column="relationship"/>
+        <result property="intention" column="intention"/>
+        <result property="sideVisited" column="side_visited"/>
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="sex" column="sex"/>
+        <result property="company" column="company"/>
+        <result property="companyCode" column="company_code"/>
+        <result property="companyProperty" column="properties"/>
+        <result property="roleInCompany" column="role_in_company"/>
+        <result property="postInCompany" column="post_in_company"/>
+        <result property="deptInCompany" column="dept_in_company"/>
+        <result property="priPhone" column="pri_phone"/>
+        <result property="secPhone" column="sec_phone"/>
+        <result property="priEmail" column="pri_email"/>
+        <result property="secEmail" column="sec_email"/>
+        <result property="addr" column="addr"/>
+        <result property="category" column="category"/>
+        <result property="sourceType" column="source_type"/>
+        <result property="remark" column="remark"/>
+        <result property="sourceId" column="source_id"/>
+        <result property="ownerId" column="owner_id"/>
+        <result property="ownerName" column="owner_Name"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="deptName" column="dept_Name"/>
+        <result property="createId" column="create_id"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateId" column="update_id"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+  <select id="queryContactsByOppCode" parameterType="String" resultMap="OpportunityContactInfoResult">
+      select
+          tc2.properties ,
+          tc .*,
+          toci.*
+      from
+          t_contact tc
+              left join t_opportunity_contact_info toci on tc.id = toci.contact_id and tc.source_id = toci.opportunity_code
+              left join t_company tc2 on tc.company_code = tc2.code
+      where
+          tc.source_type = 'opportunity'
+        and tc.source_id = #{oppCode}
+      order by tc.create_time desc,tc.update_time desc
     </select>
 
 </mapper>

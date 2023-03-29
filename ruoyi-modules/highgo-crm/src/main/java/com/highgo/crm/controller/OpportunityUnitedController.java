@@ -4,6 +4,7 @@ import com.highgo.crm.domain.Company;
 import com.highgo.crm.domain.Contact;
 import com.highgo.crm.domain.OpportunityAdvances;
 import com.highgo.crm.domain.OpportunityCompetitor;
+import com.highgo.crm.domain.OpportunityContactInfo;
 import com.highgo.crm.domain.OpportunityCost;
 import com.highgo.crm.domain.OpportunityPolicy;
 import com.highgo.crm.domain.OpportunityProperty;
@@ -212,7 +213,7 @@ public class OpportunityUnitedController extends BaseController
             return success();
         }
 
-        List<Contact> contactList = opportunityService.queryContactsByOppCode(code);
+        List<OpportunityContactInfo> contactList = opportunityService.queryContactsByOppCode(code);
         return success(contactList);
     }
     /**

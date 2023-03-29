@@ -4,6 +4,7 @@ import com.highgo.crm.domain.Company;
 import com.highgo.crm.domain.Contact;
 import com.highgo.crm.domain.OpportunityAdvances;
 import com.highgo.crm.domain.OpportunityCompetitor;
+import com.highgo.crm.domain.OpportunityContactInfo;
 import com.highgo.crm.domain.OpportunityCost;
 import com.highgo.crm.domain.OpportunityPolicy;
 import com.highgo.crm.domain.OpportunityQuotation;
@@ -56,8 +57,10 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
     public List<OpportunityUnited> selectOpportunityUnitedList(OpportunityUnited opportunity)
     {
         SysUser currentUser = SecurityUtils.getLoginUser().getSysUser();
-        opportunity.getParams().put("sharedId", currentUser.getUserId());
-        opportunity.getParams().put("sharedDeptId", currentUser.getDeptId());
+        if(!currentUser.isAdmin()){
+            opportunity.getParams().put("sharedId", currentUser.getUserId());
+            opportunity.getParams().put("sharedDeptId", currentUser.getDeptId());
+        }
         return opportunityUnitedMapper.selectOpportunityList(opportunity);
     }
 
@@ -166,7 +169,7 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
     }
 
     @Override
-    public List<Contact> queryContactsByOppCode(String oppCode)
+    public List<OpportunityContactInfo> queryContactsByOppCode(String oppCode)
     {
         return opportunityUnitedMapper.queryContactsByOppCode(oppCode);
     }

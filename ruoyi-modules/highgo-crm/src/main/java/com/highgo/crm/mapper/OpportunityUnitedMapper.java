@@ -4,6 +4,7 @@ import com.highgo.crm.domain.Company;
 import com.highgo.crm.domain.Contact;
 import com.highgo.crm.domain.OpportunityAdvances;
 import com.highgo.crm.domain.OpportunityCompetitor;
+import com.highgo.crm.domain.OpportunityContactInfo;
 import com.highgo.crm.domain.OpportunityCost;
 import com.highgo.crm.domain.OpportunityPolicy;
 import com.highgo.crm.domain.OpportunityQuotation;
@@ -87,5 +88,5 @@ public interface OpportunityUnitedMapper
 
     List<OpportunitySupport> querySupportByOppCode(String oppCode);
 
-    List<Contact> queryContactsByOppCode(String oppCode);
+    List<OpportunityContactInfo> queryContactsByOppCode(String oppCode);
 }

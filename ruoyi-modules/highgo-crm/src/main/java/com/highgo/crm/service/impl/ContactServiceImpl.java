@@ -58,7 +58,7 @@ public class ContactServiceImpl implements IContactService {
         contact.setCreateId(userCurrent.getUserId());
         contact.setCreateBy(SecurityUtils.getUsername());
         contact.setOwnerId(userCurrent.getUserId());
-        contact.setDeptId(userCurrent.getDeptId());
+        contact.setOwnerDeptId(userCurrent.getDeptId());
         contact.setCreateTime(DateUtils.getNowDate());
         return contactMapper.insertContact(contact);
     }
