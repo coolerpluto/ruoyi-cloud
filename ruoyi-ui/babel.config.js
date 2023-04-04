@@ -9,5 +9,6 @@ module.exports = {
       // This plugin can significantly increase the speed of hot updates, when you have a large number of pages.
       'plugins': ['dynamic-import-node']
     }
-  }
+  },
+  plugins: [["transform-es2015-arrow-functions", { spec: true }]]
 }
