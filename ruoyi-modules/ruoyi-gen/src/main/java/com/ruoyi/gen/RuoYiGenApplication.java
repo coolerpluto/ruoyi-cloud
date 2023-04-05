@@ -13,7 +13,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
  * @author ruoyi
  */
 @EnableCustomConfig
-@EnableCustomSwagger2   
+@EnableCustomSwagger2
 @EnableRyFeignClients
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 public class RuoYiGenApplication
