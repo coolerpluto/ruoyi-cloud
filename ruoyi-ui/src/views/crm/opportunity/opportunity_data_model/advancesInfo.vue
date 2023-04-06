@@ -164,7 +164,7 @@ export default {
       this.advancesInfoForm.advancesInfo.splice(index, 1);
     },
     editAdvances(row) {
-      this.advancesDialog.form = row
+      this.advancesDialog.form = Object.assign({}, row);
       this.advancesDialog.open = true;
       this.advancesDialog.title = "修改进展信息";
     },
@@ -186,6 +186,17 @@ export default {
           this.advancesDialog.form.tempId = new Date().getTime()//先打个标
           this.advancesInfoForm.advancesInfo.push(this.advancesDialog.form)
         }
+        // 替换
+        this.advancesInfoForm.advancesInfo.map((item, i) => {
+          //带来的
+          if (item.id && item.id == this.advancesDialog.form.id) {
+            this.advancesInfoForm.advancesInfo.splice(i, 1, this.advancesDialog.form)
+          }
+          //新增的
+          if (item.tempId && item.tempId == this.advancesDialog.form.tempId) {
+            this.advancesInfoForm.advancesInfo.splice(i, 1, this.advancesDialog.form)
+          }
+        })
         this.advancesDialog.open = false;
       });
     },

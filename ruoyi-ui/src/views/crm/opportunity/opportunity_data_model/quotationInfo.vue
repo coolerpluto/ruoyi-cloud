@@ -208,8 +208,8 @@ export default {
       this.quotationInfoForm.quotationInfo.splice(index, 1);
     },
     editQuotation(row) {
-      this.quotationDialog.currentEdit = row;
-      this.quotationDialog.form = row.quotationMap;
+      this.quotationDialog.currentEdit = JSON.parse(JSON.stringify(row));
+      this.quotationDialog.form = Object.assign({}, row.quotationMap);
       this.quotationDialog.open = true;
       this.quotationDialog.title = "修改报价信息";
     },
@@ -252,7 +252,6 @@ export default {
       let select = this.quotationDialog.productVersion.find(item => {
         return item.dictValue == val
       })
-      console.log("productSecVersion",select)
       var _this = this;
       this.getNextOptions(select.remark,function(res){
         _this.quotationDialog.productSecVersion = res;
@@ -270,12 +269,23 @@ export default {
         if (!valid) {
           return;
         }
+        this.quotationDialog.currentEdit.quotationMap = this.quotationDialog.form;
+        this.quotationDialog.currentEdit.quotationJson = JSON.stringify(this.quotationDialog.form);
         if (!this.quotationDialog.currentEdit.id && !this.quotationDialog.currentEdit.tempId) {
-          this.quotationDialog.currentEdit.quotationMap = this.quotationDialog.form;
-          this.quotationDialog.currentEdit.quotationJson = JSON.stringify(this.quotationDialog.form);
           this.quotationDialog.currentEdit.tempId = new Date().getTime();//先打个标
           this.quotationInfoForm.quotationInfo.push(this.quotationDialog.currentEdit);
         }
+        // 替换
+        this.quotationInfoForm.quotationInfo.map((item, i) => {
+          //带来的
+          if (item.id && item.id == this.quotationDialog.currentEdit.id) {
+            this.quotationInfoForm.quotationInfo.splice(i, 1, this.quotationDialog.currentEdit)
+          }
+          //新增的
+          if (item.tempId && item.tempId == this.quotationDialog.currentEdit.tempId) {
+            this.quotationInfoForm.quotationInfo.splice(i, 1, this.quotationDialog.currentEdit)
+          }
+        })
         this.quotationDialog.open = false;
         //正常的复制 界面显示不刷新
         let quotationInfoFormbak = JSON.parse(JSON.stringify(this.quotationInfoForm));

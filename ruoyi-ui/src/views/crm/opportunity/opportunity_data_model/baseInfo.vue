@@ -347,7 +347,7 @@ export default {
     },
     editApplication(row) {
       //this.getCategoryCheckedNodes()
-      this.baseInfoDialog.form = row 
+      this.baseInfoDialog.form = Object.assign({}, row); 
       this.baseInfoDialog.form.category = this.baseInfoDialog.form.category.split('/')
       this.baseInfoDialog.open = true;
       this.baseInfoDialog.title = "修改应用运营信息";
@@ -369,7 +369,17 @@ export default {
           this.baseInfoDialog.form.tempId = new Date().getTime()//先打个标
           this.baseInfoForm.operations.push(this.baseInfoDialog.form)
         }
-        console.log("submitDialogForm",this.baseInfoForm.operations)
+        // 替换
+        this.baseInfoForm.operations.map((item, i) => {
+          //带来的
+          if (item.id && item.id == this.baseInfoDialog.form.id) {
+            this.baseInfoForm.operations.splice(i, 1, this.baseInfoDialog.form)
+          }
+          //新增的
+          if (item.tempId && item.tempId == this.baseInfoDialog.form.tempId) {
+            this.baseInfoForm.operations.splice(i, 1, this.baseInfoDialog.form)
+          }
+        })
         this.baseInfoDialog.open = false;
       });
     },
@@ -402,7 +412,6 @@ export default {
       if (this.baseInfoOriginBak.oppInfo.name !==this.baseInfoForm.oppInfo.name){
         this.baseInfoModified.oppInfo.name = this.baseInfoForm.oppInfo.name
       }
-      console.log("fetchInformation",this.baseInfoForm.operations)
       for(let options of this.baseInfoForm.operations){
         if (!options.id){
           this.baseInfoModified.operations_a.push(options)
@@ -414,7 +423,6 @@ export default {
         }
         this.baseInfoModified.operations_m.push(options)
       }
-      console.log("baseInfoOriginBak",this.baseInfoOriginBak.operations)
       for(let options of this.baseInfoOriginBak.operations){
         let current = this.baseInfoForm.operations.find(item=>{return item.id==options.id;})
         if(current){

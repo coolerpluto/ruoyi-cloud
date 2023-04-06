@@ -178,7 +178,7 @@ export default {
       this.keyStandByForm.keyStandBy.splice(index, 1);
     },
     editStandBy(row) {
-      this.keyStandByDialog.form = row
+      this.keyStandByDialog.form = Object.assign({}, row);
       this.keyStandByDialog.open = true;
       this.keyStandByDialog.title = "修改进展信息";
     },
@@ -217,6 +217,17 @@ export default {
           this.keyStandByDialog.form.tempId = new Date().getTime()//先打个标
           this.keyStandByForm.keyStandBy.push(this.keyStandByDialog.form)
         }
+        // 替换
+        this.keyStandByForm.keyStandBy.map((item, i) => {
+          //带来的
+          if (item.id && item.id == this.keyStandByDialog.form.id) {
+            this.keyStandByForm.keyStandBy.splice(i, 1, this.keyStandByDialog.form)
+          }
+          //新增的
+          if (item.tempId && item.tempId == this.keyStandByDialog.form.tempId) {
+            this.keyStandByForm.keyStandBy.splice(i, 1, this.keyStandByDialog.form)
+          }
+        })
         this.keyStandByDialog.open = false;
       });
     },

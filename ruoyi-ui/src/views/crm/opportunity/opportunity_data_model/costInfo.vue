@@ -204,7 +204,7 @@ export default {
       this.costInfoForm.costInfos.splice(index, 1);
     },
     editCostInfo(row) {
-      this.costInfosDialog.form = row
+      this.costInfosDialog.form = Object.assign({}, row);
       this.costInfosDialog.open = true;
       this.costInfosDialog.title = "修改花费信息";
     },
@@ -237,11 +237,21 @@ export default {
           return;
         }
         this.costInfosDialog.form.createBy = this.costInfosDialog.form.createBy || this.$store.state.user.name;
-
         if (!this.costInfosDialog.form.id && !this.costInfosDialog.form.tempId) {
           this.costInfosDialog.form.tempId = new Date().getTime()//先打个标
           this.costInfoForm.costInfos.push(this.costInfosDialog.form)
         }
+        // 替换
+        this.costInfoForm.costInfos.map((item, i) => {
+          //带来的
+          if (item.id && item.id == this.costInfosDialog.form.id) {
+            this.costInfoForm.costInfos.splice(i, 1, this.costInfosDialog.form)
+          }
+          //新增的
+          if (item.tempId && item.tempId == this.costInfosDialog.form.tempId) {
+            this.costInfoForm.costInfos.splice(i, 1, this.costInfosDialog.form)
+          }
+        })
         this.costInfosDialog.open = false;
       });
     },

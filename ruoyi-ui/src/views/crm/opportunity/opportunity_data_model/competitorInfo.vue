@@ -217,7 +217,7 @@ export default {
       this.competitorInfoForm.competitorInfo.splice(index, 1);
     },
     editCompetitor(row) {
-      this.competitorDialog.form = row
+      this.competitorDialog.form = Object.assign({}, row);
       this.competitorDialog.open = true;
       this.competitorDialog.title = "修改竞争对手";
     },
@@ -235,6 +235,17 @@ export default {
           this.competitorDialog.form.tempId = new Date().getTime()//先打个标
           this.competitorInfoForm.competitorInfo.push(this.competitorDialog.form)
         }
+        // 替换
+        this.competitorInfoForm.competitorInfo.map((item, i) => {
+          //带来的
+          if (item.id && item.id == this.competitorDialog.form.id) {
+            this.competitorInfoForm.competitorInfo.splice(i, 1, this.competitorDialog.form)
+          }
+          //新增的
+          if (item.tempId && item.tempId == this.competitorDialog.form.tempId) {
+            this.competitorInfoForm.competitorInfo.splice(i, 1, this.competitorDialog.form)
+          }
+        })
         this.competitorDialog.open = false;
       });
     },

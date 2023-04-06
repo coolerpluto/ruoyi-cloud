@@ -18,7 +18,11 @@
             <dict-tag :options="dict.type.crm_company_properties_type" :value="scope.row.companyProperty" />
           </template>
         </el-table-column>
-        <el-table-column label="人员角色" align="center" prop="roleInCompany" :show-overflow-tooltip="true" />
+        <el-table-column label="人员角色" align="center" prop="roleInCompany" :show-overflow-tooltip="true" >
+          <template slot-scope="scope">
+            <dict-tag :options="dict.type.crm_external_person_role" :value="scope.row.roleInCompany" />
+          </template>
+        </el-table-column>
         <el-table-column label="人员职务" align="center" prop="postInCompany" :show-overflow-tooltip="true" />
         <el-table-column label="所在部门" align="center" prop="deptInCompany" :show-overflow-tooltip="true" />
         <el-table-column align="center" prop="priPhone" :show-overflow-tooltip="true">
@@ -31,7 +35,11 @@
             <label>对接情况<span style="color: red;">(按照重要程度选择最新进展)</span></label>
           </template>
         </el-table-column>
-        <el-table-column label="关系程度" align="center" prop="relationship" :show-overflow-tooltip="true" />
+        <el-table-column label="关系程度" align="center" prop="relationship" :show-overflow-tooltip="true" >
+          <template slot-scope="scope">
+            <dict-tag :options="dict.type.crm_hgdb_acceptability" :value="scope.row.relationship" />
+          </template>
+        </el-table-column>
         <el-table-column label="意向厂商" align="center" prop="intention" :show-overflow-tooltip="true" />
         <el-table-column label="是否会面对手" align="center" prop="sideVisited" :show-overflow-tooltip="true">
           <template slot-scope="scope">
@@ -284,7 +292,7 @@ export default {
       this.keyContactForm.keyContacts.splice(index, 1);
     },
     editKeyContact(row) {
-      this.keyContactsDialog.form = row
+      this.keyContactsDialog.form = Object.assign({}, row);
       this.keyContactsDialog.open = true;
       this.keyContactsDialog.title = "修改关键联系人信息";
     },
@@ -302,6 +310,17 @@ export default {
           this.keyContactsDialog.form.tempId = new Date().getTime()//先打个标
           this.keyContactForm.keyContacts.push(this.keyContactsDialog.form)
         }
+        // 替换
+        this.keyContactForm.keyContacts.map((item, i) => {
+          //带来的
+          if (item.id && item.id == this.keyContactsDialog.form.id) {
+            this.keyContactForm.keyContacts.splice(i, 1, this.keyContactsDialog.form)
+          }
+          //新增的
+          if (item.tempId && item.tempId == this.keyContactsDialog.form.tempId) {
+            this.keyContactForm.keyContacts.splice(i, 1, this.keyContactsDialog.form)
+          }
+        })
         this.keyContactsDialog.open = false;
       });
     },
