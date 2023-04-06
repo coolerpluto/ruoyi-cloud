@@ -65,8 +65,10 @@ export default {
         "signDate", "signRemark"
       ],
       signInfoForm:{
-        "signStatus":{}, "signChannel":{},
-        "signDate":{}, "signRemark":{}
+        "signStatus":{model: "sign_info", propertyLable: "签约状态"}, 
+        "signChannel":{model: "sign_info", propertyLable: "签约渠道"},
+        "signDate":{model: "sign_info", propertyLable: "签约日期"}, 
+        "signRemark":{model: "sign_info", propertyLable: "状态说明"}
       },
       signInfoModified: {},
       signInfoOriginBak: {},
@@ -175,8 +177,22 @@ export default {
       });
       return flag;
     },
+    //提取修改的信息作为提交
+    fetchInformation() {
+      if (Object.keys(this.signInfoOriginBak).length == 0) {
+        this.signInfoModified = JSON.parse(JSON.stringify(this.signInfoForm))
+        return;
+      }
+      this.signInfoModified = {}
+      Object.keys(this.signInfoForm).forEach(key => {
+        if (this.signInfoOriginBak[key].propertyVal != this.signInfoForm[key].propertyVal) {
+          this.signInfoModified[key] = this.signInfoForm[key]
+        }
+      })
+    },
     // 提供本组件的全部数据
     collectInfo() {
+      this.fetchInformation()
       return {
         currentData: this.signInfoForm,//最新展示数据
         modifyedData: this.signInfoModified,//改动部分

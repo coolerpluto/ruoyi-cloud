@@ -91,9 +91,11 @@ export default {
         "contractSuccessRate"
       ],
       oppImplementForm: {
-        "knowMainMark": {}, "companyParamsIn": {},
-        "knowDecideFlow": {}, "canHoldAllProcess": {},
-        "contractSuccessRate": {}
+        "knowMainMark": {model: "impl_key_points", propertyLable: "是否了解招标方案内容及主要评分项"}, 
+        "companyParamsIn": {model: "impl_key_points", propertyLable: "公司产品参数是否写入招标方案"},
+        "knowDecideFlow": {model: "impl_key_points", propertyLable: "是否了解用户招标的决策流程"}, 
+        "canHoldAllProcess": {model: "impl_key_points", propertyLable: "是否了解用户招标的决策流程"},
+        "contractSuccessRate": {model: "impl_key_points", propertyLable: "合同落单成功率"}
       },
       oppImplementModified: {},
       oppImplementOriginBak: {},
@@ -202,8 +204,22 @@ export default {
       });
       return flag;
     },
+    //提取修改的信息作为提交
+    fetchInformation() {
+      if (Object.keys(this.oppImplementOriginBak).length == 0) {
+        this.oppImplementModified = JSON.parse(JSON.stringify(this.oppImplementForm))
+        return;
+      }
+      this.oppImplementModified = {}
+      Object.keys(this.oppImplementForm).forEach(key => {
+        if (this.oppImplementOriginBak[key].propertyVal != this.oppImplementForm[key].propertyVal) {
+          this.oppImplementModified[key] = this.oppImplementForm[key]
+        }
+      })
+    },
     // 提供本组件的全部数据
     collectInfo() {
+      this.fetchInformation()
       return {
         currentData: this.oppImplementForm,//最新展示数据
         modifyedData: this.oppImplementModified,//改动部分

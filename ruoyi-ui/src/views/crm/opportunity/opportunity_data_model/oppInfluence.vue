@@ -43,7 +43,7 @@ export default {
         "oppInfluence"
       ],
       oppInfluenceForm: {
-        "oppInfluence": {}
+        "oppInfluence": {model: "oppo_influence", propertyLable: "对用户组织架构及作用说明" }
       },
       oppInfluenceModified: {},
       oppInfluenceOriginBak: {},
@@ -114,8 +114,22 @@ export default {
       });
       return flag;
     },
+    //提取修改的信息作为提交
+    fetchInformation() {
+      if (Object.keys(this.oppInfluenceOriginBak).length == 0) {
+        this.oppInfluenceModified = JSON.parse(JSON.stringify(this.oppInfluenceForm))
+        return;
+      }
+      this.oppInfluenceModified = {}
+      Object.keys(this.oppInfluenceForm).forEach(key => {
+        if (this.oppInfluenceOriginBak[key].propertyVal != this.oppInfluenceForm[key].propertyVal) {
+          this.oppInfluenceModified[key] = this.oppInfluenceForm[key]
+        }
+      })
+    },
     // 提供本组件的全部数据
     collectInfo() {
+      this.fetchInformation();
       return {
         currentData: this.oppInfluenceForm,//最新展示数据
         modifyedData: this.oppInfluenceModified,//改动部分

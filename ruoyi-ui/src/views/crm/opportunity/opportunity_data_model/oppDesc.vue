@@ -384,6 +384,7 @@ export default {
         this.oppDescModified = JSON.parse(JSON.stringify(this.oppDescForm))
         return;
       }
+      this.oppDescModified = {}
       Object.keys(this.oppDescForm).forEach(key => {
         if (this.oppDescOriginBak[key].propertyVal != this.oppDescForm[key].propertyVal) {
           this.oppDescModified[key] = this.oppDescForm[key]

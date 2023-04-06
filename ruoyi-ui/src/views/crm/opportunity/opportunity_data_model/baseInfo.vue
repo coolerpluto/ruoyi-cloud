@@ -142,7 +142,6 @@
 </template>
 
 <script>
-import appOperationInfo from "./appOperationInfo";
 import {listCompany} from "@/api/crm/company";
 import {getDicts as getDicts} from '@/api/system/dict/data'
 
@@ -376,8 +375,9 @@ export default {
     },
     cancelDialog() {
       this.baseInfoDialog.open = false;
-      this.baseInfoDialog.form.category = this.baseInfoDialog.form.category.join("/");
-
+      if (this.baseInfoDialog.form.category) {
+        this.baseInfoDialog.form.category = this.baseInfoDialog.form.category.join("/");
+      }
     },
     // 提供本组件的数据校验
     infoVerify() {

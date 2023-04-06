@@ -583,11 +583,9 @@
 
 <script>
 import {listUser, deptTreeSelect} from "@/api/system/user";
-import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 import {listCompany, getCompany, delCompany, addCompany, updateCompany} from "@/api/crm/company";
 import {listAddr} from "@/api/system/addr";
-import {getDicts as getDicts} from '@/api/system/dict/data'
 import {
   listApplication,
   getApplication,

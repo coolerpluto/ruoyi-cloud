@@ -151,19 +151,19 @@ export default {
         "preSaleSupport"
       ],
       custInfoForm: {
-        "userCompanyId": { propertyLable:"用户公司ID",model: "cust" },
-        "userCompanyName": { propertyLable:"用户公司名称",model: "cust" },
-        "userCompanyCode": { propertyLable:"用户公司code",model: "cust" },
-        "userCompanyAddr": { propertyLable:"用户公司地址",model: "cust" },
-        "userCompanyZipCode": { propertyLable:"用户地址邮编",model: "cust" },
-        "userCompanyAddrDetail": { propertyLable:"用户详细地址",model: "cust" },
-        "userCompanyDesc": { propertyLable:"用户公司描述",model: "cust" },
+        "userCompanyId": { propertyLable: "用户公司ID", model: "cust" },
+        "userCompanyName": { propertyLable: "用户公司名称", model: "cust" },
+        "userCompanyCode": { propertyLable: "用户公司code", model: "cust" },
+        "userCompanyAddr": { propertyLable: "用户公司地址", model: "cust" },
+        "userCompanyZipCode": { propertyLable: "用户地址邮编", model: "cust" },
+        "userCompanyAddrDetail": { propertyLable: "用户详细地址", model: "cust" },
+        "userCompanyDesc": { propertyLable: "用户公司描述", model: "cust" },
 
-        "newOrOldCust": { propertyLable:"新老用户",model: "cust" },
-        "industryInfluence": { propertyLable:"用户公司影响力",model: "cust" },
-        "redHeadedDoc": { propertyLable:"是否有红头文件支持",model: "cust" },
-        "meetingInstruction": { propertyLable:"是否有会议指示",model: "cust" },
-        "preSaleSupport": { propertyLable:"是否需要售前支持",model: "cust" }
+        "newOrOldCust": { propertyLable: "新老用户", model: "cust" },
+        "industryInfluence": { propertyLable: "用户公司影响力", model: "cust" },
+        "redHeadedDoc": { propertyLable: "是否有红头文件支持", model: "cust" },
+        "meetingInstruction": { propertyLable: "是否有会议指示", model: "cust" },
+        "preSaleSupport": { propertyLable: "是否需要售前支持", model: "cust" }
       },
       custInfoModified: {},
       custInfoOriginBak: {},
@@ -262,7 +262,7 @@ export default {
       //this.custInfoForm.userCompanyName.propertyVal = this.custInfoDialog.selectedCompany.companyName
       this.custInfoForm.userCompanyCode.propertyVal = this.custInfoDialog.selectedCompany.code
       this.custInfoForm.userCompanyAddr.propertyVal = this.custInfoDialog.selectedCompany.addr
-      this.custInfoForm.userCompanyAddrDetail.propertyVal = this.custInfoDialog.selectedCompany.addrDatail
+      this.custInfoForm.userCompanyAddrDetail.propertyVal = this.custInfoDialog.selectedCompany.addrDetail
       this.custInfoForm.userCompanyZipCode.propertyVal = this.custInfoDialog.selectedCompany.zipCode
       this.custInfoForm.userCompanyDesc.propertyVal = this.custInfoDialog.selectedCompany.remark
       this.custInfoDialog.open = false;
@@ -289,23 +289,16 @@ export default {
     },
     //提取修改的信息作为提交
     fetchInformation() {
-      let update = false
-      if (Object.keys(this.custInfoOriginBak).length != 0) {
-        if (this.custInfoForm.userCompanyId.propertyVal !== this.custInfoOriginBak.userCompanyId.propertyVal) {
-          update = true;
-        }
-        if (this.custInfoForm.userCompanyName.propertyVal !== this.custInfoOriginBak.userCompanyName.propertyVal) {
-          update = true;
-        }
-        if (this.custInfoForm.userCompanyCode.propertyVal !== this.custInfoOriginBak.userCompanyCode.propertyVal) {
-          update = true;
-        }
-      } else {
-        update = true;
-      }
-      if (update) {
+      if (Object.keys(this.custInfoOriginBak).length == 0) {
         this.custInfoModified = JSON.parse(JSON.stringify(this.custInfoForm))
+        return;
       }
+      this.custInfoModified = {}
+      Object.keys(this.custInfoForm).forEach(key => {
+        if (this.custInfoOriginBak[key].propertyVal != this.custInfoForm[key].propertyVal) {
+          this.custInfoModified[key] = this.custInfoForm[key]
+        }
+      })
     },
     // 提供本组件的全部数据
     collectInfo() {

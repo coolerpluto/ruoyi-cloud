@@ -1,7 +1,8 @@
 <template>
   <div class="app-container" :style="{ pointerEvents: oppdata.action == 'V' ? 'none' : 'unset' }">
     <h3>{{ stageTitle }}</h3><el-divider />
-    <el-form ref="summaryInfoForm" :rules="rules" v-loading="flag.summaryInfoLoading" :model="summaryInfoForm" size="medium" label-width="220px">
+    <el-form ref="summaryInfoForm" :rules="rules" v-loading="flag.summaryInfoLoading" :model="summaryInfoForm"
+      size="medium" label-width="220px">
       <div v-if="[2].includes(stageShow)">
         <el-row :gutter="15">
           <el-col :span="8">
@@ -88,9 +89,11 @@ export default {
         "summaryInfo"
       ],
       summaryInfoForm: {
-        "followAction2": {}, "followAction2Desc": {},
-        "followAction4": {}, "followAction4Desc": {},
-        "summaryInfo": {}
+        "followAction2": { model: "results", propertyLable: "后续动作" },
+        "followAction2Desc": { model: "results", propertyLable: "后续跟进措施或原因" },
+        "followAction4": { model: "results", propertyLable: "后续动作" },
+        "followAction4Desc": { model: "results", propertyLable: "后续跟进措施或原因" },
+        "summaryInfo": { model: "results", propertyLable: "总结信息" }
       },
       summaryInfoModified: {},
       summaryInfoOriginBak: {},
@@ -181,8 +184,22 @@ export default {
       });
       return flag;
     },
+    //提取修改的信息作为提交
+    fetchInformation() {
+      if (Object.keys(this.summaryInfoOriginBak).length == 0) {
+        this.summaryInfoModified = JSON.parse(JSON.stringify(this.summaryInfoForm))
+        return;
+      }
+      this.summaryInfoModified = {}
+      Object.keys(this.summaryInfoForm).forEach(key => {
+        if (this.summaryInfoOriginBak[key].propertyVal != this.summaryInfoForm[key].propertyVal) {
+          this.summaryInfoModified[key] = this.summaryInfoForm[key]
+        }
+      })
+    },
     // 提供本组件的全部数据
     collectInfo() {
+      this.fetchInformation()
       return {
         currentData: this.summaryInfoForm,//最新展示数据
         modifyedData: this.summaryInfoModified,//改动部分

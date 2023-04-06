@@ -66,9 +66,11 @@ export default {
         "winBiddingTenderPrice", "winBiddingTotalPrice"
       ],
       winningBiddingForm: {
-        "winBiddingCompetitorId": {},
-        "winBiddingCompanyId": {}, "winBiddingCompanyName": {},
-        "winBiddingTenderPrice": {}, "winBiddingTotalPrice": {}
+        "winBiddingCompetitorId": { model: "winning_bidder", propertyLable: "中标公司竞争标识" },
+        "winBiddingCompanyId": { model: "winning_bidder", propertyLable: "中标公司ID" },
+        "winBiddingCompanyName": { model: "winning_bidder", propertyLable: "中标公司名称" },
+        "winBiddingTenderPrice": { model: "winning_bidder", propertyLable: "中标公司报价投标单价" },
+        "winBiddingTotalPrice": { model: "winning_bidder", propertyLable: "中标公司报价总价" }
       },
       winningBiddingModified: {},
       winningBiddingOriginBak: {},
@@ -153,8 +155,22 @@ export default {
       });
       return flag;
     },
+    //提取修改的信息作为提交
+    fetchInformation() {
+      if (Object.keys(this.winningBiddingOriginBak).length == 0) {
+        this.winningBiddingModified = JSON.parse(JSON.stringify(this.winningBiddingForm))
+        return;
+      }
+      this.winningBiddingModified = {}
+      Object.keys(this.winningBiddingForm).forEach(key => {
+        if (this.winningBiddingOriginBak[key].propertyVal != this.winningBiddingForm[key].propertyVal) {
+          this.winningBiddingModified[key] = this.winningBiddingForm[key]
+        }
+      })
+    },
     // 提供本组件的全部数据
     collectInfo() {
+      this.fetchInformation()
       return {
         currentData: this.winningBiddingForm,//最新展示数据
         modifyedData: this.winningBiddingModified,//改动部分

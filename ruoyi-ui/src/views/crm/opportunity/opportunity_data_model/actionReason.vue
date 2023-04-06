@@ -130,8 +130,25 @@ export default {
       });
       return flag;
     },
+    //提取修改的信息作为提交
+    fetchInformation() {
+      if (!this.actionReasonForm['reasons'].model){
+        this.actionReasonForm['reasons'].model = "reasons"+this.stageShow;
+      }      
+      if (Object.keys(this.actionReasonOriginBak).length == 0) {
+        this.actionReasonModified = JSON.parse(JSON.stringify(this.actionReasonForm))
+        return;
+      }
+      this.actionReasonModified = {}
+      Object.keys(this.actionReasonForm).forEach(key => {
+        if (this.actionReasonOriginBak[key].propertyVal != this.actionReasonForm[key].propertyVal) {
+          this.actionReasonModified[key] = this.actionReasonForm[key]
+        }
+      })
+    },
     // 提供本组件的全部数据
     collectInfo() {
+      this.fetchInformation()
       return {
         currentData: this.actionReasonForm,//最新展示数据
         modifyedData: this.actionReasonModified,//改动部分
