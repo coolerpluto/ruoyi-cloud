@@ -31,6 +31,7 @@ public class OpportunityCost extends BaseEntity
 
     /** 进入人员 */
     private Long inputUserId;
+    private String inputUserName;
 
     /** 使用时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -44,10 +45,17 @@ public class OpportunityCost extends BaseEntity
     /** 填报人员Id */
     private Long creatorId;
 
-    /** 操作人员Id */
-    private Long operatorId;
+    public String getInputUserName()
+    {
+        return inputUserName;
+    }
 
-    public void setId(Long id) 
+    public void setInputUserName(String inputUserName)
+    {
+        this.inputUserName = inputUserName;
+    }
+
+    public void setId(Long id)
     {
         this.id = id;
     }
@@ -110,15 +118,6 @@ public class OpportunityCost extends BaseEntity
     {
         return creatorId;
     }
-    public void setOperatorId(Long operatorId) 
-    {
-        this.operatorId = operatorId;
-    }
-
-    public Long getOperatorId() 
-    {
-        return operatorId;
-    }
 
     @Override
     public String toString() {
@@ -131,7 +130,6 @@ public class OpportunityCost extends BaseEntity
             .append("reason", getReason())
             .append("createTime", getCreateTime())
             .append("creatorId", getCreatorId())
-            .append("operatorId", getOperatorId())
             .append("updateTime", getUpdateTime())
             .toString();
     }

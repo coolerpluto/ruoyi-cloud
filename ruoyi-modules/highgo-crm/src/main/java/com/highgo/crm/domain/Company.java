@@ -76,6 +76,7 @@ public class Company extends BaseEntity {
     private String addr;
     @Excel(name = "详细地址")
     private String addrDetail;
+    private String zipCode;
 
     /**
      * 公司业务
@@ -112,6 +113,16 @@ public class Company extends BaseEntity {
      * 更新者ID
      */
     private Long updateId;
+
+    public String getZipCode()
+    {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode)
+    {
+        this.zipCode = zipCode;
+    }
 
     public String getCode() {
         return code;

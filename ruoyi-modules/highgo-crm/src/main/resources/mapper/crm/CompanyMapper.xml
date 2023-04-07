@@ -17,6 +17,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="website"    column="website"    />
         <result property="addr"    column="addr"    />
         <result property="addrDetail"    column="addr_detail"    />
+        <result property="zipCode"    column="zip_code"    />
         <result property="businessScope"    column="business_scope"    />
         <result property="remark"    column="remark"    />
         <result property="sourceId"    column="source_id"    />
@@ -46,6 +47,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             tc.website,
             tc.addr,
             tc.addr_detail,
+            tc.zip_code,
             tc.business_scope,
             tc.remark,
             tc.source_id,

@@ -207,7 +207,7 @@
         order by create_time desc,advances_date desc
     </select>
     <select id="queryCostByOppCode" parameterType="String" resultMap="com.highgo.crm.mapper.OpportunityCostMapper.OpportunityCostResult">
-        select id, opportunity_code, cost, input_user_id, use_time, reason, create_time, creator_id, operator_id, update_time from t_opportunity_cost
+        select id, opportunity_code, cost, input_user_id,input_user_name, use_time, reason, create_time, creator_id, create_time,create_by,update_by, update_time from t_opportunity_cost
         where opportunity_code = #{oppCode}
         order by create_time desc,update_time desc
     </select>

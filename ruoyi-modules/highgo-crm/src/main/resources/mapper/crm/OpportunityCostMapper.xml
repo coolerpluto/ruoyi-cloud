@@ -9,16 +9,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="opportunityCode"    column="opportunity_code"    />
         <result property="cost"    column="cost"    />
         <result property="inputUserId"    column="input_user_id"    />
+        <result property="inputUserName"    column="input_user_name"    />
         <result property="useTime"    column="use_time"    />
         <result property="reason"    column="reason"    />
-        <result property="createTime"    column="create_time"    />
         <result property="creatorId"    column="creator_id"    />
-        <result property="operatorId"    column="operator_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
     </resultMap>
 
     <sql id="selectOpportunityCostVo">
-        select id, opportunity_code, cost, input_user_id, use_time, reason, create_time, creator_id, operator_id, update_time from t_opportunity_cost
+        select id, opportunity_code, cost, input_user_id, input_user_name,use_time, reason,  creator_id,create_time,create_by, update_by, update_time from t_opportunity_cost
     </sql>
 
     <select id="selectOpportunityCostList" parameterType="OpportunityCost" resultMap="OpportunityCostResult">
@@ -42,11 +44,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="opportunityCode != null">opportunity_code,</if>
             <if test="cost != null">cost,</if>
             <if test="inputUserId != null">input_user_id,</if>
+            <if test="inputUserName != null">input_user_name,</if>
             <if test="useTime != null">use_time,</if>
             <if test="reason != null">reason,</if>
-            <if test="createTime != null">create_time,</if>
             <if test="creatorId != null">creator_id,</if>
-            <if test="operatorId != null">operator_id,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -54,11 +58,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="opportunityCode != null">#{opportunityCode},</if>
             <if test="cost != null">#{cost},</if>
             <if test="inputUserId != null">#{inputUserId},</if>
+            <if test="inputUserName != null">#{inputUserName},</if>
             <if test="useTime != null">#{useTime},</if>
             <if test="reason != null">#{reason},</if>
-            <if test="createTime != null">#{createTime},</if>
             <if test="creatorId != null">#{creatorId},</if>
-            <if test="operatorId != null">#{operatorId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
          </trim>
     </insert>
@@ -69,11 +75,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="opportunityCode != null">opportunity_code = #{opportunityCode},</if>
             <if test="cost != null">cost = #{cost},</if>
             <if test="inputUserId != null">input_user_id = #{inputUserId},</if>
+            <if test="inputUserName != null">input_user_name = #{inputUserName},</if>
             <if test="useTime != null">use_time = #{useTime},</if>
             <if test="reason != null">reason = #{reason},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="creatorId != null">creator_id = #{creatorId},</if>
-            <if test="operatorId != null">operator_id = #{operatorId},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
         </trim>
         where id = #{id}
