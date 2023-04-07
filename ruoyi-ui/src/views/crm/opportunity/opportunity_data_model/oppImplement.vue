@@ -91,11 +91,11 @@ export default {
         "contractSuccessRate"
       ],
       oppImplementForm: {
-        "knowMainMark": {model: "impl_key_points", propertyLable: "是否了解招标方案内容及主要评分项"}, 
-        "companyParamsIn": {model: "impl_key_points", propertyLable: "公司产品参数是否写入招标方案"},
-        "knowDecideFlow": {model: "impl_key_points", propertyLable: "是否了解用户招标的决策流程"}, 
-        "canHoldAllProcess": {model: "impl_key_points", propertyLable: "是否了解用户招标的决策流程"},
-        "contractSuccessRate": {model: "impl_key_points", propertyLable: "合同落单成功率"}
+        "knowMainMark": { model: "impl_key_points", propertyLable: "是否了解招标方案内容及主要评分项" },
+        "companyParamsIn": { model: "impl_key_points", propertyLable: "公司产品参数是否写入招标方案" },
+        "knowDecideFlow": { model: "impl_key_points", propertyLable: "是否了解用户招标的决策流程" },
+        "canHoldAllProcess": { model: "impl_key_points", propertyLable: "是否了解用户招标的决策流程" },
+        "contractSuccessRate": { model: "impl_key_points", propertyLable: "合同落单成功率" }
       },
       oppImplementModified: {},
       oppImplementOriginBak: {},
@@ -136,7 +136,6 @@ export default {
       var _this = this;
       this.flag.oppImplementLoading = true;
       this.getProperties(function () {
-        //console.log("oppImplementForm:",_this.oppImplementForm)
         _this.flag.oppImplementLoading = false;
       })
     },

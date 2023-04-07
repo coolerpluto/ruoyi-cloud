@@ -1,7 +1,8 @@
 <template>
   <div class="app-container" :style="{ pointerEvents: oppdata.action == 'V' ? 'none' : 'unset' }">
-    <h3>签约信息</h3><el-divider/>
-    <el-form ref="signInfoForm" :rules="rules" v-loading="flag.signInfoLoading" :model="signInfoForm" size="medium" label-width="220px">
+    <h3>签约信息</h3><el-divider />
+    <el-form ref="signInfoForm" :rules="rules" v-loading="flag.signInfoLoading" :model="signInfoForm" size="medium"
+      label-width="220px">
       <el-row :gutter="15">
         <el-col :span="8">
           <el-form-item label="签约状态" prop="signStatus.propertyVal">
@@ -14,7 +15,8 @@
         <el-col :span="8">
           <el-form-item label="签约渠道" prop="signChannel.propertyVal">
             <el-select v-model="signInfoForm.signChannel.propertyVal" filterable placeholder="请选择签约渠道" clearable>
-              <el-option v-for="item in signChannelList" :key="item.id" :label="item.operationalName" :value="item.operationalId+''" width="300px">
+              <el-option v-for="item in signChannelList" :key="item.id" :label="item.operationalName"
+                :value="item.operationalId + ''" width="300px">
                 <span style="float: left">{{ item.operationalName }}</span>
                 <span style="float: right; color: #8492a6; font-size: 13px">isv:{{ item.isv }}</span>
               </el-option>
@@ -23,10 +25,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="签约日期" prop="signDate.propertyVal">
-            <el-date-picker
-              v-model="signInfoForm.signDate.propertyVal"
-              type="date"
-              value-format="yyyy-MM-dd"
+            <el-date-picker v-model="signInfoForm.signDate.propertyVal" type="date" value-format="yyyy-MM-dd"
               placeholder="选择日期时间">
             </el-date-picker>
           </el-form-item>
@@ -36,7 +35,7 @@
         <el-col :span="20">
           <el-form-item label="状态说明" prop="signRemark.propertyVal">
             <el-input v-model="signInfoForm.signRemark.propertyVal" type="textarea" resize="none" :rows="3"
-                      placeholder="请输入项目总结经验,小于500个字" clearable>
+              placeholder="请输入项目总结经验,小于500个字" clearable>
             </el-input>
           </el-form-item>
         </el-col>
@@ -46,7 +45,7 @@
 </template>
 
 <script>
-import { getPropertiesMap,getOppBaseInfo } from "@/api/crm/oppUnitedInfo"
+import { getPropertiesMap, getOppBaseInfo } from "@/api/crm/oppUnitedInfo"
 
 export default {
   name: "signInfo",
@@ -58,17 +57,17 @@ export default {
       }
     }
   },
-  data(){
+  data() {
     return {
       propertyKeys: [
         "signStatus", "signChannel",
         "signDate", "signRemark"
       ],
-      signInfoForm:{
-        "signStatus":{model: "sign_info", propertyLable: "签约状态"}, 
-        "signChannel":{model: "sign_info", propertyLable: "签约渠道"},
-        "signDate":{model: "sign_info", propertyLable: "签约日期"}, 
-        "signRemark":{model: "sign_info", propertyLable: "状态说明"}
+      signInfoForm: {
+        "signStatus": { model: "sign_info", propertyLable: "签约状态" },
+        "signChannel": { model: "sign_info", propertyLable: "签约渠道" },
+        "signDate": { model: "sign_info", propertyLable: "签约日期" },
+        "signRemark": { model: "sign_info", propertyLable: "状态说明" }
       },
       signInfoModified: {},
       signInfoOriginBak: {},
@@ -99,7 +98,7 @@ export default {
           ],
         },
       },
-      signChannelList:[],
+      signChannelList: [],
     }
   },
   created() {
@@ -109,12 +108,11 @@ export default {
     initSignInfo() {
       var _this = this;
       this.flag.signInfoLoading = true;
-      this.getOperationInfo(function(){
+      this.getOperationInfo(function () {
         _this.getProperties(function () {
-          //console.log("signInfoForm:",_this.signInfoForm)
           _this.flag.signInfoLoading = false;
         })
-      });      
+      });
     },
     //获取运营最新信息
     getOperationInfo(func) {
@@ -169,7 +167,6 @@ export default {
     // 提供本组件的数据校验
     infoVerify() {
       let flag = true
-      console.log("5",this.signInfoForm)
       this.$refs["signInfoForm"].validate(valid => {
         if (!valid) {
           flag = false
@@ -203,6 +200,4 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

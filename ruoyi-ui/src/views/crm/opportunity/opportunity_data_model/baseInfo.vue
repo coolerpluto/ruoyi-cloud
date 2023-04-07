@@ -37,9 +37,9 @@
                   <dict-tag :options="dict.type.sys_work_progress" :value="scope.row.targetAdaptedProgress" />
                 </template>
               </el-table-column>
-              <el-table-column label="软件分类" align="center" fixed prop="category" :show-overflow-tooltip="true" >
+              <el-table-column label="软件分类" align="center" fixed prop="category" :show-overflow-tooltip="true">
                 <template slot-scope="scope">
-                  {{scope.row.category instanceof Array?scope.row.category.join("/"):scope.row.category}}
+                  {{ scope.row.category instanceof Array ? scope.row.category.join("/") : scope.row.category }}
                 </template>
               </el-table-column>
               <el-table-column label="项目运作主体" align="center" fixed prop="operationalName" :show-overflow-tooltip="true" />
@@ -81,20 +81,16 @@
                 <el-option v-for="dict in dict.type.crm_software_category" :key="dict.value" :label="dict.label"
                   :value="dict.value"></el-option>
               </el-select> -->
-              <el-cascader ref="categoryCascade" 
-              @change="getCategoryCheckedNodes" 
-              :props="baseInfoDialog.softwareCategory" 
-              v-model="baseInfoDialog.form.category" 
-              placeholder="请选择软件归属门类">
-                </el-cascader>
+              <el-cascader ref="categoryCascade" @change="getCategoryCheckedNodes"
+                :props="baseInfoDialog.softwareCategory" v-model="baseInfoDialog.form.category" placeholder="请选择软件归属门类">
+              </el-cascader>
             </el-form-item>
           </el-col>
           <el-col :span="10">
             <el-form-item label="软件开发商" prop="isv">
               <el-select v-model="baseInfoDialog.form.isv" @change="getIsv" placeholder="请输入关键字" filterable remote
                 :remote-method="getIsvOptions" :loading="flag.isvOptionsLoading">
-                <el-option v-for="item in baseInfoDialog.isvOptions" 
-                  :key="item.id" :label="item.companyName"
+                <el-option v-for="item in baseInfoDialog.isvOptions" :key="item.id" :label="item.companyName"
                   :value="item.companyName">
                 </el-option>
               </el-select>
@@ -122,10 +118,9 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="项目运作主体" prop="operationalName">
-              <el-select v-model="baseInfoDialog.form.operationalName"  @change="getOperational" placeholder="请输入关键字" filterable remote
-                :remote-method="getOperationalOptions" :loading="flag.operationalOptionsLoading">
-                <el-option v-for="item in baseInfoDialog.operationalOptions" 
-                  :key="item.id" :label="item.companyName"
+              <el-select v-model="baseInfoDialog.form.operationalName" @change="getOperational" placeholder="请输入关键字"
+                filterable remote :remote-method="getOperationalOptions" :loading="flag.operationalOptionsLoading">
+                <el-option v-for="item in baseInfoDialog.operationalOptions" :key="item.id" :label="item.companyName"
                   :value="item.companyName">
                 </el-option>
               </el-select>
@@ -142,8 +137,8 @@
 </template>
 
 <script>
-import {listCompany} from "@/api/crm/company";
-import {getDicts as getDicts} from '@/api/system/dict/data'
+import { listCompany } from "@/api/crm/company";
+import { getDicts as getDicts } from '@/api/system/dict/data'
 
 import {
   getOppBaseInfo
@@ -225,24 +220,24 @@ export default {
         },
         isvOptions: [],
         operationalOptions: [],
-        softwareCategory:{
+        softwareCategory: {
           lazy: true,
           value: 'dictLabel',
           label: 'dictLabel',
           children: 'children',
           checkStrictly: false,
-          lazyLoad: function(node, resolve){
-            let dictCode="crm_software_category"
-            if (node.data){
-              dictCode=node.data.remark
+          lazyLoad: function (node, resolve) {
+            let dictCode = "crm_software_category"
+            if (node.data) {
+              dictCode = node.data.remark
             }
-            if (!dictCode){
+            if (!dictCode) {
               resolve();
               return
             }
             getDicts(dictCode).then(res => {
               resolve(res.data);
-            })            
+            })
           },
         },
       },
@@ -258,7 +253,6 @@ export default {
       var _this = this
       // 开启遮盖层
       this.flag.baseInfoLoading = true;
-      //console.log("base:",_this.oppdata)
       this.getOppBaseInfo(function () {
         _this.flag.baseInfoLoading = false
       });
@@ -298,48 +292,51 @@ export default {
         minutes = currentTime.getMinutes(),
         seconds = currentTime.getSeconds(),
         milliseconds = currentTime.getMilliseconds();
-      let code = "A" + year + add0(month) + add0(date) + "N" + add0(hours) + add0(minutes) + add0(seconds) + add00(milliseconds)
+      let code = "A" + year + add0(month) + add0(date) + "N" + add0(hours) + add0(minutes) + add0(seconds) + add00(milliseconds);
+      this.baseInfoForm.oppInfo.code = code;
       return code;
     },
-    getOperationalOptions (query) {
+    getOperationalOptions(query) {
       this.flag.operationalOptionsLoading = true
-      this.baseInfoDialog.operationalOptions = [{companyName:"瀚高直签",id:"0"}]
-      listCompany({pageNum: 1,
+      this.baseInfoDialog.operationalOptions = [{ companyName: "瀚高直签", id: "0" }]
+      listCompany({
+        pageNum: 1,
         pageSize: 20,
-        businessScope:"S", // 公司业务中带S的
-        companyName:query
+        businessScope: "S", // 公司业务中带S的
+        companyName: query
       }).then(response => {
         this.baseInfoDialog.operationalOptions = this.baseInfoDialog.operationalOptions.concat(response.rows);
         this.flag.operationalOptionsLoading = false;
       });
     },
-    getOperational(selected){
+    getOperational(selected) {
       const select = this.baseInfoDialog.operationalOptions.find(item => item.companyName == selected)
-      this.baseInfoDialog.form.operationalId= select.id;
+      this.baseInfoDialog.form.operationalId = select.id;
     },
-    getIsvOptions(query){
-      this.flag.isvOptionsLoading = true     
-      listCompany({pageNum: 1,
+    getIsvOptions(query) {
+      this.flag.isvOptionsLoading = true
+      listCompany({
+        pageNum: 1,
         pageSize: 20,
-        businessScope:"ISV", //公司业务中带ISV的
-        companyName:query
+        businessScope: "ISV", //公司业务中带ISV的
+        companyName: query
       }).then(response => {
         this.baseInfoDialog.isvOptions = response.rows;
         this.flag.isvOptionsLoading = false;
       });
     },
-    getIsv(selected){
+    getIsv(selected) {
       const select = this.baseInfoDialog.isvOptions.find(item => item.companyName == selected)
-      this.baseInfoDialog.form.isvId= select.id;
+      this.baseInfoDialog.form.isvId = select.id;
     },
-    getCategoryCheckedNodes(req){
+    getCategoryCheckedNodes(req) {
       //console.log('getCategoryCheckedNodes',this.$refs.categoryCascade.getCheckedNodes())
     },
     removeApplication(row) {
-      let index = this.baseInfoForm.operations.findIndex(item=>{
-        if (row.tempId){
-            return item.tempId == row.tempId//新建的或者点击过修改
-        }else{
+      let index = this.baseInfoForm.operations.findIndex(item => {
+        if (row.tempId) {
+          return item.tempId == row.tempId//新建的或者点击过修改
+        } else {
           return item.id == row.id ////初始化来的还未点击过
         }
       })
@@ -347,13 +344,13 @@ export default {
     },
     editApplication(row) {
       //this.getCategoryCheckedNodes()
-      this.baseInfoDialog.form = Object.assign({}, row); 
+      this.baseInfoDialog.form = Object.assign({}, row);
       this.baseInfoDialog.form.category = this.baseInfoDialog.form.category.split('/')
       this.baseInfoDialog.open = true;
       this.baseInfoDialog.title = "修改应用运营信息";
     },
     openDialog() {
-      this.baseInfoDialog.form={}
+      this.baseInfoDialog.form = {}
       this.baseInfoDialog.open = true;
       this.baseInfoDialog.title = "添加应用运营信息";
       this.getOperationalOptions();
@@ -365,7 +362,7 @@ export default {
           return;
         }
         this.baseInfoDialog.form.category = this.baseInfoDialog.form.category.join("/");
-        if (!this.baseInfoDialog.form.id && !this.baseInfoDialog.form.tempId){
+        if (!this.baseInfoDialog.form.id && !this.baseInfoDialog.form.tempId) {
           this.baseInfoDialog.form.tempId = new Date().getTime()//先打个标
           this.baseInfoForm.operations.push(this.baseInfoDialog.form)
         }
@@ -405,37 +402,40 @@ export default {
       return flag;
     },
     //提取修改的信息作为提交
-    fetchInformation (){
-      this.baseInfoModified.operations_a=[]
-      this.baseInfoModified.operations_m=[]
-      this.baseInfoModified.operations_d=[]
-      if (this.baseInfoOriginBak.oppInfo.name !==this.baseInfoForm.oppInfo.name){
+    fetchInformation() {
+      this.baseInfoModified.operations_a = []
+      this.baseInfoModified.operations_m = []
+      this.baseInfoModified.operations_d = []
+      if (this.baseInfoOriginBak.oppInfo.name !== this.baseInfoForm.oppInfo.name) {
         this.baseInfoModified.oppInfo.name = this.baseInfoForm.oppInfo.name
       }
-      for(let options of this.baseInfoForm.operations){
-        if (!options.id){
+      if (this.baseInfoOriginBak.oppInfo.code !== this.baseInfoForm.oppInfo.code) {
+        this.baseInfoModified.oppInfo.code = this.baseInfoForm.oppInfo.code
+      }
+      for (let options of this.baseInfoForm.operations) {
+        if (!options.id) {
           this.baseInfoModified.operations_a.push(options)
           continue;
         }
-        let currentOld = this.baseInfoOriginBak.operations.find(item=>{return item.id==options.id;})
-        if(this.objEqual(currentOld,options)){
+        let currentOld = this.baseInfoOriginBak.operations.find(item => { return item.id == options.id; })
+        if (this.objEqual(currentOld, options)) {
           continue;
         }
         this.baseInfoModified.operations_m.push(options)
       }
-      for(let options of this.baseInfoOriginBak.operations){
-        let current = this.baseInfoForm.operations.find(item=>{return item.id==options.id;})
-        if(current){
+      for (let options of this.baseInfoOriginBak.operations) {
+        let current = this.baseInfoForm.operations.find(item => { return item.id == options.id; })
+        if (current) {
           continue;
         }
         this.baseInfoModified.operations_d.push(options)
       }
     },
     //对象属性全部平铺的情况
-    objEqual(oldObj,newObj){
-      for(let key in oldObj){
+    objEqual(oldObj, newObj) {
+      for (let key in oldObj) {
         // 不考虑new新加的标识属性
-        if(oldObj[key] !== newObj[key]){
+        if (oldObj[key] !== newObj[key]) {
           return false;
         }
       }

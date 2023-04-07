@@ -1,7 +1,7 @@
 <template>
   <div class="app-container" :style="{ pointerEvents: oppdata.action == 'V' ? 'none' : 'unset' }">
     <h3>{{ stageTitle }}</h3>
-    <el-divider/>
+    <el-divider />
     <el-form ref="actionReasonForm" :model="actionReasonForm" size="medium" label-width="220px">
       <el-row :gutter="15">
         <el-checkbox-group v-model="actionReasonForm.reasons.propertyVal" @change="changeReasonSelect">
@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import {getDicts as getDicts} from '@/api/system/dict/data'
+import { getDicts as getDicts } from '@/api/system/dict/data'
 import { getPropertiesMap } from "@/api/crm/oppUnitedInfo"
 
 export default {
@@ -44,10 +44,10 @@ export default {
     }
   },
   data() {
-    return {      
+    return {
       actionReasonForm: {
         reasons: {
-          propertyVal:[]
+          propertyVal: []
         },
       },
       actionReasonModified: {},
@@ -74,13 +74,11 @@ export default {
     },
     changeReasonSelect(obj) {
       console.log(obj)
-      //console.log(this.actionReasonForm)
     },
     initActionReason() {
       var _this = this;
       this.flag.actionReasonLoading = true;
       this.getProperties(function () {
-        //console.log("actionReasonForm:",_this.actionReasonForm)
         _this.flag.actionReasonLoading = false;
       })
     },
@@ -96,7 +94,7 @@ export default {
         code: this.oppdata.opportunityCode,
         params: {
           propertyKeys: ["reasons"],
-          model: "reasons"+this.stageShow,
+          model: "reasons" + this.stageShow,
         }
       }
       getPropertiesMap(req).then(response => {
@@ -105,7 +103,7 @@ export default {
           return
         }
         this.actionReasonForm = response.data;
-        this.actionReasonForm["reasons"].propertyVal = this.actionReasonForm["reasons"].propertyVal?this.actionReasonForm["reasons"].propertyVal.split(","):[]
+        this.actionReasonForm["reasons"].propertyVal = this.actionReasonForm["reasons"].propertyVal ? this.actionReasonForm["reasons"].propertyVal.split(",") : []
         this.actionReasonOriginBak = JSON.parse(JSON.stringify(this.actionReasonForm))
         if (typeof func == 'function') {
           func();
@@ -132,9 +130,9 @@ export default {
     },
     //提取修改的信息作为提交
     fetchInformation() {
-      if (!this.actionReasonForm['reasons'].model){
-        this.actionReasonForm['reasons'].model = "reasons"+this.stageShow;
-      }      
+      if (!this.actionReasonForm['reasons'].model) {
+        this.actionReasonForm['reasons'].model = "reasons" + this.stageShow;
+      }
       if (Object.keys(this.actionReasonOriginBak).length == 0) {
         this.actionReasonModified = JSON.parse(JSON.stringify(this.actionReasonForm))
         return;
@@ -160,9 +158,9 @@ export default {
 </script>
 
 <style scoped>
-#actionReasonVerify{
+#actionReasonVerify {
   color: #ff4949;
-    font-size: 12px;
-    line-height: 3;
+  font-size: 12px;
+  line-height: 3;
 }
 </style>

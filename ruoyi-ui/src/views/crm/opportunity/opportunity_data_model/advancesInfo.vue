@@ -126,7 +126,6 @@ export default {
   methods: {
     initAdvancesInfo() {
       var _this = this
-      //console.log("advancesInfoForm:",_this.oppdata)
       // 开启遮盖层
       this.flag.advancesInfoLoading = true;
       this.getOppAdvancesInfo(function () {
@@ -170,9 +169,9 @@ export default {
     },
     openDialog() {
       this.advancesDialog.open = true;
-      this.advancesDialog.form = { 
-        createTime: new Date(), 
-        stage: this.advancesDialog.form.stage || this.stageShow + "" 
+      this.advancesDialog.form = {
+        createTime: new Date(),
+        stage: this.advancesDialog.form.stage || this.stageShow + ""
       }
       this.advancesDialog.title = "添加进展信息";
     },
