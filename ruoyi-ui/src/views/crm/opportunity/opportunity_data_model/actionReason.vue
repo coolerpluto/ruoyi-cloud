@@ -4,7 +4,7 @@
     <el-divider />
     <el-form ref="actionReasonForm" :model="actionReasonForm" size="medium" label-width="220px">
       <el-row :gutter="15">
-        <el-checkbox-group v-model="actionReasonForm.reasons.propertyVal" @change="changeReasonSelect">
+        <el-checkbox-group v-model="actionReasonForm.reasons.propertyValList" @change="changeReasonSelect">
           <el-col v-for="item in reasonsList" :key="item.dictCode" :span="8">
             <el-checkbox :label="item.dictValue">
               {{ item.dictLabel }}
@@ -47,7 +47,8 @@ export default {
     return {
       actionReasonForm: {
         reasons: {
-          propertyVal: []
+          propertyVal: "",
+          propertyValList:[]
         },
       },
       actionReasonModified: {},
@@ -103,8 +104,9 @@ export default {
           return
         }
         this.actionReasonForm = response.data;
-        this.actionReasonForm["reasons"].propertyVal = this.actionReasonForm["reasons"].propertyVal ? this.actionReasonForm["reasons"].propertyVal.split(",") : []
-        this.actionReasonOriginBak = JSON.parse(JSON.stringify(this.actionReasonForm))
+        let reasonValList = this.actionReasonForm["reasons"].propertyVal ? this.actionReasonForm["reasons"].propertyVal.split(",") : []
+        this.actionReasonOriginBak = JSON.parse(JSON.stringify(this.actionReasonForm));
+        this.$set(this.actionReasonForm.reasons, 'propertyValList', reasonValList);// 绑到界面
         if (typeof func == 'function') {
           func();
         }
@@ -138,6 +140,7 @@ export default {
         return;
       }
       this.actionReasonModified = {}
+      this.actionReasonForm['reasons'].propertyVal = this.actionReasonForm['reasons'].propertyValList.join(',');
       Object.keys(this.actionReasonForm).forEach(key => {
         if (this.actionReasonOriginBak[key].propertyVal != this.actionReasonForm[key].propertyVal) {
           this.actionReasonModified[key] = this.actionReasonForm[key]
