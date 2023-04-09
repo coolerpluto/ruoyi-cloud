@@ -590,6 +590,7 @@
 
 <script>
 import {listUser, deptTreeSelect} from "@/api/system/user";
+import { listEmployee } from "@/api/crm/employee";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 import {listCompany, getCompany, delCompany, addCompany, updateCompany} from "@/api/crm/company";
 import {listAddr} from "@/api/system/addr";
@@ -801,7 +802,7 @@ export default {
       });
     },
     handleUserQuery(param) {
-      listUser({userName: param}).then(response => {
+      listEmployee({userName: param}).then(response => {
         this.userList = response.rows;
       });
     },

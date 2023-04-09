@@ -160,7 +160,7 @@
 import { delOpportunity } from "@/api/crm/opportunity";
 import { listUnitedOpp, delUnitedOpp, transferUnitedOpp } from "@/api/crm/oppUnitedInfo"
 import { listUser } from "@/api/system/user";
-
+import { listEmployee } from "@/api/crm/employee";
 export default {
   name: "OpportunityUnited",
   dicts: ['crm_opportunity_status'],
@@ -251,7 +251,7 @@ export default {
     },
     getPersonOptions(query) {
       this.flag.transferTargetPersonLoading = true
-      listUser({
+      listEmployee({
         pageNum: 1,
         pageSize: 20,
         userName: query,

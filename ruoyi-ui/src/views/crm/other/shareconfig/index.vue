@@ -188,6 +188,7 @@ import {
   updateShareconfig
 } from "@/api/crm/shareconfig";
 import {listUser, deptTreeSelect} from "@/api/system/user";
+import { listEmployee } from "@/api/crm/employee";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
@@ -278,7 +279,7 @@ export default {
   methods: {
     handleUserQuery(param) {
       debugger
-      listUser({userName: param}).then(response => {
+      listEmployee({userName: param}).then(response => {
         this.userList = response.rows;
       });
     },
