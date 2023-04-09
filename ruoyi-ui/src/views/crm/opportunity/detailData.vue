@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="app-container" v-loading="flag.pageLoading">
     <!--style="pointer-events: none;"-->
     <el-steps :active="stageActive" size="small" align-center simple>
       <el-step v-for="(item, index) in stageList" :key="index" :title="item.label" :icon="item.icon"
@@ -66,10 +66,7 @@ const stageComponent = require.context(
 var comObj = {};
 stageComponent.keys().forEach(fileName => {
   // 获取文件名
-  var names = fileName
-    .split("/")
-    .pop()
-    .replace(/\.vue$/, "");
+  var names = fileName.split("/").pop().replace(/\.vue$/, "");
   // 获取组件配置
   const componentConfig = stageComponent(fileName);
   // 若该组件是通过"export default"导出的，优先使用".default"，否则退回到使用模块的根
@@ -78,7 +75,7 @@ stageComponent.keys().forEach(fileName => {
 import {
   stageConfigAndInfo,
   getPropertiesMap, getOppUserInfo,
-  addUnitedOpp, updateUnitedOpps
+  addUnitedOpp, updateUnitedOpp
 } from "@/api/crm/oppUnitedInfo"
 export default {
   name: "detailData",
@@ -92,6 +89,7 @@ export default {
         currentStage: "",
       },
       flag: {
+        pageLoading: false,
         showReActiveBut: false,
         showSaveUpdateBut: false,
         showNextBut: false,
@@ -255,7 +253,7 @@ export default {
       this.targetNextStage = nextStageInfo.value
     },
     collectInfoByStage(stage) {
-      let reqBody = {code:this.inputReq.opportunityCode};//为0时为新增
+      let reqBody = { code: this.inputReq.opportunityCode };//为0时为新增
       switch (stage * 1) {
         case 1:
           reqBody['baseInfo'] = this.$refs.stage01.$refs.baseInfo.collectInfo().modifyedData;
@@ -419,19 +417,40 @@ export default {
     updateOpportunityData() {
       if (!this.updateEveryStagePerson.includes(this.$store.getters.name)) {
         // 特殊人 每个阶段都能保存， 保存时仅保留当前显示姐的信息
+        this.$modal.msgError("对不去您没权限进行该操作,若需要请联系管理员！");
         return;
       }
       console.log("updateOpportunityData:", this.stageActive);
-      if(this.verifyByStage(this.stageActive)){
-        console.log("saveOrupdateData:",this.collectInfoByStage(this.stageActive))
+      if (!this.verifyByStage(this.stageActive)) {
+        return;
       }
+      let updateData = this.collectInfoByStage(this.stageActive);
+      console.log("updateData:", updateData)
+      this.flag.pageLoading = true;
+      updateUnitedOpp({params:updateData}).then(response => {
+        this.$modal.msgSuccess("更新成功");
+        this.flag.pageLoading = false;
+      }).catch(() => {
+        this.$modal.msgError("更新失败");
+        this.flag.pageLoading = false;
+      });;
     },
     saveOrupdateOpportunityData() {
       this.flag.hasSaveOrUpdate = true;
       console.log("saveOrupdateOpportunityData:", this.inputReq);
-      if(this.verifyByStage(this.inputReq.currentStage)){
-        console.log("saveOrupdateData:",this.collectInfoByStage(this.inputReq.currentStage))
+      if (!this.verifyByStage(this.inputReq.currentStage)) {
+        return;
       }
+      let saveOrupdateData = this.collectInfoByStage(this.inputReq.currentStage);
+      console.log("saveOrupdateData:", saveOrupdateData);
+      this.flag.pageLoading = true;
+      addUnitedOpp({params:saveOrupdateData}).then(response => {
+        this.$modal.msgSuccess("新增成功");
+        this.flag.pageLoading = false;
+      }).catch(() => {
+        this.$modal.msgError("新增失败");
+        this.flag.pageLoading = false;
+      });;
     },
     changeOpportunityStage() {
       this.changeStage(this.targetNextStage)

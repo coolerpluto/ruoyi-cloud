@@ -63,7 +63,7 @@
         </el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="success" plain icon="el-icon-edit" size="mini" :disabled="single" @click="handleTransfer"
+        <el-button type="success" plain icon="el-icon-edit" size="mini" :disabled="multiple" @click="handleTransfer"
           v-hasPermi="['crm:opportunity:transfer']">批量转交
         </el-button>
       </el-col>
@@ -123,7 +123,27 @@
 
     <!-- 添加或修改商机管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="form" :model="form" :rules="rules" label-width="130px">
+        <el-row>
+          <el-col :span="18">
+            <el-form-item label="转移目标人" prop="ownerName">
+              <el-select v-model="form.ownerName" @change="getTargetPerson" placeholder="请输入 关键字拼音" filterable remote
+                :remote-method="getPersonOptions" :loading="flag.transferTargetPersonLoading">
+                <el-option v-for="item in personOptions" :key="item.id" :label="item.nickName" :value="item.userName">
+                  <span style="float: left">{{ item.nickName }}</span>
+                  <span style="float: right; color: #8492a6; font-size: 13px">{{ item.dept.deptName }}</span>
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="22">
+            <el-form-item label="备注" prop="remark">
+              <el-input v-model="form.remark" type="textarea" resize="none" :rows="3" placeholder="最多100字说明" />
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -131,27 +151,15 @@
       </div>
     </el-dialog>
     商机管理开发中。。。<br>
-    完成：列表查询、详细查询、前端新增、前端修改、前端删除<br>
-    待完成：商机各个模块的：新增、删除、修改、查看(仅查看)、转交、导出
+    完成：列表查询、详细查询、查看(仅查看)、前端新增、前端修改、前端删除、前端转交、前端导出<br>
+    待完成：商机各个模块后端的：新增、删除、修改、转交、导出
   </div>
 </template>
 
 <script>
-import {
-  listOpportunity,
-  getOpportunity,
-  delOpportunity,
-  addOpportunity,
-  updateOpportunity
-} from "@/api/crm/opportunity";
-
-import {
-  listUnitedOpp,
-  getUnitedOpp,
-  delUnitedOpp,
-  addUnitedOpp,
-  updateUnitedOpp
-} from "@/api/crm/oppUnitedInfo"
+import { delOpportunity } from "@/api/crm/opportunity";
+import { listUnitedOpp, delUnitedOpp, transferUnitedOpp } from "@/api/crm/oppUnitedInfo"
+import { listUser } from "@/api/system/user";
 
 export default {
   name: "OpportunityUnited",
@@ -191,10 +199,18 @@ export default {
           stages: null,
         },
       },
+      flag: {
+        transferTargetPersonLoading: false,
+      },
       // 表单参数
       form: {},
+      personOptions: [],
       // 表单校验
-      rules: {},
+      rules: {
+        ownerName: [
+          { required: true, message: "转移目标人未选择", trigger: "blur" }
+        ]
+      },
       rangeCreateDate: [],
       rangeUpdateDate: [],
       columns: [
@@ -233,6 +249,22 @@ export default {
         this.loading = false;
       });
     },
+    getPersonOptions(query) {
+      this.flag.transferTargetPersonLoading = true
+      listUser({
+        pageNum: 1,
+        pageSize: 20,
+        userName: query,
+      }).then(response => {
+        this.personOptions = response.rows;
+        this.flag.transferTargetPersonLoading = false;
+      });
+    },
+    getTargetPerson(selected) {
+      const select = this.personOptions.find(item => item.userName == selected)
+      this.form.ownerId = select.userId;
+      this.form.deptId = select.deptId;
+    },
     // 取消按钮
     cancel() {
       this.open = false;
@@ -262,50 +294,39 @@ export default {
     },
     /** 新增按钮操作 */
     handleAdd() {
-      //this.reset();
-      //this.open = true;
-      //this.title = "添加商机管理";
       this.$router.push("/crm/opportunity-data/index/0/A");
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
-      //this.reset();
       const code = row.code || this.codes
-      // getOpportunity(id).then(response => {
-      //   this.form = response.data;
-      //   this.open = true;
-      //   this.title = "修改商机管理";
-      // });
       this.$router.push("/crm/opportunity-data/index/" + code + "/M");
     },
     /** 修改按钮操作 */
     handleView(row) {
-      //this.reset();
       const code = row.code || this.codes
-      // getOpportunity(id).then(response => {
-      //   this.form = response.data;
-      //   this.open = true;
-      //   this.title = "修改商机管理";
-      // });
       this.$router.push("/crm/opportunity-data/index/" + code + "/V");
     },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.form.id != null) {
-            updateOpportunity(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功");
-              this.open = false;
-              this.getList();
+          let ids = this.form.selectedIds
+          var _this = this;
+          this.$modal.confirm('是否确认转移商机管理编号为"' + ids + '"的数据项？').then(function () {
+            return transferUnitedOpp({
+              params: _this.form
+              //{                
+              // selectedIds:selectedIds,
+              // selectedCodes:selectedCodes,
+              // targetOwnerId:_this.form.ownerId,
+              // targetDeptId:_this.form.deptId,
+              //}
             });
-          } else {
-            addOpportunity(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功");
-              this.open = false;
-              this.getList();
-            });
-          }
+          }).then(() => {
+            this.getList();
+            this.$modal.msgSuccess("转移成功");
+          }).catch(() => {
+          });
         }
       });
     },
@@ -323,13 +344,12 @@ export default {
     /** 转交按钮 */
     handleTransfer(row) {
       const ids = row.id || this.ids;
-      this.$modal.confirm('是否确认转移商机管理编号为"' + ids + '"的数据项？').then(function () {
-        return delOpportunity(ids);
-      }).then(() => {
-        this.getList();
-        this.$modal.msgSuccess("删除成功");
-      }).catch(() => {
-      });
+      const codes = row.code || this.codes;
+      this.open = true;
+      this.title = '转移商机负责人';
+      this.form = {}//Object.assign({}, row)
+      this.form.selectedIds = ids;
+      this.form.selectedCodes = codes;
     },
     /** 导出按钮操作 */
     handleExport() {
