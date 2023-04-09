@@ -117,6 +117,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="website != null">website,</if>
             <if test="addr != null">addr,</if>
             <if test="addrDetail != null">addr_detail,</if>
+            <if test="zipCode != null">zip_code,</if>
             <if test="businessScope != null">business_scope,</if>
             <if test="remark != null">remark,</if>
             <if test="sourceId != null">source_id,</if>
@@ -142,6 +143,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="website != null">#{website},</if>
             <if test="addr != null">#{addr},</if>
             <if test="addrDetail != null">#{addrDetail},</if>
+            <if test="zipCode != null">#{zipCode},</if>
             <if test="businessScope != null">#{businessScope},</if>
             <if test="remark != null">#{remark},</if>
             <if test="sourceId != null">#{sourceId},</if>
@@ -169,6 +171,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="website != null">website = #{website},</if>
             <if test="addr != null">addr = #{addr},</if>
             <if test="addrDetail != null">addr_detail = #{addrDetail},</if>
+            <if test="zipCode != null">zip_code = #{zipCode},</if>
             <if test="businessScope != null">business_scope = #{businessScope},</if>
             <if test="remark != null">remark = #{remark},</if>
             <if test="sourceId != null">source_id = #{sourceId},</if>
