@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="app-container" v-loading="flag.pageLoading">
     <!--style="pointer-events: none;"-->
     <el-steps :active="stageActive" size="small" align-center simple>
       <el-step v-for="(item, index) in stageList" :key="index" :title="item.label" :icon="item.icon"
@@ -66,10 +66,7 @@ const stageComponent = require.context(
 var comObj = {};
 stageComponent.keys().forEach(fileName => {
   // 获取文件名
-  var names = fileName
-    .split("/")
-    .pop()
-    .replace(/\.vue$/, "");
+  var names = fileName.split("/").pop().replace(/\.vue$/, "");
   // 获取组件配置
   const componentConfig = stageComponent(fileName);
   // 若该组件是通过"export default"导出的，优先使用".default"，否则退回到使用模块的根
@@ -78,7 +75,7 @@ stageComponent.keys().forEach(fileName => {
 import {
   stageConfigAndInfo,
   getPropertiesMap, getOppUserInfo,
-  addUnitedOpp, updateUnitedOpps
+  addUnitedOpp, updateUnitedOpp
 } from "@/api/crm/oppUnitedInfo"
 export default {
   name: "detailData",
@@ -92,6 +89,7 @@ export default {
         currentStage: "",
       },
       flag: {
+        pageLoading: false,
         showReActiveBut: false,
         showSaveUpdateBut: false,
         showNextBut: false,
@@ -125,9 +123,7 @@ export default {
   created() {
     const opportunityCode = this.$route.params && this.$route.params.code;
     const action = this.$route.params && this.$route.params.action;
-    console.log("action:", action)
     this.inputReq.action = action;
-    console.log("opportunityCode:", opportunityCode)
     this.inputReq.opportunityCode = opportunityCode;
     //const query = this.$route.query;//参考代码生产传值
     this.init();
@@ -253,389 +249,214 @@ export default {
     //下拉阶段选择
     handleNextStageCommand(command) {
       let nextStageInfo = this.targetNextStageList.find(item => item.value === command)
-      console.log(nextStageInfo)
       this.targetStageName = nextStageInfo.label
       this.targetNextStage = nextStageInfo.value
+    },
+    collectInfoByStage(stage) {
+      let reqBody = { code: this.inputReq.opportunityCode };//为0时为新增
+      switch (stage * 1) {
+        case 1:
+          reqBody['baseInfo'] = this.$refs.stage01.$refs.baseInfo.collectInfo().modifyedData;
+          reqBody['keyContacts'] = this.$refs.stage01.$refs.keyContacts.collectInfo().modifyedData;
+          reqBody['custInfo'] = this.$refs.stage01.$refs.custInfo.collectInfo().modifyedData;
+          reqBody['policyStandBy'] = this.$refs.stage01.$refs.policyStandBy.collectInfo().modifyedData;
+          reqBody['oppDesc'] = this.$refs.stage01.$refs.oppDesc.collectInfo().modifyedData;
+          reqBody['advancesInfo'] = this.$refs.stage01.$refs.advancesInfo.collectInfo().modifyedData;
+          reqBody['keyStandBy'] = this.$refs.stage01.$refs.keyStandBy.collectInfo().modifyedData;
+          break;
+        case 2:
+          reqBody['custInfo'] = this.$refs.stage02.$refs.custInfo.collectInfo().modifyedData;
+          reqBody['oppDesc'] = this.$refs.stage02.$refs.oppDesc.collectInfo().modifyedData
+          reqBody['quotationInfo'] = this.$refs.stage02.$refs.quotationInfo.collectInfo().modifyedData;
+          reqBody['competitorInfo'] = this.$refs.stage02.$refs.competitorInfo.collectInfo().modifyedData;
+          reqBody['keyContacts'] = this.$refs.stage02.$refs.keyContacts.collectInfo().modifyedData;
+          reqBody['oppInfluence'] = this.$refs.stage02.$refs.oppInfluence.collectInfo().modifyedData;
+          reqBody['summaryInfo'] = this.$refs.stage02.$refs.summaryInfo.collectInfo().modifyedData;
+          reqBody['advancesInfo'] = this.$refs.stage02.$refs.advancesInfo.collectInfo().modifyedData;
+          reqBody['keyStandBy'] = this.$refs.stage02.$refs.keyStandBy.collectInfo().modifyedData;
+          break;
+        case 3:
+          reqBody['oppDesc'] = this.$refs.stage03.$refs.oppDesc.collectInfo().modifyedData;
+          reqBody['oppImplement'] = this.$refs.stage03.$refs.oppImplement.collectInfo().modifyedData;
+          reqBody['competitorInfo'] = this.$refs.stage03.$refs.competitorInfo.collectInfo().modifyedData;
+          reqBody['KeyContacts'] = this.$refs.stage03.$refs.keyContacts.collectInfo().modifyedData;
+          reqBody['quotationInfo'] = this.$refs.stage03.$refs.quotationInfo.collectInfo().modifyedData;
+          reqBody['advancesInfo'] = this.$refs.stage03.$refs.advancesInfo.collectInfo().modifyedData;
+          reqBody['keyStandBy'] = this.$refs.stage03.$refs.keyStandBy.collectInfo().modifyedData;
+          break;
+        case 4:
+          reqBody['oppDesc'] = this.$refs.stage04.$refs.oppDesc.collectInfo().modifyedData;
+          reqBody['biddingInfo'] = this.$refs.stage04.$refs.biddingInfo.collectInfo().modifyedData;
+          reqBody['competitorInfo'] = this.$refs.stage04.$refs.competitorInfo.collectInfo().modifyedData;
+          reqBody['KeyContacts'] = this.$refs.stage04.$refs.keyContacts.collectInfo().modifyedData;
+          reqBody['quotationInfo'] = this.$refs.stage04.$refs.quotationInfo.collectInfo().modifyedData;
+          reqBody['winningBidding'] = this.$refs.stage04.$refs.winningBidding.collectInfo().modifyedData;
+          reqBody['summaryInfo'] = this.$refs.stage04.$refs.summaryInfo.collectInfo().modifyedData;
+          reqBody['advancesInfo'] = this.$refs.stage04.$refs.advancesInfo.collectInfo().modifyedData;
+          reqBody['keyStandBy'] = this.$refs.stage04.$refs.keyStandBy.collectInfo().modifyedData;
+          break;
+        case 5:
+          reqBody['quotationInfo'] = this.$refs.stage05.$refs.quotationInfo.collectInfo().modifyedData;
+          reqBody['actionReason'] = this.$refs.stage05.$refs.actionReason.collectInfo().modifyedData;
+          reqBody['summaryInfo'] = this.$refs.stage05.$refs.summaryInfo.collectInfo().modifyedData;
+          reqBody['signInfo'] = this.$refs.stage05.$refs.signInfo.collectInfo().modifyedData;
+          reqBody['advancesInfo'] = this.$refs.stage05.$refs.advancesInfo.collectInfo().modifyedData;
+          reqBody['keyStandBy'] = this.$refs.stage05.$refs.keyStandBy.collectInfo().modifyedData;
+          break;
+        case 6:
+          reqBody['actionReason'] = this.$refs.stage06.$refs.actionReason.collectInfo().modifyedData;
+          reqBody['summaryInfo'] = this.$refs.stage06.$refs.summaryInfo.collectInfo().modifyedData;
+          reqBody['costInfo'] = this.$refs.stage06.$refs.costInfo.collectInfo().modifyedData;
+          break;
+        case 7:
+          reqBody['actionReason'] = this.$refs.stage07.$refs.actionReason.collectInfo().modifyedData;
+          reqBody['summaryInfo'] = this.$refs.stage07.$refs.summaryInfo.collectInfo().modifyedData;
+          reqBody['costInfo'] = this.$refs.stage07.$refs.costInfo.collectInfo().modifyedData;
+          break;
+        case 8:
+          reqBody['actionReason'] = this.$refs.stage08.$refs.actionReason.collectInfo().modifyedData;
+          reqBody['winningBidding'] = this.$refs.stage08.$refs.winningBidding.collectInfo().modifyedData;
+          reqBody['summaryInfo'] = this.$refs.stage08.$refs.summaryInfo.collectInfo().modifyedData;
+          reqBody['costInfo'] = this.$refs.stage06.$refs.costInfo.collectInfo().modifyedData;
+          break;
+        case 9:
+          reqBody['quotationInfo'] = this.$refs.stage09.$refs.quotationInfo.collectInfo().modifyedData;
+          reqBody['actionReason'] = this.$refs.stage09.$refs.actionReason.collectInfo().modifyedData;
+          reqBody['summaryInfo'] = this.$refs.stage09.$refs.summaryInfo.collectInfo().modifyedData;
+          reqBody['signInfo'] = this.$refs.stage09.$refs.signInfo.collectInfo().modifyedData;
+          reqBody['advancesInfo'] = this.$refs.stage09.$refs.advancesInfo.collectInfo().modifyedData;
+          reqBody['keyStandBy'] = this.$refs.stage09.$refs.keyStandBy.collectInfo().modifyedData;
+          break;
+        case 11:
+          reqBody['actionReason'] = this.$refs.stage11.$refs.actionReason.collectInfo().modifyedData;
+          reqBody['summaryInfo'] = this.$refs.stage11.$refs.summaryInfo.collectInfo().modifyedData;
+          break;
+      }
+      return reqBody;
+    },
+    verifyByStage(stage) {
+      switch (stage * 1) {
+        case 1:
+          let baseInfo1 = this.$refs.stage01.$refs.baseInfo.infoVerify(),
+            keyContacts1 = this.$refs.stage01.$refs.keyContacts.infoVerify(),
+            custInfo1 = this.$refs.stage01.$refs.custInfo.infoVerify(),
+            policyStandBy1 = this.$refs.stage01.$refs.policyStandBy.infoVerify(),
+            oppDesc1 = this.$refs.stage01.$refs.oppDesc.infoVerify(),
+            advancesInfo1 = this.$refs.stage01.$refs.advancesInfo.infoVerify(),
+            keyStandBy1 = this.$refs.stage01.$refs.keyStandBy.infoVerify();
+          return baseInfo1 && keyContacts1 && custInfo1 && policyStandBy1 && oppDesc1 && advancesInfo1 && keyStandBy1;
+        case 2:
+          let custInfo2 = this.$refs.stage02.$refs.custInfo.infoVerify(),
+            oppDesc2 = this.$refs.stage02.$refs.oppDesc.infoVerify(),
+            quotationInfo2 = this.$refs.stage02.$refs.quotationInfo.infoVerify(),
+            competitorInfo2 = this.$refs.stage02.$refs.competitorInfo.infoVerify(),
+            keyContacts2 = this.$refs.stage02.$refs.keyContacts.infoVerify(),
+            oppInfluence2 = this.$refs.stage02.$refs.oppInfluence.infoVerify(),
+            summaryInfo2 = this.$refs.stage02.$refs.summaryInfo.infoVerify(),
+            advancesInfo2 = this.$refs.stage02.$refs.advancesInfo.infoVerify(),
+            keyStandBy2 = this.$refs.stage02.$refs.keyStandBy.infoVerify();
+          return custInfo2 && oppDesc2 && quotationInfo2 && competitorInfo2 && keyContacts2 && oppInfluence2 && summaryInfo2 && advancesInfo2 && keyStandBy2;
+        case 3:
+          let oppDesc3 = this.$refs.stage03.$refs.oppDesc.infoVerify(),
+            oppImplement3 = this.$refs.stage03.$refs.oppImplement.infoVerify(),
+            competitorInfo3 = this.$refs.stage03.$refs.competitorInfo.infoVerify(),
+            KeyContacts3 = this.$refs.stage03.$refs.keyContacts.infoVerify(),
+            quotationInfo3 = this.$refs.stage03.$refs.quotationInfo.infoVerify(),
+            advancesInfo3 = this.$refs.stage03.$refs.advancesInfo.infoVerify(),
+            keyStandBy3 = this.$refs.stage03.$refs.keyStandBy.infoVerify();
+          return oppDesc3 && oppImplement3 && competitorInfo3 && KeyContacts3 && quotationInfo3 && advancesInfo3 && keyStandBy3;
+        case 4:
+          let oppDesc4 = this.$refs.stage04.$refs.oppDesc.infoVerify(),
+            biddingInfo4 = this.$refs.stage04.$refs.biddingInfo.infoVerify(),
+            competitorInfo4 = this.$refs.stage04.$refs.competitorInfo.infoVerify(),
+            KeyContacts4 = this.$refs.stage04.$refs.keyContacts.infoVerify(),
+            quotationInfo4 = this.$refs.stage04.$refs.quotationInfo.infoVerify(),
+            winningBidding4 = this.$refs.stage04.$refs.winningBidding.infoVerify(),
+            summaryInfo4 = this.$refs.stage04.$refs.summaryInfo.infoVerify(),
+            advancesInfo4 = this.$refs.stage04.$refs.advancesInfo.infoVerify(),
+            keyStandBy4 = this.$refs.stage04.$refs.keyStandBy.infoVerify();
+          return oppDesc4 && biddingInfo4 && competitorInfo4 && KeyContacts4 && quotationInfo4 && winningBidding4 && summaryInfo4 && advancesInfo4 && keyStandBy4;
+        case 5:
+          let quotationInfo5 = this.$refs.stage05.$refs.quotationInfo.infoVerify(),
+            actionReason5 = this.$refs.stage05.$refs.actionReason.infoVerify(),
+            summaryInfo5 = this.$refs.stage05.$refs.summaryInfo.infoVerify(),
+            signInfo5 = this.$refs.stage05.$refs.signInfo.infoVerify(),
+            advancesInfo5 = this.$refs.stage05.$refs.advancesInfo.infoVerify(),
+            keyStandBy5 = this.$refs.stage05.$refs.keyStandBy.infoVerify();
+          return quotationInfo5 && actionReason5 && summaryInfo5 && signInfo5 && advancesInfo5 && keyStandBy5;
+        case 6:
+          let actionReason6 = this.$refs.stage06.$refs.actionReason.infoVerify(),
+            summaryInfo6 = this.$refs.stage06.$refs.summaryInfo.infoVerify(),
+            costInfo6 = this.$refs.stage06.$refs.costInfo.infoVerify();
+          return actionReason6 && summaryInfo6 && costInfo6;
+        case 7:
+          let actionReason7 = this.$refs.stage07.$refs.actionReason.infoVerify(),
+            summaryInfo7 = this.$refs.stage07.$refs.summaryInfo.infoVerify(),
+            costInfo7 = this.$refs.stage07.$refs.costInfo.infoVerify();
+          return actionReason7 && summaryInfo7 && costInfo7;
+        case 8:
+          let actionReason8 = this.$refs.stage08.$refs.actionReason.infoVerify(),
+            winningBidding8 = this.$refs.stage08.$refs.winningBidding.infoVerify(),
+            summaryInfo8 = this.$refs.stage08.$refs.summaryInfo.infoVerify(),
+            costInfo8 = this.$refs.stage06.$refs.costInfo.infoVerify();
+          return actionReason8 && winningBidding8 && summaryInfo8 && costInfo8;
+        case 9:
+          let quotationInfo9 = this.$refs.stage09.$refs.quotationInfo.infoVerify(),
+            actionReason9 = this.$refs.stage09.$refs.actionReason.infoVerify(),
+            summaryInfo9 = this.$refs.stage09.$refs.summaryInfo.infoVerify(),
+            signInfo9 = this.$refs.stage09.$refs.signInfo.infoVerify(),
+            advancesInfo9 = this.$refs.stage09.$refs.advancesInfo.infoVerify(),
+            keyStandBy9 = this.$refs.stage09.$refs.keyStandBy.infoVerify();
+          return quotationInfo9 && actionReason9 && summaryInfo9 && signInfo9 && advancesInfo9 && keyStandBy9;
+        case 11:
+          let actionReason11 = this.$refs.stage11.$refs.actionReason.infoVerify(),
+            summaryInfo11 = this.$refs.stage11.$refs.summaryInfo.infoVerify();
+          return actionReason11 && summaryInfo11;
+      }
     },
     updateOpportunityData() {
       if (!this.updateEveryStagePerson.includes(this.$store.getters.name)) {
         // 特殊人 每个阶段都能保存， 保存时仅保留当前显示姐的信息
+        this.$modal.msgError("对不去您没权限进行该操作,若需要请联系管理员！");
         return;
       }
-      console.log("updateOpportunityData:",this.stageActive);
-      switch (this.stageActive) {
-        case 1:        
-          console.log("baseInfo.infoVerify:", this.$refs.stage01.$refs.baseInfo.infoVerify())
-          console.log("baseInfo.collectInfo:", this.$refs.stage01.$refs.baseInfo.collectInfo())
-
-          console.log("KeyContacts.infoVerify:", this.$refs.stage01.$refs.keyContacts.infoVerify())
-          console.log("KeyContacts.collectInfo:", this.$refs.stage01.$refs.keyContacts.collectInfo())
-
-          console.log("custInfo.infoVerify:", this.$refs.stage01.$refs.custInfo.infoVerify())
-          console.log("custInfo.collectInfo:", this.$refs.stage01.$refs.custInfo.collectInfo())
-
-          console.log("policyStandBy.infoVerify:", this.$refs.stage01.$refs.policyStandBy.infoVerify())
-          console.log("policyStandBy.collectInfo:", this.$refs.stage01.$refs.policyStandBy.collectInfo())
-
-          console.log("oppDesc.infoVerify:", this.$refs.stage01.$refs.oppDesc.infoVerify())
-          console.log("oppDesc.collectInfo:", this.$refs.stage01.$refs.oppDesc.collectInfo())
-
-          console.log("advancesInfo.infoVerify:", this.$refs.stage01.$refs.advancesInfo.infoVerify())
-          console.log("advancesInfo.collectInfo:", this.$refs.stage01.$refs.advancesInfo.collectInfo())
-
-          console.log("keyStandBy.infoVerify:", this.$refs.stage01.$refs.keyStandBy.infoVerify())
-          console.log("keyStandBy.collectInfo:", this.$refs.stage01.$refs.keyStandBy.collectInfo())
-          break;
-        case 2:
-          console.log("custInfo.infoVerify:", this.$refs.stage02.$refs.custInfo.infoVerify())
-          console.log("custInfo.collectInfo:", this.$refs.stage02.$refs.custInfo.collectInfo())
-
-          console.log("oppDesc.infoVerify:", this.$refs.stage02.$refs.oppDesc.infoVerify())
-          console.log("oppDesc.collectInfo:", this.$refs.stage02.$refs.oppDesc.collectInfo())
-
-          console.log("quotationInfo.infoVerify:", this.$refs.stage02.$refs.quotationInfo.infoVerify())
-          console.log("quotationInfo.collectInfo:", this.$refs.stage02.$refs.quotationInfo.collectInfo())
-
-          console.log("competitorInfo.infoVerify:", this.$refs.stage02.$refs.competitorInfo.infoVerify())
-          console.log("competitorInfo.collectInfo:", this.$refs.stage02.$refs.competitorInfo.collectInfo())
-
-          console.log("KeyContacts.infoVerify:", this.$refs.stage02.$refs.keyContacts.infoVerify())
-          console.log("KeyContacts.collectInfo:", this.$refs.stage02.$refs.keyContacts.collectInfo())
-          
-          console.log("oppInfluence.infoVerify:", this.$refs.stage02.$refs.oppInfluence.infoVerify())
-          console.log("oppInfluence.collectInfo:", this.$refs.stage02.$refs.oppInfluence.collectInfo())
-          
-          console.log("summaryInfo.infoVerify:", this.$refs.stage02.$refs.summaryInfo.infoVerify())
-          console.log("summaryInfo.collectInfo:", this.$refs.stage02.$refs.summaryInfo.collectInfo())
-                    
-          console.log("advancesInfo.infoVerify:", this.$refs.stage02.$refs.advancesInfo.infoVerify())
-          console.log("advancesInfo.collectInfo:", this.$refs.stage02.$refs.advancesInfo.collectInfo())
-
-          console.log("keyStandBy.infoVerify:", this.$refs.stage02.$refs.keyStandBy.infoVerify())
-          console.log("keyStandBy.collectInfo:", this.$refs.stage02.$refs.keyStandBy.collectInfo())
-          break;
-        case 3:
-          console.log("oppDesc.infoVerify:", this.$refs.stage03.$refs.oppDesc.infoVerify())
-          console.log("oppDesc.collectInfo:", this.$refs.stage03.$refs.oppDesc.collectInfo())
-          
-          console.log("oppImplement.infoVerify:", this.$refs.stage03.$refs.oppImplement.infoVerify())
-          console.log("oppImplement.collectInfo:", this.$refs.stage03.$refs.oppImplement.collectInfo())
-
-          console.log("competitorInfo.infoVerify:", this.$refs.stage03.$refs.competitorInfo.infoVerify())
-          console.log("competitorInfo.collectInfo:", this.$refs.stage03.$refs.competitorInfo.collectInfo())
-
-          console.log("KeyContacts.infoVerify:", this.$refs.stage03.$refs.keyContacts.infoVerify())
-          console.log("KeyContacts.collectInfo:", this.$refs.stage03.$refs.keyContacts.collectInfo())
-          
-          console.log("quotationInfo.infoVerify:", this.$refs.stage03.$refs.quotationInfo.infoVerify())
-          console.log("quotationInfo.collectInfo:", this.$refs.stage03.$refs.quotationInfo.collectInfo())
-          
-          console.log("advancesInfo.infoVerify:", this.$refs.stage03.$refs.advancesInfo.infoVerify())
-          console.log("advancesInfo.collectInfo:", this.$refs.stage03.$refs.advancesInfo.collectInfo())
-
-          console.log("keyStandBy.infoVerify:", this.$refs.stage03.$refs.keyStandBy.infoVerify())
-          console.log("keyStandBy.collectInfo:", this.$refs.stage03.$refs.keyStandBy.collectInfo())
-          break;
-        case 4:
-          console.log("oppDesc.infoVerify:", this.$refs.stage04.$refs.oppDesc.infoVerify())
-          console.log("oppDesc.collectInfo:", this.$refs.stage04.$refs.oppDesc.collectInfo())
-          
-          console.log("biddingInfo.infoVerify:", this.$refs.stage04.$refs.biddingInfo.infoVerify())
-          console.log("biddingInfo.collectInfo:", this.$refs.stage04.$refs.biddingInfo.collectInfo())
-          
-          console.log("competitorInfo.infoVerify:", this.$refs.stage04.$refs.competitorInfo.infoVerify())
-          console.log("competitorInfo.collectInfo:", this.$refs.stage04.$refs.competitorInfo.collectInfo())
-
-          console.log("KeyContacts.infoVerify:", this.$refs.stage04.$refs.keyContacts.infoVerify())
-          console.log("KeyContacts.collectInfo:", this.$refs.stage04.$refs.keyContacts.collectInfo())
-          
-          console.log("quotationInfo.infoVerify:", this.$refs.stage04.$refs.quotationInfo.infoVerify())
-          console.log("quotationInfo.collectInfo:", this.$refs.stage04.$refs.quotationInfo.collectInfo())
-          
-          console.log("winningBidding.infoVerify:", this.$refs.stage04.$refs.winningBidding.infoVerify())
-          console.log("winningBidding.collectInfo:", this.$refs.stage04.$refs.winningBidding.collectInfo())
-          
-          console.log("summaryInfo.infoVerify:", this.$refs.stage04.$refs.summaryInfo.infoVerify())
-          console.log("summaryInfo.collectInfo:", this.$refs.stage04.$refs.summaryInfo.collectInfo())
-             
-          console.log("advancesInfo.infoVerify:", this.$refs.stage04.$refs.advancesInfo.infoVerify())
-          console.log("advancesInfo.collectInfo:", this.$refs.stage04.$refs.advancesInfo.collectInfo())
-
-          console.log("keyStandBy.infoVerify:", this.$refs.stage04.$refs.keyStandBy.infoVerify())
-          console.log("keyStandBy.collectInfo:", this.$refs.stage04.$refs.keyStandBy.collectInfo())
-          break;
-        case 5:
-          console.log("quotationInfo.infoVerify:", this.$refs.stage05.$refs.quotationInfo.infoVerify())
-          console.log("quotationInfo.collectInfo:", this.$refs.stage05.$refs.quotationInfo.collectInfo())
-          
-          console.log("actionReason.infoVerify:", this.$refs.stage05.$refs.actionReason.infoVerify())
-          console.log("actionReason.collectInfo:", this.$refs.stage05.$refs.actionReason.collectInfo())
-          
-          console.log("summaryInfo.infoVerify:", this.$refs.stage05.$refs.summaryInfo.infoVerify())
-          console.log("summaryInfo.collectInfo:", this.$refs.stage05.$refs.summaryInfo.collectInfo())
-             
-          console.log("signInfo.infoVerify:", this.$refs.stage05.$refs.signInfo.infoVerify())
-          console.log("signInfo.collectInfo:", this.$refs.stage05.$refs.signInfo.collectInfo())
-             
-          console.log("advancesInfo.infoVerify:", this.$refs.stage05.$refs.advancesInfo.infoVerify())
-          console.log("advancesInfo.collectInfo:", this.$refs.stage05.$refs.advancesInfo.collectInfo())
-
-          console.log("keyStandBy.infoVerify:", this.$refs.stage05.$refs.keyStandBy.infoVerify())
-          console.log("keyStandBy.collectInfo:", this.$refs.stage05.$refs.keyStandBy.collectInfo())
-          break;
-        case 6:
-          console.log("actionReason.infoVerify:", this.$refs.stage06.$refs.actionReason.infoVerify())
-          console.log("actionReason.collectInfo:", this.$refs.stage06.$refs.actionReason.collectInfo())
-          
-          console.log("summaryInfo.infoVerify:", this.$refs.stage06.$refs.summaryInfo.infoVerify())
-          console.log("summaryInfo.collectInfo:", this.$refs.stage06.$refs.summaryInfo.collectInfo())
-          
-          console.log("costInfo.infoVerify:", this.$refs.stage06.$refs.costInfo.infoVerify())
-          console.log("costInfo.collectInfo:", this.$refs.stage06.$refs.costInfo.collectInfo())
-          break;
-        case 7:
-          console.log("actionReason.infoVerify:", this.$refs.stage07.$refs.actionReason.infoVerify())
-          console.log("actionReason.collectInfo:", this.$refs.stage07.$refs.actionReason.collectInfo())
-          
-          console.log("summaryInfo.infoVerify:", this.$refs.stage07.$refs.summaryInfo.infoVerify())
-          console.log("summaryInfo.collectInfo:", this.$refs.stage07.$refs.summaryInfo.collectInfo())
-          
-          console.log("costInfo.infoVerify:", this.$refs.stage07.$refs.costInfo.infoVerify())
-          console.log("costInfo.collectInfo:", this.$refs.stage07.$refs.costInfo.collectInfo())
-          break;
-        case 8:
-          console.log("actionReason.infoVerify:", this.$refs.stage08.$refs.actionReason.infoVerify())
-          console.log("actionReason.collectInfo:", this.$refs.stage08.$refs.actionReason.collectInfo())
-          
-          console.log("winningBidding.infoVerify:", this.$refs.stage08.$refs.winningBidding.infoVerify())
-          console.log("winningBidding.collectInfo:", this.$refs.stage08.$refs.winningBidding.collectInfo())
-          
-          console.log("summaryInfo.infoVerify:", this.$refs.stage08.$refs.summaryInfo.infoVerify())
-          console.log("summaryInfo.collectInfo:", this.$refs.stage08.$refs.summaryInfo.collectInfo())
-          
-          console.log("costInfo.infoVerify:", this.$refs.stage06.$refs.costInfo.infoVerify())
-          console.log("costInfo.collectInfo:", this.$refs.stage06.$refs.costInfo.collectInfo())
-          break;
-        case 9:
-          console.log("quotationInfo.infoVerify:", this.$refs.stage09.$refs.quotationInfo.infoVerify())
-          console.log("quotationInfo.collectInfo:", this.$refs.stage09.$refs.quotationInfo.collectInfo())
-          
-          console.log("actionReason.infoVerify:", this.$refs.stage09.$refs.actionReason.infoVerify())
-          console.log("actionReason.collectInfo:", this.$refs.stage09.$refs.actionReason.collectInfo())
-          
-          console.log("summaryInfo.infoVerify:", this.$refs.stage09.$refs.summaryInfo.infoVerify())
-          console.log("summaryInfo.collectInfo:", this.$refs.stage09.$refs.summaryInfo.collectInfo())
-             
-          console.log("signInfo.infoVerify:", this.$refs.stage09.$refs.signInfo.infoVerify())
-          console.log("signInfo.collectInfo:", this.$refs.stage09.$refs.signInfo.collectInfo())
-             
-          console.log("advancesInfo.infoVerify:", this.$refs.stage09.$refs.advancesInfo.infoVerify())
-          console.log("advancesInfo.collectInfo:", this.$refs.stage09.$refs.advancesInfo.collectInfo())
-
-          console.log("keyStandBy.infoVerify:", this.$refs.stage09.$refs.keyStandBy.infoVerify())
-          console.log("keyStandBy.collectInfo:", this.$refs.stage09.$refs.keyStandBy.collectInfo())
-          break;
-        case 11:
-          console.log("actionReason.infoVerify:", this.$refs.stage11.$refs.actionReason.infoVerify())
-          console.log("actionReason.collectInfo:", this.$refs.stage11.$refs.actionReason.collectInfo())
-          
-          console.log("summaryInfo.infoVerify:", this.$refs.stage11.$refs.summaryInfo.infoVerify())
-          console.log("summaryInfo.collectInfo:", this.$refs.stage11.$refs.summaryInfo.collectInfo())          
-          break;
+      console.log("updateOpportunityData:", this.stageActive);
+      if (!this.verifyByStage(this.stageActive)) {
+        return;
       }
+      let updateData = this.collectInfoByStage(this.stageActive);
+      console.log("updateData:", updateData)
+      this.flag.pageLoading = true;
+      updateUnitedOpp({params:updateData}).then(response => {
+        this.$modal.msgSuccess("更新成功");
+        this.flag.pageLoading = false;
+      }).catch(() => {
+        this.$modal.msgError("更新失败");
+        this.flag.pageLoading = false;
+      });;
     },
     saveOrupdateOpportunityData() {
       this.flag.hasSaveOrUpdate = true;
-      console.log("saveOrupdateOpportunityData:",this.inputReq);
-      switch (this.inputReq.currentStage) {
-        case 1:        
-          console.log("baseInfo.infoVerify:", this.$refs.stage01.$refs.baseInfo.infoVerify())
-          console.log("baseInfo.collectInfo:", this.$refs.stage01.$refs.baseInfo.collectInfo())
-
-          console.log("KeyContacts.infoVerify:", this.$refs.stage01.$refs.keyContacts.infoVerify())
-          console.log("KeyContacts.collectInfo:", this.$refs.stage01.$refs.keyContacts.collectInfo())
-
-          console.log("custInfo.infoVerify:", this.$refs.stage01.$refs.custInfo.infoVerify())
-          console.log("custInfo.collectInfo:", this.$refs.stage01.$refs.custInfo.collectInfo())
-
-          console.log("policyStandBy.infoVerify:", this.$refs.stage01.$refs.policyStandBy.infoVerify())
-          console.log("policyStandBy.collectInfo:", this.$refs.stage01.$refs.policyStandBy.collectInfo())
-
-          console.log("oppDesc.infoVerify:", this.$refs.stage01.$refs.oppDesc.infoVerify())
-          console.log("oppDesc.collectInfo:", this.$refs.stage01.$refs.oppDesc.collectInfo())
-
-          console.log("advancesInfo.infoVerify:", this.$refs.stage01.$refs.advancesInfo.infoVerify())
-          console.log("advancesInfo.collectInfo:", this.$refs.stage01.$refs.advancesInfo.collectInfo())
-
-          console.log("keyStandBy.infoVerify:", this.$refs.stage01.$refs.keyStandBy.infoVerify())
-          console.log("keyStandBy.collectInfo:", this.$refs.stage01.$refs.keyStandBy.collectInfo())
-          break;
-        case 2:
-          console.log("custInfo.infoVerify:", this.$refs.stage02.$refs.custInfo.infoVerify())
-          console.log("custInfo.collectInfo:", this.$refs.stage02.$refs.custInfo.collectInfo())
-
-          console.log("oppDesc.infoVerify:", this.$refs.stage02.$refs.oppDesc.infoVerify())
-          console.log("oppDesc.collectInfo:", this.$refs.stage02.$refs.oppDesc.collectInfo())
-
-          console.log("quotationInfo.infoVerify:", this.$refs.stage02.$refs.quotationInfo.infoVerify())
-          console.log("quotationInfo.collectInfo:", this.$refs.stage02.$refs.quotationInfo.collectInfo())
-
-          console.log("competitorInfo.infoVerify:", this.$refs.stage02.$refs.competitorInfo.infoVerify())
-          console.log("competitorInfo.collectInfo:", this.$refs.stage02.$refs.competitorInfo.collectInfo())
-
-          console.log("KeyContacts.infoVerify:", this.$refs.stage02.$refs.keyContacts.infoVerify())
-          console.log("KeyContacts.collectInfo:", this.$refs.stage02.$refs.keyContacts.collectInfo())
-          
-          console.log("oppInfluence.infoVerify:", this.$refs.stage02.$refs.oppInfluence.infoVerify())
-          console.log("oppInfluence.collectInfo:", this.$refs.stage02.$refs.oppInfluence.collectInfo())
-          
-          console.log("summaryInfo.infoVerify:", this.$refs.stage02.$refs.summaryInfo.infoVerify())
-          console.log("summaryInfo.collectInfo:", this.$refs.stage02.$refs.summaryInfo.collectInfo())
-                    
-          console.log("advancesInfo.infoVerify:", this.$refs.stage02.$refs.advancesInfo.infoVerify())
-          console.log("advancesInfo.collectInfo:", this.$refs.stage02.$refs.advancesInfo.collectInfo())
-
-          console.log("keyStandBy.infoVerify:", this.$refs.stage02.$refs.keyStandBy.infoVerify())
-          console.log("keyStandBy.collectInfo:", this.$refs.stage02.$refs.keyStandBy.collectInfo())
-          break;
-        case 3:
-          console.log("oppDesc.infoVerify:", this.$refs.stage03.$refs.oppDesc.infoVerify())
-          console.log("oppDesc.collectInfo:", this.$refs.stage03.$refs.oppDesc.collectInfo())
-          
-          console.log("oppImplement.infoVerify:", this.$refs.stage03.$refs.oppImplement.infoVerify())
-          console.log("oppImplement.collectInfo:", this.$refs.stage03.$refs.oppImplement.collectInfo())
-
-          console.log("competitorInfo.infoVerify:", this.$refs.stage03.$refs.competitorInfo.infoVerify())
-          console.log("competitorInfo.collectInfo:", this.$refs.stage03.$refs.competitorInfo.collectInfo())
-
-          console.log("KeyContacts.infoVerify:", this.$refs.stage03.$refs.keyContacts.infoVerify())
-          console.log("KeyContacts.collectInfo:", this.$refs.stage03.$refs.keyContacts.collectInfo())
-          
-          console.log("quotationInfo.infoVerify:", this.$refs.stage03.$refs.quotationInfo.infoVerify())
-          console.log("quotationInfo.collectInfo:", this.$refs.stage03.$refs.quotationInfo.collectInfo())
-          
-          console.log("advancesInfo.infoVerify:", this.$refs.stage03.$refs.advancesInfo.infoVerify())
-          console.log("advancesInfo.collectInfo:", this.$refs.stage03.$refs.advancesInfo.collectInfo())
-
-          console.log("keyStandBy.infoVerify:", this.$refs.stage03.$refs.keyStandBy.infoVerify())
-          console.log("keyStandBy.collectInfo:", this.$refs.stage03.$refs.keyStandBy.collectInfo())
-          break;
-        case 4:
-          console.log("oppDesc.infoVerify:", this.$refs.stage04.$refs.oppDesc.infoVerify())
-          console.log("oppDesc.collectInfo:", this.$refs.stage04.$refs.oppDesc.collectInfo())
-          
-          console.log("biddingInfo.infoVerify:", this.$refs.stage04.$refs.biddingInfo.infoVerify())
-          console.log("biddingInfo.collectInfo:", this.$refs.stage04.$refs.biddingInfo.collectInfo())
-          
-          console.log("competitorInfo.infoVerify:", this.$refs.stage04.$refs.competitorInfo.infoVerify())
-          console.log("competitorInfo.collectInfo:", this.$refs.stage04.$refs.competitorInfo.collectInfo())
-
-          console.log("KeyContacts.infoVerify:", this.$refs.stage04.$refs.keyContacts.infoVerify())
-          console.log("KeyContacts.collectInfo:", this.$refs.stage04.$refs.keyContacts.collectInfo())
-          
-          console.log("quotationInfo.infoVerify:", this.$refs.stage04.$refs.quotationInfo.infoVerify())
-          console.log("quotationInfo.collectInfo:", this.$refs.stage04.$refs.quotationInfo.collectInfo())
-          
-          console.log("winningBidding.infoVerify:", this.$refs.stage04.$refs.winningBidding.infoVerify())
-          console.log("winningBidding.collectInfo:", this.$refs.stage04.$refs.winningBidding.collectInfo())
-          
-          console.log("summaryInfo.infoVerify:", this.$refs.stage04.$refs.summaryInfo.infoVerify())
-          console.log("summaryInfo.collectInfo:", this.$refs.stage04.$refs.summaryInfo.collectInfo())
-             
-          console.log("advancesInfo.infoVerify:", this.$refs.stage04.$refs.advancesInfo.infoVerify())
-          console.log("advancesInfo.collectInfo:", this.$refs.stage04.$refs.advancesInfo.collectInfo())
-
-          console.log("keyStandBy.infoVerify:", this.$refs.stage04.$refs.keyStandBy.infoVerify())
-          console.log("keyStandBy.collectInfo:", this.$refs.stage04.$refs.keyStandBy.collectInfo())
-          break;
-        case 5:
-          console.log("quotationInfo.infoVerify:", this.$refs.stage05.$refs.quotationInfo.infoVerify())
-          console.log("quotationInfo.collectInfo:", this.$refs.stage05.$refs.quotationInfo.collectInfo())
-          
-          console.log("actionReason.infoVerify:", this.$refs.stage05.$refs.actionReason.infoVerify())
-          console.log("actionReason.collectInfo:", this.$refs.stage05.$refs.actionReason.collectInfo())
-          
-          console.log("summaryInfo.infoVerify:", this.$refs.stage05.$refs.summaryInfo.infoVerify())
-          console.log("summaryInfo.collectInfo:", this.$refs.stage05.$refs.summaryInfo.collectInfo())
-             
-          console.log("signInfo.infoVerify:", this.$refs.stage05.$refs.signInfo.infoVerify())
-          console.log("signInfo.collectInfo:", this.$refs.stage05.$refs.signInfo.collectInfo())
-             
-          console.log("advancesInfo.infoVerify:", this.$refs.stage05.$refs.advancesInfo.infoVerify())
-          console.log("advancesInfo.collectInfo:", this.$refs.stage05.$refs.advancesInfo.collectInfo())
-
-          console.log("keyStandBy.infoVerify:", this.$refs.stage05.$refs.keyStandBy.infoVerify())
-          console.log("keyStandBy.collectInfo:", this.$refs.stage05.$refs.keyStandBy.collectInfo())
-          break;
-        case 6:
-          console.log("actionReason.infoVerify:", this.$refs.stage06.$refs.actionReason.infoVerify())
-          console.log("actionReason.collectInfo:", this.$refs.stage06.$refs.actionReason.collectInfo())
-          
-          console.log("summaryInfo.infoVerify:", this.$refs.stage06.$refs.summaryInfo.infoVerify())
-          console.log("summaryInfo.collectInfo:", this.$refs.stage06.$refs.summaryInfo.collectInfo())
-          
-          console.log("costInfo.infoVerify:", this.$refs.stage06.$refs.costInfo.infoVerify())
-          console.log("costInfo.collectInfo:", this.$refs.stage06.$refs.costInfo.collectInfo())
-          break;
-        case 7:
-          console.log("actionReason.infoVerify:", this.$refs.stage07.$refs.actionReason.infoVerify())
-          console.log("actionReason.collectInfo:", this.$refs.stage07.$refs.actionReason.collectInfo())
-          
-          console.log("summaryInfo.infoVerify:", this.$refs.stage07.$refs.summaryInfo.infoVerify())
-          console.log("summaryInfo.collectInfo:", this.$refs.stage07.$refs.summaryInfo.collectInfo())
-          
-          console.log("costInfo.infoVerify:", this.$refs.stage07.$refs.costInfo.infoVerify())
-          console.log("costInfo.collectInfo:", this.$refs.stage07.$refs.costInfo.collectInfo())
-          break;
-        case 8:
-          console.log("actionReason.infoVerify:", this.$refs.stage08.$refs.actionReason.infoVerify())
-          console.log("actionReason.collectInfo:", this.$refs.stage08.$refs.actionReason.collectInfo())
-          
-          console.log("winningBidding.infoVerify:", this.$refs.stage08.$refs.winningBidding.infoVerify())
-          console.log("winningBidding.collectInfo:", this.$refs.stage08.$refs.winningBidding.collectInfo())
-          
-          console.log("summaryInfo.infoVerify:", this.$refs.stage08.$refs.summaryInfo.infoVerify())
-          console.log("summaryInfo.collectInfo:", this.$refs.stage08.$refs.summaryInfo.collectInfo())
-          
-          console.log("costInfo.infoVerify:", this.$refs.stage06.$refs.costInfo.infoVerify())
-          console.log("costInfo.collectInfo:", this.$refs.stage06.$refs.costInfo.collectInfo())
-         
-          break;
-        case 9:
-          console.log("quotationInfo.infoVerify:", this.$refs.stage09.$refs.quotationInfo.infoVerify())
-          console.log("quotationInfo.collectInfo:", this.$refs.stage09.$refs.quotationInfo.collectInfo())
-          
-          console.log("actionReason.infoVerify:", this.$refs.stage09.$refs.actionReason.infoVerify())
-          console.log("actionReason.collectInfo:", this.$refs.stage09.$refs.actionReason.collectInfo())
-          
-          console.log("summaryInfo.infoVerify:", this.$refs.stage09.$refs.summaryInfo.infoVerify())
-          console.log("summaryInfo.collectInfo:", this.$refs.stage09.$refs.summaryInfo.collectInfo())
-             
-          console.log("signInfo.infoVerify:", this.$refs.stage09.$refs.signInfo.infoVerify())
-          console.log("signInfo.collectInfo:", this.$refs.stage09.$refs.signInfo.collectInfo())
-             
-          console.log("advancesInfo.infoVerify:", this.$refs.stage09.$refs.advancesInfo.infoVerify())
-          console.log("advancesInfo.collectInfo:", this.$refs.stage09.$refs.advancesInfo.collectInfo())
-
-          console.log("keyStandBy.infoVerify:", this.$refs.stage09.$refs.keyStandBy.infoVerify())
-          console.log("keyStandBy.collectInfo:", this.$refs.stage09.$refs.keyStandBy.collectInfo())
-          break;
-        case 11:
-          console.log("actionReason.infoVerify:", this.$refs.stage11.$refs.actionReason.infoVerify())
-          console.log("actionReason.collectInfo:", this.$refs.stage11.$refs.actionReason.collectInfo())
-          
-          console.log("summaryInfo.infoVerify:", this.$refs.stage11.$refs.summaryInfo.infoVerify())
-          console.log("summaryInfo.collectInfo:", this.$refs.stage11.$refs.summaryInfo.collectInfo())          
-          break;
+      console.log("saveOrupdateOpportunityData:", this.inputReq);
+      if (!this.verifyByStage(this.inputReq.currentStage)) {
+        return;
       }
+      let saveOrupdateData = this.collectInfoByStage(this.inputReq.currentStage);
+      console.log("saveOrupdateData:", saveOrupdateData);
+      this.flag.pageLoading = true;
+      addUnitedOpp({params:saveOrupdateData}).then(response => {
+        this.$modal.msgSuccess("新增成功");
+        this.flag.pageLoading = false;
+      }).catch(() => {
+        this.$modal.msgError("新增失败");
+        this.flag.pageLoading = false;
+      });;
     },
     changeOpportunityStage() {
-      console.log(this.inputReq);
       this.changeStage(this.targetNextStage)
       this.flag.hasSaveOrUpdate = false;
     },
     reActiveOpportunity() {
-      console.log(this.inputReq);
       this.changeStage(2);
     }
   }

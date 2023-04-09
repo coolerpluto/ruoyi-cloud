@@ -43,7 +43,7 @@ export default {
         "oppInfluence"
       ],
       oppInfluenceForm: {
-        "oppInfluence": {model: "oppo_influence", propertyLable: "对用户组织架构及作用说明" }
+        "oppInfluence": { model: "oppo_influence", propertyLable: "对用户组织架构及作用说明" }
       },
       oppInfluenceModified: {},
       oppInfluenceOriginBak: {},
@@ -69,7 +69,6 @@ export default {
       var _this = this;
       this.flag.oppInfluenceLoading = true;
       this.getProperties(function () {
-        //console.log("oppInfluenceForm:",_this.oppInfluenceForm)
         _this.flag.oppInfluenceLoading = false;
       })
     },

@@ -118,7 +118,6 @@ export default {
       // 开启遮盖层
       this.flag.policyInfoLoading = true;
       this.getProperties(function () {
-        //console.log("policyStandByForm:",_this.policyStandByForm)
         _this.flag.policyInfoLoading = false;
       })
     },
@@ -193,7 +192,7 @@ export default {
       this.policyStandByForm.policyReleaseYear.propertyVal = this.policyInfoDialog.selectedPolicy.releaseYear
 
       this.policyInfoDialog.open = false;
-      this.$set(this.policyStandByForm.policyName,'propertyVal',this.policyInfoDialog.selectedPolicy.name);
+      this.$set(this.policyStandByForm.policyName, 'propertyVal', this.policyInfoDialog.selectedPolicy.name);
 
     },
     cancelDialog() {
@@ -208,16 +207,16 @@ export default {
           return flag
         }
       });
-
-      if (!this.policyStandByForm.policyId.propertyVal) {
-        flag = false
-      }
+      // 暂时不校验必填
+      // if (!this.policyStandByForm.policyId.propertyVal) {
+      //   flag = false
+      // }
       return flag;
     },
     //提取修改的信息作为提交
     fetchInformation() {
       let update = false
-      if (Object.keys(this.policyStandByOriginBak).length!=0){
+      if (Object.keys(this.policyStandByOriginBak).length != 0) {
         if (this.policyStandByForm.policyId.propertyVal !== this.policyStandByOriginBak.policyId.propertyVal) {
           update = true;
         }
@@ -227,7 +226,7 @@ export default {
         if (this.policyStandByForm.policyReleaseYear.propertyVal !== this.policyStandByOriginBak.policyReleaseYear.propertyVal) {
           update = true;
         }
-      }else{
+      } else {
         update = true;
       }
       if (update) {

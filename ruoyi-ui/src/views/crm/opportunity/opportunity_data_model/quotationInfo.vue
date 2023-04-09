@@ -58,8 +58,7 @@
           <el-col :span="11">
             <el-form-item label="版本" prop="productVersion">
               <el-select v-model="quotationDialog.form.productVersion" @change="selectProductVersion">
-                <el-option v-for="item in quotationDialog.productVersion" 
-                  :key="item.dictValue" :label="item.dictLabel"
+                <el-option v-for="item in quotationDialog.productVersion" :key="item.dictValue" :label="item.dictLabel"
                   :value="item.dictValue"></el-option>
               </el-select>
             </el-form-item>
@@ -228,15 +227,15 @@ export default {
       })
       this.quotationDialog.form.productName = select.label;
       var _this = this;
-      this.getNextOptions(select.raw.remark,function(res){
+      this.getNextOptions(select.raw.remark, function (res) {
         _this.quotationDialog.productVersion = res;
         _this.quotationDialog.productSecVersion = [];
       })
       this.$set(this.quotationDialog.form, 'productVersion', "");
       this.$set(this.quotationDialog.form, 'productSecVersion', "");
     },
-    getNextOptions(dictCode,func){
-      this.getDicts(dictCode).then(res=>{        
+    getNextOptions(dictCode, func) {
+      this.getDicts(dictCode).then(res => {
         if (typeof func == 'function') {
           func(res.data);
         }
@@ -247,17 +246,17 @@ export default {
         }
       })
     },
-    selectProductVersion(val) { 
+    selectProductVersion(val) {
       this.$set(this.quotationDialog.form, 'productSecVersion', "");
       let select = this.quotationDialog.productVersion.find(item => {
         return item.dictValue == val
       })
       var _this = this;
-      this.getNextOptions(select.remark,function(res){
+      this.getNextOptions(select.remark, function (res) {
         _this.quotationDialog.productSecVersion = res;
       })
     },
-    
+
     calculation(value) {
       let productCount = (this.quotationDialog.form.productCount || 0) * 1;
       let productPrice = (this.quotationDialog.form.productPrice || 0) * 1;

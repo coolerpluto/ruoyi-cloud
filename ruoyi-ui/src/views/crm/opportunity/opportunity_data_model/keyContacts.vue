@@ -18,7 +18,7 @@
             <dict-tag :options="dict.type.crm_company_properties_type" :value="scope.row.companyProperty" />
           </template>
         </el-table-column>
-        <el-table-column label="人员角色" align="center" prop="roleInCompany" :show-overflow-tooltip="true" >
+        <el-table-column label="人员角色" align="center" prop="roleInCompany" :show-overflow-tooltip="true">
           <template slot-scope="scope">
             <dict-tag :options="dict.type.crm_external_person_role" :value="scope.row.roleInCompany" />
           </template>
@@ -35,7 +35,7 @@
             <label>对接情况<span style="color: red;">(按照重要程度选择最新进展)</span></label>
           </template>
         </el-table-column>
-        <el-table-column label="关系程度" align="center" prop="relationship" :show-overflow-tooltip="true" >
+        <el-table-column label="关系程度" align="center" prop="relationship" :show-overflow-tooltip="true">
           <template slot-scope="scope">
             <dict-tag :options="dict.type.crm_hgdb_acceptability" :value="scope.row.relationship" />
           </template>
@@ -254,7 +254,6 @@ export default {
   methods: {
     initKeyContacts() {
       var _this = this
-      //console.log("KeyContacts:",_this.oppdata)
       // 开启遮盖层
       this.flag.contactInfoLoading = true;
       this.getOppContactsInfo(function () {
@@ -344,10 +343,10 @@ export default {
     },
     //提取修改的信息作为提交
     fetchInformation() {
-      if (Object.keys(this.keyContactOriginBak).length==0){
+      if (Object.keys(this.keyContactOriginBak).length == 0) {
         this.keyContactModified.keyContacts_a = this.keyContactForm.keyContacts
         return;
-      }      
+      }
       this.keyContactModified.keyContacts_a = []
       this.keyContactModified.keyContacts_m = []
       this.keyContactModified.keyContacts_d = []
