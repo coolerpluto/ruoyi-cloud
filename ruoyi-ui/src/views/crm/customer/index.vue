@@ -210,7 +210,7 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="公司地址" prop="addr">
-                <el-cascader :props="addrProps" v-model="form.addr" clearable placeholder="请选择公司地址">
+                <el-cascader :props="addrProps" v-model="form.addr" clearable placeholder="请选择公司地址" style="width: 250px;">
                 </el-cascader>
               </el-form-item>
             </el-col>
