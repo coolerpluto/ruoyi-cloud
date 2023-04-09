@@ -117,7 +117,7 @@
 
 <script>
 import { listCompany } from "@/api/crm/company";
-import { getPropertiesMap } from "@/api/crm/oppUnitedInfo"
+import { getPropertiesMap } from "@/api/crm/oppUnitedInfo";
 export default {
   name: "custInfo",
   dicts: ['crm_industry_influence'],

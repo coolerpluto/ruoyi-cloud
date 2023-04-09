@@ -215,6 +215,13 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
+              <el-form-item label="地址邮编" prop="zipCode">
+                <el-input v-model="form.zipCode" placeholder="请输入邮编"/>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="24">
               <el-form-item label="详细地址" prop="addrDetail">
                 <el-input v-model="form.addrDetail" placeholder="请输入公司其他描述"/>
               </el-form-item>
