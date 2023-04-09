@@ -86,7 +86,7 @@
 <script>
 import { getOppSupportInfo } from "@/api/crm/oppUnitedInfo"
 import { listUser } from "@/api/system/user";
-
+import { listEmployee } from "@/api/crm/employee";
 export default {
   name: "keyStandBy",
   dicts: ['crm_opportunity_status'],
@@ -197,7 +197,7 @@ export default {
     },
     getSupportorOptions(query) {
       this.flag.keyStandByOptionsLoading = true
-      listUser({
+      listEmployee({
         pageNum: 1,
         pageSize: 20,
         userName: query,

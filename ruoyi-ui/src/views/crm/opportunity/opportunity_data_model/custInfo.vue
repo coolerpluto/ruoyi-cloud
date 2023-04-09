@@ -16,22 +16,24 @@
             </el-form-item>
           </el-col>
           <el-col :span="15">
-            <el-form-item label="公司地址" prop="userCompanyAddr.propertyVal">
-              <el-input v-model="custInfoForm.userCompanyAddr.propertyVal" readonly placeholder="请选择公司地址三级联动">
-              </el-input>
+            <el-form-item label="公司地址" prop="userCompanyAddr.propertyValList">
+              <el-cascader :props="addrProps" v-if="cascaderVisiable"
+                v-model="custInfoForm.userCompanyAddr.propertyValList" disabled placeholder="请选择公司地址"
+                style="width: 250px;">
+              </el-cascader>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="15">
           <el-col :span="9">
             <el-form-item label="地址邮编" prop="userCompanyZipCode.propertyVal">
-              <el-input v-model="custInfoForm.userCompanyZipCode.propertyVal" readonly placeholder="请输入地址邮编">
+              <el-input v-model="custInfoForm.userCompanyZipCode.propertyVal" disabled placeholder="请输入地址邮编">
               </el-input>
             </el-form-item>
           </el-col>
           <el-col :span="15">
             <el-form-item label="详细地址" prop="userCompanyAddrDetail.propertyVal">
-              <el-input v-model="custInfoForm.userCompanyAddrDetail.propertyVal" readonly placeholder="请输入公司地址到门牌号">
+              <el-input v-model="custInfoForm.userCompanyAddrDetail.propertyVal" disabled placeholder="请输入公司地址到门牌号">
               </el-input>
             </el-form-item>
           </el-col>
@@ -39,7 +41,7 @@
         <el-row :gutter="15">
           <el-col :span="24">
             <el-form-item label="客户描述" prop="userCompanyDesc.propertyVal">
-              <el-input v-model="custInfoForm.userCompanyDesc.propertyVal" readonly type="textarea" resize="none"
+              <el-input v-model="custInfoForm.userCompanyDesc.propertyVal" disabled type="textarea" resize="none"
                 :rows="2" placeholder="请输入对客户的描述信息">
               </el-input>
             </el-form-item>
@@ -90,7 +92,8 @@
       </div>
     </el-form>
     <!-- 添加或修改信息记录对话框 -->
-    <el-dialog :title="custInfoDialog.title" :visible.sync="custInfoDialog.open" width="800px" append-to-body>
+    <el-dialog :title="custInfoDialog.title" :visible.sync="custInfoDialog.open" width="800px" append-to-body
+      :show-close="false">
       <el-form ref="custInfoDialog.form" :inline="true" :model="custInfoDialog.form" label-width="100px">
         <el-form-item label="公司名称" prop="code">
           <el-input v-model="custInfoDialog.form.companyName" placeholder="请输入公司名称" clearable />
@@ -103,7 +106,7 @@
       <el-table v-loading="flag.dialogTableLoading" highlight-current-row @current-change="handleCurrentChange"
         :data="custInfoDialog.companys">
         <el-table-column label="公司名称" align="center" prop="companyName" :show-overflow-tooltip="true" />
-        <el-table-column label="公司地址" align="center" prop="addr" :show-overflow-tooltip="true" />
+        <!-- <el-table-column label="公司地址" align="center" prop="addr" :show-overflow-tooltip="true" /> -->
         <el-table-column label="详细地址" align="center" prop="addrDetail" :show-overflow-tooltip="true" />
         <el-table-column label="描述" align="center" prop="remark" :show-overflow-tooltip="true" />
       </el-table>
@@ -117,7 +120,8 @@
 
 <script>
 import { listCompany } from "@/api/crm/company";
-import { getPropertiesMap } from "@/api/crm/oppUnitedInfo"
+import { getPropertiesMap } from "@/api/crm/oppUnitedInfo";
+import { listAddr } from "@/api/system/addr";
 export default {
   name: "custInfo",
   dicts: ['crm_industry_influence'],
@@ -197,6 +201,36 @@ export default {
         total: 0,
         selectedCompany: {},
       },
+      cascaderVisiable: true,
+      addrProps: {
+        lazy: true,
+        value: 'code',
+        label: 'name',
+        children: 'children',
+        checkStrictly: true,
+        lazyLoad: function (node, resolve) {
+          let addrParams = {
+            level: 'province',
+          }
+          if (node.data) {
+            addrParams.parent = node.data.code;
+            switch (node.data.level) {
+              case 'province':
+                addrParams.level = 'city';
+                break;
+              case 'city':
+                addrParams.level = 'area';
+                break;
+              case 'area':
+                addrParams.level = 'street';
+                break;
+            }
+          }
+          listAddr(addrParams).then(response => {
+            resolve(response.data)
+          })
+        }
+      },
     }
   },
   created() {
@@ -233,6 +267,7 @@ export default {
           return
         }
         this.custInfoForm = response.data;
+        this.custInfoForm['userCompanyAddr'].propertyValList = this.custInfoForm['userCompanyAddr'].propertyVal.split(",");
         this.custInfoOriginBak = JSON.parse(JSON.stringify(this.custInfoForm))
         if (typeof func == 'function') {
           func();
@@ -245,6 +280,7 @@ export default {
     },
     openDialog() {
       this.custInfoDialog.open = true;
+      this.cascaderVisiable = false
     },
     getListCompanys() {
       this.flag.dialogTableLoading = true
@@ -258,18 +294,28 @@ export default {
       this.custInfoDialog.selectedCompany = val
     },
     submitDialogForm() {
+      if (!this.custInfoDialog.selectedCompany.id) {
+        this.$modal.msgError("未选择公司的,请选择");
+        return
+      }
       this.custInfoForm.userCompanyId.propertyVal = this.custInfoDialog.selectedCompany.id
-      //this.custInfoForm.userCompanyName.propertyVal = this.custInfoDialog.selectedCompany.companyName
       this.custInfoForm.userCompanyCode.propertyVal = this.custInfoDialog.selectedCompany.code
-      this.custInfoForm.userCompanyAddr.propertyVal = this.custInfoDialog.selectedCompany.addr
       this.custInfoForm.userCompanyAddrDetail.propertyVal = this.custInfoDialog.selectedCompany.addrDetail
       this.custInfoForm.userCompanyZipCode.propertyVal = this.custInfoDialog.selectedCompany.zipCode
       this.custInfoForm.userCompanyDesc.propertyVal = this.custInfoDialog.selectedCompany.remark
-      this.custInfoDialog.open = false;
+
       this.$set(this.custInfoForm.userCompanyName, 'propertyVal', this.custInfoDialog.selectedCompany.companyName);
+      this.$set(this.custInfoForm.userCompanyAddr, 'propertyValList', this.custInfoDialog.selectedCompany.addr.split(","));
+
+      this.custInfoDialog.open = false;
+      this.cascaderVisiable = true;
+    },
+    addrPropsChange(val) {
+      console.log(val)
     },
     cancelDialog() {
       this.custInfoDialog.open = false;
+      this.cascaderVisiable = true
     },
     // 提供本组件的数据校验
     infoVerify() {
@@ -294,6 +340,7 @@ export default {
         return;
       }
       this.custInfoModified = {}
+      this.custInfoForm['userCompanyAddr'].propertyVal = this.custInfoForm['userCompanyAddr'].propertyValList.join(",");
       Object.keys(this.custInfoForm).forEach(key => {
         if (this.custInfoOriginBak[key].propertyVal != this.custInfoForm[key].propertyVal) {
           this.custInfoModified[key] = this.custInfoForm[key]

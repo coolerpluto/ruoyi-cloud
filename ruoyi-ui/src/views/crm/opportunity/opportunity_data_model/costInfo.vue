@@ -97,7 +97,7 @@
 <script>
 import { getOppCostInfo } from "@/api/crm/oppUnitedInfo"
 import { listUser } from "@/api/system/user";
-
+import { listEmployee } from "@/api/crm/employee";
 export default {
   name: "costInfo",
   dicts: ['crm_opportunity_status'],
@@ -222,7 +222,7 @@ export default {
     },
     getSupportorOptions(query) {
       this.flag.personOptionsLoading = true
-      listUser({
+      listEmployee({
         pageNum: 1,
         pageSize: 20,
         userName: query,

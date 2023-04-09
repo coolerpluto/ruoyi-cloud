@@ -210,11 +210,18 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="公司地址" prop="addr">
-                <el-cascader :props="addrProps" v-model="form.addr" clearable placeholder="请选择公司地址">
+                <el-cascader :props="addrProps" v-model="form.addr" clearable placeholder="请选择公司地址" style="width: 250px;">
                 </el-cascader>
               </el-form-item>
             </el-col>
             <el-col :span="12">
+              <el-form-item label="地址邮编" prop="zipCode">
+                <el-input v-model="form.zipCode" placeholder="请输入邮编"/>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="24">
               <el-form-item label="详细地址" prop="addrDetail">
                 <el-input v-model="form.addrDetail" placeholder="请输入公司其他描述"/>
               </el-form-item>
@@ -583,6 +590,7 @@
 
 <script>
 import {listUser, deptTreeSelect} from "@/api/system/user";
+import { listEmployee } from "@/api/crm/employee";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 import {listCompany, getCompany, delCompany, addCompany, updateCompany} from "@/api/crm/company";
 import {listAddr} from "@/api/system/addr";
@@ -794,7 +802,7 @@ export default {
       });
     },
     handleUserQuery(param) {
-      listUser({userName: param}).then(response => {
+      listEmployee({userName: param}).then(response => {
         this.userList = response.rows;
       });
     },
