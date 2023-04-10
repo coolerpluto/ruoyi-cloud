@@ -40,7 +40,7 @@
           <el-col :span="11">
             <el-form-item label="竞争对手" prop="competitorName">
               <el-input v-model="competitorDialog.form.competitorName" placeholder="请输入或选择竞争对手">
-                <el-button slot="append" icon="el-icon-search" @click="openDialog">选择</el-button>
+                <el-button slot="append" icon="el-icon-search" @click="openCompanyDialog">选择</el-button>
               </el-input>
             </el-form-item>
           </el-col>
@@ -100,14 +100,45 @@
         <el-button @click="cancelDialog">取 消</el-button>
       </div>
     </el-dialog>
+    <el-dialog :title="companyDialog.title" :visible.sync="companyDialog.open" :show-close="false" label-width="150px"
+      width="800px" append-to-body>
+      <el-form ref="companyDialog.form" :model="companyDialog.form" @submit.native.prevent>
+        <el-row>
+          <el-col :span="15">
+            <el-input v-model="companyDialog.form.companyName" placeholder="请输入公司名称关键字" clearable />
+          </el-col>
+          <el-col :span="5">
+            <el-button type="primary" icon="el-icon-search" size="mini" @click="getListCompanys">搜索</el-button>
+            <el-button icon="el-icon-refresh" size="mini" @click="companyDialog.form.companyName = ''">重置</el-button>
+          </el-col>
+        </el-row>
+      </el-form>
+      <el-table v-loading="flag.dialogCompanyTableLoading" highlight-current-row @current-change="handleCurrentChange"
+        :data="companyDialog.companys">
+        <el-table-column label="公司名称" align="center" prop="companyName" :show-overflow-tooltip="true" />
+        <el-table-column label="公司性质" align="center" prop="properties" :show-overflow-tooltip="true">
+          <template slot-scope="scope">
+            <dict-tag :options="dict.type.crm_company_properties_type" :value="scope.row.properties" />
+          </template>
+        </el-table-column>
+        <el-table-column label="公司法人" align="center" prop="legal" :show-overflow-tooltip="true" />
+        <el-table-column label="公司地址" align="center" prop="addrDetail" :show-overflow-tooltip="true" />
+      </el-table>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitCompanyDialogForm">确 定</el-button>
+        <el-button @click="cancelCompanyDialog">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getOppCompetitorInfo } from "@/api/crm/oppUnitedInfo"
+import { getOppCompetitorInfo } from "@/api/crm/oppUnitedInfo";
+import { listCompany } from "@/api/crm/company";
+
 export default {
   name: "competitorInfo",
-  dicts: ['sys_yes_no'],
+  dicts: ['sys_yes_no', 'crm_company_properties_type'],
   props: {
     stageShow: {
       type: Number,
@@ -134,6 +165,7 @@ export default {
       flag: {
         competitorLoading: false,
         competitorVerify: false,
+        dialogCompanyTableLoading: false,
       },
       //组件弹框承载
       competitorDialog: {
@@ -171,6 +203,21 @@ export default {
             { required: true, message: "备注对竞争对手的其他描述不能为空", trigger: "blur" }
           ],
         },
+      },
+      companyDialog: {
+        // 弹出层标题
+        title: "公司信息查找",
+        // 是否显示弹出层
+        open: false,
+        form: {
+          pageNum: 1,
+          pageSize: 15,
+          //sourceType: "customer",
+          //businessScope:"S", // 公司业务中带S的
+          companyName: ""
+        },
+        selectedCompany: {},
+        companys: []
       },
     }
   },
@@ -225,6 +272,32 @@ export default {
       this.competitorDialog.open = true;
       this.competitorDialog.form = {}
       this.competitorDialog.title = "添加新竞争对手";
+    },
+    openCompanyDialog() {
+      this.companyDialog.open = true;
+    },
+    getListCompanys() {
+      this.flag.dialogCompanyTableLoading = true
+      listCompany(this.companyDialog.form).then(response => {
+        this.companyDialog.companys = (response.rows);
+        this.companyDialog.total = response.total;
+        this.flag.dialogCompanyTableLoading = false;
+      });
+    },
+    handleCurrentChange(val) {
+      this.companyDialog.selectedCompany = val
+    },
+    cancelCompanyDialog() {
+      this.companyDialog.open = false;
+    },
+    submitCompanyDialogForm() {
+      if (Object.keys(this.companyDialog.selectedCompany).length == 0) {
+        this.$modal.msgError("您还未选择公司信息");
+        return;
+      }
+      this.competitorDialog.form.competitorName = this.companyDialog.selectedCompany.companyName;
+      this.competitorDialog.form.competitorId = this.companyDialog.selectedCompany.id;
+      this.companyDialog.open = false;
     },
     submitDialogForm() {
       this.$refs["competitorDialog.form"].validate(valid => {

@@ -100,7 +100,7 @@
           <el-col :span="9">
             <el-form-item label="单位名称" prop="company">
               <el-input v-model="keyContactsDialog.form.company" placeholder="请输入单位名称">
-                <el-button slot="append" icon="el-icon-search" @click="openDialog">选择</el-button>
+                <el-button slot="append" icon="el-icon-search" @click="openCompanyDialog">选择</el-button>
               </el-input>
             </el-form-item>
           </el-col>
@@ -170,6 +170,35 @@
         <el-button @click="cancelDialog">取 消</el-button>
       </div>
     </el-dialog>
+    <el-dialog :title="companyDialog.title" :visible.sync="companyDialog.open" :show-close="false" label-width="150px"
+      width="800px" append-to-body>
+      <el-form ref="companyDialog.form" :model="companyDialog.form" @submit.native.prevent>
+        <el-row>
+          <el-col :span="15">
+            <el-input v-model="companyDialog.form.companyName" placeholder="请输入公司名称关键字" clearable />
+          </el-col>
+          <el-col :span="5">
+            <el-button type="primary" icon="el-icon-search" size="mini" @click="getListCompanys">搜索</el-button>
+            <el-button icon="el-icon-refresh" size="mini" @click="companyDialog.form.companyName = ''">重置</el-button>
+          </el-col>
+        </el-row>
+      </el-form>
+      <el-table v-loading="flag.dialogCompanyTableLoading" highlight-current-row @current-change="handleCurrentChange"
+        :data="companyDialog.companys">
+        <el-table-column label="公司名称" align="center" prop="companyName" :show-overflow-tooltip="true" />
+        <el-table-column label="公司性质" align="center" prop="properties" :show-overflow-tooltip="true">
+          <template slot-scope="scope">
+            <dict-tag :options="dict.type.crm_company_properties_type" :value="scope.row.properties" />
+          </template>
+        </el-table-column>
+        <el-table-column label="公司法人" align="center" prop="legal" :show-overflow-tooltip="true" />
+        <el-table-column label="公司地址" align="center" prop="addrDetail" :show-overflow-tooltip="true" />
+      </el-table>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitCompanyDialogForm">确 定</el-button>
+        <el-button @click="cancelCompanyDialog">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -177,6 +206,8 @@
 import {
   getOppContactsInfo
 } from "@/api/crm/oppUnitedInfo"
+import { listCompany } from "@/api/crm/company";
+
 export default {
   name: "KeyContacts",
   dicts: [
@@ -244,7 +275,21 @@ export default {
             { required: true, message: "人员角色不能为空", trigger: "blur" }
           ],
         },
-
+      },
+      companyDialog: {
+        // 弹出层标题
+        title: "公司信息查找",
+        // 是否显示弹出层
+        open: false,
+        form: {
+          pageNum: 1,
+          pageSize: 15,
+          //sourceType: "customer",
+          //businessScope:"S", // 公司业务中带S的
+          companyName: ""
+        },
+        selectedCompany: {},
+        companys: []
       },
     }
   },
@@ -299,6 +344,33 @@ export default {
       this.keyContactsDialog.open = true;
       this.keyContactsDialog.form = {}
       this.keyContactsDialog.title = "添加关键联系人信息";
+    },
+    openCompanyDialog() {
+      this.companyDialog.open = true;
+    },
+    getListCompanys() {
+      this.flag.dialogCompanyTableLoading = true
+      listCompany(this.companyDialog.form).then(response => {
+        this.companyDialog.companys = (response.rows);
+        this.companyDialog.total = response.total;
+        this.flag.dialogCompanyTableLoading = false;
+      });
+    },
+    handleCurrentChange(val) {
+      this.companyDialog.selectedCompany = val
+    },
+    cancelCompanyDialog() {
+      this.companyDialog.open = false;
+    },
+    submitCompanyDialogForm() {
+      if (Object.keys(this.companyDialog.selectedCompany).length == 0) {
+        this.$modal.msgError("您还未选择公司信息");
+        return;
+      }
+      this.keyContactsDialog.form.company = this.companyDialog.selectedCompany.companyName;
+      this.keyContactsDialog.form.companyCode = this.companyDialog.selectedCompany.code;
+      this.keyContactsDialog.form.companyProperty = this.companyDialog.selectedCompany.properties;
+      this.companyDialog.open = false;
     },
     submitDialogForm() {
       this.$refs["keyContactsDialog.form"].validate(valid => {
