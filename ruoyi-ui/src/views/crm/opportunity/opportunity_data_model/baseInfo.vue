@@ -76,14 +76,35 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="软件分类" prop="category">
-              <!-- <el-select v-model="baseInfoDialog.form.category" placeholder="请选择应用软件归属门类">
-                <el-option v-for="dict in dict.type.crm_software_category" :key="dict.value" :label="dict.label"
-                  :value="dict.value"></el-option>
-              </el-select> -->
-              <el-cascader ref="categoryCascade" @change="getCategoryCheckedNodes"
+            <el-form-item label="软件分类大类" prop="categoryL1">
+              <el-select v-model="baseInfoDialog.form.categoryL1" @change="handleSelectCategoryL1" placeholder="请选择应用软件归属大类">
+                <el-option v-for="item in baseInfoDialog.categoryL1Options" :key="item.dictValue" :label="item.dictLabel"
+                  :value="item.dictValue"></el-option>
+              </el-select>
+              <!-- <el-cascader ref="categoryCascade" @change="getCategoryCheckedNodes"
                 :props="baseInfoDialog.softwareCategory" v-model="baseInfoDialog.form.category" placeholder="请选择软件归属门类">
-              </el-cascader>
+              </el-cascader> -->
+            </el-form-item>
+          </el-col>
+          <el-col :span="10">
+            <el-form-item label="软件分类小类" prop="categoryL2">
+              <el-select v-model="baseInfoDialog.form.categoryL2" placeholder="请选择应用软件归属小类" >
+                <el-option v-for="item in baseInfoDialog.categoryL2Options" :key="item.dictValue" :label="item.dictLabel"
+                  :value="item.dictValue">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="项目运作主体" prop="operationalName">
+              <el-select v-model="baseInfoDialog.form.operationalName" @change="getOperational" placeholder="请输入关键字"
+                filterable remote :remote-method="getOperationalOptions" :loading="flag.operationalOptionsLoading">
+                <el-option v-for="item in baseInfoDialog.operationalOptions" :key="item.id" :label="item.companyName"
+                  :value="item.companyName">
+                </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="10">
@@ -114,19 +135,7 @@
               </el-select>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="项目运作主体" prop="operationalName">
-              <el-select v-model="baseInfoDialog.form.operationalName" @change="getOperational" placeholder="请输入关键字"
-                filterable remote :remote-method="getOperationalOptions" :loading="flag.operationalOptionsLoading">
-                <el-option v-for="item in baseInfoDialog.operationalOptions" :key="item.id" :label="item.companyName"
-                  :value="item.companyName">
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
+        </el-row>        
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitDialogForm">确 定</el-button>
@@ -202,8 +211,11 @@ export default {
           dbBase: [
             { required: true, message: "在用数据库不能为空", trigger: "blur" }
           ],
-          category: [
-            { required: true, message: "软件分类不能为空", trigger: "blur" }
+          categoryL1: [
+            { required: true, message: "软件分类大类不能为空", trigger: "blur" }
+          ],
+          categoryL2: [
+            { required: true, message: "软件分类小类不能为空", trigger: "blur" }
           ],
           isv: [
             { required: true, message: "软件开发商不能为空", trigger: "blur" }
@@ -342,26 +354,67 @@ export default {
       })
       this.baseInfoForm.operations.splice(index, 1);
     },
+    getCtegoryByCode(dictCode,func){
+      if (!dictCode){
+        if (typeof func == 'function') {
+          func();
+        }
+        return;
+      }      
+      getDicts(dictCode).then(res => {
+        if (typeof func == 'function') {
+          func(res.data);
+        }
+        return res.data;
+      })
+    },
+    handleSelectCategoryL1(val){
+      let select = this.baseInfoDialog.categoryL1Options.find(item=>{
+        return item.dictValue == val;
+      })
+      var _this = this;
+      this.getCtegoryByCode(select.remark,function(res){
+        _this.baseInfoDialog.categoryL2Options = res;
+        _this.$set(_this.baseInfoDialog.form,'categoryL2','');
+      });
+    },
+    getSelectCategoryL1(){
+      var _this = this;
+      this.getCtegoryByCode('crm_software_category',function(res){
+        _this.baseInfoDialog.categoryL1Options=res;
+        _this.baseInfoDialog.categoryL2Options=[];
+      });
+      this.$set(this.baseInfoDialog,'categoryL1Options',[]);
+      this.$set(this.baseInfoDialog,'categoryL2Options',[]);
+    },
     editApplication(row) {
       //this.getCategoryCheckedNodes()
       this.baseInfoDialog.form = Object.assign({}, row);
-      this.baseInfoDialog.form.category = this.baseInfoDialog.form.category.split('/')
+      //this.baseInfoDialog.form.category = this.baseInfoDialog.form.category.split('/');
       this.baseInfoDialog.open = true;
       this.baseInfoDialog.title = "修改应用运营信息";
+      this.getSelectCategoryL1();
     },
     openDialog() {
       this.baseInfoDialog.form = {}
       this.baseInfoDialog.open = true;
       this.baseInfoDialog.title = "添加应用运营信息";
       this.getOperationalOptions();
-      this.getIsvOptions()
+      this.getIsvOptions();
+      this.getSelectCategoryL1();
     },
     submitDialogForm() {
       this.$refs["baseInfoDialog.form"].validate(valid => {
         if (!valid) {
           return;
-        }
-        this.baseInfoDialog.form.category = this.baseInfoDialog.form.category.join("/");
+        }        
+        let selectCategoryL1 = this.baseInfoDialog.categoryL1Options.find(item=>{
+          return item.dictValue == this.baseInfoDialog.form.categoryL1;
+        });
+        let selectCategoryL2 = this.baseInfoDialog.categoryL2Options.find(item=>{
+          return item.dictValue == this.baseInfoDialog.form.categoryL2;
+        })
+        this.baseInfoDialog.form.category = selectCategoryL1.dictLabel+"/"+selectCategoryL2.dictLabel;
         if (!this.baseInfoDialog.form.id && !this.baseInfoDialog.form.tempId) {
           this.baseInfoDialog.form.tempId = new Date().getTime()//先打个标
           this.baseInfoForm.operations.push(this.baseInfoDialog.form)
@@ -382,9 +435,6 @@ export default {
     },
     cancelDialog() {
       this.baseInfoDialog.open = false;
-      if (this.baseInfoDialog.form.category) {
-        this.baseInfoDialog.form.category = this.baseInfoDialog.form.category.join("/");
-      }
     },
     // 提供本组件的数据校验
     infoVerify() {
