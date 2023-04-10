@@ -33,43 +33,70 @@
         <result property="preContractVal" column="preContractVal"/>
 
         <!--select子查询， column 传给子查询的参数-->
-<!--        <collection property="properties" ofType="OpportunityProperty" select="queryProperties"-->
-<!--                    column="code"/>-->
+        <!--        <collection property="properties" ofType="OpportunityProperty" select="queryProperties"-->
+        <!--                    column="code"/>-->
     </resultMap>
 
     <sql id="selectOpportunityVo">
-        select id,code,current_stage,name,cust_id,dept_id,owner_id,shared_id,shared_dept_id,
-               create_by,create_time,update_by,update_time,remark
+        select id,
+               code,
+               current_stage,
+               name,
+               cust_id,
+               dept_id,
+               owner_id,
+               shared_id,
+               shared_dept_id,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark
         from t_opportunity
     </sql>
     <sql id="selectOpportunityPropertyVo">
-        select id, property_label, property_key, property_val, opportunity_code, model, status, data_type
+        select id,
+               property_label,
+               property_key,
+               property_val,
+               opportunity_code,
+               model,
+               status,
+               data_type
         from t_opportunity_property
     </sql>
     <sql id="select4OpportunityUnitedVo">
-        select
-            tc.id,tc.code,tc.current_stage,tc.name,
-            tc.cust_id,tc2.company_name cust_name,
-            tc.dept_id,tc.owner_id,su.nick_name owner_name,
-            tc.shared_id,tc.shared_dept_id,
-            tc.create_time,tc.update_time,tc.remark,
-            max(case when top.property_key = 'preTenderDate' then top.property_val end) preTenderDate,
-            max(case when top.property_key = 'preSignDate' then top.property_val end) preSignDate,
-            max(case when top.property_key = 'preContractVal' then top.property_val end) preContractVal
-        from
-            t_opportunity tc
-        left join t_company tc2 on tc.cust_id = tc2.id
-        left join t_opportunity_property top on (top.status = '1' and tc.code = top.opportunity_code)
-        left join remote_db.sys_dept sd on tc.dept_id = sd.dept_id
-        left join remote_db.sys_user su on su.user_id = tc.owner_id
+        select tc.id,
+               tc.code,
+               tc.current_stage,
+               tc.name,
+               tc.cust_id,
+               tc2.company_name                                                             cust_name,
+               tc.dept_id,
+               tc.owner_id,
+               su.nick_name                                                                 owner_name,
+               tc.shared_id,
+               tc.shared_dept_id,
+               tc.create_time,
+               tc.update_time,
+               tc.remark,
+               max(case when top.property_key = 'preTenderDate' then top.property_val end)  preTenderDate,
+               max(case when top.property_key = 'preSignDate' then top.property_val end)    preSignDate,
+               max(case when top.property_key = 'preContractVal' then top.property_val end) preContractVal
+        from t_opportunity tc
+                 left join t_company tc2 on tc.cust_id = tc2.id
+                 left join t_opportunity_property top on (top.status = '1' and tc.code = top.opportunity_code)
+                 left join remote_db.sys_dept sd on tc.dept_id = sd.dept_id
+                 left join remote_db.sys_user su on su.user_id = tc.owner_id
     </sql>
 
-    <select id="queryProperties" parameterType="String" resultMap="com.highgo.crm.mapper.OpportunityPropertyMapper.OpportunityPropertyResult">
+    <select id="queryProperties" parameterType="String"
+            resultMap="com.highgo.crm.mapper.OpportunityPropertyMapper.OpportunityPropertyResult">
         <include refid="selectOpportunityPropertyVo"/>
         where opportunity_code = #{code}
     </select>
     <select id="selectOpportunityList" parameterType="Opportunity" resultMap="OpportunityUnitedResult">
-<!--        <include refid="selectOpportunityVo"/>-->
+        <!--        <include refid="selectOpportunityVo"/>-->
         <include refid="select4OpportunityUnitedVo"/>
         <where>
             <if test="code != null  and code != ''">and tc.code like concat('%', #{code}, '%')</if>
@@ -77,11 +104,16 @@
             <if test="createBy != null  and createBy != ''">and tc.create_by like concat('%', #{createBy}, '%')</if>
             <if test="updateTime != null ">and tc.update_time &lt; #{updateTime}</if>
             <!--下面的是商机必须已经设置过的属性-->
-            <if test="params.properties != null and params.properties != ''">and find_in_set(top.property_key,#{params.properties})</if>
+            <if test="params.properties != null and params.properties != ''">and
+                find_in_set(top.property_key,#{params.properties})
+            </if>
             ${params.crmDataScope}
             <!--下面的时共享过来的判读-->
-            <if test="params.sharedId != null and params.sharedId != ''"> or find_in_set( #{sharedId} , tc.shared_id)</if>
-            <if test="params.sharedDeptId != null and params.sharedDeptId != ''"> or find_in_set( #{sharedDeptId} , tc.shared_dept_id)</if>
+            <if test="params.sharedId != null and params.sharedId != ''">or find_in_set( #{sharedId} , tc.shared_id)
+            </if>
+            <if test="params.sharedDeptId != null and params.sharedDeptId != ''">or find_in_set( #{sharedDeptId} ,
+                tc.shared_dept_id)
+            </if>
         </where>
         group by tc.code
     </select>
@@ -162,29 +194,41 @@
         where code = #{code}
     </select>
     <resultMap type="OpportunitySoftwareOperation" id="OpportunitySoftwareOperationResult">
-        <result property="id"    column="id"    />
-        <result property="opportunityCode"    column="opportunity_code"    />
-        <result property="applicationId"    column="application_id"    />
-        <result property="applicationName"    column="application_name"    />
-        <result property="isvNeedAdapted"    column="isv_need_adapted"    />
-        <result property="targetAdaptedProgress"    column="target_adapted_progress"    />
-        <result property="currentAdaptedProgress"    column="current_adapted_progress"    />
-        <result property="operationalId"    column="operational_id"    />
-        <result property="operationalName"    column="operational_name"    />
-        <result property="operationalTender"    column="operational_tender"    />
-        <result property="operationalSupportDb"    column="operational_support_db"    />
-        <result property="isvId"    column="isv_id"    />
-        <result property="isv"    column="isv"    />
-        <result property="category"    column="category"    />
-        <result property="createBy"    column="create_by"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="updateBy"    column="update_by"    />
-        <result property="updateTime"    column="update_time"    />
-        <result property="remark"    column="remark"    />
+        <result property="id" column="id"/>
+        <result property="opportunityCode" column="opportunity_code"/>
+        <result property="applicationId" column="application_id"/>
+        <result property="applicationName" column="application_name"/>
+        <result property="dbBase" column="db_base"/>
+        <result property="isvNeedAdapted" column="isv_need_adapted"/>
+        <result property="targetAdaptedProgress" column="target_adapted_progress"/>
+        <result property="currentAdaptedProgress" column="current_adapted_progress"/>
+        <result property="operationalId" column="operational_id"/>
+        <result property="operationalName" column="operational_name"/>
+        <result property="operationalTender" column="operational_tender"/>
+        <result property="operationalSupportDb" column="operational_support_db"/>
+        <result property="isvId" column="isv_id"/>
+        <result property="isv" column="isv"/>
+        <result property="category" column="category"/>
+        <result property="categoryL1" column="category_l1"/>
+        <result property="categoryL2" column="category_l2"/>
+        <result property="categoryL3" column="category_l3"/>
+        <result property="categoryL4" column="category_l4"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
     </resultMap>
     <select id="querySoftwareOperationByCode" parameterType="String"
             resultMap="OpportunitySoftwareOperationResult">
-        select tc.company_name isv, tc.id isv_id, ta.category, toso.*
+        select tc.company_name isv,
+               tc.id           isv_id,
+               ta.category,
+               ta.category_l1,
+               ta.category_l2,
+               ta.category_l3,
+               ta.category_l4,
+               toso.*
         from t_opportunity_software_operation toso,
              t_application ta,
              t_company tc
@@ -193,38 +237,96 @@
           and tc.business_scope = 'ISV'
           and toso.opportunity_code = #{code}
     </select>
-    <select id="queryCompanyByOppCode" parameterType="String" resultMap="com.highgo.crm.mapper.CompanyMapper.CompanyResult">
-        select tc.* from t_company tc ,t_opportunity to2
-        where tc.id = to2.cust_id and to2 .code = #{oppCode}
+    <select id="queryCompanyByOppCode" parameterType="String"
+            resultMap="com.highgo.crm.mapper.CompanyMapper.CompanyResult">
+        select tc.*
+        from t_company tc,
+             t_opportunity to2
+        where tc.id = to2.cust_id
+          and to2.code = #{oppCode}
     </select>
-    <select id="queryPolicyByOppCode" parameterType="String" resultMap="com.highgo.crm.mapper.OpportunityPolicyMapper.OpportunityPolicyResult">
-        select opportunity_code, policy_id, policy_name, release_date from t_opportunity_policy
+    <select id="queryPolicyByOppCode" parameterType="String"
+            resultMap="com.highgo.crm.mapper.OpportunityPolicyMapper.OpportunityPolicyResult">
+        select opportunity_code, policy_id, policy_name, release_date
+        from t_opportunity_policy
         where opportunity_code = #{oppCode}
     </select>
-    <select id="queryAdvanceByOppCode" parameterType="String" resultMap="com.highgo.crm.mapper.OpportunityAdvancesMapper.OpportunityAdvancesResult">
-        select id, opportunity_code, stage, advances, advances_date, creator, create_time from t_opportunity_advances
+    <select id="queryAdvanceByOppCode" parameterType="String"
+            resultMap="com.highgo.crm.mapper.OpportunityAdvancesMapper.OpportunityAdvancesResult">
+        select id, opportunity_code, stage, advances, advances_date, creator, create_time
+        from t_opportunity_advances
         where opportunity_code = #{oppCode}
-        order by create_time desc,advances_date desc
+        order by create_time desc, advances_date desc
     </select>
-    <select id="queryCostByOppCode" parameterType="String" resultMap="com.highgo.crm.mapper.OpportunityCostMapper.OpportunityCostResult">
-        select id, opportunity_code, cost, input_user_id,input_user_name, use_time, reason, create_time, creator_id, create_time,create_by,update_by, update_time from t_opportunity_cost
+    <select id="queryCostByOppCode" parameterType="String"
+            resultMap="com.highgo.crm.mapper.OpportunityCostMapper.OpportunityCostResult">
+        select id,
+               opportunity_code,
+               cost,
+               input_user_id,
+               input_user_name,
+               use_time,
+               reason,
+               create_time,
+               creator_id,
+               create_time,
+               create_by,
+               update_by,
+               update_time
+        from t_opportunity_cost
         where opportunity_code = #{oppCode}
-        order by create_time desc,update_time desc
+        order by create_time desc, update_time desc
     </select>
-   <select id="queryCompetitorByOppCode" parameterType="String" resultMap="com.highgo.crm.mapper.OpportunityCompetitorMapper.OpportunityCompetitorResult">
-       select id, opportunity_code, competitor_id, competitor_name, product, unit_price, advantage, has_same_advantage, memo, tender_price, tender_total_price, create_time, update_time from t_opportunity_competitor
+    <select id="queryCompetitorByOppCode" parameterType="String"
+            resultMap="com.highgo.crm.mapper.OpportunityCompetitorMapper.OpportunityCompetitorResult">
+        select id,
+               opportunity_code,
+               competitor_id,
+               competitor_name,
+               product,
+               unit_price,
+               advantage,
+               has_same_advantage,
+               memo,
+               tender_price,
+               tender_total_price,
+               create_time,
+               update_time
+        from t_opportunity_competitor
         where opportunity_code = #{oppCode}
-        order by create_time desc,update_time desc
+        order by create_time desc, update_time desc
     </select>
-  <select id="queryQuotationByOppCode" parameterType="String" resultMap="com.highgo.crm.mapper.OpportunityQuotationMapper.OpportunityQuotationResult">
-      select id, opportunity_code, quotation_json, opportunity_stage, create_by, create_time, update_by, update_time, remark from t_opportunity_quotation
+    <select id="queryQuotationByOppCode" parameterType="String"
+            resultMap="com.highgo.crm.mapper.OpportunityQuotationMapper.OpportunityQuotationResult">
+        select id,
+               opportunity_code,
+               quotation_json,
+               opportunity_stage,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark
+        from t_opportunity_quotation
         where opportunity_code = #{oppCode}
-        order by create_time desc,update_time desc
+        order by create_time desc, update_time desc
     </select>
-  <select id="querySupportByOppCode" parameterType="String" resultMap="com.highgo.crm.mapper.OpportunitySupportMapper.OpportunitySupportResult">
-      select id, opportunity_code, opportunity_stage, support_id, support_name, support_val, create_by, create_time, update_by, update_time, remark from t_opportunity_support
+    <select id="querySupportByOppCode" parameterType="String"
+            resultMap="com.highgo.crm.mapper.OpportunitySupportMapper.OpportunitySupportResult">
+        select id,
+               opportunity_code,
+               opportunity_stage,
+               support_id,
+               support_name,
+               support_val,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark
+        from t_opportunity_support
         where opportunity_code = #{oppCode}
-        order by create_time desc,update_time desc
+        order by create_time desc, update_time desc
     </select>
     <resultMap type="OpportunityContactInfo" id="OpportunityContactInfoResult">
         <result property="keyId" column="key_id"/>
@@ -263,19 +365,17 @@
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
     </resultMap>
-  <select id="queryContactsByOppCode" parameterType="String" resultMap="OpportunityContactInfoResult">
-      select
-          tc2.properties ,
-          tc .*,
-          toci.*
-      from
-          t_contact tc
-              left join t_opportunity_contact_info toci on tc.id = toci.contact_id and tc.source_id = toci.opportunity_code
-              left join t_company tc2 on tc.company_code = tc2.code
-      where
-          tc.source_type = 'opportunity'
-        and tc.source_id = #{oppCode}
-      order by tc.create_time desc,tc.update_time desc
+    <select id="queryContactsByOppCode" parameterType="String" resultMap="OpportunityContactInfoResult">
+        select tc2.properties,
+               tc.*,
+               toci.*
+        from t_contact tc
+                 left join t_opportunity_contact_info toci
+                           on tc.id = toci.contact_id and tc.source_id = toci.opportunity_code
+                 left join t_company tc2 on tc.company_code = tc2.code
+        where tc.source_type = 'opportunity'
+          and tc.source_id = #{oppCode}
+        order by tc.create_time desc, tc.update_time desc
     </select>
 
 </mapper>

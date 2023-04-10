@@ -36,7 +36,7 @@ public class OpportunitySoftwareOperation extends BaseEntity
      */
     @Excel(name = "应用软件名字")
     private String applicationName;
-
+    private String dbBase;
     /**
      * 是否需要适配
      */
@@ -84,6 +84,11 @@ public class OpportunitySoftwareOperation extends BaseEntity
      * 软件分类
      */
     private String category;
+    private String categoryL1;
+    private String categoryL2;
+    private String categoryL3;
+    private String categoryL4;
+
 
     public String getOperationalTender()
     {
@@ -135,6 +140,46 @@ public class OpportunitySoftwareOperation extends BaseEntity
         this.category = category;
     }
 
+    public String getCategoryL1()
+    {
+        return categoryL1;
+    }
+
+    public void setCategoryL1(String categoryL1)
+    {
+        this.categoryL1 = categoryL1;
+    }
+
+    public String getCategoryL2()
+    {
+        return categoryL2;
+    }
+
+    public void setCategoryL2(String categoryL2)
+    {
+        this.categoryL2 = categoryL2;
+    }
+
+    public String getCategoryL3()
+    {
+        return categoryL3;
+    }
+
+    public void setCategoryL3(String categoryL3)
+    {
+        this.categoryL3 = categoryL3;
+    }
+
+    public String getCategoryL4()
+    {
+        return categoryL4;
+    }
+
+    public void setCategoryL4(String categoryL4)
+    {
+        this.categoryL4 = categoryL4;
+    }
+
     public void setId(Long id)
     {
         this.id = id;
@@ -173,6 +218,16 @@ public class OpportunitySoftwareOperation extends BaseEntity
     public String getApplicationName()
     {
         return applicationName;
+    }
+
+    public String getDbBase()
+    {
+        return dbBase;
+    }
+
+    public void setDbBase(String dbBase)
+    {
+        this.dbBase = dbBase;
     }
 
     public void setIsvNeedAdapted(String isvNeedAdapted)

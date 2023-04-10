@@ -36,6 +36,10 @@ public class Application extends BaseEntity {
      */
     @Excel(name = "应归属门类")
     private String category;
+    private String categoryL1;
+    private String categoryL2;
+    private String categoryL3;
+    private String categoryL4;
 
     /**
      * 软件开发商
@@ -211,6 +215,46 @@ public class Application extends BaseEntity {
 
     public String getCategory() {
         return category;
+    }
+
+    public String getCategoryL1()
+    {
+        return categoryL1;
+    }
+
+    public void setCategoryL1(String categoryL1)
+    {
+        this.categoryL1 = categoryL1;
+    }
+
+    public String getCategoryL2()
+    {
+        return categoryL2;
+    }
+
+    public void setCategoryL2(String categoryL2)
+    {
+        this.categoryL2 = categoryL2;
+    }
+
+    public String getCategoryL3()
+    {
+        return categoryL3;
+    }
+
+    public void setCategoryL3(String categoryL3)
+    {
+        this.categoryL3 = categoryL3;
+    }
+
+    public String getCategoryL4()
+    {
+        return categoryL4;
+    }
+
+    public void setCategoryL4(String categoryL4)
+    {
+        this.categoryL4 = categoryL4;
     }
 
     public void setIsv(Long isv) {

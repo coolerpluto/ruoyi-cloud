@@ -9,6 +9,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="opportunityCode"    column="opportunity_code"    />
         <result property="applicationId"    column="application_id"    />
         <result property="applicationName"    column="application_name"    />
+        <result property="dbBase"    column="db_base"    />
         <result property="isvNeedAdapted"    column="isv_need_adapted"    />
         <result property="targetAdaptedProgress"    column="target_adapted_progress"    />
         <result property="currentAdaptedProgress"    column="current_adapted_progress"    />
@@ -22,18 +23,36 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectOpportunitySoftwareOperationVo">
-        select id, opportunity_code, application_id, application_name, isv_need_adapted, target_adapted_progress, current_adapted_progress, operational_id, operational_name, create_by, create_time, update_by, update_time, remark from t_opportunity_software_operation
+        select id, opportunity_code, application_id, application_name,db_base, isv_need_adapted,
+               target_adapted_progress, current_adapted_progress, operational_id, operational_name,
+               create_by, create_time, update_by, update_time, remark
+        from t_opportunity_software_operation
     </sql>
 
     <select id="selectOpportunitySoftwareOperationList" parameterType="OpportunitySoftwareOperation" resultMap="OpportunitySoftwareOperationResult">
         <include refid="selectOpportunitySoftwareOperationVo"/>
-        <where>  
-            <if test="opportunityCode != null  and opportunityCode != ''"> and opportunity_code like concat('%', #{opportunityCode}, '%')</if>
-            <if test="applicationName != null  and applicationName != ''"> and application_name like concat('%', #{applicationName}, '%')</if>
-            <if test="isvNeedAdapted != null  and isvNeedAdapted != ''"> and isv_need_adapted = #{isvNeedAdapted}</if>
-            <if test="targetAdaptedProgress != null  and targetAdaptedProgress != ''"> and target_adapted_progress = #{targetAdaptedProgress}</if>
-            <if test="currentAdaptedProgress != null  and currentAdaptedProgress != ''"> and current_adapted_progress = #{currentAdaptedProgress}</if>
-            <if test="operationalName != null  and operationalName != ''"> and operational_name like concat('%', #{operationalName}, '%')</if>
+        <where>
+            <if test="opportunityCode != null  and opportunityCode != ''">
+                and opportunity_code like concat('%', #{opportunityCode}, '%')
+            </if>
+            <if test="applicationName != null  and applicationName != ''">
+                and application_name like concat('%', #{applicationName}, '%')
+            </if>
+            <if test="dbBase != null  and dbBase != ''">
+                and db_base like concat('%', #{dbBase}, '%')
+            </if>
+            <if test="isvNeedAdapted != null  and isvNeedAdapted != ''">
+                and isv_need_adapted = #{isvNeedAdapted}
+            </if>
+            <if test="targetAdaptedProgress != null  and targetAdaptedProgress != ''">
+                and target_adapted_progress = #{targetAdaptedProgress}
+            </if>
+            <if test="currentAdaptedProgress != null  and currentAdaptedProgress != ''">
+                and current_adapted_progress = #{currentAdaptedProgress}
+            </if>
+            <if test="operationalName != null  and operationalName != ''">
+                and operational_name like concat('%', #{operationalName}, '%')
+            </if>
         </where>
     </select>
     
@@ -49,6 +68,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="opportunityCode != null">opportunity_code,</if>
             <if test="applicationId != null">application_id,</if>
             <if test="applicationName != null">application_name,</if>
+            <if test="dbBase != null">db_base,</if>
             <if test="isvNeedAdapted != null">isv_need_adapted,</if>
             <if test="targetAdaptedProgress != null">target_adapted_progress,</if>
             <if test="currentAdaptedProgress != null">current_adapted_progress,</if>
@@ -65,6 +85,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="opportunityCode != null">#{opportunityCode},</if>
             <if test="applicationId != null">#{applicationId},</if>
             <if test="applicationName != null">#{applicationName},</if>
+            <if test="dbBase != null">#{dbBase},</if>
             <if test="isvNeedAdapted != null">#{isvNeedAdapted},</if>
             <if test="targetAdaptedProgress != null">#{targetAdaptedProgress},</if>
             <if test="currentAdaptedProgress != null">#{currentAdaptedProgress},</if>
@@ -84,6 +105,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="opportunityCode != null">opportunity_code = #{opportunityCode},</if>
             <if test="applicationId != null">application_id = #{applicationId},</if>
             <if test="applicationName != null">application_name = #{applicationName},</if>
+            <if test="dbBase != null">db_base = #{dbBase},</if>
             <if test="isvNeedAdapted != null">isv_need_adapted = #{isvNeedAdapted},</if>
             <if test="targetAdaptedProgress != null">target_adapted_progress = #{targetAdaptedProgress},</if>
             <if test="currentAdaptedProgress != null">current_adapted_progress = #{currentAdaptedProgress},</if>
