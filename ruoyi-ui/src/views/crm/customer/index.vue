@@ -148,7 +148,9 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="公司名称" prop="companyName">
-                <el-input v-model="form.companyName" placeholder="请输入公司名称"/>
+                <el-input v-model="form.companyName" placeholder="请输入公司名称">
+                  <el-button slot="append" icon="el-icon-search" @click="openCompanyDialog">选择</el-button>
+                </el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -350,6 +352,36 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+    <el-dialog :title="companyDialog.title" :visible.sync="companyDialog.open" :show-close="false" label-width="150px"
+      width="800px" append-to-body>
+      <el-form ref="companyDialog.form" :model="companyDialog.form" @submit.native.prevent>
+        <el-row>
+          <el-col :span="15">
+            <el-input v-model="companyDialog.form.searchValue" placeholder="请输入公司名称关键字" clearable />
+          </el-col>
+          <el-col :span="5">
+            <el-button type="primary" icon="el-icon-search" size="mini" @click="getListCompanys">搜索</el-button>
+            <el-button icon="el-icon-refresh" size="mini" @click="companyDialog.form.companyName = ''">重置</el-button>
+          </el-col>
+        </el-row>
+      </el-form>
+      <el-table v-loading="flag.dialogCompanyTableLoading" highlight-current-row @current-change="handleCurrentChange"
+        :data="companyDialog.companys">
+        <el-table-column label="公司名称" align="center" prop="companyName" :show-overflow-tooltip="true" />
+        <el-table-column label="公司性质" align="center" prop="properties" :show-overflow-tooltip="true">
+          <template slot-scope="scope">
+            <dict-tag :options="dict.type.crm_company_properties_type" :value="scope.row.properties" />
+          </template>
+        </el-table-column>
+        <el-table-column label="公司法人" align="center" prop="legal" :show-overflow-tooltip="true" />
+        <el-table-column label="公司地址" align="center" prop="addrDetail" :show-overflow-tooltip="true" />
+      </el-table>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitCompanyDialogForm">确 定</el-button>
+        <el-button @click="cancelCompanyDialog">取 消</el-button>
+      </div>
+    </el-dialog>
+
     <el-dialog :title="appAreaTitle" :visible.sync="openAppArea" width="40%" :close-on-click-modal="false"
                append-to-body>
       <el-form ref="formApp" :model="formApp" :rules="rulesApp" label-width="120px">
@@ -592,7 +624,7 @@
 import {listUser, deptTreeSelect} from "@/api/system/user";
 import { listEmployee } from "@/api/crm/employee";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
-import {listCompany, getCompany, delCompany, addCompany, updateCompany} from "@/api/crm/company";
+import {listCompany,tianYanChaSearch, getCompany, delCompany, addCompany, updateCompany} from "@/api/crm/company";
 import {listAddr} from "@/api/system/addr";
 import {
   listApplication,
@@ -604,7 +636,7 @@ import {
 import {listContact, getContact, delContact, addContact, updateContact} from "@/api/crm/contact";
 
 export default {
-  name: "customer",
+  name: "CUST",
   dicts: [
     'crm_companny_business_scope',
     'crm_company_industry_type',
@@ -764,6 +796,23 @@ export default {
           })
         }
       },
+      flag:{
+        dialogCompanyTableLoading:false,
+      },
+      companyDialog: {
+        // 弹出层标题
+        title: "公司信息查找",
+        // 是否显示弹出层
+        open: false,
+        form: {
+          pageNum: 1,
+          pageSize: 15,
+          searchValue: "",
+          sourceType:"CUST"
+        },
+        selectedCompany: {},
+        companys: []
+      },
     };
   },
   created() {
@@ -788,7 +837,7 @@ export default {
     /** 查询列表 */
     getList() {
       this.loading = true;
-      this.queryParams.sourceType = "customer";
+      this.queryParams.sourceType = "CUST";
       listCompany(this.queryParams).then(response => {
         this.companyList = response.rows;
         this.total = response.total;
@@ -856,6 +905,31 @@ export default {
       this.open = true;
       this.title = "添加客户基本信息";
     },
+    openCompanyDialog() {
+      this.companyDialog.open = true;
+    },
+    getListCompanys() {
+      this.flag.dialogCompanyTableLoading = true
+      tianYanChaSearch(this.companyDialog.form).then(response => {
+        this.companyDialog.companys = (response.rows||response.data);
+        this.companyDialog.total = response.total;
+        this.flag.dialogCompanyTableLoading = false;
+      });
+    },
+    handleCurrentChange(val) {
+      this.companyDialog.selectedCompany = val
+    },
+    cancelCompanyDialog() {
+      this.companyDialog.open = false;
+    },
+    submitCompanyDialogForm() {
+      if (Object.keys(this.companyDialog.selectedCompany).length == 0) {
+        this.$modal.msgError("您还未选择公司信息");
+        return;
+      }
+      this.form = this.companyDialog.selectedCompany;
+      this.companyDialog.open = false;
+    },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
@@ -891,7 +965,7 @@ export default {
     queryCustomerContactList() {
       this.loading = true;
       this.queryCustomerContactParams.sourceId = this.form.id;
-      this.queryCustomerContactParams.sourceType = "customer";
+      this.queryCustomerContactParams.sourceType = "CUST";
       listContact(this.queryCustomerContactParams).then(response => {
         this.customerContactList = response.rows;
         this.customerContactTotal = response.total;
@@ -901,7 +975,7 @@ export default {
     queryCustomerAppList() {
       this.loading = true;
       this.queryCustomerAppParams.sourceId = this.form.id;
-      this.queryCustomerAppParams.sourceType = "customer";
+      this.queryCustomerAppParams.sourceType = "CUST";
       listApplication(this.queryCustomerAppParams).then(response => {
         this.customerAppList = response.rows;
         this.customerAppTotal = response.total;
@@ -968,8 +1042,8 @@ export default {
               this.getList();
             });
           } else {
-            this.form.code = 'CUSTOMER_' + Date.parse(new Date());
-            this.form.sourceType = "customer";
+            this.form.code = this.form.code ||'CUST' + Date.parse(new Date());
+            this.form.sourceType = "CUST";
             addCompany(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
@@ -1002,7 +1076,7 @@ export default {
       this.resetContact();
       this.openContactArea = true;
       this.formContact.sourceId = this.form.id;
-      this.formContact.sourceType = "customer";
+      this.formContact.sourceType = "CUST";
       this.formContact.company = this.form.companyName;
       this.contactAreaTitle = "添加客户联系人";
     },
@@ -1010,7 +1084,7 @@ export default {
       this.resetApp();
       this.openAppArea = true;
       this.formApp.sourceId = this.form.id;
-      this.formApp.sourceType = "customer";
+      this.formApp.sourceType = "CUST";
       this.appAreaTitle = "添加客户项目/应用";
     },
     handleUpdateCustomerContact(row) {

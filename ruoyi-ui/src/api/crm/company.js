@@ -9,6 +9,15 @@ export function listCompany(query) {
   })
 }
 
+// 查询公司列表联通企查查
+export function tianYanChaSearch(query) {
+  return request({
+    url: '/crm/company/tianYanChaSearch',
+    method: 'get',
+    params: query
+  })
+}
+
 // 查询公司详细
 export function getCompany(id) {
   return request({
