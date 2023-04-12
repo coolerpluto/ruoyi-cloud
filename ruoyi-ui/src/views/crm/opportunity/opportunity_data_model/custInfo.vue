@@ -94,7 +94,7 @@
     <!-- 添加或修改信息记录对话框 -->
     <el-dialog :title="custInfoDialog.title" :visible.sync="custInfoDialog.open" width="800px" append-to-body
       :show-close="false">
-      <el-form ref="custInfoDialog.form" :inline="true" :model="custInfoDialog.form" label-width="100px">
+      <el-form ref="custInfoDialog.form" :inline="true" :model="custInfoDialog.form" label-width="100px" @submit.native.prevent>
         <el-form-item label="公司名称" prop="code">
           <el-input v-model="custInfoDialog.form.companyName" placeholder="请输入公司名称" clearable />
         </el-form-item>
@@ -193,7 +193,7 @@ export default {
         form: {
           pageNum: 1,
           pageSize: 15,
-          sourceType: "customer",
+          sourceType: "CUST",
           //businessScope:"S", // 公司业务中带S的
           companyName: ""
         },

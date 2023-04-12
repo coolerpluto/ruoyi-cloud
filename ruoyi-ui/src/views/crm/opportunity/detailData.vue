@@ -425,9 +425,11 @@ export default {
         return;
       }
       let updateData = this.collectInfoByStage(this.stageActive);
+      updateData["stageActive"] = this.stageActive;
+      updateData["currentStage"] = this.inputReq.currentStage;
       console.log("updateData:", updateData)
       this.flag.pageLoading = true;
-      updateUnitedOpp({params:updateData}).then(response => {
+      updateUnitedOpp(updateData).then(response => {
         this.$modal.msgSuccess("更新成功");
         this.flag.pageLoading = false;
       }).catch(() => {
@@ -442,9 +444,11 @@ export default {
         return;
       }
       let saveOrupdateData = this.collectInfoByStage(this.inputReq.currentStage);
+      saveOrupdateData["currentStage"] = this.inputReq.currentStage;
+      saveOrupdateData["stageActive"] = this.stageActive;
       console.log("saveOrupdateData:", saveOrupdateData);
       this.flag.pageLoading = true;
-      addUnitedOpp({params:saveOrupdateData}).then(response => {
+      addUnitedOpp(saveOrupdateData).then(response => {
         this.$modal.msgSuccess("新增成功");
         this.flag.pageLoading = false;
       }).catch(() => {

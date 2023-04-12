@@ -77,6 +77,7 @@
 </template>
 
 <script>
+import fecha from 'element-ui/src/utils/date';
 import { getOppAdvancesInfo } from "@/api/crm/oppUnitedInfo"
 export default {
   name: "advancesInfo",
@@ -170,7 +171,7 @@ export default {
     openDialog() {
       this.advancesDialog.open = true;
       this.advancesDialog.form = {
-        createTime: new Date(),
+        createTime: fecha.format(new Date(), 'yyyy-MM-dd HH:mm:ss'),
         stage: this.advancesDialog.form.stage || this.stageShow + ""
       }
       this.advancesDialog.title = "添加进展信息";

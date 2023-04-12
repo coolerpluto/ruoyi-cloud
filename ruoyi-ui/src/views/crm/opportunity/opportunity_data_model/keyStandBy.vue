@@ -84,6 +84,7 @@
 </template>
 
 <script>
+import fecha from 'element-ui/src/utils/date';
 import { getOppSupportInfo } from "@/api/crm/oppUnitedInfo"
 import { listUser } from "@/api/system/user";
 import { listEmployee } from "@/api/crm/employee";
@@ -184,7 +185,7 @@ export default {
     },
     openDialog() {
       this.keyStandByDialog.form = {
-        createTime: new Date(),
+        createTime: fecha.format(new Date(), 'yyyy-MM-dd HH:mm:ss'),
         opportunityStage: this.keyStandByDialog.form.opportunityStage || this.stageShow + ""
       }
       this.keyStandByDialog.open = true;

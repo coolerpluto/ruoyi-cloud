@@ -95,6 +95,7 @@
 </template>
 
 <script>
+import fecha from 'element-ui/src/utils/date';
 import { getOppCostInfo } from "@/api/crm/oppUnitedInfo"
 import { listUser } from "@/api/system/user";
 import { listEmployee } from "@/api/crm/employee";
@@ -210,7 +211,7 @@ export default {
     },
     openDialog() {
       this.costInfosDialog.form = {
-        createTime: new Date(),
+        createTime: fecha.format(new Date(), 'yyyy-MM-dd HH:mm:ss'),
       };
       this.costInfosDialog.open = true;
       this.costInfosDialog.title = "添加新的支出信息";
