@@ -24,7 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectSysAddrVo"/>
         <where>  
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
-            <if test="parent != null  and parent != ''"> and parent like concat('%', #{parent}, '%')</if>
+            <if test="parent != null  and parent != ''"> and parent = #{parent}</if>
             <if test="level != null  and level != ''"> and level = #{level}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
         </where>
