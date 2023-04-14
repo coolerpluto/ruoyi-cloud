@@ -279,7 +279,7 @@ export default {
           reqBody['oppDesc'] = this.$refs.stage03.$refs.oppDesc.collectInfo().modifyedData;
           reqBody['oppImplement'] = this.$refs.stage03.$refs.oppImplement.collectInfo().modifyedData;
           reqBody['competitorInfo'] = this.$refs.stage03.$refs.competitorInfo.collectInfo().modifyedData;
-          reqBody['KeyContacts'] = this.$refs.stage03.$refs.keyContacts.collectInfo().modifyedData;
+          reqBody['keyContacts'] = this.$refs.stage03.$refs.keyContacts.collectInfo().modifyedData;
           reqBody['quotationInfo'] = this.$refs.stage03.$refs.quotationInfo.collectInfo().modifyedData;
           reqBody['advancesInfo'] = this.$refs.stage03.$refs.advancesInfo.collectInfo().modifyedData;
           reqBody['keyStandBy'] = this.$refs.stage03.$refs.keyStandBy.collectInfo().modifyedData;
@@ -288,7 +288,7 @@ export default {
           reqBody['oppDesc'] = this.$refs.stage04.$refs.oppDesc.collectInfo().modifyedData;
           reqBody['biddingInfo'] = this.$refs.stage04.$refs.biddingInfo.collectInfo().modifyedData;
           reqBody['competitorInfo'] = this.$refs.stage04.$refs.competitorInfo.collectInfo().modifyedData;
-          reqBody['KeyContacts'] = this.$refs.stage04.$refs.keyContacts.collectInfo().modifyedData;
+          reqBody['keyContacts'] = this.$refs.stage04.$refs.keyContacts.collectInfo().modifyedData;
           reqBody['quotationInfo'] = this.$refs.stage04.$refs.quotationInfo.collectInfo().modifyedData;
           reqBody['winningBidding'] = this.$refs.stage04.$refs.winningBidding.collectInfo().modifyedData;
           reqBody['summaryInfo'] = this.$refs.stage04.$refs.summaryInfo.collectInfo().modifyedData;
