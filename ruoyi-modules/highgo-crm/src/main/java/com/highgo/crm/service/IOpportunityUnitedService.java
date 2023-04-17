@@ -11,6 +11,7 @@ import com.highgo.crm.domain.OpportunityQuotation;
 import com.highgo.crm.domain.OpportunitySoftwareOperation;
 import com.highgo.crm.domain.OpportunitySupport;
 import com.highgo.crm.domain.OpportunityUnited;
+import com.highgo.crm.domain.OpportunityUnitedReq;
 
 import java.util.List;
 
@@ -89,4 +90,8 @@ public interface IOpportunityUnitedService
     List<OpportunitySupport> querySupportByOppCode(String oppCode);
 
     List<OpportunityContactInfo> queryContactsByOppCode(String oppCode);
+
+    int updateOppoUnited(OpportunityUnitedReq opportunity);
+
+    int insertOppoUnited(OpportunityUnitedReq opportunity);
 }
