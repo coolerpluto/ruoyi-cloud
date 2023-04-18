@@ -432,6 +432,7 @@ export default {
       updateUnitedOpp(updateData).then(response => {
         this.$modal.msgSuccess("更新成功");
         this.flag.pageLoading = false;
+        this.$tab.refreshPage();
       }).catch(() => {
         this.$modal.msgError("更新失败");
         this.flag.pageLoading = false;
@@ -449,10 +450,15 @@ export default {
       console.log("saveOrupdateData:", saveOrupdateData);
       this.flag.pageLoading = true;
       addUnitedOpp(saveOrupdateData).then(response => {
-        this.$modal.msgSuccess("新增成功");
+        this.$modal.msgSuccess("操作成功");
         this.flag.pageLoading = false;
+        if(this.inputReq.action=="M"){
+          this.$tab.refreshPage();
+        }else{
+          this.$tab.closePage();
+        }
       }).catch(() => {
-        this.$modal.msgError("新增失败");
+        this.$modal.msgError("操作失败");
         this.flag.pageLoading = false;
       });;
     },
