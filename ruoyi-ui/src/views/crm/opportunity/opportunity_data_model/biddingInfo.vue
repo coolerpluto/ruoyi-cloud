@@ -262,6 +262,9 @@ export default {
     },
     //提取修改的信息作为提交
     fetchInformation() {
+      debugger
+      this.biddingInfoForm["knowExpertList"]["model"] =  "bidding_info";
+      this.biddingInfoForm["supportByExpert"]["model"] =  "bidding_info";
       if (Object.keys(this.biddingInfoOriginBak).length == 0) {
         this.biddingInfoModified["knowExpertList"] = this.biddingInfoForm["knowExpertList"];
         this.biddingInfoModified["supportByExpert"] = this.biddingInfoForm["supportByExpert"];

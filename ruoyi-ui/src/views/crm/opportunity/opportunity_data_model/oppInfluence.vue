@@ -115,8 +115,8 @@ export default {
     },
     //提取修改的信息作为提交
     fetchInformation() {
-      Object.keys(this.oppDescForm).forEach(key => {
-        this.oppDescForm[key]["model"]="oppo_influence"
+      Object.keys(this.oppInfluenceForm).forEach(key => {
+        this.oppInfluenceForm[key]["model"]="oppo_influence"
       })
       if (Object.keys(this.oppInfluenceOriginBak).length == 0) {
         this.oppInfluenceModified = JSON.parse(JSON.stringify(this.oppInfluenceForm))

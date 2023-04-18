@@ -270,6 +270,7 @@ export default {
         }
         this.quotationDialog.currentEdit.quotationMap = this.quotationDialog.form;
         this.quotationDialog.currentEdit.quotationJson = JSON.stringify(this.quotationDialog.form);
+        this.quotationDialog.currentEdit.opportunityStage = this.quotationDialog.form.quotationStage;
         if (!this.quotationDialog.currentEdit.id && !this.quotationDialog.currentEdit.tempId) {
           this.quotationDialog.currentEdit.tempId = new Date().getTime();//先打个标
           this.quotationInfoForm.quotationInfo.push(this.quotationDialog.currentEdit);

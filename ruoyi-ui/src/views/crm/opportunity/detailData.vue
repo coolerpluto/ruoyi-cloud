@@ -5,15 +5,23 @@
       <el-step v-for="(item, index) in stageList" :key="index" :title="item.label" :icon="item.icon"
         v-if="stageShowList.includes(item.value)" @click.native="changeStage(item.value)" />
     </el-steps>
+    
+    <stage-l01 ref="stage01" v-if="stageActive === 1" :oppdata="inputReq" />
+    <stage-l02 ref="stage02" v-if="stageActive === 2" :oppdata="inputReq" />
+    <stage-l03 ref="stage03" v-if="stageActive === 3" :oppdata="inputReq" />
+    <stage-l04 ref="stage04" v-if="stageActive === 4" :oppdata="inputReq" />
+    <stage-l05 ref="stage05" v-if="stageActive === 5" :oppdata="inputReq" />
+    <stage-l06 ref="stage06" v-if="stageActive === 6" :oppdata="inputReq" />
+    <stage-l07 ref="stage07" v-if="stageActive === 7" :oppdata="inputReq" />
+    <stage-l08 ref="stage08" v-if="stageActive === 8" :oppdata="inputReq" />
+    <stage-l09 ref="stage09" v-if="stageActive === 9" :oppdata="inputReq" />
+    <stage-l11 ref="stage11" v-if="stageActive === 11" :oppdata="inputReq" />
     <div style="text-align: center;" v-if="inputReq.action != 'V'">
-      <div id="currentStageButArea" v-if="inputReq.currentStage === stageActive">
-        <el-button-group>
-          <el-button type="primary" icon="el-icon-unlock" v-if="flag.showReActiveBut" @click="reActiveOpportunity()">
-            重新激活到L2
-          </el-button>
+      <div id="currentStageButArea">
+        <el-button-group>          
           <el-button type="primary" icon="el-icon-finished" v-if="flag.showSaveUpdateBut"
             @click="saveOrupdateOpportunityData()">
-            保存并更新
+            保存/更新
           </el-button>
           <el-button type="primary" v-if="flag.showNextBut" @click="changeOpportunityStage()">
             下一步
@@ -27,8 +35,7 @@
             <i class="el-icon-arrow-down el-icon--right"></i>
           </el-button>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item v-for="item in targetNextStageList" :key="item.value" :command="item.value"
-              :disabled="![1, 2, 3, 4, 5, 6, 7, 8, 9, 11].includes(item.value)">
+            <el-dropdown-item v-for="item in targetNextStageList" :key="item.value" :command="item.value">
               {{ item.label }}
             </el-dropdown-item>
           </el-dropdown-menu>
@@ -41,18 +48,21 @@
           </el-button>
         </el-button-group>
       </div>
+      <div id="newStageButArea" v-if="flag.showNewStageSaveBut">
+        <el-button-group>
+          <el-button type="primary" icon="el-icon-unlock" @click="saveNewStageOpportunityData()">
+            新阶段保存
+          </el-button>
+        </el-button-group>
+      </div>
+      <div id="reActiveButArea" v-if="flag.showReActiveBut">
+        <el-button-group>
+          <el-button type="primary" icon="el-icon-unlock" @click="reActiveOpportunity()">
+            重新激活到L2
+          </el-button>
+        </el-button-group>
+      </div>
     </div>
-    <stage-l01 ref="stage01" v-if="stageActive === 1" :oppdata="inputReq" />
-    <stage-l02 ref="stage02" v-if="stageActive === 2" :oppdata="inputReq" />
-    <stage-l03 ref="stage03" v-if="stageActive === 3" :oppdata="inputReq" />
-    <stage-l04 ref="stage04" v-if="stageActive === 4" :oppdata="inputReq" />
-    <stage-l05 ref="stage05" v-if="stageActive === 5" :oppdata="inputReq" />
-    <stage-l06 ref="stage06" v-if="stageActive === 6" :oppdata="inputReq" />
-    <stage-l07 ref="stage07" v-if="stageActive === 7" :oppdata="inputReq" />
-    <stage-l08 ref="stage08" v-if="stageActive === 8" :oppdata="inputReq" />
-    <stage-l09 ref="stage09" v-if="stageActive === 9" :oppdata="inputReq" />
-    <stage-l11 ref="stage11" v-if="stageActive === 11" :oppdata="inputReq" />
-
   </div>
 </template>
 
@@ -96,10 +106,12 @@ export default {
         showNextStageOptions: false,
         showUpdateBut: false,
         hasSaveOrUpdate: false,
+        showNewStageSaveBut: false,
       },
       stageActive: undefined,
       modelActive: 1,
       updateEveryStagePerson: [],
+      stageGoneList: [],
       stageShowList: [1],
       targetNextStage: 0,// 向下新的阶段
       targetStageName: '选择阶段',
@@ -130,16 +142,37 @@ export default {
   },
   methods: {
     refreshBut() {
+      // 再激活
       this.flag.showReActiveBut = [6, 7, 8, 11].includes(this.stageActive);
-      this.flag.showSaveUpdateBut = true;
-      // 新建时不显示下一步的操作按钮
-      this.flag.showNextBut = this.inputReq.action == "A" ? false : ![6, 7, 8, 9, 11].includes(this.stageActive);
-      this.flag.showNextStageOptions = this.inputReq.action == "A" ? false : ![6, 7, 8, 9, 11].includes(this.stageActive);
-      // 特殊人员每个阶段都能更新
-      this.updateEveryStagePerson = this.dict.type.crm_opportunity_updataeverystage_person.map((item) => {
-        return item.value
-      })
-      this.flag.showUpdateBut = this.inputReq.currentStage !== this.stageActive && this.updateEveryStagePerson.includes(this.$store.getters.name)
+      // 当前阶段按钮
+      this.flag.showSaveUpdateBut = false;
+      this.flag.showNextBut = false;
+      this.flag.showNextStageOptions = false;
+      // 阶段下行按钮
+      this.flag.showNewStageSaveBut = false;
+      // 特权更新
+      this.flag.showUpdateBut = false;
+
+      if (this.inputReq.currentStage === this.stageActive){
+        // 最新阶段的按钮配置
+        // 保存/更新
+        this.flag.showSaveUpdateBut = true;        
+        // 新建时和终点时不显示下一步操作相关按钮
+        this.flag.showNextBut = this.inputReq.action == "A" ? false : ![6, 7, 8, 9, 11].includes(this.stageActive);
+        this.flag.showNextStageOptions = this.flag.showNextBut;
+      }else{
+        // 非最新阶段
+        if (this.stageGoneList.indexOf(this.stageActive)>-1){
+          // 特殊人员尽力过的每个阶段都能更新
+          this.updateEveryStagePerson = this.dict.type.crm_opportunity_updataeverystage_person.map((item) => {
+            return item.value
+          })
+          this.flag.showUpdateBut = this.updateEveryStagePerson.includes(this.$store.getters.name);
+        }else{
+          // 推进最新继续下行
+          this.flag.showNewStageSaveBut = true;
+        }        
+      }
     },
     init() {
       //商机当前阶段、走过的阶段以及阶段跳转配置信息
@@ -158,6 +191,7 @@ export default {
         this.stageShowList.sort((a, b) => {
           return a - b;
         });
+        this.stageGoneList = this.stageShowList.slice();
         // 不同阶段的阶段跳转控制列表
         this.stageTransferConfig = response.data.activeConfig;
         // 获取当前阶段的跳转
@@ -219,38 +253,38 @@ export default {
 
     refreshNextStageList() {
       // 将字符串转成数字数组
-      let _this = this
+      let _this = this;
       if (!this.stageTransferConfig[_this.stageActive]) {
         return;
       }
       let nextStageIdList = this.stageTransferConfig[_this.stageActive].targetStage.split(',').map(function (data) {
         return +data;
       })
-      this.targetNextStageList = this.stageList.filter(item => nextStageIdList.includes(item.value))
+      this.targetNextStageList = this.stageList.filter(item => nextStageIdList.includes(item.value));
     },
     //步骤条跳转
     changeStage(targetStage) {
       if (this.stageActive === targetStage) {
         this.$modal.msg("已在选择目标阶段，无需跳转");
       } else if (targetStage === 0) {
-        this.$modal.alert("您还未选择目标阶段或者目标阶段选择错误！")
+        this.$modal.alert("您还未选择目标阶段或者目标阶段选择错误！");
       } else {
         this.stageActive = targetStage;
         this.stageShowList.push(targetStage)
         this.stageShowList.sort((a, b) => {
           return a - b;
         });
-        this.targetStageName = '选择阶段'
-        this.targetNextStage = 0
-        this.refreshBut()
-        this.refreshNextStageList()
+        this.targetStageName = '选择阶段';
+        this.targetNextStage = 0;
+        this.refreshBut();
+        this.refreshNextStageList();
       }
     },
     //下拉阶段选择
     handleNextStageCommand(command) {
-      let nextStageInfo = this.targetNextStageList.find(item => item.value === command)
-      this.targetStageName = nextStageInfo.label
-      this.targetNextStage = nextStageInfo.value
+      let nextStageInfo = this.targetNextStageList.find(item => item.value === command);
+      this.targetStageName = nextStageInfo.label;
+      this.targetNextStage = nextStageInfo.value;
     },
     collectInfoByStage(stage) {
       let reqBody = { code: this.inputReq.opportunityCode };//为0时为新增
@@ -414,6 +448,26 @@ export default {
           return actionReason11 && summaryInfo11;
       }
     },
+    saveNewStageOpportunityData(){
+      if (!this.verifyByStage(this.stageActive)) {
+        return;
+      }
+      let updateData = this.collectInfoByStage(this.stageActive);
+      updateData["stageActive"] = this.stageActive;
+      updateData["currentStage"] = this.inputReq.currentStage;
+      updateData["newStage"] = this.stageActive;
+      console.log("updateData:", updateData);
+      this.flag.pageLoading = true;
+      updateUnitedOpp(updateData).then(response => {
+        this.$modal.msgSuccess("更新新阶段成功");
+        this.flag.pageLoading = false;
+        this.stageGoneList.push(this.stageActive);
+        this.$tab.refreshPage();
+      }).catch(() => {
+        this.$modal.msgError("更新阶段失败");
+        this.flag.pageLoading = false;
+      });;
+    },
     updateOpportunityData() {
       if (!this.updateEveryStagePerson.includes(this.$store.getters.name)) {
         // 特殊人 每个阶段都能保存， 保存时仅保留当前显示姐的信息
@@ -427,7 +481,7 @@ export default {
       let updateData = this.collectInfoByStage(this.stageActive);
       updateData["stageActive"] = this.stageActive;
       updateData["currentStage"] = this.inputReq.currentStage;
-      console.log("updateData:", updateData)
+      console.log("updateData:", updateData);
       this.flag.pageLoading = true;
       updateUnitedOpp(updateData).then(response => {
         this.$modal.msgSuccess("更新成功");
