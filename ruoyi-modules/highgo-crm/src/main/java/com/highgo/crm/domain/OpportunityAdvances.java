@@ -39,7 +39,7 @@ public class OpportunityAdvances extends BaseEntity
 
     /** 提报人 */
     @Excel(name = "提报人")
-    private Long creator;
+    private String creator;
 
     public void setId(Long id) 
     {
@@ -86,12 +86,12 @@ public class OpportunityAdvances extends BaseEntity
     {
         return advancesDate;
     }
-    public void setCreator(Long creator) 
+    public void setCreator(String creator)
     {
         this.creator = creator;
     }
 
-    public Long getCreator() 
+    public String getCreator()
     {
         return creator;
     }

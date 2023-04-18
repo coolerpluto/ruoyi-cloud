@@ -60,4 +60,6 @@ public interface ICompanyService
     public int deleteCompanyById(String id);
 
     int transfer(Company company);
+
+    List<Company> searchCompanyByName(Company company);
 }

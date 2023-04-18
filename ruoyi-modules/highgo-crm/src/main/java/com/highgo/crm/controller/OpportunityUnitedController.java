@@ -1,7 +1,7 @@
 package com.highgo.crm.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.highgo.crm.domain.Company;
-import com.highgo.crm.domain.Contact;
 import com.highgo.crm.domain.OpportunityAdvances;
 import com.highgo.crm.domain.OpportunityCompetitor;
 import com.highgo.crm.domain.OpportunityContactInfo;
@@ -13,13 +13,12 @@ import com.highgo.crm.domain.OpportunitySoftwareOperation;
 import com.highgo.crm.domain.OpportunityStageChangeHis;
 import com.highgo.crm.domain.OpportunitySupport;
 import com.highgo.crm.domain.OpportunityUnited;
-import com.highgo.crm.domain.PolicyFile;
-import com.highgo.crm.service.ICompanyService;
+import com.highgo.crm.domain.OpportunityUnitedReq;
 import com.highgo.crm.service.IOpportunityPropertyService;
-import com.highgo.crm.service.IOpportunityService;
 import com.highgo.crm.service.IOpportunityStageChangeHisService;
 import com.highgo.crm.service.IOpportunityStageTransferConfigService;
 import com.highgo.crm.service.IOpportunityUnitedService;
+import com.highgo.crm.service.impl.OpportunityUnitedServiceImpl;
 import com.ruoyi.common.core.utils.StringUtils;
 import com.ruoyi.common.core.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.web.controller.BaseController;
@@ -29,6 +28,8 @@ import com.ruoyi.common.log.annotation.Log;
 import com.ruoyi.common.log.enums.BusinessType;
 import com.ruoyi.common.security.annotation.Logical;
 import com.ruoyi.common.security.annotation.RequiresRoles;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,7 +41,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -100,6 +100,9 @@ public class OpportunityUnitedController extends BaseController
     }
     @Autowired
     private IOpportunityPropertyService opportunityPropertyService;
+
+    private static final Logger log = LoggerFactory.getLogger(OpportunityUnitedServiceImpl.class);
+
     @PostMapping("/getPropertiesMap")
     public AjaxResult getPropertiesMap(@RequestBody OpportunityUnited opportunity){
         Map<String, Object> res = new HashMap<>();
@@ -110,7 +113,9 @@ public class OpportunityUnitedController extends BaseController
         for (String propertyKey:propertyKeysReq){
             res.put(propertyKey,new OpportunityProperty());
         }
+        log.info("getPropertiesMap req:{},", JSON.toJSONString(opportunityProperty));
         List<OpportunityProperty> properties = opportunityPropertyService.selectOpportunityPropertyList(opportunityProperty);
+        log.info("getPropertiesMap res:{},", JSON.toJSONString(properties));
         for (OpportunityProperty property:properties)
         {
             if (!StringUtils.equals(property.getStatus(),"1")){
@@ -242,23 +247,23 @@ public class OpportunityUnitedController extends BaseController
     /**
      * 新增商机统一管理
      */
-    @RequiresRoles(value = {"crm:opportunity", "crm:mangment"}, logical = Logical.OR)
+    //@RequiresRoles(value = {"crm:opportunity", "crm:mangment"}, logical = Logical.OR)
     @Log(title = "商机统一管理", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody OpportunityUnited opportunity)
+    public AjaxResult add(@RequestBody OpportunityUnitedReq opportunity)
     {
-        return toAjax(opportunityService.insertOpportunityUnited(opportunity));
+        return toAjax(opportunityService.insertOppoUnited(opportunity));
     }
 
     /**
      * 修改商机统一管理
      */
-    @RequiresRoles(value = {"crm:opportunity", "crm:mangment"}, logical = Logical.OR)
+    //@RequiresRoles(value = {"crm:opportunity", "crm:mangment"}, logical = Logical.OR)
     @Log(title = "商机统一管理", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody OpportunityUnited opportunity)
+    public AjaxResult edit(@RequestBody OpportunityUnitedReq opportunity)
     {
-        return toAjax(opportunityService.updateOpportunityUnited(opportunity));
+        return toAjax(opportunityService.updateOppoUnited(opportunity));
     }
 
     @RequiresRoles(value = {"crm:opportunity", "crm:mangment"}, logical = Logical.OR)

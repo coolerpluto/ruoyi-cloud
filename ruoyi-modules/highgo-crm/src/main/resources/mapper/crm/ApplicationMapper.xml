@@ -9,6 +9,10 @@
         <result property="name"    column="name"    />
         <result property="version"    column="version"    />
         <result property="category"    column="category"    />
+        <result property="categoryL1"    column="category_l1"    />
+        <result property="categoryL2"    column="category_l2"    />
+        <result property="categoryL3"    column="category_l3"    />
+        <result property="categoryL4"    column="category_l4"    />
         <result property="isv"    column="isv"    />
         <result property="isvContactId"    column="isv_contact_id"    />
         <result property="baseEnviron"    column="base_environ"    />
@@ -37,7 +41,12 @@
     </resultMap>
 
     <sql id="selectApplicationVo">
-        select id, name, version, category, isv, isv_contact_id, base_environ, opeart_sys, middle_soft, data_base, db_selection_model, deploy_type, deploy_level, sys_build_money, source_id, source_type, dev_status, db_adapt_status, remark, owner_id, dept_id, create_id, create_by, create_time, update_id, update_by, update_time from t_application
+        select id, name, version, category,category_l1,category_l2,category_l3,category_l4,
+               isv, isv_contact_id, base_environ, opeart_sys, middle_soft, data_base,
+               db_selection_model, deploy_type, deploy_level, sys_build_money, source_id,
+               source_type, dev_status, db_adapt_status, remark, owner_id, dept_id,
+               create_id, create_by, create_time, update_id, update_by, update_time
+        from t_application
     </sql>
 
     <select id="selectApplicationList" parameterType="Application" resultMap="ApplicationResult">
@@ -46,6 +55,10 @@
             <if test="name != null  and name != ''"> and name = #{name}</if>
             <if test="version != null  and version != ''"> and version = #{version}</if>
             <if test="category != null  and category != ''"> and category = #{category}</if>
+            <if test="categoryL1 != null  and categoryL1 != ''"> and category_l1 = #{categoryL1}</if>
+            <if test="categoryL2 != null  and categoryL2 != ''"> and category_l2 = #{categoryL2}</if>
+            <if test="categoryL3 != null  and categoryL3 != ''"> and category_l3 = #{categoryL3}</if>
+            <if test="categoryL4 != null  and categoryL4 != ''"> and category_l4 = #{categoryL4}</if>
             <if test="isv != null  and isv != ''"> and isv = #{isv}</if>
             <if test="isvContactId != null  and isvContactId != ''"> and isv_contact_id = #{isvContactId}</if>
             <if test="baseEnviron != null  and baseEnviron != ''"> and base_environ = #{baseEnviron}</if>
@@ -77,13 +90,17 @@
         where id = #{id}
     </select>
 
-    <insert id="insertApplication" parameterType="Application">
+    <insert id="insertApplication" parameterType="Application" useGeneratedKeys="true" keyProperty="id">
         insert into t_application
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">id,</if>
             <if test="name != null">name,</if>
             <if test="version != null">version,</if>
             <if test="category != null">category,</if>
+            <if test="categoryL1 != null">category_l1,</if>
+            <if test="categoryL2 != null">category_l2,</if>
+            <if test="categoryL3 != null">category_l3,</if>
+            <if test="categoryL4 != null">category_l4,</if>
             <if test="isv != null">isv,</if>
             <if test="isvContactId != null">isv_contact_id,</if>
             <if test="baseEnviron != null">base_environ,</if>
@@ -113,6 +130,10 @@
             <if test="name != null">#{name},</if>
             <if test="version != null">#{version},</if>
             <if test="category != null">#{category},</if>
+            <if test="categoryL1 != null">#{categoryL1},</if>
+            <if test="categoryL2 != null">#{categoryL2},</if>
+            <if test="categoryL3 != null">#{categoryL3},</if>
+            <if test="categoryL4 != null">#{categoryL4},</if>
             <if test="isv != null">#{isv},</if>
             <if test="isvContactId != null">#{isvContactId},</if>
             <if test="baseEnviron != null">#{baseEnviron},</if>
@@ -145,6 +166,10 @@
             <if test="name != null">name = #{name},</if>
             <if test="version != null">version = #{version},</if>
             <if test="category != null">category = #{category},</if>
+            <if test="categoryL1 != null">category_l1 = #{categoryL1},</if>
+            <if test="categoryL2 != null">category_l2 = #{categoryL2},</if>
+            <if test="categoryL3 != null">category_l3 = #{categoryL3},</if>
+            <if test="categoryL4 != null">category_l4 = #{categoryL4},</if>
             <if test="isv != null">isv = #{isv},</if>
             <if test="isvContactId != null">isv_contact_id = #{isvContactId},</if>
             <if test="baseEnviron != null">base_environ = #{baseEnviron},</if>

@@ -157,7 +157,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">#{updateTime},</if>
          </trim>
     </insert>
-
+    <insert id="batchInsertCompany">
+        INSERT INTO t_company (id, code, company_name, properties, industry,
+                               legal, capital_reg, capital_pay_type,
+                               source_id, source_type, website, addr, addr_detail,
+                               zip_code, business_scope, remark,
+                               owner_id, dept_id, create_id, create_by, create_time,
+                               update_id, update_by, update_time)
+        VALUES
+           <foreach collection="companyList" index="index" item="item" separator="," >
+            (#{item.id}, #{item.code},#{item.companyName},#{item.properties},#{item.industry}
+               ,#{item.legal},#{item.capitalReg},#{item.capitalPayType}
+               ,#{item.sourceId},#{item.sourceType},#{item.website},#{item.addr},#{item.addrDetail}
+               ,#{item.zipCode},#{item.businessScope},#{item.remark}
+               ,#{item.ownerId},#{item.deptId},#{item.createId},#{item.createBy},#{item.createTime}
+               ,#{item.updateId},#{item.updateBy},#{item.updateTime})
+           </foreach>
+    </insert>
     <update id="updateCompany" parameterType="Company">
         update t_company
         <trim prefix="SET" suffixOverrides=",">

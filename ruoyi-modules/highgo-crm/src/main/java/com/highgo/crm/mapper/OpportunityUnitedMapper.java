@@ -89,4 +89,12 @@ public interface OpportunityUnitedMapper
     List<OpportunitySupport> querySupportByOppCode(String oppCode);
 
     List<OpportunityContactInfo> queryContactsByOppCode(String oppCode);
+
+    int insertOpportunityContact(OpportunityContactInfo contact);
+
+    int updateOpportunityContact(OpportunityContactInfo contact);
+
+    int deleteOpportunityContactByKeyId(Long keyId);
+
+    int updateOpportunityByCode(OpportunityUnited oppo);
 }

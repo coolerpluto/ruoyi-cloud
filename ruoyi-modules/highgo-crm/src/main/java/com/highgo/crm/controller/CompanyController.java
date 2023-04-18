@@ -49,6 +49,13 @@ public class CompanyController extends BaseController
         return getDataTable(list);
     }
 
+    @GetMapping("/tianYanChaSearch")
+    public AjaxResult searchCompanyByName(Company company)
+    {
+        List<Company> list = companyService.searchCompanyByName(company);
+        return success(list);
+    }
+
     /**
      * 导出公司列表
      */
