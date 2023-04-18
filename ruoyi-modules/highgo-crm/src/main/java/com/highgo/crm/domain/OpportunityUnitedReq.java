@@ -28,7 +28,7 @@ public class OpportunityUnitedReq extends BaseEntity
     private Map<String, OpportunityProperty> summaryInfo;
     private OppoCostInfo costInfo;
     private Map<String, OpportunityProperty> actionReason;
-    private Map<String, OpportunityProperty> biddingInfo;
+    private OppoBiddingInfo biddingInfo;
     private Map<String, OpportunityProperty> winningBidding;
     private OppoAdvancesInfo advancesInfo;
     private OppoKeyStandBy keyStandBy;
@@ -55,12 +55,12 @@ public class OpportunityUnitedReq extends BaseEntity
         this.costInfo = costInfo;
     }
 
-    public Map<String, OpportunityProperty> getBiddingInfo()
+    public OppoBiddingInfo getBiddingInfo()
     {
         return biddingInfo;
     }
 
-    public void setBiddingInfo(Map<String, OpportunityProperty> biddingInfo)
+    public void setBiddingInfo(OppoBiddingInfo biddingInfo)
     {
         this.biddingInfo = biddingInfo;
     }

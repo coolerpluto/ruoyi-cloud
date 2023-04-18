@@ -7,6 +7,7 @@ import com.highgo.crm.domain.Application;
 import com.highgo.crm.domain.Company;
 import com.highgo.crm.domain.OppoAdvancesInfo;
 import com.highgo.crm.domain.OppoBaseInfo;
+import com.highgo.crm.domain.OppoBiddingInfo;
 import com.highgo.crm.domain.OppoCompetitorInfo;
 import com.highgo.crm.domain.OppoCostInfo;
 import com.highgo.crm.domain.OppoKeyContacts;
@@ -291,6 +292,16 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
         if (StringUtils.isBlank(targetStage))
         {
             targetStage = opportunity.getCurrentStage();
+        }
+        else
+        {
+            // 变更主表阶段
+            OpportunityUnited oppo = new OpportunityUnited();
+            oppo.setCurrentStage(targetStage);
+            oppo.setCode(opportunity.getCode());
+            oppo.setUpdateBy(currentUser.getUserName());
+            oppo.setUpdateTime(DateUtils.getNowDate());
+            opportunityUnitedMapper.updateOpportunityByCode(oppo);
         }
         stageHis.setTargetStage(targetStage);
         stageHis.setSourceStage(opportunity.getCurrentStage());
@@ -689,11 +700,23 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
     private Map<String, String> inOrUpBiddingInfo(CountDownLatch end, OpportunityUnitedReq opportunity)
     {
         log.info("inOrUpBiddingInfo:begin:{}", Thread.currentThread().getName());
-        Map<String, OpportunityProperty> biddingInfo = opportunity.getBiddingInfo();
-        //TODOs
-        Map<String, String> res = inOrUpProperty(end, getOppoCode(opportunity), biddingInfo);
+        OppoBiddingInfo biddingInfo = opportunity.getBiddingInfo();
+
+        Map<String, OpportunityProperty> biddingInfoProperties = new HashMap<>();
+        biddingInfoProperties.put("knowExpertList",biddingInfo.getKnowExpertList());
+        biddingInfoProperties.put("supportByExpert",biddingInfo.getSupportByExpert());
+        Map<String, String> res = inOrUpProperty(null, getOppoCode(opportunity), biddingInfoProperties);
+
+        List<OpportunitySoftwareOperation> biddingInfo_m = biddingInfo.getBiddingInfo_m();
+        // 无增 无删  只关注修改
+        for (OpportunitySoftwareOperation opera : biddingInfo_m)
+        {
+            softwareOperationService.updateOpportunitySoftwareOperation(opera);
+        }
+
         res.put("model", "biddingInfo");
         log.info("inOrUpBiddingInfo:end:{}", Thread.currentThread().getName());
+        end.countDown();
         return res;
     }
 
@@ -840,7 +863,10 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
         res.put("code", "1");
         if (null == propertyMap)
         {
-            end.countDown();
+            if (null != end)
+            {
+                end.countDown();
+            }
             return res;
         }
         for (String key : propertyMap.keySet())
@@ -874,7 +900,10 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
         {
             res.put("code", "0");
         }
-        end.countDown();
+        if (null != end)
+        {
+            end.countDown();
+        }
         return res;
     }
 

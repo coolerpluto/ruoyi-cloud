@@ -2,6 +2,7 @@ package com.highgo.crm.service.impl;
 
 import java.util.List;
 import com.ruoyi.common.core.utils.DateUtils;
+import com.ruoyi.common.security.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.highgo.crm.mapper.OpportunityQuotationMapper;
@@ -54,6 +55,7 @@ public class OpportunityQuotationServiceImpl implements IOpportunityQuotationSer
     public int insertOpportunityQuotation(OpportunityQuotation opportunityQuotation)
     {
         opportunityQuotation.setCreateTime(DateUtils.getNowDate());
+        opportunityQuotation.setCreateBy(SecurityUtils.getUsername());
         return opportunityQuotationMapper.insertOpportunityQuotation(opportunityQuotation);
     }
 
@@ -67,6 +69,7 @@ public class OpportunityQuotationServiceImpl implements IOpportunityQuotationSer
     public int updateOpportunityQuotation(OpportunityQuotation opportunityQuotation)
     {
         opportunityQuotation.setUpdateTime(DateUtils.getNowDate());
+        opportunityQuotation.setUpdateBy(SecurityUtils.getUsername());
         return opportunityQuotationMapper.updateOpportunityQuotation(opportunityQuotation);
     }
 

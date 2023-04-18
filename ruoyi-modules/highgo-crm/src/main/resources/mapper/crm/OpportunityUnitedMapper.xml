@@ -139,6 +139,7 @@
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="remark != null">remark,</if>
+            <if test="currentStage != null">current_stage,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
@@ -154,6 +155,7 @@
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="remark != null">#{remark},</if>
+            <if test="currentStage != null">#{currentStage},</if>
         </trim>
     </insert>
 
@@ -188,6 +190,7 @@
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="remark != null">remark = #{remark},</if>
+            <if test="currentStage != null">current_stage = #{currentStage},</if>
         </trim>
         where code = #{code}
     </update>

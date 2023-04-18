@@ -15,6 +15,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="currentAdaptedProgress"    column="current_adapted_progress"    />
         <result property="operationalId"    column="operational_id"    />
         <result property="operationalName"    column="operational_name"    />
+        <result property="operationalTender" column="operational_tender"/>
+        <result property="operationalSupportDb" column="operational_support_db"/>
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
@@ -25,7 +27,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <sql id="selectOpportunitySoftwareOperationVo">
         select id, opportunity_code, application_id, application_name,db_base, isv_need_adapted,
                target_adapted_progress, current_adapted_progress, operational_id, operational_name,
-               create_by, create_time, update_by, update_time, remark
+               create_by, create_time, update_by, update_time, remark,operational_tender,operational_support_db
         from t_opportunity_software_operation
     </sql>
 
@@ -79,6 +81,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="remark != null">remark,</if>
+            <if test="operationalTender != null">operational_tender,</if>
+            <if test="operationalSupportDb != null">operational_support_db,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
@@ -96,6 +100,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="remark != null">#{remark},</if>
+            <if test="operationalTender != null">#{operationalTender},</if>
+            <if test="operationalSupportDb != null">#{operationalSupportDb},</if>
          </trim>
     </insert>
 
@@ -116,6 +122,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="remark != null">remark = #{remark},</if>
+            <if test="operationalTender != null">operational_tender = #{operationalTender},</if>
+            <if test="operationalSupportDb != null">operational_support_db = #{operationalSupportDb},</if>
         </trim>
         where id = #{id}
     </update>
