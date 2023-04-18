@@ -98,7 +98,7 @@
         where id = #{id}
     </select>
 
-    <insert id="insertContact" parameterType="Contact">
+    <insert id="insertContact" parameterType="Contact" useGeneratedKeys="true" keyProperty="id">
         insert into t_contact
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">id,</if>

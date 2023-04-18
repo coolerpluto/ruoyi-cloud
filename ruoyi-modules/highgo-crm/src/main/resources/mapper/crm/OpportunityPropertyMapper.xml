@@ -40,7 +40,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </select>
         
-    <insert id="insertOpportunityProperty" parameterType="OpportunityProperty">
+    <insert id="insertOpportunityProperty" parameterType="OpportunityProperty" useGeneratedKeys="true" keyProperty="id">
         insert into t_opportunity_property
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">id,</if>

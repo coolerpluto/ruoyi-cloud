@@ -95,7 +95,7 @@
         <include refid="selectOpportunityPropertyVo"/>
         where opportunity_code = #{code}
     </select>
-    <select id="selectOpportunityList" parameterType="Opportunity" resultMap="OpportunityUnitedResult">
+    <select id="selectOpportunityList" parameterType="OpportunityUnited" resultMap="OpportunityUnitedResult">
         <!--        <include refid="selectOpportunityVo"/>-->
         <include refid="select4OpportunityUnitedVo"/>
         <where>
@@ -123,14 +123,14 @@
         where id = #{id}
     </select>
 
-    <insert id="insertOpportunity" parameterType="Opportunity">
+    <insert id="insertOpportunity" parameterType="OpportunityUnited" useGeneratedKeys="true" keyProperty="id">
         insert into t_opportunity
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">id,</if>
             <if test="code != null">code,</if>
             <if test="name != null">name,</if>
             <if test="custId != null">cust_id,</if>
-            <if test="deptId != null">dept_id,</if>
+            <if test="ownerDeptId != null">dept_id,</if>
             <if test="ownerId != null">owner_id,</if>
             <if test="sharedId != null">shared_id,</if>
             <if test="sharedDeptId != null">shared_dept_id,</if>
@@ -145,7 +145,7 @@
             <if test="code != null">#{code},</if>
             <if test="name != null">#{name},</if>
             <if test="custId != null">#{custId},</if>
-            <if test="deptId != null">#{deptId},</if>
+            <if test="ownerDeptId != null">#{ownerDeptId},</if>
             <if test="ownerId != null">#{ownerId},</if>
             <if test="sharedId != null">#{sharedId},</if>
             <if test="sharedDeptId != null">#{sharedDeptId},</if>
@@ -157,13 +157,13 @@
         </trim>
     </insert>
 
-    <update id="updateOpportunity" parameterType="Opportunity">
+    <update id="updateOpportunity" parameterType="OpportunityUnited">
         update t_opportunity
         <trim prefix="SET" suffixOverrides=",">
             <if test="code != null">code = #{code},</if>
             <if test="name != null">name = #{name},</if>
             <if test="custId != null">cust_id = #{custId},</if>
-            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="ownerDeptId != null">dept_id = #{ownerDeptId},</if>
             <if test="ownerId != null">owner_id = #{ownerId},</if>
             <if test="sharedId != null">shared_id = #{sharedId},</if>
             <if test="sharedDeptId != null">shared_dept_id = #{sharedDeptId},</if>
@@ -172,10 +172,25 @@
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="remark != null">remark = #{remark},</if>
+            <if test="currentStage != null">current_stage = #{currentStage},</if>
         </trim>
         where id = #{id}
     </update>
-
+    <update id="updateOpportunityByCode" parameterType="OpportunityUnited">
+        update t_opportunity
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="custId != null">cust_id = #{custId},</if>
+            <if test="ownerDeptId != null">dept_id = #{ownerDeptId},</if>
+            <if test="ownerId != null">owner_id = #{ownerId},</if>
+            <if test="sharedId != null">shared_id = #{sharedId},</if>
+            <if test="sharedDeptId != null">shared_dept_id = #{sharedDeptId},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where code = #{code}
+    </update>
     <delete id="deleteOpportunityById" parameterType="Long">
         delete
         from t_opportunity
@@ -369,13 +384,48 @@
         select tc2.properties,
                tc.*,
                toci.*
-        from t_contact tc
-                 left join t_opportunity_contact_info toci
+        from t_opportunity_contact_info toci
+                 left join t_contact tc
                            on tc.id = toci.contact_id and tc.source_id = toci.opportunity_code
                  left join t_company tc2 on tc.company_code = tc2.code
         where tc.source_type = 'opportunity'
           and tc.source_id = #{oppCode}
         order by tc.create_time desc, tc.update_time desc
     </select>
-
+    <insert id="insertOpportunityContact" parameterType="OpportunityContactInfo" useGeneratedKeys="true" keyProperty="keyId">
+        insert into t_opportunity_contact_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="keyId != null">key_id,</if>
+            <if test="opportunityCode != null">opportunity_code,</if>
+            <if test="contactId != null">contact_id,</if>
+            <if test="exposure != null">exposure,</if>
+            <if test="relationship != null">relationship,</if>
+            <if test="intention != null">intention,</if>
+            <if test="sideVisited != null">side_visited,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="keyId != null">#{keyId},</if>
+            <if test="opportunityCode != null">#{opportunityCode},</if>
+            <if test="contactId != null">#{contactId},</if>
+            <if test="exposure != null">#{exposure},</if>
+            <if test="relationship != null">#{relationship},</if>
+            <if test="intention != null">#{intention},</if>
+            <if test="sideVisited != null">#{sideVisited},</if>
+        </trim>
+    </insert>
+    <update id="updateOpportunityContact" parameterType="OpportunityContactInfo">
+        update t_opportunity_contact_info
+        <trim prefix="SET"  suffixOverrides=",">
+            <if test="opportunityCode != null">opportunity_code = #{opportunityCode},</if>
+            <if test="contactId != null">contact_id = #{contactId},</if>
+            <if test="exposure != null">exposure=#{exposure},</if>
+            <if test="relationship != null">relationship=#{relationship},</if>
+            <if test="intention != null">intention=#{intention},</if>
+            <if test="sideVisited != null">side_visited=#{sideVisited},</if>
+        </trim>
+        where key_id = #{keyId}
+    </update>
+    <delete id="deleteOpportunityContactByKeyId" parameterType="Long">
+        delete from t_opportunity_contact_info where key_id = #{keyId}
+    </delete>
 </mapper>

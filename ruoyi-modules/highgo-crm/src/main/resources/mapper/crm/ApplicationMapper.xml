@@ -90,7 +90,7 @@
         where id = #{id}
     </select>
 
-    <insert id="insertApplication" parameterType="Application">
+    <insert id="insertApplication" parameterType="Application" useGeneratedKeys="true" keyProperty="id">
         insert into t_application
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">id,</if>

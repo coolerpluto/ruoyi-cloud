@@ -13,6 +13,7 @@ public class OpportunityUnitedReq extends BaseEntity
 
     private String code;
     private String currentStage;
+    private String newStage;
     private String stageActive;
     private String name;
 
@@ -33,6 +34,16 @@ public class OpportunityUnitedReq extends BaseEntity
     private OppoKeyStandBy keyStandBy;
     private Map<String, OpportunityProperty> oppImplement;
     private Map<String, OpportunityProperty> signInfo;
+
+    public String getNewStage()
+    {
+        return newStage;
+    }
+
+    public void setNewStage(String newStage)
+    {
+        this.newStage = newStage;
+    }
 
     public OppoCostInfo getCostInfo()
     {

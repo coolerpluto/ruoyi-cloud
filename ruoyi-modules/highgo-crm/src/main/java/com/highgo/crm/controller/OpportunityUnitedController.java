@@ -1,5 +1,6 @@
 package com.highgo.crm.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.highgo.crm.domain.Company;
 import com.highgo.crm.domain.OpportunityAdvances;
 import com.highgo.crm.domain.OpportunityCompetitor;
@@ -17,6 +18,7 @@ import com.highgo.crm.service.IOpportunityPropertyService;
 import com.highgo.crm.service.IOpportunityStageChangeHisService;
 import com.highgo.crm.service.IOpportunityStageTransferConfigService;
 import com.highgo.crm.service.IOpportunityUnitedService;
+import com.highgo.crm.service.impl.OpportunityUnitedServiceImpl;
 import com.ruoyi.common.core.utils.StringUtils;
 import com.ruoyi.common.core.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.web.controller.BaseController;
@@ -26,6 +28,8 @@ import com.ruoyi.common.log.annotation.Log;
 import com.ruoyi.common.log.enums.BusinessType;
 import com.ruoyi.common.security.annotation.Logical;
 import com.ruoyi.common.security.annotation.RequiresRoles;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -96,6 +100,9 @@ public class OpportunityUnitedController extends BaseController
     }
     @Autowired
     private IOpportunityPropertyService opportunityPropertyService;
+
+    private static final Logger log = LoggerFactory.getLogger(OpportunityUnitedServiceImpl.class);
+
     @PostMapping("/getPropertiesMap")
     public AjaxResult getPropertiesMap(@RequestBody OpportunityUnited opportunity){
         Map<String, Object> res = new HashMap<>();
@@ -106,7 +113,9 @@ public class OpportunityUnitedController extends BaseController
         for (String propertyKey:propertyKeysReq){
             res.put(propertyKey,new OpportunityProperty());
         }
+        log.info("getPropertiesMap req:{},", JSON.toJSONString(opportunityProperty));
         List<OpportunityProperty> properties = opportunityPropertyService.selectOpportunityPropertyList(opportunityProperty);
+        log.info("getPropertiesMap res:{},", JSON.toJSONString(properties));
         for (OpportunityProperty property:properties)
         {
             if (!StringUtils.equals(property.getStatus(),"1")){
