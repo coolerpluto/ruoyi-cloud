@@ -1,5 +1,6 @@
 package com.ruoyi.file.service;
 
+import com.alibaba.nacos.common.utils.IoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -39,7 +40,7 @@ public class FastDfsSysFileServiceImpl extends ASysFileService {
         InputStream inputStream = file.getInputStream();
         StorePath storePath = storageClient.uploadFile(inputStream, file.getSize(),
                 FileTypeUtils.getExtension(file), null);
-        inputStream.close();
+        IoUtils.closeQuietly(inputStream);
         return domain + "/" + storePath.getFullPath();
     }
 }
