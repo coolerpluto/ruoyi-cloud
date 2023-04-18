@@ -176,6 +176,9 @@ export default {
     },
     //提取修改的信息作为提交
     fetchInformation() {
+      Object.keys(this.signInfoForm).forEach(key => {
+        this.signInfoForm[key]["model"]="sign_info"
+      })
       if (Object.keys(this.signInfoOriginBak).length == 0) {
         this.signInfoModified = JSON.parse(JSON.stringify(this.signInfoForm))
         return;

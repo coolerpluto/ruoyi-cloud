@@ -380,6 +380,9 @@ export default {
     },
     //提取修改的信息作为提交
     fetchInformation() {
+      Object.keys(this.oppDescForm).forEach(key => {
+        this.oppDescForm[key]["model"]="oppo_desc"
+      })
       if (Object.keys(this.oppDescOriginBak).length == 0) {
         this.oppDescModified = JSON.parse(JSON.stringify(this.oppDescForm))
         return;

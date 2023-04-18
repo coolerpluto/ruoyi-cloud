@@ -306,6 +306,7 @@ export default {
 
       this.$set(this.custInfoForm.userCompanyName, 'propertyVal', this.custInfoDialog.selectedCompany.companyName);
       this.$set(this.custInfoForm.userCompanyAddr, 'propertyValList', this.custInfoDialog.selectedCompany.addr.split(","));
+      this.custInfoForm['userCompanyAddr'].propertyVal = this.custInfoForm['userCompanyAddr'].propertyValList.join(",");
 
       this.custInfoDialog.open = false;
       this.cascaderVisiable = true;
@@ -335,12 +336,14 @@ export default {
     },
     //提取修改的信息作为提交
     fetchInformation() {
+      Object.keys(this.custInfoForm).forEach(key => {
+        this.custInfoForm[key]["model"]="cust"
+      })
       if (Object.keys(this.custInfoOriginBak).length == 0) {
         this.custInfoModified = JSON.parse(JSON.stringify(this.custInfoForm))
         return;
       }
       this.custInfoModified = {}
-      this.custInfoForm['userCompanyAddr'].propertyVal = this.custInfoForm['userCompanyAddr'].propertyValList.join(",");
       Object.keys(this.custInfoForm).forEach(key => {
         if (this.custInfoOriginBak[key].propertyVal != this.custInfoForm[key].propertyVal) {
           this.custInfoModified[key] = this.custInfoForm[key]

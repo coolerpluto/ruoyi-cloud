@@ -186,6 +186,9 @@ export default {
     },
     //提取修改的信息作为提交
     fetchInformation() {
+      Object.keys(this.summaryInfoForm).forEach(key => {
+        this.summaryInfoForm[key]["model"]="results"
+      })
       if (Object.keys(this.summaryInfoOriginBak).length == 0) {
         this.summaryInfoModified = JSON.parse(JSON.stringify(this.summaryInfoForm))
         return;

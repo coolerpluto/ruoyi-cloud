@@ -157,6 +157,9 @@ export default {
     },
     //提取修改的信息作为提交
     fetchInformation() {
+      Object.keys(this.winningBiddingForm).forEach(key => {
+        this.winningBiddingForm[key]["model"]="winning_bidder"
+      })
       if (Object.keys(this.winningBiddingOriginBak).length == 0) {
         this.winningBiddingModified = JSON.parse(JSON.stringify(this.winningBiddingForm))
         return;

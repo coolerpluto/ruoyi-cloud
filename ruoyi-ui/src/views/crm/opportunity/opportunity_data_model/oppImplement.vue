@@ -205,6 +205,9 @@ export default {
     },
     //提取修改的信息作为提交
     fetchInformation() {
+      Object.keys(this.oppDescForm).forEach(key => {
+        this.oppDescForm[key]["model"]="impl_key_points"
+      })
       if (Object.keys(this.oppImplementOriginBak).length == 0) {
         this.oppImplementModified = JSON.parse(JSON.stringify(this.oppImplementForm))
         return;

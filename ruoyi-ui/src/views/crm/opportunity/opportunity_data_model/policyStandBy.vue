@@ -215,6 +215,9 @@ export default {
     },
     //提取修改的信息作为提交
     fetchInformation() {
+      Object.keys(this.policyStandByForm).forEach(key => {
+        this.policyStandByForm[key]["model"]="policy"
+      })
       let update = false
       if (Object.keys(this.policyStandByOriginBak).length != 0) {
         if (this.policyStandByForm.policyId.propertyVal !== this.policyStandByOriginBak.policyId.propertyVal) {
