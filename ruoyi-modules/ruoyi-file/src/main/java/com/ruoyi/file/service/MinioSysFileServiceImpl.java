@@ -2,6 +2,7 @@ package com.ruoyi.file.service;
 
 import com.ruoyi.file.config.MinioConfig;
 import com.ruoyi.file.utils.FileUploadUtils;
+import com.alibaba.nacos.common.utils.IoUtils;
 import com.ruoyi.file.utils.MinioUtil;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
@@ -52,7 +53,7 @@ public class MinioSysFileServiceImpl extends ASysFileService {
                 .contentType(file.getContentType())
                 .build();
         client.putObject(args);
-        inputStream.close();
+        IoUtils.closeQuietly(inputStream);
         return minioConfig.getUrl() + "/" + minioConfig.getBucketName() + "/" + fileName;
     }
 
