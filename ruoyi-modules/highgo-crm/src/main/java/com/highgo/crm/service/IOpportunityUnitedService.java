@@ -10,6 +10,7 @@ import com.highgo.crm.domain.OpportunityPolicy;
 import com.highgo.crm.domain.OpportunityQuotation;
 import com.highgo.crm.domain.OpportunitySoftwareOperation;
 import com.highgo.crm.domain.OpportunitySupport;
+import com.highgo.crm.domain.OpportunityTransferReq;
 import com.highgo.crm.domain.OpportunityUnited;
 import com.highgo.crm.domain.OpportunityUnitedReq;
 
@@ -94,4 +95,6 @@ public interface IOpportunityUnitedService
     int updateOppoUnited(OpportunityUnitedReq opportunity);
 
     int insertOppoUnited(OpportunityUnitedReq opportunity);
+
+    int transferOpportunityUnited(OpportunityTransferReq opportunity);
 }

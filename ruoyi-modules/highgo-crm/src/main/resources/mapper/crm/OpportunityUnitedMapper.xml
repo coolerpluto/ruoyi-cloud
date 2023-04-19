@@ -17,6 +17,7 @@
         <result property="ownerDeptName" column="dept_name"/>
         <result property="ownerId" column="owner_id"/>
         <result property="ownerName" column="owner_name"/>
+        <result property="nickName" column="nick_name"/>
 
         <result property="sharedId" column="shared_id"/>
         <result property="sharedDeptId" column="shared_dept_id"/>
@@ -74,7 +75,8 @@
                tc2.company_name                                                             cust_name,
                tc.dept_id,
                tc.owner_id,
-               su.nick_name                                                                 owner_name,
+               su.user_name                                                                 owner_name,
+               su.nick_name                                                                 nick_name,
                tc.shared_id,
                tc.shared_dept_id,
                tc.create_time,
@@ -431,4 +433,16 @@
     <delete id="deleteOpportunityContactByKeyId" parameterType="Long">
         delete from t_opportunity_contact_info where key_id = #{keyId}
     </delete>
+    <update id="transferByCodes" parameterType="OpportunityTransferReq">
+        update t_opportunity
+        <trim prefix="SET"  suffixOverrides=",">
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="ownerId != null">owner_id = #{ownerId},</if>
+            <if test="remark != null">remark = concat_ws(';',remark,#{remark}),</if>
+        </trim>
+        where code in
+        <foreach item="code" collection="selectedCodes"   open="(" separator="," close=")">
+            #{code}
+        </foreach>
+    </update>
 </mapper>

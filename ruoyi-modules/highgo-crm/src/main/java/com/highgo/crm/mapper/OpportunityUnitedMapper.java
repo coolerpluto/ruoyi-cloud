@@ -10,6 +10,7 @@ import com.highgo.crm.domain.OpportunityPolicy;
 import com.highgo.crm.domain.OpportunityQuotation;
 import com.highgo.crm.domain.OpportunitySoftwareOperation;
 import com.highgo.crm.domain.OpportunitySupport;
+import com.highgo.crm.domain.OpportunityTransferReq;
 import com.highgo.crm.domain.OpportunityUnited;
 
 import java.util.List;
@@ -97,4 +98,6 @@ public interface OpportunityUnitedMapper
     int deleteOpportunityContactByKeyId(Long keyId);
 
     int updateOpportunityByCode(OpportunityUnited oppo);
+
+    int transferByCodes(OpportunityTransferReq opportunity);
 }

@@ -23,9 +23,12 @@ import com.highgo.crm.domain.OpportunityQuotation;
 import com.highgo.crm.domain.OpportunitySoftwareOperation;
 import com.highgo.crm.domain.OpportunityStageChangeHis;
 import com.highgo.crm.domain.OpportunitySupport;
+import com.highgo.crm.domain.OpportunityTransferReq;
 import com.highgo.crm.domain.OpportunityUnited;
 import com.highgo.crm.domain.OpportunityUnitedReq;
+import com.highgo.crm.domain.TransferLog;
 import com.highgo.crm.mapper.OpportunityUnitedMapper;
+import com.highgo.crm.mapper.TransferLogMapper;
 import com.highgo.crm.service.IApplicationService;
 import com.highgo.crm.service.IContactService;
 import com.highgo.crm.service.IOpportunityAdvancesService;
@@ -48,6 +51,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -227,6 +231,23 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
         log.info("insertOppoUnited:{}", JSON.toJSONString(opportunity));
         inOrUpOppoUnited(opportunity);
         return 1;
+    }
+
+    @Autowired
+    private TransferLogMapper transferLogMapper;
+    @Override
+    public int transferOpportunityUnited(OpportunityTransferReq opportunity)
+    {
+        TransferLog transferLog = new TransferLog();
+        transferLog.setModel("opportunity");
+        transferLog.setUserFrom(SecurityUtils.getUsername());
+        transferLog.setUserTo(opportunity.getOwnerId());
+        transferLog.setRecordIds(Arrays.toString(opportunity.getSelectedCodes()));
+        transferLog.setQuantity(opportunity.getSelectedCodes().length);
+        transferLog.setReason(opportunity.getRemark());
+        transferLog.setActionTime(DateUtils.getNowDate());
+        transferLogMapper.insertTransferLog(transferLog);
+        return opportunityUnitedMapper.transferByCodes(opportunity);
     }
 
     private Map<String, String> inOrUpOppoUnited(OpportunityUnitedReq opportunity)

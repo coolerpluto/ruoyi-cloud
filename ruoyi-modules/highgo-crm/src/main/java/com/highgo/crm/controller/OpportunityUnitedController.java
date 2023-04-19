@@ -12,6 +12,7 @@ import com.highgo.crm.domain.OpportunityQuotation;
 import com.highgo.crm.domain.OpportunitySoftwareOperation;
 import com.highgo.crm.domain.OpportunityStageChangeHis;
 import com.highgo.crm.domain.OpportunitySupport;
+import com.highgo.crm.domain.OpportunityTransferReq;
 import com.highgo.crm.domain.OpportunityUnited;
 import com.highgo.crm.domain.OpportunityUnitedReq;
 import com.highgo.crm.service.IOpportunityPropertyService;
@@ -269,9 +270,9 @@ public class OpportunityUnitedController extends BaseController
     @RequiresRoles(value = {"crm:opportunity", "crm:mangment"}, logical = Logical.OR)
     @Log(title = "商机统一管理", businessType = BusinessType.TRANSFER)
     @PutMapping("/transfer")
-    public AjaxResult transfer(@RequestBody OpportunityUnited opportunity)
+    public AjaxResult transfer(@RequestBody OpportunityTransferReq opportunity)
     {
-        return toAjax(opportunityService.updateOpportunityUnited(opportunity));
+        return toAjax(opportunityService.transferOpportunityUnited(opportunity));
     }
 
     /**

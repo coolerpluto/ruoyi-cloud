@@ -25,6 +25,7 @@ public class OpportunityUnited  extends BaseEntity
     private String custName;
     private Long custId;
 
+    private String nickName;
     private String ownerName;
     private String ownerId;
     private String ownerDeptId;
@@ -33,8 +34,16 @@ public class OpportunityUnited  extends BaseEntity
     private String sharedId;
     private String sharedDeptId;
 
+    public String getNickName()
+    {
+        return nickName;
+    }
 
-    //属性中拎出来用来展示
+    public void setNickName(String nickName)
+    {
+        this.nickName = nickName;
+    }
+//属性中拎出来用来展示
     /**
      * 投标时间
      */
