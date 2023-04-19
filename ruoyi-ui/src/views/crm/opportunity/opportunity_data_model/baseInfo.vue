@@ -378,11 +378,14 @@ export default {
         _this.$set(_this.baseInfoDialog.form,'categoryL2','');
       });
     },
-    getSelectCategoryL1(){
+    getSelectCategoryL1(func){
       var _this = this;
       this.getCtegoryByCode('crm_software_category',function(res){
         _this.baseInfoDialog.categoryL1Options=res;
         _this.baseInfoDialog.categoryL2Options=[];
+        if (typeof func == 'function') {
+          func();
+        }
       });
       this.$set(this.baseInfoDialog,'categoryL1Options',[]);
       this.$set(this.baseInfoDialog,'categoryL2Options',[]);
@@ -393,7 +396,17 @@ export default {
       //this.baseInfoDialog.form.category = this.baseInfoDialog.form.category.split('/');
       this.baseInfoDialog.open = true;
       this.baseInfoDialog.title = "修改应用运营信息";
-      this.getSelectCategoryL1();
+      var _this = this;
+      this.getSelectCategoryL1(function(){
+        //_this.handleSelectCategoryL1();
+        let select = _this.baseInfoDialog.categoryL1Options.find(item=>{
+          return item.dictValue == _this.baseInfoDialog.form.categoryL1;
+        })
+        _this.getCtegoryByCode(select.remark,function(res){
+          _this.baseInfoDialog.categoryL2Options = res;
+          //_this.$set(_this.baseInfoDialog.form,'categoryL2','');
+        });
+      });
     },
     openDialog() {
       this.baseInfoDialog.form = {}
