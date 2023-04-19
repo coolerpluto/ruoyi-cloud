@@ -29,6 +29,7 @@ import com.highgo.crm.mapper.OpportunityUnitedMapper;
 import com.highgo.crm.service.IApplicationService;
 import com.highgo.crm.service.IContactService;
 import com.highgo.crm.service.IOpportunityAdvancesService;
+import com.highgo.crm.service.IOpportunityCompetitorService;
 import com.highgo.crm.service.IOpportunityCostService;
 import com.highgo.crm.service.IOpportunityPropertyService;
 import com.highgo.crm.service.IOpportunityQuotationService;
@@ -529,6 +530,9 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
         return res;
     }
 
+    @Autowired
+    private IOpportunityCompetitorService competitorService;
+
     private Map<String, String> inOrUpCompetitorInfo(CountDownLatch end, OpportunityUnitedReq opportunity)
     {
         Map<String, String> res = new HashMap<>();
@@ -543,9 +547,30 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
         }
         log.info("inOrUpCompetitorInfo:begin:{}", Thread.currentThread().getName());
         List<OpportunityCompetitor> competitor_a = competitor.getCompetitorInfo_a();
+        if (CollectionUtils.isNotEmpty(competitor_a))
+        {
+            for (OpportunityCompetitor comp : competitor_a)
+            {
+                comp.setOpportunity_code(getOppoCode(opportunity));
+                competitorService.insertOpportunityCompetitor(comp);
+            }
+        }
         List<OpportunityCompetitor> competitor_m = competitor.getCompetitorInfo_m();
+        if (CollectionUtils.isNotEmpty(competitor_m))
+        {
+            for (OpportunityCompetitor comp : competitor_m)
+            {
+                competitorService.updateOpportunityCompetitor(comp);
+            }
+        }
         List<OpportunityCompetitor> competitor_d = competitor.getCompetitorInfo_d();
-        // TODO
+        if (CollectionUtils.isNotEmpty(competitor_d))
+        {
+            for (OpportunityCompetitor comp : competitor_d)
+            {
+                competitorService.deleteOpportunityCompetitorById(comp.getId());
+            }
+        }
         log.info("inOrUpCompetitorInfo:end:{}", Thread.currentThread().getName());
         end.countDown();
         return res;
@@ -703,8 +728,8 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
         OppoBiddingInfo biddingInfo = opportunity.getBiddingInfo();
 
         Map<String, OpportunityProperty> biddingInfoProperties = new HashMap<>();
-        biddingInfoProperties.put("knowExpertList",biddingInfo.getKnowExpertList());
-        biddingInfoProperties.put("supportByExpert",biddingInfo.getSupportByExpert());
+        biddingInfoProperties.put("knowExpertList", biddingInfo.getKnowExpertList());
+        biddingInfoProperties.put("supportByExpert", biddingInfo.getSupportByExpert());
         Map<String, String> res = inOrUpProperty(null, getOppoCode(opportunity), biddingInfoProperties);
 
         List<OpportunitySoftwareOperation> biddingInfo_m = biddingInfo.getBiddingInfo_m();
