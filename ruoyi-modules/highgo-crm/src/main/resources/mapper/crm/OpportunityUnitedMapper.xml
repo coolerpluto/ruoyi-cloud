@@ -249,13 +249,10 @@
                ta.category_l3,
                ta.category_l4,
                toso.*
-        from t_opportunity_software_operation toso,
-             t_application ta,
-             t_company tc
-        where toso.application_id = ta.id
-          and ta.isv = tc.id
-          and tc.business_scope = 'ISV'
-          and toso.opportunity_code = #{code}
+        from t_opportunity_software_operation toso
+                 left join t_application ta on toso.application_id = ta.id
+                 left join t_company tc on ta.isv = tc.id and tc.business_scope like '%ISV%'
+        where toso.opportunity_code = #{code}
     </select>
     <select id="queryCompanyByOppCode" parameterType="String"
             resultMap="com.highgo.crm.mapper.CompanyMapper.CompanyResult">
@@ -397,7 +394,8 @@
           and tc.source_id = #{oppCode}
         order by tc.create_time desc, tc.update_time desc
     </select>
-    <insert id="insertOpportunityContact" parameterType="OpportunityContactInfo" useGeneratedKeys="true" keyProperty="keyId">
+    <insert id="insertOpportunityContact" parameterType="OpportunityContactInfo" useGeneratedKeys="true"
+            keyProperty="keyId">
         insert into t_opportunity_contact_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="keyId != null">key_id,</if>
@@ -420,7 +418,7 @@
     </insert>
     <update id="updateOpportunityContact" parameterType="OpportunityContactInfo">
         update t_opportunity_contact_info
-        <trim prefix="SET"  suffixOverrides=",">
+        <trim prefix="SET" suffixOverrides=",">
             <if test="opportunityCode != null">opportunity_code = #{opportunityCode},</if>
             <if test="contactId != null">contact_id = #{contactId},</if>
             <if test="exposure != null">exposure=#{exposure},</if>
@@ -431,17 +429,19 @@
         where key_id = #{keyId}
     </update>
     <delete id="deleteOpportunityContactByKeyId" parameterType="Long">
-        delete from t_opportunity_contact_info where key_id = #{keyId}
+        delete
+        from t_opportunity_contact_info
+        where key_id = #{keyId}
     </delete>
     <update id="transferByCodes" parameterType="OpportunityTransferReq">
         update t_opportunity
-        <trim prefix="SET"  suffixOverrides=",">
+        <trim prefix="SET" suffixOverrides=",">
             <if test="deptId != null">dept_id = #{deptId},</if>
             <if test="ownerId != null">owner_id = #{ownerId},</if>
             <if test="remark != null">remark = concat_ws(';',remark,#{remark}),</if>
         </trim>
         where code in
-        <foreach item="code" collection="selectedCodes"   open="(" separator="," close=")">
+        <foreach item="code" collection="selectedCodes" open="(" separator="," close=")">
             #{code}
         </foreach>
     </update>
