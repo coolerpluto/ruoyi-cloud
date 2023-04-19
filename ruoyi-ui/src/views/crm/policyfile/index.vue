@@ -15,8 +15,8 @@
         <el-input v-model="queryParams.releaseOffice" placeholder="请输入发文机构" clearable
                   @keyup.enter.native="handleQuery"/>
       </el-form-item>
-      <el-form-item label="发布年分" prop="releaseYear">
-        <el-input v-model="queryParams.releaseYear" placeholder="请输入发布年分" clearable @keyup.enter.native="handleQuery"/>
+      <el-form-item label="发布年份" prop="releaseYear">
+        <el-input v-model="queryParams.releaseYear" placeholder="请输入发布年份" clearable @keyup.enter.native="handleQuery"/>
       </el-form-item>
       <el-form-item label="文件状态" prop="status">
         <el-select v-model="queryParams.status" placeholder="请选择文件可用状态" clearable>
@@ -68,7 +68,7 @@
       </el-table-column>
       <el-table-column label="发文机构" align="center" prop="releaseOffice" v-if="columns[4].visible"
                        :show-overflow-tooltip="true"/>
-      <el-table-column label="发布年分" align="center" prop="releaseYear" v-if="columns[5].visible"/>
+      <el-table-column label="发布年份" align="center" prop="releaseYear" v-if="columns[5].visible"/>
       <el-table-column label="适用省份" align="center" prop="province" v-if="columns[6].visible"/>
       <el-table-column label="适用市" align="center" prop="city" v-if="columns[7].visible"/>
       <el-table-column label="备注说明" align="center" prop="remark" v-if="columns[8].visible"
@@ -131,7 +131,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="发布年份" prop="releaseYear">
-              <el-input v-model="form.releaseYear" placeholder="请输入文件发布年分，如:2023"/>
+              <el-input v-model="form.releaseYear" placeholder="请输入文件发布年份，如:2023"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -277,7 +277,7 @@ export default {
         {key: 2, label: `文件路径`, visible: true},
         {key: 3, label: `发布时间`, visible: true},
         {key: 4, label: `发文机构`, visible: false},
-        {key: 5, label: `发布年分`, visible: false},
+        {key: 5, label: `发布年份`, visible: false},
         {key: 6, label: `适用省份`, visible: false},
         {key: 7, label: `适用市`, visible: false},
         {key: 8, label: `备注`, visible: false},
