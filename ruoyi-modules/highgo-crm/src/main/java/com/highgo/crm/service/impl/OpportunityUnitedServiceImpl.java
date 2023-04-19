@@ -235,6 +235,7 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
 
     @Autowired
     private TransferLogMapper transferLogMapper;
+
     @Override
     public int transferOpportunityUnited(OpportunityTransferReq opportunity)
     {
@@ -745,21 +746,30 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
 
     private Map<String, String> inOrUpBiddingInfo(CountDownLatch end, OpportunityUnitedReq opportunity)
     {
-        log.info("inOrUpBiddingInfo:begin:{}", Thread.currentThread().getName());
+        Map<String, String> res = new HashMap<>();
         OppoBiddingInfo biddingInfo = opportunity.getBiddingInfo();
-
+        if (null == biddingInfo)
+        {
+            end.countDown();
+            res.put("model", "biddingInfo");
+            res.put("msg", "");
+            return res;
+        }
+        log.info("inOrUpBiddingInfo:begin:{}", Thread.currentThread().getName());
         Map<String, OpportunityProperty> biddingInfoProperties = new HashMap<>();
         biddingInfoProperties.put("knowExpertList", biddingInfo.getKnowExpertList());
         biddingInfoProperties.put("supportByExpert", biddingInfo.getSupportByExpert());
-        Map<String, String> res = inOrUpProperty(null, getOppoCode(opportunity), biddingInfoProperties);
+        res = inOrUpProperty(null, getOppoCode(opportunity), biddingInfoProperties);
 
         List<OpportunitySoftwareOperation> biddingInfo_m = biddingInfo.getBiddingInfo_m();
-        // 无增 无删  只关注修改
-        for (OpportunitySoftwareOperation opera : biddingInfo_m)
+        if (CollectionUtils.isNotEmpty(biddingInfo_m))
         {
-            softwareOperationService.updateOpportunitySoftwareOperation(opera);
+            // 无增 无删  只关注修改
+            for (OpportunitySoftwareOperation opera : biddingInfo_m)
+            {
+                softwareOperationService.updateOpportunitySoftwareOperation(opera);
+            }
         }
-
         res.put("model", "biddingInfo");
         log.info("inOrUpBiddingInfo:end:{}", Thread.currentThread().getName());
         end.countDown();
