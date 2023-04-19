@@ -35,7 +35,7 @@
             <if test="fileNum != null  and fileNum != ''"> and file_num like concat('%', #{fileNum}, '%')</if>
             <if test="params.beginReleaseDate != null and params.beginReleaseDate != '' and params.endReleaseDate != null and params.endReleaseDate != ''"> and release_date between #{params.beginReleaseDate} and #{params.endReleaseDate}</if>
             <if test="releaseOffice != null  and releaseOffice != ''"> and release_office like concat('%', #{releaseOffice}, '%')</if>
-            <if test="releaseYear != null "> and release_year &lt;= #{releaseYear}</if>
+            <if test="releaseYear != null "> and release_year = #{releaseYear}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
         </where>
     </select>
