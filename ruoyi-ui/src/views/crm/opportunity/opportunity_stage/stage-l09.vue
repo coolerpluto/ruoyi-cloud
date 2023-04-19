@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container" style="pointer-events: none;">
+  <div class="app-container">
     <quotation-info :oppdata="oppdata" ref="quotationInfo" :stage-show="9"></quotation-info>
     <action-reason :oppdata="oppdata" ref="actionReason" :stage-show="5"></action-reason>
     <summary-info ref="summaryInfo" :oppdata="oppdata" :stage-show="9" stage-title="项目经验总结"></summary-info>

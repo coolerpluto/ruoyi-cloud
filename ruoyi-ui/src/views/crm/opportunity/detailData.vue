@@ -14,7 +14,7 @@
     <stage-l06 ref="stage06" v-if="stageActive === 6" :oppdata="inputReq" />
     <stage-l07 ref="stage07" v-if="stageActive === 7" :oppdata="inputReq" />
     <stage-l08 ref="stage08" v-if="stageActive === 8" :oppdata="inputReq" />
-    <stage-l09 ref="stage09" v-if="stageActive === 9" :oppdata="inputReq" />
+    <stage-l09 ref="stage09" v-if="stageActive === 9" :oppdata="inputReq" :class="flag.clickEnable ? 'click-enable' : 'click-disenable'"/>
     <stage-l11 ref="stage11" v-if="stageActive === 11" :oppdata="inputReq" />
     <div style="text-align: center;" v-if="inputReq.action != 'V'">
       <div id="currentStageButArea">
@@ -107,6 +107,7 @@ export default {
         showUpdateBut: false,
         hasSaveOrUpdate: false,
         showNewStageSaveBut: false,
+        clickEnable:false,
       },
       stageActive: undefined,
       modelActive: 1,
@@ -155,8 +156,10 @@ export default {
 
       if (this.inputReq.currentStage === this.stageActive){
         // 最新阶段的按钮配置
-        // 保存/更新
-        this.flag.showSaveUpdateBut = true;        
+        // 针对L9界面是不是可以点击
+        this.flag.clickEnable = this.updateEveryStagePerson.includes(this.$store.getters.name);
+        // 保存/更新 当前阶段不为L9时必显示 为9时查看是否赋予特殊权限
+        this.flag.showSaveUpdateBut = this.stageActive !==9 ? true : this.flag.clickEnable;        
         // 新建时和终点时不显示下一步操作相关按钮
         this.flag.showNextBut = this.inputReq.action == "A" ? false : ![6, 7, 8, 9, 11].includes(this.stageActive);
         this.flag.showNextStageOptions = this.flag.showNextBut;
@@ -527,4 +530,15 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.click-enable {
+	cursor: pointer;
+	pointer-events: auto;
+}
+
+.click-disenable {
+	cursor: default;
+  /* 禁止点击事件 */
+  pointer-events: none;    
+}
+</style>
