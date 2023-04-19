@@ -88,7 +88,7 @@
           <dict-tag :options="dict.type.crm_opportunity_status" :value="scope.row.currentStage" />
         </template>
       </el-table-column>
-      <el-table-column label="归属者" align="center" prop="ownerName" :show-overflow-tooltip="true"
+      <el-table-column label="归属者" align="center" prop="nickName" :show-overflow-tooltip="true"
         v-if="columns[4].visible" />
       <el-table-column label="投标时间" align="center" prop="preTenderDate" value-format="yyyy-MM-dd"
         :show-overflow-tooltip="true" v-if="columns[5].visible" />
@@ -105,13 +105,13 @@
           <el-button size="mini" type="text" icon="el-icon-zoom-in" @click="handleView(scope.row)">
             查看
           </el-button>
-          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
+          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)" v-if="$store.getters.name==scope.row.ownerName"
             v-hasPermi="['crm:opportunity:edit']">修改
           </el-button>
-          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleTransfer(scope.row)"
+          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleTransfer(scope.row)" v-if="$store.getters.name==scope.row.ownerName"
             v-hasPermi="['crm:opportunity:transfer']">转交
           </el-button>
-          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
+          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)" v-if="$store.getters.name==scope.row.ownerName"
             v-hasPermi="['crm:opportunity:remove']">删除
           </el-button>
         </template>
@@ -151,8 +151,8 @@
       </div>
     </el-dialog>
     商机管理开发中。。。<br>
-    完成：列表查询、详细查询、查看(仅查看)、前端新增、前端修改、前端删除、前端转交、前端导出<br>
-    待完成：商机各个模块后端的：新增、删除、修改、转交、导出
+    完成：列表查询、详细查询、查看(仅查看)、前端新增、前端修改、前端删除、前端转交、前端导出、新增、删除、修改<br>
+    待完成：商机各个模块后端的：、转交、导出
   </div>
 </template>
 
@@ -201,6 +201,7 @@ export default {
       },
       flag: {
         transferTargetPersonLoading: false,
+        selectedUnbeLongYou:false,
       },
       // 表单参数
       form: {},
@@ -287,10 +288,11 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.id)
-      this.codes = selection.map(item => item.code)
-      this.single = selection.length !== 1
-      this.multiple = !selection.length
+      this.ids = selection.map(item => item.id);
+      this.codes = selection.map(item => item.code);
+      this.single = selection.length !== 1;
+      this.multiple = !selection.length;
+      this.flag.selectedUnbeLongYou = selection.findIndex(item => {return item.ownerName != this.$store.getters.name})>-1?true:false;
     },
     /** 新增按钮操作 */
     handleAdd() {
@@ -310,20 +312,14 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          let ids = this.form.selectedIds
+          let codes = this.form.selectedCodes
           var _this = this;
-          this.$modal.confirm('是否确认转移商机管理编号为"' + ids + '"的数据项？').then(function () {
-            return transferUnitedOpp({
-              params: _this.form
-              //{                
-              // selectedIds:selectedIds,
-              // selectedCodes:selectedCodes,
-              // targetOwnerId:_this.form.ownerId,
-              // targetDeptId:_this.form.deptId,
-              //}
-            });
+          this.$modal.confirm('是否确认转移商机编码为"' + codes + '"的商机项？').then(function () {
+            return transferUnitedOpp(_this.form);
           }).then(() => {
-            this.getList();
+            this.reset();
+            this.open = false;            
+            this.getList();            
             this.$modal.msgSuccess("转移成功");
           }).catch(() => {
           });
@@ -333,6 +329,12 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
+      if(typeof ids !='string'){
+        if(this.flag.selectedUnbeLongYou){
+          this.$modal.msgError("禁止操作，您选择了不属于您的数据请检查后再操作！");
+          return;
+        }
+      }
       this.$modal.confirm('是否确认删除商机管理编号为"' + ids + '"的数据项？').then(function () {
         return delOpportunity(ids);
       }).then(() => {
@@ -345,11 +347,18 @@ export default {
     handleTransfer(row) {
       const ids = row.id || this.ids;
       const codes = row.code || this.codes;
+      this.form = {}//Object.assign({}, row)
+      if(typeof codes=='string'){
+        this.form.selectedCodes = [codes];
+      }else{
+        this.form.selectedCodes = codes;
+        if(this.flag.selectedUnbeLongYou){
+          this.$modal.msgError("禁止操作，您选择了不属于您的数据请检查后再操作！");
+          return;
+        }
+      }
       this.open = true;
       this.title = '转移商机负责人';
-      this.form = {}//Object.assign({}, row)
-      this.form.selectedIds = ids;
-      this.form.selectedCodes = codes;
     },
     /** 导出按钮操作 */
     handleExport() {

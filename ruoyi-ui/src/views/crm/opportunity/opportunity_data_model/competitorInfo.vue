@@ -73,7 +73,11 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="对方优势" prop="advantage">
-              <el-input v-model="competitorDialog.form.advantage" placeholder="选择对方优势" />
+              <el-select v-model="competitorDialog.form.advantage" placeholder="选择对方优势">
+                <el-option v-for="item in dict.type.crm_oppo_other_side_advantage" :key="item.value" :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -138,7 +142,7 @@ import { listCompany } from "@/api/crm/company";
 
 export default {
   name: "competitorInfo",
-  dicts: ['sys_yes_no', 'crm_company_properties_type'],
+  dicts: ['sys_yes_no', 'crm_company_properties_type','crm_oppo_other_side_advantage'],
   props: {
     stageShow: {
       type: Number,
@@ -212,8 +216,7 @@ export default {
         form: {
           pageNum: 1,
           pageSize: 15,
-          //sourceType: "customer",
-          //businessScope:"S", // 公司业务中带S的
+          //businessScope:"SCOPE", // 公司业务中带SCOPE的
           companyName: ""
         },
         selectedCompany: {},

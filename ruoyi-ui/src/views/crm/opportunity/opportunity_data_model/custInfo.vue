@@ -194,7 +194,7 @@ export default {
           pageNum: 1,
           pageSize: 15,
           sourceType: "CUST",
-          //businessScope:"S", // 公司业务中带S的
+          //businessScope:"SCOPE", // 公司业务中带SCOPE的
           companyName: ""
         },
         companys: [],
