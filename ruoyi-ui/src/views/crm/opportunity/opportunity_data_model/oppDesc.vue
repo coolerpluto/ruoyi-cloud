@@ -143,7 +143,7 @@
           <el-col :span="8">
             <el-form-item label="用户关注点" prop="custInterest.propertyVal">
               <el-select v-model="oppDescForm.custInterest.propertyVal" filterable placeholder="请选择用户关注点" clearable>
-                <el-option v-for="item in dict.type.crm_fund_source_type" :key="item.value" :label="item.label"
+                <el-option v-for="item in dict.type.crm_oppo_user_concerns" :key="item.value" :label="item.label"
                   :value="item.value"></el-option>
               </el-select>
             </el-form-item>
@@ -177,7 +177,7 @@ import { getPropertiesMap } from "@/api/crm/oppUnitedInfo"
 
 export default {
   name: "oppDesc",
-  dicts: ['crm_fund_source_type', 'crm_opportunity_main_product', 'crm_opportunity_bidding_type'],
+  dicts: ['crm_fund_source_type', 'crm_opportunity_main_product', 'crm_opportunity_bidding_type','crm_oppo_user_concerns'],
   props: {
     stageShow: {
       type: Number,
