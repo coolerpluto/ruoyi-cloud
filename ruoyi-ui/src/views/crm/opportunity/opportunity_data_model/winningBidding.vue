@@ -6,11 +6,11 @@
       size="medium" label-width="220px">
       <el-row :gutter="15">
         <el-col :span="8">
-          <el-form-item label="中标公司名称" prop="winBiddingCompanyName.propertyVal">
-            <el-select v-model="winningBiddingForm.winBiddingCompanyName.propertyVal" filterable placeholder="请选择中标公司"
+          <el-form-item label="中标公司名称" prop="winBiddingCompetitorId.propertyVal">
+            <el-select v-model="winningBiddingForm.winBiddingCompetitorId.propertyVal" filterable placeholder="请选择中标公司"
               @change="changeWinBidding" @visible-change="selectInit">
               <el-option v-for="item in companyOptions" :key="item.id" :label="item.competitorName"
-                :value="item.competitorId"></el-option>
+                :value="item.id"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
@@ -80,7 +80,7 @@ export default {
         winningBiddingVerify: false,
       },
       rules: {
-        "winBiddingCompanyName": {
+        "winBiddingCompetitorId": {
           propertyVal: [
             { required: true, message: "未选择 中标公司名称", trigger: "blur" }
           ],
@@ -88,6 +88,11 @@ export default {
       },
       companyOptions: [],
     }
+  },
+  watch: {
+      firstName(newName, oldName) {
+        this.fullName = newName + ' ' + this.lastName;
+      }
   },
   created() {
     this.initWinningBidding();
@@ -122,6 +127,8 @@ export default {
           return
         }
         this.winningBiddingForm = response.data;
+        this.companyOptions = [{ id: this.winningBiddingForm.winBiddingCompetitorId.propertyVal,
+           competitorName: this.winningBiddingForm.winBiddingCompanyName.propertyVal, competitorId: this.winningBiddingForm.winBiddingCompanyId.propertyVal }];
         this.winningBiddingOriginBak = JSON.parse(JSON.stringify(this.winningBiddingForm))
         if (typeof func == 'function') {
           func();
@@ -133,17 +140,19 @@ export default {
       })
     },
     changeWinBidding(competitorId) {
-      debugger
-      const arr1 = this.companyOptions.find(item => item.competitorId == competitorId)
-      //console.log(arr1)
+      const arr1 = this.companyOptions.find(item => item.id == competitorId)
+      console.log(arr1)
       this.winningBiddingForm.winBiddingTenderPrice.propertyVal = arr1.tenderPrice;
       this.winningBiddingForm.winBiddingTotalPrice.propertyVal = arr1.tenderTotalPrice;
+      this.winningBiddingForm.winBiddingCompanyId.propertyVal = arr1.competitorId;
+      //this.winningBiddingForm.winBiddingCompetitorId.propertyVal = arr1.id;      
+      this.winningBiddingForm.winBiddingCompanyName.propertyVal = arr1.competitorName;
     },
     selectInit(action) {
       if (!action) {
         return
       }
-      this.companyOptions = [{ id: 0, competitorName: "我司", competitorId: 0 }].concat(this.$parent.$refs.competitorInfo.competitorInfoForm.competitorInfo)
+      this.companyOptions = [{ id: 0, competitorName: "我司", competitorId: 0 }].concat(this.$parent.$refs.competitorInfo.competitorInfoForm.competitorInfo);
     },
     // 提供本组件的数据校验
     infoVerify() {
