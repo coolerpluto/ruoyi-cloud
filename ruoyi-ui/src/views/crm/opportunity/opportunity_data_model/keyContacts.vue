@@ -284,8 +284,7 @@ export default {
         form: {
           pageNum: 1,
           pageSize: 15,
-          //sourceType: "customer",
-          //businessScope:"S", // 公司业务中带S的
+          //businessScope:"S", // 公司业务中带SCOPE的 任何公司联系人都可以
           companyName: ""
         },
         selectedCompany: {},

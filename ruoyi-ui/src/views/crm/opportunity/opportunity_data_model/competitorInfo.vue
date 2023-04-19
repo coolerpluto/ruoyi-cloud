@@ -216,8 +216,7 @@ export default {
         form: {
           pageNum: 1,
           pageSize: 15,
-          //sourceType: "customer",
-          //businessScope:"S", // 公司业务中带S的
+          //businessScope:"SCOPE", // 公司业务中带SCOPE的
           companyName: ""
         },
         selectedCompany: {},

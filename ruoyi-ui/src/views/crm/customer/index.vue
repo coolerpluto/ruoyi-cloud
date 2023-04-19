@@ -204,7 +204,7 @@
               <el-form-item label="业务范围" prop="businessScope">
                 <el-select v-model="form.businessScope" placeholder="请选择公司业务范围" clearable>
                   <el-option v-for="dict in dict.type.crm_companny_business_scope" :key="dict.value" :label="dict.label"
-                             :value="dict.value"/>
+                             :value="dict.value" :disabled="!dict.value.includes('ISV')"/>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -706,6 +706,9 @@ export default {
       rules: {
         companyName: [
           {required: true, message: "公司名称不能为空", trigger: "blur"},
+        ],
+        businessScope:[
+          {required: true, message: "公司业务范围不能为空", trigger: "blur"},
         ],
         capitalReg: [
           {type: "number", message: "请输入正确的数字", trigger: ["blur"], transform: (value) => Number(value)}

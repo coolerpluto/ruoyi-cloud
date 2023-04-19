@@ -314,7 +314,7 @@ export default {
       listCompany({
         pageNum: 1,
         pageSize: 20,
-        businessScope: "S", // 公司业务中带S的
+        businessScope: "SI", // 公司业务中带S的
         companyName: query
       }).then(response => {
         this.baseInfoDialog.operationalOptions = this.baseInfoDialog.operationalOptions.concat(response.rows);
