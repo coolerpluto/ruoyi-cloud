@@ -11,7 +11,8 @@ import com.ruoyi.common.core.web.domain.BaseEntity;
  * @author eszhang
  * @date 2023-02-02
  */
-public class Company extends BaseEntity {
+public class Company extends BaseEntity
+{
     private static final long serialVersionUID = 1L;
 
     /**
@@ -95,6 +96,7 @@ public class Company extends BaseEntity {
      */
     private Long ownerId;
     @Excel(name = "所有者")
+    private String nickName;
     private String ownerName;
 
     /**
@@ -114,6 +116,16 @@ public class Company extends BaseEntity {
      */
     private Long updateId;
 
+    public String getNickName()
+    {
+        return nickName;
+    }
+
+    public void setNickName(String nickName)
+    {
+        this.nickName = nickName;
+    }
+
     public String getZipCode()
     {
         return zipCode;
@@ -124,168 +136,209 @@ public class Company extends BaseEntity {
         this.zipCode = zipCode;
     }
 
-    public String getCode() {
+    public String getCode()
+    {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(String code)
+    {
         this.code = code;
     }
 
-    public String getAddrDetail() {
+    public String getAddrDetail()
+    {
         return addrDetail;
     }
 
-    public void setAddrDetail(String addrDetail) {
+    public void setAddrDetail(String addrDetail)
+    {
         this.addrDetail = addrDetail;
     }
 
-    public String getOwnerName() {
+    public String getOwnerName()
+    {
         return ownerName;
     }
 
-    public void setOwnerName(String ownerName) {
+    public void setOwnerName(String ownerName)
+    {
         this.ownerName = ownerName;
     }
 
-    public String getDeptName() {
+    public String getDeptName()
+    {
         return deptName;
     }
 
-    public void setDeptName(String deptName) {
+    public void setDeptName(String deptName)
+    {
         this.deptName = deptName;
     }
 
-    public void setId(String id) {
+    public void setId(String id)
+    {
         this.id = id;
     }
 
-    public String getId() {
+    public String getId()
+    {
         return id;
     }
 
-    public void setCompanyName(String companyName) {
+    public void setCompanyName(String companyName)
+    {
         this.companyName = companyName;
     }
 
-    public String getCompanyName() {
+    public String getCompanyName()
+    {
         return companyName;
     }
 
-    public void setProperties(String properties) {
+    public void setProperties(String properties)
+    {
         this.properties = properties;
     }
 
-    public String getProperties() {
+    public String getProperties()
+    {
         return properties;
     }
 
-    public void setIndustry(String industry) {
+    public void setIndustry(String industry)
+    {
         this.industry = industry;
     }
 
-    public String getIndustry() {
+    public String getIndustry()
+    {
         return industry;
     }
 
-    public void setLegal(String legal) {
+    public void setLegal(String legal)
+    {
         this.legal = legal;
     }
 
-    public String getLegal() {
+    public String getLegal()
+    {
         return legal;
     }
 
-    public void setCapitalReg(String capitalReg) {
+    public void setCapitalReg(String capitalReg)
+    {
         this.capitalReg = capitalReg;
     }
 
-    public String getCapitalReg() {
+    public String getCapitalReg()
+    {
         return capitalReg;
     }
 
-    public void setCapitalPayType(String capitalPayType) {
+    public void setCapitalPayType(String capitalPayType)
+    {
         this.capitalPayType = capitalPayType;
     }
 
-    public String getCapitalPayType() {
+    public String getCapitalPayType()
+    {
         return capitalPayType;
     }
 
-    public void setSourceType(String sourceType) {
+    public void setSourceType(String sourceType)
+    {
         this.sourceType = sourceType;
     }
 
-    public String getSourceType() {
+    public String getSourceType()
+    {
         return sourceType;
     }
 
-    public void setWebsite(String website) {
+    public void setWebsite(String website)
+    {
         this.website = website;
     }
 
-    public String getWebsite() {
+    public String getWebsite()
+    {
         return website;
     }
 
-    public void setAddr(String addr) {
+    public void setAddr(String addr)
+    {
         this.addr = addr;
     }
 
-    public String getAddr() {
+    public String getAddr()
+    {
         return addr;
     }
 
-    public void setBusinessScope(String businessScope) {
+    public void setBusinessScope(String businessScope)
+    {
         this.businessScope = businessScope;
     }
 
-    public String getBusinessScope() {
+    public String getBusinessScope()
+    {
         return businessScope;
     }
 
-    public Long getSourceId() {
+    public Long getSourceId()
+    {
         return sourceId;
     }
 
-    public void setSourceId(Long sourceId) {
+    public void setSourceId(Long sourceId)
+    {
         this.sourceId = sourceId;
     }
 
-    public Long getOwnerId() {
+    public Long getOwnerId()
+    {
         return ownerId;
     }
 
-    public void setOwnerId(Long ownerId) {
+    public void setOwnerId(Long ownerId)
+    {
         this.ownerId = ownerId;
     }
 
-    public Long getDeptId() {
+    public Long getDeptId()
+    {
         return deptId;
     }
 
-    public void setDeptId(Long deptId) {
+    public void setDeptId(Long deptId)
+    {
         this.deptId = deptId;
     }
 
-    public Long getCreateId() {
+    public Long getCreateId()
+    {
         return createId;
     }
 
-    public void setCreateId(Long createId) {
+    public void setCreateId(Long createId)
+    {
         this.createId = createId;
     }
 
-    public Long getUpdateId() {
+    public Long getUpdateId()
+    {
         return updateId;
     }
 
-    public void setUpdateId(Long updateId) {
+    public void setUpdateId(Long updateId)
+    {
         this.updateId = updateId;
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
                 .append("id", getId())
                 .append("companyName", getCompanyName())

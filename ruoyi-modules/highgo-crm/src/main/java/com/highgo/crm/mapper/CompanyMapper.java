@@ -60,7 +60,7 @@ public interface CompanyMapper
      */
     public int deleteCompanyByIds(String[] ids);
 
-    int changeCompanyOwners(@Param("targetOwnerId") Long targetOwnerId, @Param("companyResIds")List<String> companyResIds);
+    int changeCompanyOwners(Company company);
 
     int batchInsertCompany(@Param("companyList") List<Company> companyList);
 }

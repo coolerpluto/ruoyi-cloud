@@ -257,7 +257,7 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
     public int transferOpportunityUnited(OpportunityTransferReq opportunity)
     {
         TransferLog transferLog = new TransferLog();
-        transferLog.setModel("opportunity");
+        transferLog.setModel("OPPO");
         transferLog.setUserFrom(SecurityUtils.getUsername());
         transferLog.setUserTo(opportunity.getOwnerId());
         transferLog.setRecordIds(Arrays.toString(opportunity.getSelectedCodes()));

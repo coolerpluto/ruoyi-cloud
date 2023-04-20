@@ -23,6 +23,7 @@
         <result property="sourceId" column="source_id"/>
         <result property="ownerId" column="owner_id"/>
         <result property="ownerName" column="owner_Name"/>
+        <result property="nickName" column="nick_Name"/>
         <result property="deptId" column="dept_id"/>
         <result property="deptName" column="dept_Name"/>
         <result property="createId" column="create_id"/>
@@ -51,7 +52,8 @@
                tc.remark,
                tc.source_id,
                tc.owner_id,
-               su.nick_name owner_name,
+               su.nick_name,
+               su.user_name owner_name,
                tc.dept_id,
                sd.dept_name dept_name,
                tc.create_id,
@@ -232,9 +234,16 @@
         where id = #{id}
     </update>
     <update id="changeCompanyOwners">
-        update t_company set owner_id = #{targetOwnerId} where id in
-        <foreach collection="companyResIds" open="(" close=")" separator="," item="item" index="index">
-            #{item}
+        update t_company
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="ownerId != null">owner_id = #{ownerId},</if>
+            <if test="remark != null">remark = concat_ws(';',remark,#{remark}),</if>
+        </trim>
+        where code in
+        <foreach collection="params.selectedCodes" separator="," item="code" index="index" close=")"
+                 open="(">
+            #{code}
         </foreach>
     </update>
     <delete id="deleteCompanyById" parameterType="String">
