@@ -2,44 +2,77 @@
   <div class="app-container">
     <el-form :model="queryParams.params" ref="queryForm" size="small" :inline="true" v-show="showSearch"
       label-width="85px">
-      <el-form-item label="商机编码" prop="code">
-        <el-input v-model="queryParams.params.code" placeholder="请输入商机编码" clearable @keyup.enter.native="handleQuery" />
-      </el-form-item>
-      <el-form-item label="商机名称" prop="name">
-        <el-input v-model="queryParams.params.name" placeholder="请输入商机名称" clearable @keyup.enter.native="handleQuery" />
-      </el-form-item>
-      <el-form-item label="客户公司" prop="companyName">
-        <el-input v-model="queryParams.params.companyName" placeholder="请输入公司名称" clearable
-          @keyup.enter.native="handleQuery" />
-      </el-form-item>
-      <el-form-item label="创建者部门" prop="deptIds">
-        <el-input v-model="queryParams.params.deptIds" placeholder="请选择创建者部门" clearable
-          @keyup.enter.native="handleQuery" />
-      </el-form-item>
-      <el-form-item label="创建者" prop="createIds">
-        <el-input v-model="queryParams.params.createIds" placeholder="请选择创建者" clearable
-          @keyup.enter.native="handleQuery" />
-      </el-form-item>
-      <el-form-item label="归属者" prop="ownerIds">
-        <el-input v-model="queryParams.params.ownerIds" placeholder="请选择归属者" clearable
-          @keyup.enter.native="handleQuery" />
-      </el-form-item>
-      <el-form-item label="商机阶段" prop="stages">
-        <el-select v-model="queryParams.params.stages" placeholder="请选择商机阶段" clearable multiple collapse-tags>
-          <el-option v-for="dict in dict.type.crm_opportunity_status" :key="dict.value" :label="dict.label"
-            :value="dict.value" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="创建时间">
-        <el-date-picker v-model="rangeCreateDate" style="width: 340px" value-format="yyyy-MM-dd HH:mm:ss"
-          type="datetimerange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"
-          :default-time="['00:00:00', '23:59:59']"></el-date-picker>
-      </el-form-item>
-      <el-form-item label="更新时间">
-        <el-date-picker v-model="rangeUpdateDate" style="width: 340px" value-format="yyyy-MM-dd HH:mm:ss"
-          type="datetimerange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"
-          :default-time="['00:00:00', '23:59:59']"></el-date-picker>
-      </el-form-item>
+      <el-row>
+        <el-col :span="5">
+          <el-form-item label="商机编码" prop="code">
+            <el-input v-model="queryParams.code" placeholder="请输入商机编码" clearable @keyup.enter.native="handleQuery" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="5">
+          <el-form-item label="商机名称" prop="name">
+            <el-input v-model="queryParams.name" placeholder="请输入商机名称" clearable @keyup.enter.native="handleQuery" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="5">
+          <el-form-item label="客户名称" prop="custName">
+            <el-input v-model="queryParams.custName" placeholder="请输入公司名称" clearable @keyup.enter.native="handleQuery" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="5">
+          <el-form-item label="商机阶段" prop="stages">
+            <el-select v-model="queryParams.params.stages" placeholder="请选择商机阶段" clearable multiple collapse-tags>
+              <el-option v-for="dict in dict.type.crm_opportunity_status" :key="dict.value" :label="dict.label"
+                :value="dict.value" />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="5">
+          <el-form-item label="归属人" prop="ownerIds">
+            <el-select v-model="queryParams.params.ownerIds" collapse-tags placeholder="请输入 关键字拼音检索" filterable remote
+              multiple :remote-method="getPersonOptions" :loading="flag.transferTargetPersonLoading">
+              <el-option v-for="item in personOptions" :key="item.userName" :label="item.nickName" :value="item.userId">
+                <span style="float: left">{{ item.nickName }}</span>
+                <span style="float: right; color: #8492a6; font-size: 13px">
+                  {{ item.dept.deptName }}</span>
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="5">
+          <el-form-item label="创建人" prop="createBys">
+            <el-select v-model="queryParams.params.createBys" collapse-tags placeholder="请输入 关键字拼音检索" filterable remote
+              multiple :remote-method="getPersonOptions" :loading="flag.transferTargetPersonLoading">
+              <el-option v-for="item in personOptions" :key="item.userName" :label="item.nickName" :value="item.userName">
+                <span style="float: left">{{ item.nickName }}</span>
+                <span style="float: right; color: #8492a6; font-size: 13px">
+                  {{ item.dept.deptName }}</span>
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <el-form-item label="部门归属">
+            <treeselect v-model="queryParams.params.deptIds" style="width: 215px" :options="deptOptions"
+              :show-count="true" placeholder="请选择归属部门" />
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="8">
+          <el-form-item label="创建时间">
+            <el-date-picker v-model="rangeCreateDate" style="width: 340px" value-format="yyyy-MM-dd HH:mm:ss"
+              type="datetimerange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"
+              :default-time="['00:00:00', '23:59:59']"></el-date-picker>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="更新时间">
+            <el-date-picker v-model="rangeUpdateDate" style="width: 340px" value-format="yyyy-MM-dd HH:mm:ss"
+              type="datetimerange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"
+              :default-time="['00:00:00', '23:59:59']"></el-date-picker>
+          </el-form-item>
+        </el-col>
+      </el-row>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -105,14 +138,14 @@
           <el-button size="mini" type="text" icon="el-icon-zoom-in" @click="handleView(scope.row)">
             查看
           </el-button>
-          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)" v-if="$store.getters.name==scope.row.ownerName"
-            v-hasPermi="['crm:opportunity:edit']">修改
+          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
+            v-if="$store.getters.name == scope.row.ownerName" v-hasPermi="['crm:opportunity:edit']">修改
           </el-button>
-          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleTransfer(scope.row)" v-if="$store.getters.name==scope.row.ownerName"
-            v-hasPermi="['crm:opportunity:transfer']">转交
+          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleTransfer(scope.row)"
+            v-if="$store.getters.name == scope.row.ownerName" v-hasPermi="['crm:opportunity:transfer']">转交
           </el-button>
-          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)" v-if="$store.getters.name==scope.row.ownerName"
-            v-hasPermi="['crm:opportunity:remove']">删除
+          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
+            v-if="$store.getters.name == scope.row.ownerName" v-hasPermi="['crm:opportunity:remove']">删除
           </el-button>
         </template>
       </el-table-column>
@@ -150,9 +183,6 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
-    商机管理开发中。。。<br>
-    完成：列表查询、详细查询、查看(仅查看)、前端新增、前端修改、前端删除、前端转交、前端导出、新增、删除、修改<br>
-    待完成：商机各个模块后端的：、转交、导出
   </div>
 </template>
 
@@ -160,10 +190,13 @@
 import { delOpportunity } from "@/api/crm/opportunity";
 import { listUnitedOpp, delUnitedOpp, transferUnitedOpp } from "@/api/crm/oppUnitedInfo"
 import { listUser } from "@/api/system/user";
-import { listEmployee } from "@/api/crm/employee";
+import { listEmployee, deptTreeSelect} from "@/api/crm/employee";
+import Treeselect from "@riophae/vue-treeselect";
+import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 export default {
   name: "OpportunityUnited",
   dicts: ['crm_opportunity_status'],
+  components: { Treeselect },
   data() {
     return {
       // 遮罩层
@@ -183,25 +216,35 @@ export default {
       opportunityList: [],
       // 弹出层标题
       title: "",
+      // 部门树选项
+      deptOptions: undefined,
+      defaultProps: {
+        children: "children",
+        label: "label"
+      },
       // 是否显示弹出层
       open: false,
       // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
+        code: null,
+        name: null,
+        custName: null,
         params: {
-          code: null,
-          name: null,
-          companyName: null,
           deptIds: null,
-          createIds: null,
+          createBys: null,
           ownerIds: null,
-          stages: null,
+          stages: ['1', '2', '3', '4', '5'],
+          beginCreateDate: null,
+          endCreateDate: null,
+          beginUpdateDate: null,
+          endUpdateDate: null,
         },
       },
       flag: {
         transferTargetPersonLoading: false,
-        selectedUnbeLongYou:false,
+        selectedUnbeLongYou: false,
       },
       // 表单参数
       form: {},
@@ -231,6 +274,7 @@ export default {
   },
   created() {
     this.getList();
+    this.getDeptTree();
   },
   methods: {
     /** 查询商机管理列表 */
@@ -248,6 +292,12 @@ export default {
         this.opportunityList = response.rows;
         this.total = response.total;
         this.loading = false;
+      });
+    },
+    /** 查询部门下拉树结构 */
+    getDeptTree() {
+      deptTreeSelect().then(response => {
+        this.deptOptions = response.data;
       });
     },
     getPersonOptions(query) {
@@ -292,7 +342,7 @@ export default {
       this.codes = selection.map(item => item.code);
       this.single = selection.length !== 1;
       this.multiple = !selection.length;
-      this.flag.selectedUnbeLongYou = selection.findIndex(item => {return item.ownerName != this.$store.getters.name})>-1?true:false;
+      this.flag.selectedUnbeLongYou = selection.findIndex(item => { return item.ownerName != this.$store.getters.name }) > -1 ? true : false;
     },
     /** 新增按钮操作 */
     handleAdd() {
@@ -318,8 +368,8 @@ export default {
             return transferUnitedOpp(_this.form);
           }).then(() => {
             this.reset();
-            this.open = false;            
-            this.getList();            
+            this.open = false;
+            this.getList();
             this.$modal.msgSuccess("转移成功");
           }).catch(() => {
           });
@@ -329,8 +379,8 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
-      if(typeof ids !='string'){
-        if(this.flag.selectedUnbeLongYou){
+      if (typeof ids != 'string') {
+        if (this.flag.selectedUnbeLongYou) {
           this.$modal.msgError("禁止操作，您选择了不属于您的数据请检查后再操作！");
           return;
         }
@@ -348,11 +398,11 @@ export default {
       const ids = row.id || this.ids;
       const codes = row.code || this.codes;
       this.form = {}//Object.assign({}, row)
-      if(typeof codes=='string'){
+      if (typeof codes == 'string') {
         this.form.selectedCodes = [codes];
-      }else{
+      } else {
         this.form.selectedCodes = codes;
-        if(this.flag.selectedUnbeLongYou){
+        if (this.flag.selectedUnbeLongYou) {
           this.$modal.msgError("禁止操作，您选择了不属于您的数据请检查后再操作！");
           return;
         }

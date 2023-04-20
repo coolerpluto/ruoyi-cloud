@@ -8,3 +8,10 @@ export function listEmployee(query) {
     params: query
   })
 }
+// 查询部门下拉树结构
+export function deptTreeSelect() {
+  return request({
+    url: '/crm/employee/deptTree',
+    method: 'get'
+  })
+}
