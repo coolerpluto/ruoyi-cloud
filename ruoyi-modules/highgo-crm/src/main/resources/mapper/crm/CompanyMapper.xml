@@ -1,107 +1,136 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.highgo.crm.mapper.CompanyMapper">
-    
+
     <resultMap type="Company" id="CompanyResult">
-        <result property="id"    column="id"    />
-        <result property="code"    column="code"    />
-        <result property="companyName"    column="company_name"    />
-        <result property="properties"    column="properties"    />
-        <result property="industry"    column="industry"    />
-        <result property="legal"    column="legal"    />
-        <result property="capitalReg"    column="capital_reg"    />
-        <result property="capitalPayType"    column="capital_pay_type"    />
-        <result property="sourceType"    column="source_type"    />
-        <result property="website"    column="website"    />
-        <result property="addr"    column="addr"    />
-        <result property="addrDetail"    column="addr_detail"    />
-        <result property="zipCode"    column="zip_code"    />
-        <result property="businessScope"    column="business_scope"    />
-        <result property="remark"    column="remark"    />
-        <result property="sourceId"    column="source_id"    />
-        <result property="ownerId"    column="owner_id"    />
-        <result property="ownerName"    column="owner_Name"    />
-        <result property="deptId"    column="dept_id"    />
-        <result property="deptName"    column="dept_Name"    />
-        <result property="createId"    column="create_id"    />
-        <result property="createBy"    column="create_by"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="updateId"    column="update_id"    />
-        <result property="updateBy"    column="update_by"    />
-        <result property="updateTime"    column="update_time"    />
+        <result property="id" column="id"/>
+        <result property="code" column="code"/>
+        <result property="companyName" column="company_name"/>
+        <result property="properties" column="properties"/>
+        <result property="industry" column="industry"/>
+        <result property="legal" column="legal"/>
+        <result property="capitalReg" column="capital_reg"/>
+        <result property="capitalPayType" column="capital_pay_type"/>
+        <result property="sourceType" column="source_type"/>
+        <result property="website" column="website"/>
+        <result property="addr" column="addr"/>
+        <result property="addrDetail" column="addr_detail"/>
+        <result property="zipCode" column="zip_code"/>
+        <result property="businessScope" column="business_scope"/>
+        <result property="remark" column="remark"/>
+        <result property="sourceId" column="source_id"/>
+        <result property="ownerId" column="owner_id"/>
+        <result property="ownerName" column="owner_Name"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="deptName" column="dept_Name"/>
+        <result property="createId" column="create_id"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateId" column="update_id"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
     </resultMap>
 
     <sql id="selectCompanyVo">
-        select
-            tc.id,
-            tc.code,
-            tc.company_name,
-            tc.properties,
-            tc.industry,
-            tc.legal,
-            tc.capital_reg,
-            tc.capital_pay_type,
-            tc.source_type,
-            tc.website,
-            tc.addr,
-            tc.addr_detail,
-            tc.zip_code,
-            tc.business_scope,
-            tc.remark,
-            tc.source_id,
-            tc.owner_id,
-            su.nick_name owner_name,
-            tc.dept_id,
-            sd.dept_name dept_name,
-            tc.create_id,
-            tc.create_by,
-            tc.create_time,
-            tc.update_id,
-            tc.update_by,
-            tc.update_time
-        from
-            t_company tc
-                left join remote_db.sys_dept sd on
-                tc.dept_id = sd.dept_id
-                left join remote_db.sys_user su on
-                su.user_id = tc.owner_id
+        select tc.id,
+               tc.code,
+               tc.company_name,
+               tc.properties,
+               tc.industry,
+               tc.legal,
+               tc.capital_reg,
+               tc.capital_pay_type,
+               tc.source_type,
+               tc.website,
+               tc.addr,
+               tc.addr_detail,
+               tc.zip_code,
+               tc.business_scope,
+               tc.remark,
+               tc.source_id,
+               tc.owner_id,
+               su.nick_name owner_name,
+               tc.dept_id,
+               sd.dept_name dept_name,
+               tc.create_id,
+               tc.create_by,
+               tc.create_time,
+               tc.update_id,
+               tc.update_by,
+               tc.update_time
+        from t_company tc
+                 left join remote_db.sys_dept sd on
+            tc.dept_id = sd.dept_id
+                 left join remote_db.sys_user su on
+            su.user_id = tc.owner_id
     </sql>
 
     <select id="selectCompanyList" parameterType="Company" resultMap="CompanyResult">
         <include refid="selectCompanyVo"/>
         <where>
-            <if test="companyName != null  and companyName != ''"> and tc.company_name like concat('%', #{companyName}, '%')</if>
-            <if test="properties != null  and properties != ''"> and tc.properties like concat('%', #{properties}, '%')</if>
-            <if test="industry != null  and industry != ''"> and tc.industry = #{industry}</if>
-            <if test="legal != null  and legal != ''"> and tc.legal like concat('%', #{legal}, '%')</if>
-            <if test="capitalReg != null  and capitalReg != ''"> and tc.capital_reg = #{capitalReg}</if>
-            <if test="capitalPayType != null  and capitalPayType != ''"> and tc.capital_pay_type = #{capitalPayType}</if>
-            <if test="sourceType != null  and sourceType != ''"> and tc.source_type = #{sourceType}</if>
-            <if test="website != null  and website != ''"> and tc.website = #{website}</if>
-            <if test="addr != null  and addr != ''"> and tc.addr = #{addr}</if>
-            <if test="addrDetail != null  and addrDetail != ''"> and tc.addr_detail = #{addrDetail}</if>
-            <if test="businessScope != null  and businessScope != ''"> and tc.business_scope like concat('%', #{businessScope}, '%')</if>
-            <if test="remark != null  and remark != ''"> and tc.remark = #{remark}</if>
-            <if test="sourceId != null  and sourceId != ''"> and tc.source_id = #{sourceId}</if>
-            <if test="ownerId != null  and ownerId != ''"> and tc.owner_id = #{ownerId}</if>
-            <if test="deptId != null  and deptId != ''"> and tc.dept_id = #{deptId}</if>
-            <if test="createId != null  and createId != ''"> and tc.create_id = #{createId}</if>
-            <if test="createBy != null  and createBy != ''"> and tc.create_by = #{createBy}</if>
-            <if test="createTime != null "> and tc.create_time = #{createTime}</if>
-            <if test="updateId != null  and updateId != ''"> and tc.update_id = #{updateId}</if>
-            <if test="updateBy != null  and updateBy != ''"> and tc.update_by = #{updateBy}</if>
-            <if test="updateTime != null "> and tc.update_time = #{updateTime}</if>
+            <if test="code != null  and code != ''">and tc.code like concat('%', #{code}, '%')</if>
+            <if test="companyName != null  and companyName != ''">and tc.company_name like concat('%', #{companyName},
+                '%')
+            </if>
+            <if test="properties != null  and properties != ''">and tc.properties like concat('%', #{properties}, '%')
+            </if>
+            <if test="industry != null  and industry != ''">and tc.industry = #{industry}</if>
+            <if test="legal != null  and legal != ''">and tc.legal like concat('%', #{legal}, '%')</if>
+            <if test="capitalReg != null  and capitalReg != ''">and tc.capital_reg = #{capitalReg}</if>
+            <if test="capitalPayType != null  and capitalPayType != ''">and tc.capital_pay_type = #{capitalPayType}</if>
+            <if test="sourceType != null  and sourceType != ''">and tc.source_type = #{sourceType}</if>
+            <if test="website != null  and website != ''">and tc.website = #{website}</if>
+            <if test="addr != null  and addr != ''">and tc.addr = #{addr}</if>
+            <if test="addrDetail != null  and addrDetail != ''">and tc.addr_detail = #{addrDetail}</if>
+            <if test="businessScope != null  and businessScope != ''">and tc.business_scope like concat('%',
+                #{businessScope}, '%')
+            </if>
+            <if test="remark != null  and remark != ''">and tc.remark = #{remark}</if>
+            <if test="sourceId != null  and sourceId != ''">and tc.source_id = #{sourceId}</if>
+            <if test="ownerId != null  and ownerId != ''">and tc.owner_id = #{ownerId}</if>
+            <if test="deptId != null  and deptId != ''">and tc.dept_id = #{deptId}</if>
+            <if test="createId != null  and createId != ''">and tc.create_id = #{createId}</if>
+            <if test="createBy != null  and createBy != ''">and tc.create_by = #{createBy}</if>
+            <if test="createTime != null ">and tc.create_time = #{createTime}</if>
+            <if test="updateId != null  and updateId != ''">and tc.update_id = #{updateId}</if>
+            <if test="updateBy != null  and updateBy != ''">and tc.update_by = #{updateBy}</if>
+            <if test="updateTime != null ">and tc.update_time = #{updateTime}</if>
+            <if test="params.deptIds != null and params.deptIds !=''">
+                and tc.dept_id in
+                <foreach collection="params.deptIds.split(',')" separator="," item="deptId" index="index" close=")"
+                         open="(">
+                    #{deptId}
+                </foreach>
+            </if>
+            <if test="params.createBys != null and params.createBys !=''">
+                and tc.create_by in
+                <foreach collection="params.createBys.split(',')" separator="," item="createBy" index="index" close=")"
+                         open="(">
+                    #{createBy}
+                </foreach>
+            </if>
+            <if test="params.ownerIds != null and params.ownerIds !=''">
+                and tc.owner_id in
+                <foreach collection="params.ownerIds.split(',')" separator="," item="ownerId" index="index" close=")"
+                         open="(">
+                    #{ownerId}
+                </foreach>
+            </if>
+            <if test="params.beginCreateDate != null and params.beginCreateDate != '' and params.endCreateDate != null and params.endCreateDate != ''">
+                and tc.create_time between #{params.beginCreateDate} and #{params.endCreateDate}
+            </if>
+
             ${params.crmDataScope}
         </where>
     </select>
-    
+
     <select id="selectCompanyById" parameterType="String" resultMap="CompanyResult">
         <include refid="selectCompanyVo"/>
         where tc.id = #{id}
     </select>
-        
+
     <insert id="insertCompany" parameterType="Company">
         insert into t_company
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -129,7 +158,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateId != null">update_id,</if>
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
             <if test="code != null">#{code},</if>
@@ -155,24 +184,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateId != null">#{updateId},</if>
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
-         </trim>
+        </trim>
     </insert>
     <insert id="batchInsertCompany">
         INSERT INTO t_company (id, code, company_name, properties, industry,
-                               legal, capital_reg, capital_pay_type,
-                               source_id, source_type, website, addr, addr_detail,
-                               zip_code, business_scope, remark,
-                               owner_id, dept_id, create_id, create_by, create_time,
-                               update_id, update_by, update_time)
+        legal, capital_reg, capital_pay_type,
+        source_id, source_type, website, addr, addr_detail,
+        zip_code, business_scope, remark,
+        owner_id, dept_id, create_id, create_by, create_time,
+        update_id, update_by, update_time)
         VALUES
-           <foreach collection="companyList" index="index" item="item" separator="," >
+        <foreach collection="companyList" index="index" item="item" separator=",">
             (#{item.id}, #{item.code},#{item.companyName},#{item.properties},#{item.industry}
-               ,#{item.legal},#{item.capitalReg},#{item.capitalPayType}
-               ,#{item.sourceId},#{item.sourceType},#{item.website},#{item.addr},#{item.addrDetail}
-               ,#{item.zipCode},#{item.businessScope},#{item.remark}
-               ,#{item.ownerId},#{item.deptId},#{item.createId},#{item.createBy},#{item.createTime}
-               ,#{item.updateId},#{item.updateBy},#{item.updateTime})
-           </foreach>
+            ,#{item.legal},#{item.capitalReg},#{item.capitalPayType}
+            ,#{item.sourceId},#{item.sourceType},#{item.website},#{item.addr},#{item.addrDetail}
+            ,#{item.zipCode},#{item.businessScope},#{item.remark}
+            ,#{item.ownerId},#{item.deptId},#{item.createId},#{item.createBy},#{item.createTime}
+            ,#{item.updateId},#{item.updateBy},#{item.updateTime})
+        </foreach>
     </insert>
     <update id="updateCompany" parameterType="Company">
         update t_company
@@ -204,16 +233,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
     <update id="changeCompanyOwners">
         update t_company set owner_id = #{targetOwnerId} where id in
-        <foreach collection="companyResIds" open="(" close=")" separator="," item="item" index="index" >
+        <foreach collection="companyResIds" open="(" close=")" separator="," item="item" index="index">
             #{item}
         </foreach>
     </update>
     <delete id="deleteCompanyById" parameterType="String">
-        delete from t_company where id = #{id}
+        delete
+        from t_company
+        where id = #{id}
     </delete>
 
     <delete id="deleteCompanyByIds" parameterType="String">
-        delete from t_company where id in 
+        delete from t_company where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
