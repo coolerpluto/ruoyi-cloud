@@ -53,7 +53,7 @@
         </el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="success" plain icon="el-icon-tickets" size="mini" :disabled="single" @click="handleTransfer"
+        <el-button type="success" plain icon="el-icon-tickets" size="mini" :disabled="multiple" @click="handleTransfer"
           v-hasPermi="['crm:company:transfer']">批量交接
         </el-button>
       </el-col>
@@ -109,7 +109,7 @@
       </el-table-column>
       <el-table-column label="公司描述" align="center" prop="remark" v-if="columns[10].visible"
         :show-overflow-tooltip="true" />
-      <el-table-column label="所有者" align="center" prop="ownerName" v-if="columns[11].visible"
+      <el-table-column label="所有者" align="center" prop="nickName" v-if="columns[11].visible"
         :show-overflow-tooltip="true" />
       <el-table-column label="所有者部门" align="center" prop="deptName" v-if="columns[12].visible"
         :show-overflow-tooltip="true" />
@@ -129,10 +129,10 @@
             v-hasPermi="['crm:company:edit']">修改
           </el-button>
           <el-button size="mini" type="text" icon="el-icon-tickets" @click="handleTransfer(scope.row)"
-            v-if="$store.getters.name == scope.row.createBy" v-hasPermi="['crm:company:transfer']">交接
+            v-if="$store.getters.name == scope.row.ownerName" v-hasPermi="['crm:company:transfer']">交接
           </el-button>
           <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
-            v-if="$store.getters.name == scope.row.createBy" v-hasPermi="['crm:company:remove']">删除
+            v-if="$store.getters.name == scope.row.ownerName" v-hasPermi="['crm:company:remove']">删除
           </el-button>
         </template>
       </el-table-column>
@@ -140,6 +140,36 @@
 
     <pagination v-show="total > 0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize"
       @pagination="getList" />
+
+    <!-- 添加或修改商机管理对话框 -->
+    <el-dialog :title="transfer.title" :visible.sync="transfer.open" width="500px" append-to-body>
+      <el-form ref="transfer.form" :model="transfer.form" :rules="transfer.rules" label-width="130px">
+        <el-row>
+          <el-col :span="18">
+            <el-form-item label="转移目标人" prop="ownerName">
+              <el-select v-model="transfer.form.ownerName" @change="getTargetPerson" placeholder="请输入 关键字拼音" filterable
+                remote :remote-method="getPersonOptions" :loading="flag.transferTargetPersonLoading">
+                <el-option v-for="item in personOptions" :key="item.id" :label="item.nickName" :value="item.userName">
+                  <span style="float: left">{{ item.nickName }}</span>
+                  <span style="float: right; color: #8492a6; font-size: 13px">{{ item.dept.deptName }}</span>
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="22">
+            <el-form-item label="备注" prop="remark">
+              <el-input v-model="transfer.form.remark" type="textarea" resize="none" :rows="3" placeholder="最多100字说明" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="transferSubmitForm">确 定</el-button>
+        <el-button @click="transferCancel">取 消</el-button>
+      </div>
+    </el-dialog>
 
     <el-dialog :title="title" :visible.sync="open" width="80%" :close-on-click-modal="false" append-to-body>
       <div id="baseCompanyArea">
@@ -577,7 +607,7 @@
 import { listEmployee, deptTreeSelect } from "@/api/crm/employee";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
-import { listCompany, tianYanChaSearch, getCompany, delCompany, addCompany, updateCompany } from "@/api/crm/company";
+import { listCompany, transferCompanyOwner, tianYanChaSearch, getCompany, delCompany, addCompany, updateCompany } from "@/api/crm/company";
 import { listAddr } from "@/api/system/addr";
 import {
   listApplication,
@@ -774,6 +804,18 @@ export default {
         selectedCompany: {},
         companys: []
       },
+      transfer: {
+        form: {
+          params: {}
+        },
+        open: false,
+        title: "",
+        rules: {
+          ownerName: [
+            { required: true, message: "目标任务不能为空", trigger: "blur" }
+          ],
+        }
+      },
     };
   },
   created() {
@@ -855,6 +897,7 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id);
+      this.codes = selection.map(item => item.code);
       this.single = selection.length !== 1;
       this.multiple = !selection.length;
       this.flag.selectedUnbeLongYou = selection.findIndex(item => { return item.createBy != this.$store.getters.name }) > -1 ? true : false;
@@ -901,12 +944,12 @@ export default {
         this.$modal.msgError("您还未选择公司信息");
         return;
       }
-      for (const key in this.companyDialog.selectedCompany){
-        if(this.companyDialog.selectedCompany[key]==""||this.companyDialog.selectedCompany[key]==null){
+      for (const key in this.companyDialog.selectedCompany) {
+        if (this.companyDialog.selectedCompany[key] == "" || this.companyDialog.selectedCompany[key] == null) {
           delete this.companyDialog.selectedCompany[key];
         }
       }
-      this.form = Object.assign(this.form,this.companyDialog.selectedCompany);
+      this.form = Object.assign(this.form, this.companyDialog.selectedCompany);
       this.companyDialog.open = false;
     },
     /** 修改按钮操作 */
@@ -924,18 +967,52 @@ export default {
     handleTransfer(row) {
       const ids = row.id || this.ids;
       const codes = row.code || this.codes;
-      this.formTransfer = {}//Object.assign({}, row)
+      this.transfer.form = { params: {} }//Object.assign({}, row)
       if (typeof codes == 'string') {
-        this.formTransfer.selectedCodes = [codes];
+        this.transfer.form.params.selectedCodes = [codes];
+        this.transfer.form.params.companyIds = [ids];
       } else {
-        this.formTransfer.selectedCodes = codes;
+        this.transfer.form.params.selectedCodes = codes;
+        this.transfer.form.params.companyIds = ids;
         if (this.flag.selectedUnbeLongYou) {
           this.$modal.msgError("禁止操作，您选择了不属于您的数据请检查后再操作！");
           return;
         }
       }
-      this.openTransfer = true;
-      this.titleTransfer = '转移客/用户主负责人';
+      this.transfer.open = true;
+      this.transfer.title = '转移客/用户主负责人';
+    },
+    getTargetPerson(selected) {
+      const select = this.personOptions.find(item => item.userName == selected)
+      this.transfer.form.ownerId = select.userId;
+      this.transfer.form.deptId = select.deptId;
+    },
+    /** 提交按钮 */
+    transferSubmitForm() {
+      this.$refs["transfer.form"].validate(valid => {
+        if (valid) {
+          let codes = this.transfer.form.params.selectedCodes
+          var _this = this;
+          this.$modal.confirm('是否确认交接编码为"' + codes + '"的客/用户项？').then(function () {
+            return transferCompanyOwner(_this.transfer.form);
+          }).then(() => {
+            this.resetTransfer();
+            this.transfer.open = false;
+            this.getList();
+            this.$modal.msgSuccess("转移成功");
+          }).catch(() => {
+          });
+        }
+      });
+    },
+    // 取消按钮
+    transferCancel() {
+      this.transfer.open = false;
+      this.resetTransfer();
+    },
+    resetTransfer() {
+      this.transfer.form = {};
+      this.resetForm("transfer.form");
     },
     // 取消按钮
     cancel() {

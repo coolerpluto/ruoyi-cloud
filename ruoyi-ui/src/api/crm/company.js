@@ -58,3 +58,11 @@ export function delCompany(id) {
     method: 'delete'
   })
 }
+// 交接
+export function transferCompanyOwner(data) {
+  return request({
+    url: '/crm/company/transfer',
+    method: 'put',
+    data: data
+  })
+}
