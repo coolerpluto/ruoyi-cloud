@@ -189,7 +189,6 @@
 <script>
 import { delOpportunity } from "@/api/crm/opportunity";
 import { listUnitedOpp, delUnitedOpp, transferUnitedOpp } from "@/api/crm/oppUnitedInfo"
-import { listUser } from "@/api/system/user";
 import { listEmployee, deptTreeSelect} from "@/api/crm/employee";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
@@ -333,7 +332,26 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.resetForm("queryForm");
+      // 查询参数
+      this.queryParams =  {
+        pageNum: 1,
+        pageSize: 10,
+        code: null,
+        name: null,
+        custName: null,
+        params: {
+          deptIds: null,
+          createBys: null,
+          ownerIds: null,
+          stages: ['1', '2', '3', '4', '5'],
+          beginCreateDate: null,
+          endCreateDate: null,
+          beginUpdateDate: null,
+          endUpdateDate: null,
+        },
+      };
+      this.rangeUpdateDate = [];
+      this.rangeCreateDate= [];
       this.handleQuery();
     },
     // 多选框选中数据
