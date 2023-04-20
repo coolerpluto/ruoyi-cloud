@@ -241,13 +241,25 @@
           </el-row>
           <el-row>
             <el-col :span="12">
-              <el-form-item label="公司地址" prop="addr">
+              <el-form-item prop="addr">
+                <span slot="label">
+                  公司地址
+                  <el-tooltip content="推荐补如:北京/朝阳区/八里庄街道,商机中会使用到" placement="top">
+                    <i class="el-icon-question"></i>
+                  </el-tooltip>
+                </span>
                 <el-cascader :props="addrProps" v-model="form.addr" clearable placeholder="请选择公司地址" style="width: 250px;">
                 </el-cascader>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="地址邮编" prop="zipCode">
+              <el-form-item prop="zipCode">
+                <span slot="label">
+                  地址邮编
+                  <el-tooltip content="推荐补如:250000,商机中会使用到" placement="top">
+                    <i class="el-icon-question"></i>
+                  </el-tooltip>
+                </span>
                 <el-input v-model="form.zipCode" placeholder="请输入邮编" />
               </el-form-item>
             </el-col>
@@ -261,8 +273,14 @@
           </el-row>
           <el-row>
             <el-col :span="24">
-              <el-form-item label="公司描述" prop="remark">
-                <el-input v-model="form.remark" type="textarea" :rows="1" placeholder="请输入公司其他描述" />
+              <el-form-item prop="remark">
+                <span slot="label">
+                  公司描述
+                  <el-tooltip content="推荐补,商机中会使用到" placement="top">
+                    <i class="el-icon-question"></i>
+                  </el-tooltip>
+                </span>
+                <el-input v-model="form.remark" type="textarea" :rows="1" placeholder="请输入公司介绍描述" />
               </el-form-item>
             </el-col>
           </el-row>
