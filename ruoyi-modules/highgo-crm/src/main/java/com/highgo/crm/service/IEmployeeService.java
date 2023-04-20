@@ -1,5 +1,7 @@
 package com.highgo.crm.service;
 
+import com.highgo.crm.domain.vo.TreeSelect;
+import com.ruoyi.system.api.domain.SysDept;
 import com.ruoyi.system.api.domain.SysUser;
 
 import java.util.List;
@@ -13,4 +15,6 @@ public interface IEmployeeService
      * @return 用户信息集合信息
      */
     public List<SysUser> selectUserList(SysUser user);
+
+    List<TreeSelect> selectDeptTreeList(SysDept dept);
 }

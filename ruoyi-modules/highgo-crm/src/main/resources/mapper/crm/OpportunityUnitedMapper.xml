@@ -105,21 +105,143 @@
             <if test="name != null  and name != ''">and tc.name like concat('%', #{name}, '%')</if>
             <if test="createBy != null  and createBy != ''">and tc.create_by like concat('%', #{createBy}, '%')</if>
             <if test="updateTime != null ">and tc.update_time &lt; #{updateTime}</if>
+            <if test="custName != null ">and tc2.company_name like concat('%', #{custName}, '%')</if>
+            <if test="params.deptIds != null and params.deptIds !=''">
+                and tc.dept_id in
+                <foreach collection="params.deptIds.split(',')" separator="," item="deptId" index="index" close=")"
+                         open="(">
+                    #{deptId}
+                </foreach>
+            </if>
+            <if test="params.createBys != null and params.createBys !=''">
+                and tc.create_by in
+                <foreach collection="params.createBys.split(',')" separator="," item="createBy" index="index" close=")"
+                         open="(">
+                    #{createBy}
+                </foreach>
+            </if>
+            <if test="params.ownerIds != null and params.ownerIds !=''">
+                and tc.owner_id in
+                <foreach collection="params.ownerIds.split(',')" separator="," item="ownerId" index="index" close=")"
+                         open="(">
+                    #{ownerId}
+                </foreach>
+            </if>
+            <if test="params.stages != null and params.stages !=''">
+                and tc.current_stage in
+                <foreach collection="params.stages.split(',')" separator="," item="stage" index="index" close=")"
+                         open="(">
+                    #{stage}
+                </foreach>
+            </if>
+            <if test="params.beginUpdateDate != null and params.beginUpdateDate != '' and params.endUpdateDate != null and params.endUpdateDate != ''">
+                and tc.update_time between #{params.beginUpdateDate} and #{params.endUpdateDate}
+            </if>
+            <if test="params.beginCreateDate != null and params.beginCreateDate != '' and params.endCreateDate != null and params.endCreateDate != ''">
+                and tc.create_time between #{params.beginCreateDate} and #{params.endCreateDate}
+            </if>
             <!--下面的是商机必须已经设置过的属性-->
-            <if test="params.properties != null and params.properties != ''">and
-                find_in_set(top.property_key,#{params.properties})
+            <if test="params.properties != null and params.properties != ''">
+                and find_in_set(top.property_key,#{params.properties})
             </if>
             ${params.crmDataScope}
             <!--下面的时共享过来的判读-->
-            <if test="params.sharedId != null and params.sharedId != ''">or find_in_set( #{sharedId} , tc.shared_id)
+            <if test="params.sharedId != null and params.sharedId != ''">
+                or find_in_set( #{params.sharedId} , tc.shared_id)
             </if>
-            <if test="params.sharedDeptId != null and params.sharedDeptId != ''">or find_in_set( #{sharedDeptId} ,
-                tc.shared_dept_id)
+            <if test="params.sharedDeptId != null and params.sharedDeptId != ''">
+                or find_in_set( #{params.sharedDeptId} , tc.shared_dept_id)
             </if>
         </where>
         group by tc.code
     </select>
+    <resultMap type="OpportunityUnitedExportFiled" id="OpportunityUnitedExportFiledResult">
+        <result property="id" column="id"/>
+        <result property="code" column="code"/>
+        <result property="currentStage" column="current_stage"/>
+        <result property="name" column="name"/>
 
+        <result property="custId" column="cust_id"/>
+        <result property="custName" column="cust_name"/>
+
+        <result property="ownerDeptId" column="dept_id"/>
+        <result property="ownerDeptName" column="dept_name"/>
+        <result property="ownerId" column="owner_id"/>
+        <result property="ownerName" column="owner_name"/>
+        <result property="nickName" column="nick_name"/>
+
+        <result property="sharedId" column="shared_id"/>
+        <result property="sharedDeptId" column="shared_dept_id"/>
+
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+
+        <!--属性中拎出来用来展示-->
+        <result property="preSignDate" column="preSignDate"/>
+        <result property="preTenderDate" column="preTenderDate"/>
+        <result property="preContractVal" column="preContractVal"/>
+    </resultMap>
+    <select id="selectOppoList4Export" parameterType="OpportunityUnitedExportFiled" resultMap="OpportunityUnitedExportFiledResult">
+        <!--        <include refid="selectOpportunityVo"/>-->
+        <include refid="select4OpportunityUnitedVo"/>
+        <where>
+            <if test="code != null  and code != ''">and tc.code like concat('%', #{code}, '%')</if>
+            <if test="name != null  and name != ''">and tc.name like concat('%', #{name}, '%')</if>
+            <if test="createBy != null  and createBy != ''">and tc.create_by like concat('%', #{createBy}, '%')</if>
+            <if test="updateTime != null ">and tc.update_time &lt; #{updateTime}</if>
+            <if test="custName != null ">and tc2.company_name like concat('%', #{custName}, '%')</if>
+            <if test="params.deptIds != null and params.deptIds !=''">
+                and tc.dept_id in
+                <foreach collection="params.deptIds.split(',')" separator="," item="deptId" index="index" close=")"
+                         open="(">
+                    #{deptId}
+                </foreach>
+            </if>
+            <if test="params.createBys != null and params.createBys !=''">
+                and tc.create_by in
+                <foreach collection="params.createBys.split(',')" separator="," item="createBy" index="index" close=")"
+                         open="(">
+                    #{createBy}
+                </foreach>
+            </if>
+            <if test="params.ownerIds != null and params.ownerIds !=''">
+                and tc.owner_id in
+                <foreach collection="params.ownerIds.split(',')" separator="," item="ownerId" index="index" close=")"
+                         open="(">
+                    #{ownerId}
+                </foreach>
+            </if>
+            <if test="params.stages != null and params.stages !=''">
+                and tc.current_stage in
+                <foreach collection="params.stages.split(',')" separator="," item="stage" index="index" close=")"
+                         open="(">
+                    #{stage}
+                </foreach>
+            </if>
+            <if test="params.beginUpdateDate != null and params.beginUpdateDate != '' and params.endUpdateDate != null and params.endUpdateDate != ''">
+                and tc.update_time between #{params.beginUpdateDate} and #{params.endUpdateDate}
+            </if>
+            <if test="params.beginCreateDate != null and params.beginCreateDate != '' and params.endCreateDate != null and params.endCreateDate != ''">
+                and tc.create_time between #{params.beginCreateDate} and #{params.endCreateDate}
+            </if>
+            <!--下面的是商机必须已经设置过的属性-->
+            <if test="params.properties != null and params.properties != ''">
+                and find_in_set(top.property_key,#{params.properties})
+            </if>
+            ${params.crmDataScope}
+            <!--下面的时共享过来的判读-->
+            <if test="params.sharedId != null and params.sharedId != ''">
+                or find_in_set( #{params.sharedId} , tc.shared_id)
+            </if>
+            <if test="params.sharedDeptId != null and params.sharedDeptId != ''">
+                or find_in_set( #{params.sharedDeptId} , tc.shared_dept_id)
+            </if>
+        </where>
+        group by tc.code
+    </select>
     <select id="selectOpportunityById" parameterType="Long" resultMap="OpportunityUnitedResult">
         <include refid="selectOpportunityVo"/>
         where id = #{id}

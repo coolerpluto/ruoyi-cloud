@@ -12,6 +12,7 @@ import com.highgo.crm.domain.OpportunitySoftwareOperation;
 import com.highgo.crm.domain.OpportunitySupport;
 import com.highgo.crm.domain.OpportunityTransferReq;
 import com.highgo.crm.domain.OpportunityUnited;
+import com.highgo.crm.domain.OpportunityUnitedExportFiled;
 
 import java.util.List;
 
@@ -100,4 +101,6 @@ public interface OpportunityUnitedMapper
     int updateOpportunityByCode(OpportunityUnited oppo);
 
     int transferByCodes(OpportunityTransferReq opportunity);
+
+    List<OpportunityUnitedExportFiled> selectOppoList4Export(OpportunityUnited opportunity);
 }

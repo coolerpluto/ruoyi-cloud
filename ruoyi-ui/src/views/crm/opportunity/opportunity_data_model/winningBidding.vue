@@ -17,7 +17,7 @@
         <el-col :span="8">
           <el-form-item label="中标公司报价" prop="winBiddingTenderPrice.propertyVal">
             <el-input v-model="winningBiddingForm.winBiddingTenderPrice.propertyVal" type="number"
-              placeholder="请输入系统项目总预算金额">
+              placeholder="请输入中标公司报价金额">
             </el-input>
             {{ convertCurrencyDX(winningBiddingForm.winBiddingTenderPrice.propertyVal || 0) }}
           </el-form-item>
@@ -25,7 +25,7 @@
         <el-col :span="8">
           <el-form-item label="中标公司报价总价" prop="winBiddingTotalPrice.propertyVal">
             <el-input v-model="winningBiddingForm.winBiddingTotalPrice.propertyVal" type="number"
-              placeholder="请输入系统项目总预算金额">
+              placeholder="请输入中标公司报价总价金额">
             </el-input>
             {{ convertCurrencyDX(winningBiddingForm.winBiddingTotalPrice.propertyVal || 0) }}
           </el-form-item>
@@ -145,7 +145,7 @@ export default {
       this.winningBiddingForm.winBiddingTenderPrice.propertyVal = arr1.tenderPrice;
       this.winningBiddingForm.winBiddingTotalPrice.propertyVal = arr1.tenderTotalPrice;
       this.winningBiddingForm.winBiddingCompanyId.propertyVal = arr1.competitorId;
-      //this.winningBiddingForm.winBiddingCompetitorId.propertyVal = arr1.id;      
+      //this.winningBiddingForm.winBiddingCompetitorId.propertyVal = arr1.id;
       this.winningBiddingForm.winBiddingCompanyName.propertyVal = arr1.competitorName;
     },
     selectInit(action) {

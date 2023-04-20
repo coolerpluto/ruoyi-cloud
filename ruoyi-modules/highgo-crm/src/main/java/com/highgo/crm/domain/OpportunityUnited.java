@@ -12,23 +12,26 @@ import java.util.Map;
 /**
  * 商机统一查询信息体
  */
-public class OpportunityUnited  extends BaseEntity
+public class OpportunityUnited extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     private Long id;
+    @Excel(name = "商机编码")
     private String code;
-    @Excel(name = "当前阶段")
+    @Excel(name = "当前阶段", readConverterExp = "1=L1.发现机会,2=L2.分析机会,3=L3.落实机会,4=L4.竞标阶段,5=L5.合同签署,6=L6.放弃投标和分析,7=L7.项目停止和分析,8=L8.丢标原因和分析,9=L9.合同签订完成,11=L11.关闭商机")
     private String currentStage;
+    @Excel(name = "商机名称")
     private String name;
-
+    @Excel(name = "用户名称")
     private String custName;
     private Long custId;
-
+    @Excel(name = "负责人")
     private String nickName;
     private String ownerName;
     private String ownerId;
     private String ownerDeptId;
+    @Excel(name = "隶属部门")
     private String ownerDeptName;
 
     private String sharedId;
@@ -48,15 +51,18 @@ public class OpportunityUnited  extends BaseEntity
      * 投标时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @Excel(name = "预计投标时间")
     private Date preTenderDate;
     /**
      * 预签单时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @Excel(name = "预签单时间")
     private Date preSignDate;
     /**
      * 预合同金额
      */
+    @Excel(name = "预计合同金额")
     private BigDecimal preContractVal;
 
     // 下面未商机附属表信息

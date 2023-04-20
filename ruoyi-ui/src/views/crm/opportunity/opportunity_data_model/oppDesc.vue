@@ -40,11 +40,11 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="项目中DB预算" prop="projectDbBdget.propertyVal">
-              <el-input v-model="oppDescForm.projectDbBdget.propertyVal" type="number" placeholder="请输入项目中DB预算金额"
+            <el-form-item label="项目中DB预算" prop="projectDbBudget.propertyVal">
+              <el-input v-model="oppDescForm.projectDbBudget.propertyVal" type="number" placeholder="请输入项目中DB预算金额"
                 clearable>
               </el-input>
-              {{ convertCurrencyDX(oppDescForm.projectDbBdget.propertyVal || 0) }}
+              {{ convertCurrencyDX(oppDescForm.projectDbBudget.propertyVal || 0) }}
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -64,7 +64,7 @@
               <el-radio v-model="oppDescForm.chosedFlag.propertyVal" label="Y">有</el-radio>
               <el-radio v-model="oppDescForm.chosedFlag.propertyVal" label="N">无</el-radio>
             </el-form-item>
-          </el-col>
+          </el-col>o
           <el-col :span="8">
             <el-form-item label="是否批准立项" prop="approveFlag.propertyVal">
               <el-radio v-model="oppDescForm.approveFlag.propertyVal" label="Y">是</el-radio>
@@ -198,7 +198,7 @@ export default {
     return {
       propertyKeys: [
         "useSystemReason", "systemPublicTime", "startProjectTime",
-        "projectBudget", "projectDbBdget", "matchProduct",
+        "projectBudget", "projectDbBudget", "matchProduct",
 
         "chosedFlag", "approveFlag", "isFundOk", "budgetSource",
         "preTenderDate", "preSignDate", "preInviteTenderType",
@@ -211,7 +211,7 @@ export default {
         "systemPublicTime": { model: "oppo_desc", propertyLable: "客户要求系统正式上线时间" },
         "startProjectTime": { model: "oppo_desc", propertyLable: "客户召集ISV、SI启动项目时间" },
         "projectBudget": { model: "oppo_desc", propertyLable: "系统项目总预算" },
-        "projectDbBdget": { model: "oppo_desc", propertyLable: "项目中DB预算" },
+        "projectDbBudget": { model: "oppo_desc", propertyLable: "项目中DB预算" },
         "matchProduct": { model: "oppo_desc", propertyLable: "对应我司产品" },
 
         "chosedFlag": { model: "oppo_desc", propertyLable: "有无入围要求" },
@@ -260,7 +260,7 @@ export default {
             { required: true, message: "未填写 系统项目总预算", trigger: "blur" }
           ],
         },
-        "projectDbBdget": {
+        "projectDbBudget": {
           propertyVal: [
             { required: true, message: "未填写 项目中DB预算", trigger: "blur" }
           ],

@@ -25,6 +25,7 @@ import com.highgo.crm.domain.OpportunityStageChangeHis;
 import com.highgo.crm.domain.OpportunitySupport;
 import com.highgo.crm.domain.OpportunityTransferReq;
 import com.highgo.crm.domain.OpportunityUnited;
+import com.highgo.crm.domain.OpportunityUnitedExportFiled;
 import com.highgo.crm.domain.OpportunityUnitedReq;
 import com.highgo.crm.domain.TransferLog;
 import com.highgo.crm.mapper.OpportunityUnitedMapper;
@@ -105,6 +106,22 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
             opportunity.getParams().put("sharedDeptId", currentUser.getDeptId());
         }
         return opportunityUnitedMapper.selectOpportunityList(opportunity);
+    }
+
+    /**
+     * 导出定制而生
+     */
+    @Override
+    @CrmDataScope(deptAlias = "sd", userAlias = "su")
+    public List<OpportunityUnitedExportFiled> selectOppoList4Export(OpportunityUnitedExportFiled opportunity)
+    {
+        SysUser currentUser = SecurityUtils.getLoginUser().getSysUser();
+        if (!currentUser.isAdmin())
+        {
+            opportunity.getParams().put("sharedId", currentUser.getUserId());
+            opportunity.getParams().put("sharedDeptId", currentUser.getDeptId());
+        }
+        return opportunityUnitedMapper.selectOppoList4Export(opportunity);
     }
 
     /**

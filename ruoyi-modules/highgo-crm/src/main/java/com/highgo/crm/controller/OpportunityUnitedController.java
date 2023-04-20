@@ -14,6 +14,7 @@ import com.highgo.crm.domain.OpportunityStageChangeHis;
 import com.highgo.crm.domain.OpportunitySupport;
 import com.highgo.crm.domain.OpportunityTransferReq;
 import com.highgo.crm.domain.OpportunityUnited;
+import com.highgo.crm.domain.OpportunityUnitedExportFiled;
 import com.highgo.crm.domain.OpportunityUnitedReq;
 import com.highgo.crm.service.IOpportunityPropertyService;
 import com.highgo.crm.service.IOpportunityStageChangeHisService;
@@ -29,6 +30,8 @@ import com.ruoyi.common.log.annotation.Log;
 import com.ruoyi.common.log.enums.BusinessType;
 import com.ruoyi.common.security.annotation.Logical;
 import com.ruoyi.common.security.annotation.RequiresRoles;
+import com.ruoyi.common.security.utils.SecurityUtils;
+import com.ruoyi.system.api.domain.SysUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -228,10 +231,10 @@ public class OpportunityUnitedController extends BaseController
     @RequiresRoles(value = {"crm:opportunity", "crm:mangment"}, logical = Logical.OR)
     @Log(title = "商机统一管理", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, OpportunityUnited opportunity)
+    public void export(HttpServletResponse response, OpportunityUnitedExportFiled opportunity)
     {
-        List<OpportunityUnited> list = opportunityService.selectOpportunityUnitedList(opportunity);
-        ExcelUtil<OpportunityUnited> util = new ExcelUtil<OpportunityUnited>(OpportunityUnited.class);
+        List<OpportunityUnitedExportFiled> list = opportunityService.selectOppoList4Export(opportunity);
+        ExcelUtil<OpportunityUnitedExportFiled> util = new ExcelUtil<OpportunityUnitedExportFiled>(OpportunityUnitedExportFiled.class);
         util.exportExcel(response, list, "商机管理数据");
     }
 
