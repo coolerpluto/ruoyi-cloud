@@ -637,6 +637,7 @@ import {
 } from "@/api/crm/application";
 import { listContact, getContact, delContact, addContact, updateContact } from "@/api/crm/contact";
 import { getDicts as getDicts } from '@/api/system/dict/data'
+import fecha from 'element-ui/src/utils/date';
 
 export default {
   name: "CUST",
@@ -716,9 +717,6 @@ export default {
         ],
         businessScope: [
           { required: true, message: "公司业务范围不能为空", trigger: "blur" },
-        ],
-        capitalReg: [
-          { type: "number", message: "请输入正确的数字", trigger: ["blur"], transform: (value) => Number(value) }
         ],
       },
       rulesApp: {
@@ -910,14 +908,21 @@ export default {
       });
     },
     handleGetIndustry() {
+      if (!this.form.industryCategory) {
+        return;
+      }
       var _this = this
       let selectCategory = this.industryCategories.find(item => {
         return item.dictValue == _this.form.industryCategory;
       })
+      this.form.industry = selectCategory.dictLabel;
+      if (!this.form.industrySubcategory) {
+        return;
+      }
       let selectSubcategory = this.industrySubcategories.find(item => {
         return item.dictValue == _this.form.industrySubcategory;
       })
-      this.form.industry = selectCategory.dictLabel + '/' + selectSubcategory.dictLabel;
+      this.form.industry = this.form.industry + '/' + selectSubcategory.dictLabel;
     },
     getIndustryCategories(func) {
       var _this = this;
@@ -1199,7 +1204,11 @@ export default {
               this.getList();
             });
           } else {
-            this.form.code = this.form.code || 'CUST' + Date.parse(new Date());
+            if (!this.form.code) {
+              let timeStr = fecha.format(new Date(), 'yyyyMMdd HHmmss');
+              let rondomStr = Math.random().toString(36).slice(-7);
+              this.form.code = 'CUST' + timeStr.replace(" ", rondomStr);
+            }
             this.form.sourceType = "CUST";
             addCompany(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
