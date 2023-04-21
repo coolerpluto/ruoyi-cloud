@@ -39,6 +39,8 @@ public class Company extends BaseEntity
      */
     @Excel(name = "行业归属")
     private String industry;
+    private String industryCategory;
+    private String industrySubcategory;
 
     /**
      * 公司法人
@@ -214,6 +216,26 @@ public class Company extends BaseEntity
     public String getIndustry()
     {
         return industry;
+    }
+
+    public String getIndustryCategory()
+    {
+        return industryCategory;
+    }
+
+    public void setIndustryCategory(String industryCategory)
+    {
+        this.industryCategory = industryCategory;
+    }
+
+    public String getIndustrySubcategory()
+    {
+        return industrySubcategory;
+    }
+
+    public void setIndustrySubcategory(String industrySubcategory)
+    {
+        this.industrySubcategory = industrySubcategory;
     }
 
     public void setLegal(String legal)

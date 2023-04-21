@@ -21,6 +21,8 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 公司Service业务层处理
@@ -189,7 +191,7 @@ public class CompanyServiceImpl implements ICompanyService
             String name = (String) companyJson.get("name");
             companyTemp.setCompanyName(name);
             companyTemp.setLegal((String) companyJson.get("legalPersonName"));
-            companyTemp.setCapitalReg((String) companyJson.get("regCapital"));
+            companyTemp.setCapitalReg(getCapitalRegFormat((String) companyJson.get("regCapital")));
             companyTemp.setSourceType(sourceType);
             String webStr = (String) companyJson.get("websites");
             String[] webs = webStr.split(";");
@@ -213,5 +215,14 @@ public class CompanyServiceImpl implements ICompanyService
         }
         //companyMapper.batchInsertCompany(resReturn);
         return resReturn;
+    }
+
+    private String getCapitalRegFormat(String str)
+    {
+        //String str = "1,000.222万元人民币";
+        String regEx = "[^0-9.,]";
+        Pattern p = Pattern.compile(regEx);
+        Matcher m = p.matcher(str);
+        return m.replaceAll("").trim();
     }
 }

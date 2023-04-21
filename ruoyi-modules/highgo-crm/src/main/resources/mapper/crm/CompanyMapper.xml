@@ -10,6 +10,8 @@
         <result property="companyName" column="company_name"/>
         <result property="properties" column="properties"/>
         <result property="industry" column="industry"/>
+        <result property="industryCategory" column="industry_category"/>
+        <result property="industrySubcategory" column="industry_subcategory"/>
         <result property="legal" column="legal"/>
         <result property="capitalReg" column="capital_reg"/>
         <result property="capitalPayType" column="capital_pay_type"/>
@@ -40,6 +42,8 @@
                tc.company_name,
                tc.properties,
                tc.industry,
+               tc.industry_category,
+               tc.industry_subcategory,
                tc.legal,
                tc.capital_reg,
                tc.capital_pay_type,
@@ -79,6 +83,8 @@
             <if test="properties != null  and properties != ''">and tc.properties like concat('%', #{properties}, '%')
             </if>
             <if test="industry != null  and industry != ''">and tc.industry = #{industry}</if>
+            <if test="industryCategory != null  and industryCategory != ''">and tc.industry_category = #{industryCategory}</if>
+            <if test="industrySubcategory != null  and industrySubcategory != ''">and tc.industry_subcategory = #{industrySubcategory}</if>
             <if test="legal != null  and legal != ''">and tc.legal like concat('%', #{legal}, '%')</if>
             <if test="capitalReg != null  and capitalReg != ''">and tc.capital_reg = #{capitalReg}</if>
             <if test="capitalPayType != null  and capitalPayType != ''">and tc.capital_pay_type = #{capitalPayType}</if>
@@ -141,6 +147,8 @@
             <if test="companyName != null">company_name,</if>
             <if test="properties != null">properties,</if>
             <if test="industry != null">industry,</if>
+            <if test="industryCategory != null">industry_category,</if>
+            <if test="industrySubcategory != null">industry_subcategory,</if>
             <if test="legal != null">legal,</if>
             <if test="capitalReg != null">capital_reg,</if>
             <if test="capitalPayType != null">capital_pay_type,</if>
@@ -167,6 +175,8 @@
             <if test="companyName != null">#{companyName},</if>
             <if test="properties != null">#{properties},</if>
             <if test="industry != null">#{industry},</if>
+            <if test="industryCategory != null">#{industryCategory},</if>
+            <if test="industrySubcategory != null">#{industrySubcategory},</if>
             <if test="legal != null">#{legal},</if>
             <if test="capitalReg != null">#{capitalReg},</if>
             <if test="capitalPayType != null">#{capitalPayType},</if>
@@ -189,7 +199,7 @@
         </trim>
     </insert>
     <insert id="batchInsertCompany">
-        INSERT INTO t_company (id, code, company_name, properties, industry,
+        INSERT INTO t_company (id, code, company_name, properties, industry,industry_category,industry_subcategory,
         legal, capital_reg, capital_pay_type,
         source_id, source_type, website, addr, addr_detail,
         zip_code, business_scope, remark,
@@ -197,7 +207,7 @@
         update_id, update_by, update_time)
         VALUES
         <foreach collection="companyList" index="index" item="item" separator=",">
-            (#{item.id}, #{item.code},#{item.companyName},#{item.properties},#{item.industry}
+            (#{item.id}, #{item.code},#{item.companyName},#{item.properties},#{item.industry},#{item.industryCategory},#{item.industrySubcategory}
             ,#{item.legal},#{item.capitalReg},#{item.capitalPayType}
             ,#{item.sourceId},#{item.sourceType},#{item.website},#{item.addr},#{item.addrDetail}
             ,#{item.zipCode},#{item.businessScope},#{item.remark}
@@ -211,6 +221,8 @@
             <if test="companyName != null">company_name = #{companyName},</if>
             <if test="properties != null">properties = #{properties},</if>
             <if test="industry != null">industry = #{industry},</if>
+            <if test="industryCategory != null">industry_category = #{industryCategory},</if>
+            <if test="industrySubcategory != null">industry_subcategory = #{industrySubcategory},</if>
             <if test="legal != null">legal = #{legal},</if>
             <if test="capitalReg != null">capital_reg = #{capitalReg},</if>
             <if test="capitalPayType != null">capital_pay_type = #{capitalPayType},</if>
