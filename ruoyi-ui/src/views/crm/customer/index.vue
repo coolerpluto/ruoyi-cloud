@@ -82,11 +82,7 @@
         </template>
       </el-table-column>
       <el-table-column label="行业类别" align="center" prop="industry" v-if="columns[2].visible"
-        :show-overflow-tooltip="true">
-        <template slot-scope="scope">
-          <dict-tag :options="dict.type.crm_company_industry_type" :value="scope.row.industry" />
-        </template>
-      </el-table-column>
+        :show-overflow-tooltip="true"/>
       <el-table-column label="公司法人" align="center" prop="legal" v-if="columns[3].visible" :show-overflow-tooltip="true" />
       <el-table-column label="注册资金" align="center" prop="capitalReg" v-if="columns[4].visible"
         :show-overflow-tooltip="true">
@@ -194,13 +190,22 @@
           </el-row>
           <el-row>
             <el-col :span="12">
-              <el-form-item label="行业归属" prop="industry">
-                <el-select v-model="form.industry" placeholder="请选择公司归属行业" clearable>
-                  <el-option v-for="dict in dict.type.crm_company_industry_type" :key="dict.value" :label="dict.label"
-                    :value="dict.value" />
-                </el-select>
-              </el-form-item>
-            </el-col>
+                <el-form-item label="行业归属" prop="industry">
+                  <el-select v-model="form.industryCategory" 
+                  placeholder="请选择行业大类" clearable
+                  @change="handleSelectIndustryCategory">
+                    <el-option v-for="dict in industryCategories" 
+                    :key="dict.dictValue" :label="dict.dictLabel"
+                      :value="dict.dictValue" />
+                  </el-select>
+                  <el-select v-model="form.industrySubcategory" 
+                  placeholder="请选择行业小类" clearable >
+                    <el-option v-for="dict in industrySubcategories" 
+                    :key="dict.dictValue" :label="dict.dictLabel"
+                      :value="dict.dictValue" />
+                  </el-select>
+                </el-form-item>
+              </el-col>            
             <el-col :span="12">
               <el-form-item label="公司法人" prop="legal">
                 <el-input v-model="form.legal" placeholder="请选择输入公司法人" />
@@ -210,7 +215,7 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="注册资金" prop="capitalReg">
-                <el-input type=”number” v-model="form.capitalReg" placeholder="请输入公司注册资金">
+                <el-input type="number" v-model="form.capitalReg" placeholder="请输入公司注册资金">
                   <template slot="append">万元</template>
                 </el-input>
               </el-form-item>
@@ -635,13 +640,13 @@ import {
   updateApplication
 } from "@/api/crm/application";
 import { listContact, getContact, delContact, addContact, updateContact } from "@/api/crm/contact";
+import { getDicts as getDicts } from '@/api/system/dict/data'
 
 export default {
   name: "CUST",
   components: { Treeselect },
   dicts: [
     'crm_companny_business_scope',
-    'crm_company_industry_type',
     'crm_company_properties_type',
     'crm_capital_pay_type',
     'crm_business_type',
@@ -704,6 +709,8 @@ export default {
       // 表单参数
       form: {},
       personOptions: [],
+      industryCategories: [],
+      industrySubcategories: [],
       formApp: {},
       formContact: {},
       // 表单校验
@@ -882,6 +889,52 @@ export default {
         this.flag.personOptionsLoading = false;
       });
     },
+    getCtegoryByCode(dictCode,func){
+      if (!dictCode){
+        if (typeof func == 'function') {
+          func();
+        }
+        return;
+      }      
+      getDicts(dictCode).then(res => {
+        if (typeof func == 'function') {
+          func(res.data);
+        }
+        return res.data;
+      })
+    },
+    handleSelectIndustryCategory(val){
+      let select = this.industryCategories.find(item=>{
+        return item.dictValue == val;
+      })
+      var _this = this;
+      this.getCtegoryByCode(select.remark,function(res){
+        _this.industrySubcategories = res;
+        _this.$set(_this.form,'industrySubcategory','');
+      });
+    },
+    handleGetIndustry(){
+      var _this= this
+      let selectCategory = this.industryCategories.find(item=>{
+        return item.dictValue == _this.form.industryCategory;
+      })
+      let selectSubcategory = this.industrySubcategories.find(item=>{
+        return item.dictValue == _this.form.industrySubcategory;
+      })
+      this.form.industry = selectCategory.dictLabel+'/'+selectSubcategory.dictLabel;
+    },
+    getIndustryCategories(func){
+      var _this = this;
+      this.getCtegoryByCode('com_industry_category',function(res){
+        _this.industryCategories=res;
+        _this.industrySubcategories=[];
+        if (typeof func == 'function') {
+          func();
+        }
+      });
+      this.$set(this,'industryCategories',[]);
+      this.$set(this,'industrySubcategories',[]);
+    },
     // 表单重置
     reset() {
       this.form = {};
@@ -939,6 +992,7 @@ export default {
       this.reset();
       this.open = true;
       this.title = "添加客户基本信息";
+      this.getIndustryCategories();
     },
     openCompanyDialog() {
       this.companyDialog.open = true;
@@ -967,7 +1021,7 @@ export default {
           delete this.companyDialog.selectedCompany[key];
         }
       }
-      this.form = Object.assign(this.form, this.companyDialog.selectedCompany);
+      this.form = {...this.form, ...this.companyDialog.selectedCompany};
       this.companyDialog.open = false;
     },
     /** 修改按钮操作 */
@@ -979,6 +1033,17 @@ export default {
         this.form.addr = this.form.addr ? this.form.addr.split(',') : this.form.addr;
         this.open = true;
         this.title = "修改客户基本信息";
+        var _this = this;
+        this.form.industry=[]
+        this.getIndustryCategories(function(){
+          let select = _this.industryCategories.find(item=>{
+            return item.dictValue == _this.form.industryCategory;
+          })
+          _this.getCtegoryByCode(select.remark,function(res){
+            _this.industrySubcategories = res;
+            //_this.$set(_this.baseInfoDialog.form,'categoryL2','');
+          });
+        })
       });
     },
     /** 转交按钮 */
@@ -1126,6 +1191,7 @@ export default {
           if (this.form.addr) {
             this.form.addr = this.form.addr.toString();
           }
+          this.handleGetIndustry();
           if (this.form.id != null) {
             updateCompany(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
