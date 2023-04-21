@@ -82,7 +82,7 @@
         </template>
       </el-table-column>
       <el-table-column label="行业类别" align="center" prop="industry" v-if="columns[2].visible"
-        :show-overflow-tooltip="true"/>
+        :show-overflow-tooltip="true" />
       <el-table-column label="公司法人" align="center" prop="legal" v-if="columns[3].visible" :show-overflow-tooltip="true" />
       <el-table-column label="注册资金" align="center" prop="capitalReg" v-if="columns[4].visible"
         :show-overflow-tooltip="true">
@@ -190,22 +190,17 @@
           </el-row>
           <el-row>
             <el-col :span="12">
-                <el-form-item label="行业归属" prop="industry">
-                  <el-select v-model="form.industryCategory" 
-                  placeholder="请选择行业大类" clearable
-                  @change="handleSelectIndustryCategory">
-                    <el-option v-for="dict in industryCategories" 
-                    :key="dict.dictValue" :label="dict.dictLabel"
-                      :value="dict.dictValue" />
-                  </el-select>
-                  <el-select v-model="form.industrySubcategory" 
-                  placeholder="请选择行业小类" clearable >
-                    <el-option v-for="dict in industrySubcategories" 
-                    :key="dict.dictValue" :label="dict.dictLabel"
-                      :value="dict.dictValue" />
-                  </el-select>
-                </el-form-item>
-              </el-col>            
+              <el-form-item label="行业归属" prop="industry">
+                <el-select v-model="form.industryCategory" placeholder="请选择行业大类" @change="handleSelectIndustryCategory">
+                  <el-option v-for="dict in industryCategories" :key="dict.dictValue" :label="dict.dictLabel"
+                    :value="dict.dictValue" />
+                </el-select>
+                <el-select v-model="form.industrySubcategory" placeholder="请选择行业小类" clearable>
+                  <el-option v-for="dict in industrySubcategories" :key="dict.dictValue" :label="dict.dictLabel"
+                    :value="dict.dictValue" />
+                </el-select>
+              </el-form-item>
+            </el-col>
             <el-col :span="12">
               <el-form-item label="公司法人" prop="legal">
                 <el-input v-model="form.legal" placeholder="请选择输入公司法人" />
@@ -388,11 +383,12 @@
       <el-form ref="companyDialog.form" :model="companyDialog.form" @submit.native.prevent>
         <el-row>
           <el-col :span="15">
-            <el-input v-model="companyDialog.form.searchValue" placeholder="请输入公司名称关键字" clearable />
+            <el-input v-model="companyDialog.form.searchValue" placeholder="请输入公司名称关键字" clearable
+              @keyup.enter.native="getListCompanys" />
           </el-col>
           <el-col :span="5">
             <el-button type="primary" icon="el-icon-search" size="mini" @click="getListCompanys">搜索</el-button>
-            <el-button icon="el-icon-refresh" size="mini" @click="companyDialog.form.companyName = ''">重置</el-button>
+            <el-button icon="el-icon-refresh" size="mini" @click="companyDialog.form.searchValue = ''">重置</el-button>
           </el-col>
         </el-row>
       </el-form>
@@ -817,7 +813,7 @@ export default {
       },
       companyDialog: {
         // 弹出层标题
-        title: "公司信息查找",
+        title: "查找公司信息-关联天眼查",
         // 是否显示弹出层
         open: false,
         form: {
@@ -889,13 +885,13 @@ export default {
         this.flag.personOptionsLoading = false;
       });
     },
-    getCtegoryByCode(dictCode,func){
-      if (!dictCode){
+    getCtegoryByCode(dictCode, func) {
+      if (!dictCode) {
         if (typeof func == 'function') {
           func();
         }
         return;
-      }      
+      }
       getDicts(dictCode).then(res => {
         if (typeof func == 'function') {
           func(res.data);
@@ -903,37 +899,37 @@ export default {
         return res.data;
       })
     },
-    handleSelectIndustryCategory(val){
-      let select = this.industryCategories.find(item=>{
+    handleSelectIndustryCategory(val) {
+      let select = this.industryCategories.find(item => {
         return item.dictValue == val;
       })
       var _this = this;
-      this.getCtegoryByCode(select.remark,function(res){
+      this.getCtegoryByCode(select.remark, function (res) {
         _this.industrySubcategories = res;
-        _this.$set(_this.form,'industrySubcategory','');
+        _this.$set(_this.form, 'industrySubcategory', '');
       });
     },
-    handleGetIndustry(){
-      var _this= this
-      let selectCategory = this.industryCategories.find(item=>{
+    handleGetIndustry() {
+      var _this = this
+      let selectCategory = this.industryCategories.find(item => {
         return item.dictValue == _this.form.industryCategory;
       })
-      let selectSubcategory = this.industrySubcategories.find(item=>{
+      let selectSubcategory = this.industrySubcategories.find(item => {
         return item.dictValue == _this.form.industrySubcategory;
       })
-      this.form.industry = selectCategory.dictLabel+'/'+selectSubcategory.dictLabel;
+      this.form.industry = selectCategory.dictLabel + '/' + selectSubcategory.dictLabel;
     },
-    getIndustryCategories(func){
+    getIndustryCategories(func) {
       var _this = this;
-      this.getCtegoryByCode('com_industry_category',function(res){
-        _this.industryCategories=res;
-        _this.industrySubcategories=[];
+      this.getCtegoryByCode('com_industry_category', function (res) {
+        _this.industryCategories = res;
+        _this.industrySubcategories = [];
         if (typeof func == 'function') {
           func();
         }
       });
-      this.$set(this,'industryCategories',[]);
-      this.$set(this,'industrySubcategories',[]);
+      this.$set(this, 'industryCategories', []);
+      this.$set(this, 'industrySubcategories', []);
     },
     // 表单重置
     reset() {
@@ -996,6 +992,7 @@ export default {
     },
     openCompanyDialog() {
       this.companyDialog.open = true;
+      this.companyDialog.form.searchValue = null;
     },
     getListCompanys() {
       this.flag.dialogCompanyTableLoading = true
@@ -1012,7 +1009,7 @@ export default {
       this.companyDialog.open = false;
     },
     submitCompanyDialogForm() {
-      if (Object.keys(this.companyDialog.selectedCompany).length == 0) {
+      if (!this.companyDialog.selectedCompany || Object.keys(this.companyDialog.selectedCompany).length == 0) {
         this.$modal.msgError("您还未选择公司信息");
         return;
       }
@@ -1021,7 +1018,10 @@ export default {
           delete this.companyDialog.selectedCompany[key];
         }
       }
-      this.form = {...this.form, ...this.companyDialog.selectedCompany};
+      if (this.form.code) {
+        delete this.companyDialog.selectedCompany["code"];
+      }
+      this.form = { ...this.form, ...this.companyDialog.selectedCompany };
       this.companyDialog.open = false;
     },
     /** 修改按钮操作 */
@@ -1034,12 +1034,12 @@ export default {
         this.open = true;
         this.title = "修改客户基本信息";
         var _this = this;
-        this.form.industry=[]
-        this.getIndustryCategories(function(){
-          let select = _this.industryCategories.find(item=>{
+        this.form.industry = []
+        this.getIndustryCategories(function () {
+          let select = _this.industryCategories.find(item => {
             return item.dictValue == _this.form.industryCategory;
           })
-          _this.getCtegoryByCode(select.remark,function(res){
+          _this.getCtegoryByCode(select.remark, function (res) {
             _this.industrySubcategories = res;
             //_this.$set(_this.baseInfoDialog.form,'categoryL2','');
           });
