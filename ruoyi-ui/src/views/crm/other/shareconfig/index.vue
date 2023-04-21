@@ -107,7 +107,7 @@
           <el-col :span="12">
             <el-form-item label="共享源类型" prop="sourceType">
               <el-radio-group v-model="form.sourceType" @input="sourceTypeChange">
-                <el-radio v-for="type in shareTypes" :key="type.value" :label="type.value">{{ type.label }}
+                <el-radio v-for="item in shareTypes" :key="item.value" :label="item.value">{{ item.label }}
                 </el-radio>
               </el-radio-group>
             </el-form-item>
@@ -132,7 +132,7 @@
           <el-col :span="12">
             <el-form-item label="共享目标类型" prop="targetType">
               <el-radio-group v-model="form.targetType" @input="targetTypeChange">
-                <el-radio v-for="type in shareTypes" :key="type.value" :label="type.value">{{ type.label }}
+                <el-radio v-for="item in shareTypes" :key="item.value" :label="item.value">{{ item.label }}
                 </el-radio>
               </el-radio-group>
             </el-form-item>
