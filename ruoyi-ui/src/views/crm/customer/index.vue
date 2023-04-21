@@ -831,7 +831,7 @@ export default {
         title: "",
         rules: {
           ownerName: [
-            { required: true, message: "目标任务不能为空", trigger: "blur" }
+            { required: true, message: "目标人不能为空", trigger: "blur" }
           ],
         }
       },
@@ -963,8 +963,8 @@ export default {
         pageSize: 10,
         params: {}
       },
-        this.rangeCreateDate = [],
-        this.handleQuery();
+      this.rangeCreateDate = [],
+      this.handleQuery();
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
@@ -1046,7 +1046,6 @@ export default {
           })
           _this.getCtegoryByCode(select.remark, function (res) {
             _this.industrySubcategories = res;
-            //_this.$set(_this.baseInfoDialog.form,'categoryL2','');
           });
         })
       });
@@ -1081,6 +1080,7 @@ export default {
         if (valid) {
           let codes = this.transfer.form.params.selectedCodes
           var _this = this;
+          this.transfer.form.sourceType = "CUST";
           this.$modal.confirm('是否确认交接编码为"' + codes + '"的客/用户项？').then(function () {
             return transferCompanyOwner(_this.transfer.form);
           }).then(() => {
