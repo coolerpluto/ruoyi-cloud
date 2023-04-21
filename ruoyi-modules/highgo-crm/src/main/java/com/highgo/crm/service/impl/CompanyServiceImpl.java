@@ -126,7 +126,8 @@ public class CompanyServiceImpl implements ICompanyService
     public int transfer(Company company)
     {
         TransferLog transferLog = new TransferLog();
-        transferLog.setModel("CUST");
+        String sourceModel = company.getSourceType();
+        transferLog.setModel(StringUtils.isBlank(sourceModel)?"UnKnown":sourceModel);
         transferLog.setUserFrom(SecurityUtils.getUsername());
         transferLog.setUserTo(String.valueOf(company.getOwnerId()));
         List<String> selectedCodes = (List<String>) company.getParams().get("selectedCodes");
