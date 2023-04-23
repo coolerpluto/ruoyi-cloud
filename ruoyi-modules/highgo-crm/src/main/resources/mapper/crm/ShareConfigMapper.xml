@@ -31,6 +31,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="sourceType != null  and sourceType != ''"> and source_type = #{sourceType}</if>
             <if test="targetIds != null  and targetIds != ''"> and target_ids = #{targetIds}</if>
             <if test="targetType != null  and targetType != ''"> and target_type = #{targetType}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
         </where>
     </select>
     

@@ -882,6 +882,10 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
             for (OpportunitySupport adv : keyStandBy_a)
             {
                 adv.setOpportunityCode(code);
+                OpportunityUnited opp = new OpportunityUnited();
+                opp.setCode(code);
+                opp.setSharedId(String.valueOf(adv.getSupportId()));
+                opportunityUnitedMapper.addOppoShareByCode(opp);
                 supportService.insertOpportunitySupport(adv);
             }
         }
@@ -902,6 +906,10 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
             log.info("删除内部支持人");
             for (OpportunitySupport adv : keyStandBy_d)
             {
+                OpportunityUnited opp = new OpportunityUnited();
+                opp.setCode(code);
+                opp.setSharedId(String.valueOf(adv.getSupportId()));
+                opportunityUnitedMapper.deleteOppoShareByCode(opp);
                 supportService.deleteOpportunitySupportById(adv.getId());
             }
         }

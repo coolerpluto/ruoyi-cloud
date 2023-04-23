@@ -103,4 +103,8 @@ public interface OpportunityUnitedMapper
     int transferByCodes(OpportunityTransferReq opportunity);
 
     List<OpportunityUnitedExportFiled> selectOppoList4Export(OpportunityUnited opportunity);
+
+    int deleteOppoShareByCode(OpportunityUnited opp);
+
+    int addOppoShareByCode(OpportunityUnited opp);
 }

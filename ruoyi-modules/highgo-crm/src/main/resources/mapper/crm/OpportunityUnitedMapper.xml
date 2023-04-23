@@ -144,13 +144,19 @@
             <if test="params.properties != null and params.properties != ''">
                 and find_in_set(top.property_key,#{params.properties})
             </if>
-            ${params.crmDataScope}
-            <!--下面的时共享过来的判读-->
-            <if test="params.sharedId != null and params.sharedId != ''">
-                or find_in_set( #{params.sharedId} , tc.shared_id)
-            </if>
-            <if test="params.sharedDeptId != null and params.sharedDeptId != ''">
-                or find_in_set( #{params.sharedDeptId} , tc.shared_dept_id)
+            <if test="(params.sharedId != null and params.sharedId != '') or (params.sharedDeptId != null and params.sharedDeptId != '') or (params.crmDataScope != null and params.crmDataScope != '')">
+                and
+                <trim prefixOverrides="and" prefix="(" suffix=")">
+                    <!--下面的自己权限内的判读-->
+                    ${params.crmDataScope}
+                    <!--下面的是共享过来的判读-->
+                    <if test="params.sharedId != null and params.sharedId != ''">
+                        or find_in_set( #{params.sharedId} , tc.shared_id)
+                    </if>
+                    <if test="params.sharedDeptId != null and params.sharedDeptId != ''">
+                        or find_in_set( #{params.sharedDeptId} , tc.shared_dept_id)
+                    </if>
+                </trim>
             </if>
         </where>
         group by tc.code
@@ -184,7 +190,8 @@
         <result property="preTenderDate" column="preTenderDate"/>
         <result property="preContractVal" column="preContractVal"/>
     </resultMap>
-    <select id="selectOppoList4Export" parameterType="OpportunityUnitedExportFiled" resultMap="OpportunityUnitedExportFiledResult">
+    <select id="selectOppoList4Export" parameterType="OpportunityUnitedExportFiled"
+            resultMap="OpportunityUnitedExportFiledResult">
         <!--        <include refid="selectOpportunityVo"/>-->
         <include refid="select4OpportunityUnitedVo"/>
         <where>
@@ -231,13 +238,19 @@
             <if test="params.properties != null and params.properties != ''">
                 and find_in_set(top.property_key,#{params.properties})
             </if>
-            ${params.crmDataScope}
-            <!--下面的时共享过来的判读-->
-            <if test="params.sharedId != null and params.sharedId != ''">
-                or find_in_set( #{params.sharedId} , tc.shared_id)
-            </if>
-            <if test="params.sharedDeptId != null and params.sharedDeptId != ''">
-                or find_in_set( #{params.sharedDeptId} , tc.shared_dept_id)
+            <if test="(params.sharedId != null and params.sharedId != '') or (params.sharedDeptId != null and params.sharedDeptId != '') or (params.crmDataScope != null and params.crmDataScope != '')">
+                and
+                <trim prefixOverrides="and" prefix="(" suffix=")">
+                    <!--下面的自己权限内的判读-->
+                    ${params.crmDataScope}
+                    <!--下面的是共享过来的判读-->
+                    <if test="params.sharedId != null and params.sharedId != ''">
+                        or find_in_set( #{params.sharedId} , tc.shared_id)
+                    </if>
+                    <if test="params.sharedDeptId != null and params.sharedDeptId != ''">
+                        or find_in_set( #{params.sharedDeptId} , tc.shared_dept_id)
+                    </if>
+                </trim>
             </if>
         </where>
         group by tc.code
@@ -566,5 +579,15 @@
         <foreach item="code" collection="selectedCodes" open="(" separator="," close=")">
             #{code}
         </foreach>
+    </update>
+    <update id="deleteOppoShareByCode" parameterType="OpportunityUnited">
+        update t_opportunity
+        set shared_id = replace(shared_id,concat(',',#{sharedId}),'')
+        where code =#{code}
+    </update>
+    <update id="addOppoShareByCode" parameterType="OpportunityUnited">
+        update t_opportunity
+        set shared_id = concat_ws(',',shared_id,#{sharedId})
+        where code = #{code}
     </update>
 </mapper>
