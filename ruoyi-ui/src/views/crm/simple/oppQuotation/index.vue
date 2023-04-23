@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="88px">
       <el-form-item label="商机code" prop="opportunityCode">
         <el-input
           v-model="queryParams.opportunityCode"
@@ -9,7 +9,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="商机所在阶段" prop="opportunityStage">
+      <el-form-item label="所在阶段" prop="opportunityStage">
         <el-select v-model="queryParams.opportunityStage" placeholder="请选择商机所在阶段" clearable>
           <el-option
             v-for="dict in dict.type.crm_opportunity_status"
@@ -19,7 +19,7 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="创建报价单人" prop="createBy">
+      <el-form-item label="创建人" prop="createBy">
         <el-input
           v-model="queryParams.createBy"
           placeholder="请输入创建报价单人"
@@ -119,8 +119,8 @@
     />
 
     <!-- 添加或修改商机产品报价对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="150px">
         <el-form-item label="商机code" prop="opportunityCode">
           <el-input v-model="form.opportunityCode" placeholder="请输入商机code" />
         </el-form-item>

@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="88px">
       <el-form-item label="字段名" prop="propertyKey">
         <el-input
           v-model="queryParams.propertyKey"
@@ -91,7 +91,7 @@
       </el-table-column>
       <el-table-column label="是否启用" align="center" prop="status">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.status"/>
+          <dict-tag :options="dict.type.sys_show_hide" :value="scope.row.status"/>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -144,7 +144,7 @@
         <el-form-item label="是否启用" prop="status">
           <el-select v-model="form.status" placeholder="请选择是否启用">
             <el-option
-              v-for="dict in dict.type.sys_yes_no"
+              v-for="dict in dict.type.sys_show_hide"
               :key="dict.value"
               :label="dict.label"
               :value="dict.value"
@@ -165,7 +165,7 @@ import { listOppProperty, getOppProperty, delOppProperty, addOppProperty, update
 
 export default {
   name: "OppProperty",
-  dicts: ['sys_yes_no', 'crm_opportunity_data_model'],
+  dicts: ['sys_show_hide', 'crm_opportunity_data_model'],
   data() {
     return {
       // 遮罩层

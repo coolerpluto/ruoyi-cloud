@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="100px">
       <el-form-item label="商机Code" prop="opportunityCode">
         <el-input
           v-model="queryParams.opportunityCode"
@@ -17,7 +17,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="是否需要适配" prop="isvNeedAdapted">
+      <!-- <el-form-item label="是否需要适配" prop="isvNeedAdapted">
         <el-select v-model="queryParams.isvNeedAdapted" placeholder="请选择是否需要适配" clearable>
           <el-option
             v-for="dict in dict.type.sys_yes_no"
@@ -26,8 +26,8 @@
             :value="dict.value"
           />
         </el-select>
-      </el-form-item>
-      <el-form-item label="招标前目标进度" prop="targetAdaptedProgress">
+      </el-form-item> -->
+      <el-form-item label="招标前完成度" prop="targetAdaptedProgress">
         <el-select v-model="queryParams.targetAdaptedProgress" placeholder="请选择招标前目标进度" clearable>
           <el-option
             v-for="dict in dict.type.sys_work_progress"
@@ -127,10 +127,10 @@
         </template>
       </el-table-column>
       <el-table-column label="运作主体名字" align="center" prop="operationalName" />
-      <el-table-column label="${comment}" align="center" prop="createBy" />
-      <el-table-column label="${comment}" align="center" prop="createTime" />
-      <el-table-column label="${comment}" align="center" prop="updateBy" />
-      <el-table-column label="${comment}" align="center" prop="updateTime" />
+      <el-table-column label="创建人" align="center" prop="createBy" />
+      <el-table-column label="创建时间" align="center" prop="createTime" />
+      <el-table-column label="更新人" align="center" prop="updateBy" />
+      <el-table-column label="更新时间" align="center" prop="updateTime" />
       <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">

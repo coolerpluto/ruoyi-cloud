@@ -1,8 +1,8 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="88px">
-      <el-form-item label="邮件服务器" prop="userFrom">
-        <el-input v-model="queryParams.userFrom" placeholder="转移人员" clearable @keyup.enter.native="handleQuery"/>
+      <el-form-item label="邮件服务器" prop="server">
+        <el-input v-model="queryParams.server" placeholder="请输入" clearable @keyup.enter.native="handleQuery"/>
       </el-form-item>
       <el-form-item label="是否启用" prop="status">
         <el-select v-model="queryParams.status" placeholder="请选择是否启用" clearable>

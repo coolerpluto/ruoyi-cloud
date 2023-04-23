@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="88px">
       <el-form-item label="商机code" prop="opportunityCode">
         <el-input
           v-model="queryParams.opportunityCode"
@@ -29,7 +29,7 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="转变时间" prop="changeTime">
+      <el-form-item label="转变截至" prop="changeTime">
         <el-date-picker clearable
           v-model="queryParams.changeTime"
           type="date"

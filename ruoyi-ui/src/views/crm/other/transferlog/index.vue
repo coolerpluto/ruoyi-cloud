@@ -1,17 +1,31 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="数据模块" prop="dataModel">
-        <el-select v-model="queryParams.dataModel" placeholder="请选择数据模块" clearable>
+      <el-form-item label="数据模块" prop="model">
+        <el-select v-model="queryParams.model" placeholder="请选择数据模块" clearable>
           <el-option v-for="dict in dict.type.crm_business_type" :key="dict.value" :label="dict.label"
                      :value="dict.value"/>
         </el-select>
       </el-form-item>
-      <el-form-item label="转移来源" prop="userFrom">
-        <el-input v-model="queryParams.userFrom" placeholder="转移人员" clearable @keyup.enter.native="handleQuery"/>
+      <el-form-item label="转移人" prop="userFrom">
+        <el-select v-model="queryParams.userFrom" clearable placeholder="请输入 关键字拼音检索" filterable remote
+          :remote-method="getPersonOptions" :loading="flag.transferTargetPersonLoading">
+          <el-option v-for="item in personOptions" :key="item.userName" :label="item.nickName" :value="item.userName">
+            <span style="float: left">{{ item.nickName }}</span>
+            <span style="float: right; color: #8492a6; font-size: 13px">
+              {{ item.dept.deptName }}</span>
+          </el-option>
+        </el-select>
       </el-form-item>
-      <el-form-item label="转移目标" prop="userTo">
-        <el-input v-model="queryParams.userTo" placeholder="接收人员" clearable @keyup.enter.native="handleQuery"/>
+      <el-form-item label="接收人" prop="userTo">
+        <el-select v-model="queryParams.userTo" clearable placeholder="请输入 关键字拼音检索" filterable remote
+          :remote-method="getPersonOptions" :loading="flag.transferTargetPersonLoading">
+          <el-option v-for="item in personOptions" :key="item.userName" :label="item.nickName" :value="item.userId">
+            <span style="float: left">{{ item.nickName }}</span>
+            <span style="float: right; color: #8492a6; font-size: 13px">
+              {{ item.dept.deptName }}</span>
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="截至时间" prop="actionTime">
         <el-date-picker clearable v-model="queryParams.actionTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"
@@ -86,6 +100,7 @@ import {
   addTransferlog,
   updateTransferlog
 } from "@/api/crm/transferlog";
+import { listEmployee } from "@/api/crm/employee";
 
 export default {
   name: "Transferlog",
@@ -127,12 +142,16 @@ export default {
       columns: [
         {key: 0, label: `数据模块`, visible: true},
         {key: 1, label: `来源`, visible: true},
-        {key: 2, label: `目标`, visible: true},
+        {key: 2, label: `目标`, visible: false},
         {key: 3, label: `操作的记录的ID`, visible: true},
         {key: 4, label: `单次转移数量`, visible: false},
         {key: 5, label: `转移原因`, visible: false},
         {key: 6, label: `操作时间`, visible: false}
       ],
+      personOptions: [],
+      flag: {
+        transferTargetPersonLoading: false,
+      },
     };
   },
   created() {
@@ -146,6 +165,17 @@ export default {
         this.transferlogList = response.rows;
         this.total = response.total;
         this.loading = false;
+      });
+    },
+    getPersonOptions(query) {
+      this.flag.transferTargetPersonLoading = true
+      listEmployee({
+        pageNum: 1,
+        pageSize: 20,
+        userName: query,
+      }).then(response => {
+        this.personOptions = response.rows;
+        this.flag.transferTargetPersonLoading = false;
       });
     },
     // 取消按钮

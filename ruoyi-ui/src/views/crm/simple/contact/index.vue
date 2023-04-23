@@ -141,9 +141,9 @@
                        :show-overflow-tooltip="true"/>
       <el-table-column label="数据归属" align="center" prop="sourceId" v-if="columns[14].visible"
                        :show-overflow-tooltip="true"/>
-      <el-table-column label="所有者" align="center" prop="ownerName" v-if="columns[15].visible"
+      <el-table-column label="负责人" align="center" prop="ownerName" v-if="columns[15].visible"
                        :show-overflow-tooltip="true"/>
-      <el-table-column label="持有部门" align="center" prop="deptName" v-if="columns[16].visible"
+      <el-table-column label="隶属部门" align="center" prop="deptName" v-if="columns[16].visible"
                        :show-overflow-tooltip="true"/>
       <el-table-column label="创建者" align="center" prop="createBy" v-if="columns[17].visible"
                        :show-overflow-tooltip="true"/>
@@ -216,7 +216,9 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="所属公司" prop="company">
-              <el-input v-model="form.company" placeholder="请输入所属公司"/>
+              <el-input v-model="form.company" placeholder="请输入所属公司">
+              <el-button slot="append" icon="el-icon-search" @click="openCompanyDialog">本系统查找</el-button>
+</el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -300,12 +302,42 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+    <el-dialog :title="companyDialog.title" :visible.sync="companyDialog.open" :show-close="false" label-width="150px"
+      width="800px" append-to-body>
+      <el-form ref="companyDialog.form" :model="companyDialog.form" @submit.native.prevent>
+        <el-row>
+          <el-col :span="15">
+            <el-input v-model="companyDialog.form.companyName" placeholder="请输入公司名称关键字" clearable />
+          </el-col>
+          <el-col :span="5">
+            <el-button type="primary" icon="el-icon-search" size="mini" @click="getListCompanys">搜索</el-button>
+            <el-button icon="el-icon-refresh" size="mini" @click="companyDialog.form.companyName = ''">重置</el-button>
+          </el-col>
+        </el-row>
+      </el-form>
+      <el-table v-loading="flag.dialogCompanyTableLoading" highlight-current-row @current-change="handleCurrentChange"
+        :data="companyDialog.companys">
+        <el-table-column label="公司名称" align="center" prop="companyName" :show-overflow-tooltip="true" />
+        <el-table-column label="公司性质" align="center" prop="properties" :show-overflow-tooltip="true">
+          <template slot-scope="scope">
+            <dict-tag :options="dict.type.crm_company_properties_type" :value="scope.row.properties" />
+          </template>
+        </el-table-column>
+        <el-table-column label="公司法人" align="center" prop="legal" :show-overflow-tooltip="true" />
+        <el-table-column label="公司地址" align="center" prop="addrDetail" :show-overflow-tooltip="true" />
+      </el-table>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitCompanyDialogForm">确 定</el-button>
+        <el-button @click="cancelCompanyDialog">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import {listContact, getContact, delContact, addContact, updateContact} from "@/api/crm/contact";
 import {listAddr } from "@/api/system/addr";
+import { listCompany } from "@/api/crm/company";
 
 export default {
   name: "Contact",
@@ -399,12 +431,55 @@ export default {
         {key: 19, label: `更新者`, visible: false},
         {key: 20, label: `更新时间`, visible: false},
       ],
+      flag:{
+        dialogCompanyTableLoading:false,
+      },
+      companyDialog: {
+        // 弹出层标题
+        title: "公司信息查找",
+        // 是否显示弹出层
+        open: false,
+        form: {
+          pageNum: 1,
+          pageSize: 10,
+          businessScope:"SCOPE", // 公司业务中带SCOPE的 任何公司联系人都可以
+          companyName: ""
+        },
+        selectedCompany: {},
+        companys: []
+      },
     };
   },
   created() {
     this.getList();
   },
   methods: {
+    openCompanyDialog() {
+      this.companyDialog.open = true;
+    },
+    getListCompanys() {
+      this.flag.dialogCompanyTableLoading = true
+      listCompany(this.companyDialog.form).then(response => {
+        this.companyDialog.companys = (response.rows);
+        this.companyDialog.total = response.total;
+        this.flag.dialogCompanyTableLoading = false;
+      });
+    },
+    handleCurrentChange(val) {
+      this.companyDialog.selectedCompany = val
+    },
+    submitCompanyDialogForm() {
+      if (!this.companyDialog.selectedCompany||Object.keys(this.companyDialog.selectedCompany).length == 0) {
+        this.$modal.msgError("您还未选择公司信息");
+        return;
+      }
+      this.form.company = this.companyDialog.selectedCompany.companyName;
+      this.form.companyCode = this.companyDialog.selectedCompany.code;
+      this.companyDialog.open = false;
+    },
+    cancelCompanyDialog() {
+      this.companyDialog.open = false;
+    },
     /** 查询联系人列表 */
     getList() {
       this.loading = true;

@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="88px">
       <el-form-item label="商机code" prop="opportunityCode">
         <el-input
           v-model="queryParams.opportunityCode"
@@ -28,12 +28,14 @@
         </el-date-picker>
       </el-form-item>
       <el-form-item label="提报人" prop="creator">
-        <el-input
-          v-model="queryParams.creator"
-          placeholder="请输入提报人"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-select v-model="queryParams.creator" clearable placeholder="请输入 关键字拼音检索" filterable remote
+          :remote-method="getPersonOptions" :loading="flag.transferTargetPersonLoading">
+          <el-option v-for="item in personOptions" :key="item.userName" :label="item.nickName" :value="item.userName">
+            <span style="float: left">{{ item.nickName }}</span>
+            <span style="float: right; color: #8492a6; font-size: 13px">
+              {{ item.dept.deptName }}</span>
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="提报时间" prop="createTime">
         <el-date-picker clearable
@@ -181,6 +183,7 @@
 
 <script>
 import { listOppAdvances, getOppAdvances, delOppAdvances, addOppAdvances, updateOppAdvances } from "@/api/crm/oppAdvances";
+import { listEmployee } from "@/api/crm/employee";
 
 export default {
   name: "OppAdvances",
@@ -219,13 +222,29 @@ export default {
       form: {},
       // 表单校验
       rules: {
-      }
+      },
+      flag:{
+        transferTargetPersonLoading:false,
+      },
+      personOptions:[],
+
     };
   },
   created() {
     this.getList();
   },
   methods: {
+    getPersonOptions(query) {
+      this.flag.transferTargetPersonLoading = true
+      listEmployee({
+        pageNum: 1,
+        pageSize: 20,
+        userName: query,
+      }).then(response => {
+        this.personOptions = response.rows;
+        this.flag.transferTargetPersonLoading = false;
+      });
+    },
     /** 查询商机进展列表 */
     getList() {
       this.loading = true;

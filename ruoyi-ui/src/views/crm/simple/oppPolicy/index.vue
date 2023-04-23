@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="88px">
       <el-form-item label="商机Code" prop="opportunityCode">
         <el-input
           v-model="queryParams.opportunityCode"
@@ -17,7 +17,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="发布时间" prop="releaseDate">
+      <el-form-item label="发布截至" prop="releaseDate">
         <el-date-picker clearable
           v-model="queryParams.releaseDate"
           type="date"
@@ -117,7 +117,7 @@
 
     <!-- 添加或修改商机支持政策对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-form-item label="商机Code" prop="opportunityCode">
           <el-input v-model="form.opportunityCode" placeholder="请输入商机Code" />
         </el-form-item>
@@ -178,6 +178,10 @@ export default {
       form: {},
       // 表单校验
       rules: {
+        "opportunityCode": [
+            { required: true, message: "未填写 商机code", trigger: "blur" }
+          ],
+        
       }
     };
   },

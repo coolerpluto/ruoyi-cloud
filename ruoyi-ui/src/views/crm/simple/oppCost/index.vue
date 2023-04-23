@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="商机code" prop="opportunityCode">
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="98px">
+      <el-form-item label="商机Code" prop="opportunityCode">
         <el-input
           v-model="queryParams.opportunityCode"
           placeholder="请输入商机code"
@@ -9,7 +9,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="花费金额" prop="cost">
+      <el-form-item label="上限金额" prop="cost">
         <el-input
           v-model="queryParams.cost"
           placeholder="请输入花费金额"
@@ -17,7 +17,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="使用时间" prop="useTime">
+      <el-form-item label="截至时间" prop="useTime">
         <el-date-picker clearable
           v-model="queryParams.useTime"
           type="date"
@@ -117,8 +117,8 @@
     />
 
     <!-- 添加或修改商机花费对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-dialog :title="title" :visible.sync="open" width="550px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-form-item label="商机code" prop="opportunityCode">
           <el-input v-model="form.opportunityCode" placeholder="请输入商机code" />
         </el-form-item>
@@ -132,6 +132,9 @@
             value-format="yyyy-MM-dd"
             placeholder="请选择使用时间">
           </el-date-picker>
+        </el-form-item>
+        <el-form-item label="使用原因" prop="reason">
+              <el-input v-model="form.reason" type="textarea" resize="none" :rows="2" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -179,6 +182,22 @@ export default {
       form: {},
       // 表单校验
       rules: {
+        "opportunityCode": [
+            { required: true, message: "未填写 商机code", trigger: "blur" }
+          ],
+        
+        "cost":  [
+            { required: true, message: "未填写 花费金额", trigger: "blur" }
+          ],
+        
+        "useTime":  [
+            { required: true, message: "未填写 使用时间", trigger: "blur" }
+          ],
+        
+        "reason": [
+            { required: true, message: "未填写 使用原因", trigger: "blur" }
+          ],
+        
       }
     };
   },

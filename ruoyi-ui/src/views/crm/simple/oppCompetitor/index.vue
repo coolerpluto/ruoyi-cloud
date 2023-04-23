@@ -1,30 +1,16 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="竞争对手名称" prop="competitorName">
-        <el-input
-          v-model="queryParams.competitorName"
-          placeholder="请输入竞争对手名称"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+      <el-form-item label="对手名称" prop="competitorName">
+        <el-input v-model="queryParams.competitorName" placeholder="请输入竞争对手名称" clearable
+          @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item label="竟品名称" prop="product">
-        <el-input
-          v-model="queryParams.product"
-          placeholder="请输入竟品名称"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.product" placeholder="请输入竟品名称" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
-      <el-form-item label="具备相同优势" prop="hasSameAdvantage">
+      <el-form-item label="具备优势" prop="hasSameAdvantage">
         <el-select v-model="queryParams.hasSameAdvantage" placeholder="请选择具备相同优势" clearable>
-          <el-option
-            v-for="dict in dict.type.sys_yes_no"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
+          <el-option v-for="dict in dict.type.sys_yes_no" :key="dict.value" :label="dict.label" :value="dict.value" />
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -35,46 +21,20 @@
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['crm:oppCompetitor:add']"
-        >新增</el-button>
+        <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd"
+          v-hasPermi="['crm:oppCompetitor:add']">新增</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['crm:oppCompetitor:edit']"
-        >修改</el-button>
+        <el-button type="success" plain icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate"
+          v-hasPermi="['crm:oppCompetitor:edit']">修改</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['crm:oppCompetitor:remove']"
-        >删除</el-button>
+        <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete"
+          v-hasPermi="['crm:oppCompetitor:remove']">删除</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['crm:oppCompetitor:export']"
-        >导出</el-button>
+        <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
+          v-hasPermi="['crm:oppCompetitor:export']">导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -88,7 +48,7 @@
       <el-table-column label="对方优势" align="center" prop="advantage" />
       <el-table-column label="具备相同优势" align="center" prop="hasSameAdvantage">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.hasSameAdvantage"/>
+          <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.hasSameAdvantage" />
         </template>
       </el-table-column>
       <el-table-column label="备注" align="center" prop="memo" />
@@ -97,51 +57,66 @@
       <el-table-column label="更新时间" align="center" prop="updateTime" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['crm:oppCompetitor:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['crm:oppCompetitor:remove']"
-          >删除</el-button>
+          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
+            v-hasPermi="['crm:oppCompetitor:edit']">修改</el-button>
+          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
+            v-hasPermi="['crm:oppCompetitor:remove']">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
-    
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
-      @pagination="getList"
-    />
+
+    <pagination v-show="total > 0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize"
+      @pagination="getList" />
 
     <!-- 添加或修改竞争对手对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="竞争对手名称" prop="competitorName">
-          <el-input v-model="form.competitorName" placeholder="请输入竞争对手名称" />
-        </el-form-item>
-        <el-form-item label="竟品名称" prop="product">
-          <el-input v-model="form.product" placeholder="请输入竟品名称" />
-        </el-form-item>
-        <el-form-item label="具备相同优势" prop="hasSameAdvantage">
-          <el-select v-model="form.hasSameAdvantage" placeholder="请选择具备相同优势">
-            <el-option
-              v-for="dict in dict.type.sys_yes_no"
-              :key="dict.value"
-              :label="dict.label"
-              :value="dict.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
+    <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="竞争对手名称" prop="competitorName">
+              <el-input v-model="form.competitorName" placeholder="请输入竞争对手名称" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="竟品名称" prop="product">
+              <el-input v-model="form.product" placeholder="请输入竟品名称" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="产品单价" prop="unitPrice">
+              <el-input v-model="form.unitPrice" placeholder="请输入产品单价" />
+            </el-form-item>
+          </el-col>        
+          <el-col :span="12">
+            <el-form-item label="投标价格" prop="tenderPrice">
+              <el-input v-model="form.tenderPrice" placeholder="请输入投标价格" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="对方优势" prop="advantage">
+              <el-input v-model="form.advantage" placeholder="请输入对方优势" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="具备相同优势" prop="hasSameAdvantage">
+              <el-select v-model="form.hasSameAdvantage" placeholder="请选择具备相同优势">
+                <el-option v-for="dict in dict.type.sys_yes_no" :key="dict.value" :label="dict.label"
+                  :value="dict.value"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col>
+            <el-form-item label="备注" prop="memo">
+              <el-input v-model="form.memo" type="textarea" resize="none" :rows="2" />
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -242,7 +217,7 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
-      this.single = selection.length!==1
+      this.single = selection.length !== 1
       this.multiple = !selection.length
     },
     /** 新增按钮操作 */
@@ -284,12 +259,12 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
-      this.$modal.confirm('是否确认删除竞争对手编号为"' + ids + '"的数据项？').then(function() {
+      this.$modal.confirm('是否确认删除竞争对手编号为"' + ids + '"的数据项？').then(function () {
         return delOppCompetitor(ids);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
-      }).catch(() => {});
+      }).catch(() => { });
     },
     /** 导出按钮操作 */
     handleExport() {

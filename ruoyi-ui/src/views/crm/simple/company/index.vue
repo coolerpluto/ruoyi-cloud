@@ -20,14 +20,12 @@
         </el-select>
       </el-form-item>
       <el-form-item label="行业归属" prop="industry">
-        <el-select v-model="queryParams.industry" placeholder="请选择行业归属" clearable>
-          <el-option
-            v-for="dict in dict.type.crm_company_industry_type"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
+        <el-input
+          v-model="queryParams.industry"
+          placeholder="请输入行业归属"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />        
       </el-form-item>
       <el-form-item label="公司法人" prop="legal">
         <el-input
@@ -136,11 +134,7 @@
         </template>
       </el-table-column>
       <el-table-column label="行业归属" align="center" prop="industry" v-if="columns[2].visible"
-                       :show-overflow-tooltip="true">
-        <template slot-scope="scope">
-          <dict-tag :options="dict.type.crm_company_industry_type" :value="scope.row.industry"/>
-        </template>
-      </el-table-column>
+                       :show-overflow-tooltip="true"/>
       <el-table-column label="公司法人" align="center" prop="legal" v-if="columns[3].visible"
                        :show-overflow-tooltip="true"/>
       <el-table-column label="注册资金" align="center" prop="capitalReg" v-if="columns[4].visible"
