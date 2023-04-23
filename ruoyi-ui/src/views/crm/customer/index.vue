@@ -53,7 +53,7 @@
         </el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="success" plain icon="el-icon-tickets" size="mini" :disabled="multiple" @click="handleTransfer"
+        <el-button type="success" plain icon="el-icon-s-promotion" size="mini" :disabled="multiple" @click="handleTransfer"
           v-hasPermi="['crm:company:transfer']">批量交接
         </el-button>
       </el-col>
@@ -124,7 +124,7 @@
           <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
             v-hasPermi="['crm:company:edit']">修改
           </el-button>
-          <el-button size="mini" type="text" icon="el-icon-tickets" @click="handleTransfer(scope.row)"
+          <el-button size="mini" type="text" icon="el-icon-s-promotion" @click="handleTransfer(scope.row)"
             v-if="$store.getters.name == scope.row.ownerName" v-hasPermi="['crm:company:transfer']">交接
           </el-button>
           <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
@@ -972,7 +972,7 @@ export default {
       this.codes = selection.map(item => item.code);
       this.single = selection.length !== 1;
       this.multiple = !selection.length;
-      this.flag.selectedUnbeLongYou = selection.findIndex(item => { return item.createBy != this.$store.getters.name }) > -1 ? true : false;
+      this.flag.selectedUnbeLongYou = selection.findIndex(item => { return item.ownerName != this.$store.getters.name }) > -1 ? true : false;
     },
     // 查看客户详情
     handleDetail(row) {
@@ -1033,6 +1033,15 @@ export default {
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids
+      if (typeof id != 'string') {
+        if (this.flag.selectedUnbeLongYou) {
+          this.$modal.msgError("禁止操作，您选择了不属于您的数据请检查后再操作！");
+          return;
+        }
+      }else if(this.$store.getters.name != row.ownerName){
+        this.$modal.msgError("禁止操作，您选择了不属于您的数据请检查后再操作！");
+        return;
+      }
       getCompany(id).then(response => {
         this.form = response.data;
         this.form.addr = this.form.addr ? this.form.addr.split(',') : this.form.addr;
@@ -1056,15 +1065,19 @@ export default {
       const codes = row.code || this.codes;
       this.transfer.form = { params: {} }//Object.assign({}, row)
       if (typeof codes == 'string') {
+        if(this.$store.getters.name != row.ownerName){
+          this.$modal.msgError("禁止操作，您选择了不属于您的数据请检查后再操作！");
+          return;
+        }
         this.transfer.form.params.selectedCodes = [codes];
         this.transfer.form.params.companyIds = [ids];
       } else {
-        this.transfer.form.params.selectedCodes = codes;
-        this.transfer.form.params.companyIds = ids;
         if (this.flag.selectedUnbeLongYou) {
           this.$modal.msgError("禁止操作，您选择了不属于您的数据请检查后再操作！");
           return;
         }
+        this.transfer.form.params.selectedCodes = codes;
+        this.transfer.form.params.companyIds = ids;
       }
       this.transfer.open = true;
       this.transfer.title = '转移客/用户主负责人';
@@ -1223,13 +1236,17 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
+      const codes = row.code || this.codes;
       if (typeof ids != 'string') {
         if (this.flag.selectedUnbeLongYou) {
           this.$modal.msgError("禁止操作，您选择了不属于您的数据请检查后再操作！");
           return;
         }
+      }else if(this.$store.getters.name != row.ownerName){
+        this.$modal.msgError("禁止操作，您选择了不属于您的数据请检查后再操作！");
+        return;
       }
-      this.$modal.confirm('是否确认删除公司编号为"' + ids + '"的数据项？').then(function () {
+      this.$modal.confirm('是否确认删除公司编码为"' + codes + '"的数据项？').then(function () {
         return delCompany(ids);
       }).then(() => {
         this.getList();

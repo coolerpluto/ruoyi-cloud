@@ -48,18 +48,14 @@
                        v-if="columns[1].visible"/>
       <el-table-column label="共享源类型" align="center" prop="sourceType" v-if="columns[2].visible">
         <template slot-scope="{ row }">
-         <span v-for="(item, index) in shareTypes" :key="index">
-           {{ row.sourceType == item.value ? item.label : "" }}
-         </span>
+         {{ getShareTypeLable(row.sourceType) }}
         </template>
       </el-table-column>
       <el-table-column label="共享目标" align="center" prop="targetIds" :show-overflow-tooltip="true"
                        v-if="columns[3].visible"/>
       <el-table-column label="共享目标类型" align="center" prop="targetType" v-if="columns[4].visible">
         <template slot-scope="{ row }">
-         <span v-for="(item, index) in shareTypes" :key="index">
-           {{ row.targetType == item.value ? item.label : "" }}
-         </span>
+          {{ getShareTypeLable(row.targetType) }}
         </template>
       </el-table-column>
       <el-table-column label="共享目标权限" align="center" prop="permission" v-if="columns[5].visible">
@@ -107,7 +103,7 @@
           <el-col :span="12">
             <el-form-item label="共享源类型" prop="sourceType">
               <el-radio-group v-model="form.sourceType" @input="sourceTypeChange">
-                <el-radio v-for="type in shareTypes" :key="type.value" :label="type.value">{{ type.label }}
+                <el-radio v-for="item in shareTypes" :key="item.value" :label="item.value" :disabled="item.disabled">{{ item.label }}
                 </el-radio>
               </el-radio-group>
             </el-form-item>
@@ -132,7 +128,7 @@
           <el-col :span="12">
             <el-form-item label="共享目标类型" prop="targetType">
               <el-radio-group v-model="form.targetType" @input="targetTypeChange">
-                <el-radio v-for="type in shareTypes" :key="type.value" :label="type.value">{{ type.label }}
+                <el-radio v-for="item in shareTypes" :key="item.value" :label="item.value" :disabled="item.disabled">{{ item.label }}
                 </el-radio>
               </el-radio-group>
             </el-form-item>
@@ -246,11 +242,11 @@ export default {
         ],
       },
       shareTypes: [{
-        label: "人员", value: "u",
+        label: "人员", value: "u",disabled:false
       }, {
-        label: "部门", value: "d",
+        label: "部门", value: "d",disabled:false
       }, {
-        label: "部门及以下", value: "d+",
+        label: "部门及以下", value: "d+",disabled:false
       }],
       // 列信息
       columns: [
@@ -290,6 +286,14 @@ export default {
     targetTypeChange(param) {
       debugger
       this.form.targetIdList = []
+    },
+    getShareTypeLable(val){
+      for (var i = 0; i < this.shareTypes.length; i++) {
+        if (this.shareTypes[i].value == val) {
+          return this.shareTypes[i].label;
+        }
+      }
+      return "具体数据";
     },
     /** 查询共享规则配置列表 */
     getList() {
@@ -368,7 +372,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加共享规则配置";
+      this.title = "添加共享规则配置(此处未人员级和部门级)";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -380,7 +384,7 @@ export default {
         this.form.targetIdList = this.form.targetIds ? this.form.targetIds.split(',').map(t => +t) : [];
         this.form.sourceIdList = this.form.sourceIds ? this.form.sourceIds.split(',').map(t => +t) : [];
         this.open = true;
-        this.title = "修改共享规则配置";
+        this.title = "修改共享规则配置(此处未人员级和部门级)";
       });
     },
     /** 提交按钮 */
