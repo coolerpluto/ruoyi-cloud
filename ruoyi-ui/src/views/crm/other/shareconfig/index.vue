@@ -293,6 +293,7 @@ export default {
           return this.shareTypes[i].label;
         }
       }
+      return "具体数据";
     },
     /** 查询共享规则配置列表 */
     getList() {
