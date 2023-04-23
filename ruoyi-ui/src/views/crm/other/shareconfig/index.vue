@@ -103,7 +103,7 @@
           <el-col :span="12">
             <el-form-item label="共享源类型" prop="sourceType">
               <el-radio-group v-model="form.sourceType" @input="sourceTypeChange">
-                <el-radio v-for="item in shareTypes" :key="item.value" :label="item.value">{{ item.label }}
+                <el-radio v-for="item in shareTypes" :key="item.value" :label="item.value" :disabled="item.disabled">{{ item.label }}
                 </el-radio>
               </el-radio-group>
             </el-form-item>
@@ -128,7 +128,7 @@
           <el-col :span="12">
             <el-form-item label="共享目标类型" prop="targetType">
               <el-radio-group v-model="form.targetType" @input="targetTypeChange">
-                <el-radio v-for="item in shareTypes" :key="item.value" :label="item.value">{{ item.label }}
+                <el-radio v-for="item in shareTypes" :key="item.value" :label="item.value" :disabled="item.disabled">{{ item.label }}
                 </el-radio>
               </el-radio-group>
             </el-form-item>
@@ -242,11 +242,11 @@ export default {
         ],
       },
       shareTypes: [{
-        label: "人员", value: "u",
+        label: "人员", value: "u",disabled:false
       }, {
-        label: "部门", value: "d",
+        label: "部门", value: "d",disabled:false
       }, {
-        label: "部门及以下", value: "d+",
+        label: "部门及以下", value: "d+",disabled:false
       }],
       // 列信息
       columns: [
