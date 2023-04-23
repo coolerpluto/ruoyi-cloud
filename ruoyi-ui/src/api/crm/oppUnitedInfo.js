@@ -138,3 +138,12 @@ export function transferUnitedOpp(data) {
     data: data
   })
 }
+// 分享管理
+export function shareUnitedOpp(data) {
+  return request({
+    url: '/crm/oppUnited/share',
+    method: 'put',
+    data: data
+  })
+}
+

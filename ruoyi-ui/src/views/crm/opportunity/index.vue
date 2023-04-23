@@ -96,7 +96,7 @@
         </el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="success" plain icon="el-icon-edit" size="mini" :disabled="multiple" @click="handleTransfer"
+        <el-button type="success" plain icon="el-icon-s-promotion" size="mini" :disabled="multiple" @click="handleTransfer"
           v-hasPermi="['crm:opportunity:transfer']">批量转交
         </el-button>
       </el-col>
@@ -141,7 +141,7 @@
           <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
             v-if="$store.getters.name == scope.row.ownerName" v-hasPermi="['crm:opportunity:edit']">修改
           </el-button>
-          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleTransfer(scope.row)"
+          <el-button size="mini" type="text" icon="el-icon-s-promotion" @click="handleTransfer(scope.row)"
             v-if="$store.getters.name == scope.row.ownerName" v-hasPermi="['crm:opportunity:transfer']">转交
           </el-button>
           <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
@@ -188,7 +188,7 @@
 
 <script>
 import { delOpportunity } from "@/api/crm/opportunity";
-import { listUnitedOpp, delUnitedOpp, transferUnitedOpp } from "@/api/crm/oppUnitedInfo"
+import { listUnitedOpp, transferUnitedOpp } from "@/api/crm/oppUnitedInfo"
 import { listEmployee, deptTreeSelect} from "@/api/crm/employee";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
@@ -216,7 +216,7 @@ export default {
       // 弹出层标题
       title: "",
       // 部门树选项
-      deptOptions: undefined,
+      deptOptions: [],
       defaultProps: {
         children: "children",
         label: "label"
@@ -369,6 +369,15 @@ export default {
     /** 修改按钮操作 */
     handleUpdate(row) {
       const code = row.code || this.codes
+      if (typeof code != 'string') {
+        if (this.flag.selectedUnbeLongYou) {
+          this.$modal.msgError("禁止操作，您选择了不属于您的数据请检查后再操作！");
+          return;
+        }
+      }else if(this.$store.getters.name != row.ownerName){
+        this.$modal.msgError("禁止操作，您选择了不属于您的数据请检查后再操作！");
+        return;
+      }
       this.$router.push("/crm/opportunity-data/index/" + code + "/M");
     },
     /** 修改按钮操作 */
@@ -397,13 +406,17 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
+      const codes = row.code || this.codes;
       if (typeof ids != 'string') {
         if (this.flag.selectedUnbeLongYou) {
           this.$modal.msgError("禁止操作，您选择了不属于您的数据请检查后再操作！");
           return;
         }
+      }else if(this.$store.getters.name != row.ownerName){
+        this.$modal.msgError("禁止操作，您选择了不属于您的数据请检查后再操作！");
+        return;
       }
-      this.$modal.confirm('是否确认删除商机管理编号为"' + ids + '"的数据项？').then(function () {
+      this.$modal.confirm('是否确认删除商机管理编码为"' + codes + '"的数据项？').then(function () {
         return delOpportunity(ids);
       }).then(() => {
         this.getList();
