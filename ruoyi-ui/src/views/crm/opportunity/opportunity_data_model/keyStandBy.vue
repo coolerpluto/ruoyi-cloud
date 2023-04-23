@@ -38,7 +38,7 @@
         <el-row>
           <el-col :span="10">
             <el-form-item label="支持人员" prop="supportName">
-              <el-select v-model="keyStandByDialog.form.supportName" @change="getSupportor" placeholder="请输入 关键字拼音"
+              <el-select v-model="keyStandByDialog.form.supportName" @change="getSupportor" placeholder="请输入 关键字拼音" :disabled="flag.disableReSelect"
                 filterable remote :remote-method="getSupportorOptions" :loading="flag.keyStandByOptionsLoading">
                 <el-option v-for="item in keyStandByDialog.personOptions" :key="item.id" :label="item.userName"
                   :value="item.userName">
@@ -112,6 +112,7 @@ export default {
         keyStandByLoading: false,
         keyStandByNumVerify: false,
         keyStandByOptionsLoading: false,
+        disableReSelect: false,
       },
       //组件弹框承载
       keyStandByDialog: {
@@ -181,15 +182,17 @@ export default {
     editStandBy(row) {
       this.keyStandByDialog.form = Object.assign({}, row);
       this.keyStandByDialog.open = true;
-      this.keyStandByDialog.title = "修改进展信息";
+      this.flag.disableReSelect = true;
+      this.keyStandByDialog.title = "修改支持内容信息";
     },
     openDialog() {
       this.keyStandByDialog.form = {
         createTime: fecha.format(new Date(), 'yyyy-MM-dd HH:mm:ss'),
         opportunityStage: this.keyStandByDialog.form.opportunityStage || this.stageShow + ""
       }
+      this.flag.disableReSelect = false;
       this.keyStandByDialog.open = true;
-      this.keyStandByDialog.title = "添加进展信息";
+      this.keyStandByDialog.title = "添加支持人以及内容";
       this.getSupportorOptions()
     },
     getSupportor(selected) {
