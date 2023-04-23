@@ -82,7 +82,7 @@
             </if>
             <if test="properties != null  and properties != ''">and tc.properties like concat('%', #{properties}, '%')
             </if>
-            <if test="industry != null  and industry != ''">and tc.industry = #{industry}</if>
+            <if test="industry != null  and industry != ''">and tc.industry like concat('%', #{industry}, '%')</if>
             <if test="industryCategory != null  and industryCategory != ''">and tc.industry_category = #{industryCategory}</if>
             <if test="industrySubcategory != null  and industrySubcategory != ''">and tc.industry_subcategory = #{industrySubcategory}</if>
             <if test="legal != null  and legal != ''">and tc.legal like concat('%', #{legal}, '%')</if>

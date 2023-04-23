@@ -24,7 +24,6 @@
         <include refid="selectOpportunityQuotationVo"/>
         <where>
             <if test="opportunityCode != null  and opportunityCode != ''"> and opportunity_code = #{opportunityCode}</if>
-            <if test="quotationJson != null  and quotationJson != ''"> and quotation_json = #{quotationJson}</if>
             <if test="opportunityStage != null  and opportunityStage != ''"> and opportunity_stage = #{opportunityStage}</if>
             <if test="createBy != null  and createBy != ''"> and create_by like concat('%', #{createBy}, '%')</if>
             <if test="createTime != null "> and create_time = #{createTime}</if>

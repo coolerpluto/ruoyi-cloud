@@ -52,7 +52,7 @@
     <select id="selectApplicationList" parameterType="Application" resultMap="ApplicationResult">
         <include refid="selectApplicationVo"/>
         <where>
-            <if test="name != null  and name != ''"> and name = #{name}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name},'%')</if>
             <if test="version != null  and version != ''"> and version = #{version}</if>
             <if test="category != null  and category != ''"> and category = #{category}</if>
             <if test="categoryL1 != null  and categoryL1 != ''"> and category_l1 = #{categoryL1}</if>

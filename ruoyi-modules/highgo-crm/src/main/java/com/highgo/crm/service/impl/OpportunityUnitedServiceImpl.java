@@ -441,6 +441,7 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
                 application.setName(opera.getApplicationName());
                 application.setIsv(Long.valueOf(opera.getIsvId()));
                 application.setDataBase(opera.getDbBase());
+                application.setDbAdaptStatus(opera.getCurrentAdaptedProgress());
                 applicationService.insertApplication(application);
                 opera.setApplicationId(Long.valueOf(application.getId()));
                 opera.setOpportunityCode(getOppoCode(opportunity));
@@ -513,7 +514,7 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
             for (OpportunityContactInfo contact : contact_a)
             {
                 contact.setOpportunityCode(code);
-                contact.setSourceType("opportunity");
+                contact.setSourceType("OPPO");
                 contact.setSourceId(code);
                 contactService.insertContact(contact);
                 contact.setContactId(Long.valueOf(contact.getId()));//设置关联
@@ -959,7 +960,7 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
                 String status = property.getStatus();
                 if (StringUtils.isEmpty(status))
                 {
-                    status = "1";
+                    status = "0";
                     property.setStatus(status);
                 }
                 property.setOpportunityCode(code);
