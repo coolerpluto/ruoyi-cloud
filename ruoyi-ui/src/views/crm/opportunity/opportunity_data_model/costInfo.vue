@@ -34,7 +34,7 @@
           </template>
         </el-table-column>
       </el-table>
-
+      <div id="costNumVerify" align="center" v-if="flag.costNumVerify">至少有一条费用记录</div>
     </el-form>
     <!-- 添加或修改信息记录对话框 -->
     <el-dialog :title="costInfosDialog.title" :visible.sync="costInfosDialog.open" width="800px" append-to-body>
@@ -127,7 +127,7 @@ export default {
       costInfoOriginBak: {},
       flag: {
         contactInfoLoading: false,
-        contactNumVerify: false,
+        costNumVerify: false,
         personOptionsLoading: false,
       },
       //组件弹框承载
@@ -262,10 +262,11 @@ export default {
     // 提供本组件的数据校验
     infoVerify() {
       let flag = true
-      if (!this.costInfoForm.costInfos || this.costInfoForm.costInfos.length == 0) {
-        this.flag.contactNumVerify = true
-        flag = false
-      }
+      // 校验花费记录数量
+      // if (!this.costInfoForm.costInfos || this.costInfoForm.costInfos.length == 0) {
+      //   this.flag.costNumVerify = true
+      //   flag = false
+      // }
       this.$refs["costInfoForm"].validate(valid => {
         if (!valid) {
           flag = false
@@ -325,7 +326,7 @@ export default {
 </script>
 
 <style scoped>
-#contactNumVerify {
+#costNumVerify {
   color: #ff4949;
   font-size: 12px;
   line-height: 3;
