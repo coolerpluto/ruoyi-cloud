@@ -1033,15 +1033,16 @@ export default {
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids
-      if (typeof id != 'string') {
-        if (this.flag.selectedUnbeLongYou) {
-          this.$modal.msgError("禁止操作，您选择了不属于您的数据请检查后再操作！");
-          return;
-        }
-      }else if(this.$store.getters.name != row.ownerName){
-        this.$modal.msgError("禁止操作，您选择了不属于您的数据请检查后再操作！");
-        return;
-      }
+      // 若是禁止非主负责人修改则放开下面代码
+      // if (typeof id != 'string') {
+      //   if (this.flag.selectedUnbeLongYou) {
+      //     this.$modal.msgError("禁止操作，您选择了不属于您的数据请检查后再操作！");
+      //     return;
+      //   }
+      // }else if(this.$store.getters.name != row.ownerName){
+      //   this.$modal.msgError("禁止操作，您选择了不属于您的数据请检查后再操作！");
+      //   return;
+      // }
       getCompany(id).then(response => {
         this.form = response.data;
         this.form.addr = this.form.addr ? this.form.addr.split(',') : this.form.addr;
