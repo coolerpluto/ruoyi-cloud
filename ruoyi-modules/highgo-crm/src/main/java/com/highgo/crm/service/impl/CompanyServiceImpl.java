@@ -55,7 +55,7 @@ public class CompanyServiceImpl implements ICompanyService
      * @return 公司
      */
     @Override
-    @CrmDataScope(deptAlias = "sd", userAlias = "su")
+    //@CrmDataScope(deptAlias = "sd", userAlias = "su")
     public List<Company> selectCompanyList(Company company)
     {
         return companyMapper.selectCompanyList(company);
