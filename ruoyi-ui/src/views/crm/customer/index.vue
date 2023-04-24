@@ -293,12 +293,18 @@
       </el-steps>
       <div id="stepsArea" v-if="baseCompanyReadOnly">
         <div id="customerOppArea" v-if="companyDetailActive === 1">
-          <el-table v-loading="loading" :data="customerContactList" key="one">
-            <el-table-column label="联系人" align="center" prop="name" :show-overflow-tooltip="true" />
-            <el-table-column label="手机(主)" align="center" prop="priPhone" :show-overflow-tooltip="true" />
-            <el-table-column label="邮件(主)" align="center" prop="priEmail" :show-overflow-tooltip="true" />
+          <el-table v-loading="loading" :data="customerOppoList" key="one">
+            <el-table-column label="商机Code" align="center" prop="code" :show-overflow-tooltip="true" />
+            <el-table-column label="商机名称" align="center" prop="name" :show-overflow-tooltip="true" />
+            <el-table-column label="当前阶段" align="center" prop="currentStage" :show-overflow-tooltip="true" />
+            <el-table-column label="归属者" align="center" prop="nickName" :show-overflow-tooltip="true" />
+            <el-table-column label="投标时间" align="center" prop="preTenderDate" :show-overflow-tooltip="true" />
+            <el-table-column label="预计合同金额" align="center" prop="preContractVal" :show-overflow-tooltip="true" />
+            <el-table-column label="创建时间" align="center" prop="createTime" :show-overflow-tooltip="true" />
           </el-table>
-          <!-- TODO 待商机完成后完成-->
+          <pagination v-show="customerOppoTotal > 0" :pageSizes="[4, 6, 8]" :total="customerOppoTotal"
+            :page.sync="queryCustomerOppoParams.pageNum" :limit.sync="queryCustomerOppoParams.pageSize"
+            @pagination="queryCustomerOppoList" />
         </div>
         <div id="customerContactArea" v-if="companyDetailActive === 2">
           <el-table v-loading="loading" :data="customerContactList" key="two">
@@ -638,6 +644,7 @@ import {
 import { listContact, getContact, delContact, addContact, updateContact } from "@/api/crm/contact";
 import { getDicts as getDicts } from '@/api/system/dict/data'
 import fecha from 'element-ui/src/utils/date';
+import { listUnitedOpp } from "@/api/crm/oppUnitedInfo"
 
 export default {
   name: "CUST",
@@ -671,10 +678,13 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
+      customerOppoTotal: 0,
       customerContactTotal: 0,
       customerAppTotal: 0,
       // 公司表格数据
       companyList: [],
+      // 公司商机表格数据
+      customerOppoList: [],
       // 公司联系人表格数据
       customerContactList: [],
       // 公司项目应用表格数据
@@ -700,6 +710,10 @@ export default {
         pageSize: 4,
       },
       queryCustomerContactParams: {
+        pageNum: 1,
+        pageSize: 4,
+      },
+      queryCustomerOppoParams: {
         pageNum: 1,
         pageSize: 4,
       },
@@ -1127,7 +1141,7 @@ export default {
       switch (newStep) {
         case 1:
           // TODO
-          this.queryCustomerContactList();
+          this.queryCustomerOppoList();
           break;
         case 2:
           this.queryCustomerContactList();
@@ -1137,10 +1151,22 @@ export default {
           break;
       }
     },
+    queryCustomerOppoList(){
+      this.loading = true;
+      this.queryCustomerOppoParams.id = this.form.id;//公司ID
+      this.queryCustomerOppoParams.code = this.form.code;//公司编码
+      this.queryCustomerOppoParams.companyName = this.form.companyName;//公司名称
+      //this.queryCustomerOppoParams.sourceType = "CUST";
+      listUnitedOpp(this.queryCustomerOppoParams).then(response => {
+        this.customerOppoList = response.rows;
+        this.customerOppoTotal = response.total;
+        this.loading = false;
+      });
+    },
     queryCustomerContactList() {
       this.loading = true;
       this.queryCustomerContactParams.sourceId = this.form.id;
-      this.queryCustomerContactParams.sourceType = "CUST";
+      //this.queryCustomerContactParams.sourceType = "CUST";
       listContact(this.queryCustomerContactParams).then(response => {
         this.customerContactList = response.rows;
         this.customerContactTotal = response.total;
@@ -1150,7 +1176,7 @@ export default {
     queryCustomerAppList() {
       this.loading = true;
       this.queryCustomerAppParams.sourceId = this.form.id;
-      this.queryCustomerAppParams.sourceType = "CUST";
+      //this.queryCustomerAppParams.sourceType = "CUST";
       listApplication(this.queryCustomerAppParams).then(response => {
         this.customerAppList = response.rows;
         this.customerAppTotal = response.total;
