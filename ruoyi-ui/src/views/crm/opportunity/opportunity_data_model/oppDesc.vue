@@ -64,7 +64,7 @@
               <el-radio v-model="oppDescForm.chosedFlag.propertyVal" label="Y">有</el-radio>
               <el-radio v-model="oppDescForm.chosedFlag.propertyVal" label="N">无</el-radio>
             </el-form-item>
-          </el-col>o
+          </el-col>
           <el-col :span="8">
             <el-form-item label="是否批准立项" prop="approveFlag.propertyVal">
               <el-radio v-model="oppDescForm.approveFlag.propertyVal" label="Y">是</el-radio>

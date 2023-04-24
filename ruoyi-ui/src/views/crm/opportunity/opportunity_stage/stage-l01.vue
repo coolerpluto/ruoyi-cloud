@@ -5,8 +5,8 @@
     <cust-info :oppdata="oppdata" ref="custInfo"></cust-info>
     <policyStandBy :oppdata="oppdata" ref="policyStandBy"></policyStandBy>
     <opp-desc :oppdata="oppdata" ref="oppDesc" :stage-show="1"></opp-desc>
-    <advances-info :oppdata="oppdata" ref="advancesInfo" :stage-show="1" v-if="oppdata.action != 'A'"></advances-info>
-    <key-stand-by :oppdata="oppdata" ref="keyStandBy" :stage-show="1" v-if="oppdata.action != 'A'"></key-stand-by>
+    <advances-info :oppdata="oppdata" ref="advancesInfo" :stage-show="1"></advances-info>
+    <key-stand-by :oppdata="oppdata" ref="keyStandBy" :stage-show="1"></key-stand-by>
   </div>
 </template>
 

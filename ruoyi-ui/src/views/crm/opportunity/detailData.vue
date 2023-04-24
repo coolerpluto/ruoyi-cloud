@@ -58,7 +58,7 @@
       <div id="reActiveButArea" v-if="flag.showReActiveBut">
         <el-button-group>
           <el-button type="primary" icon="el-icon-unlock" @click="reActiveOpportunity()">
-            重新激活到L2
+            重新激活
           </el-button>
         </el-button-group>
       </div>
@@ -354,7 +354,7 @@ export default {
           reqBody['actionReason'] = this.$refs.stage08.$refs.actionReason.collectInfo().modifyedData;
           reqBody['winningBidding'] = this.$refs.stage08.$refs.winningBidding.collectInfo().modifyedData;
           reqBody['summaryInfo'] = this.$refs.stage08.$refs.summaryInfo.collectInfo().modifyedData;
-          reqBody['costInfo'] = this.$refs.stage06.$refs.costInfo.collectInfo().modifyedData;
+          reqBody['costInfo'] = this.$refs.stage08.$refs.costInfo.collectInfo().modifyedData;
           break;
         case 9:
           reqBody['quotationInfo'] = this.$refs.stage09.$refs.quotationInfo.collectInfo().modifyedData;
@@ -435,7 +435,7 @@ export default {
           let actionReason8 = this.$refs.stage08.$refs.actionReason.infoVerify(),
             winningBidding8 = this.$refs.stage08.$refs.winningBidding.infoVerify(),
             summaryInfo8 = this.$refs.stage08.$refs.summaryInfo.infoVerify(),
-            costInfo8 = this.$refs.stage06.$refs.costInfo.infoVerify();
+            costInfo8 = this.$refs.stage08.$refs.costInfo.infoVerify();
           return actionReason8 && winningBidding8 && summaryInfo8 && costInfo8;
         case 9:
           let quotationInfo9 = this.$refs.stage09.$refs.quotationInfo.infoVerify(),
@@ -524,7 +524,7 @@ export default {
       this.flag.hasSaveOrUpdate = false;
     },
     reActiveOpportunity() {
-      this.changeStage(2);
+      this.changeStage(3);
     }
   }
 }
