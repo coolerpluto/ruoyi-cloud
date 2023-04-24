@@ -87,7 +87,7 @@
                max(case when top.property_key = 'preContractVal' then top.property_val end) preContractVal
         from t_opportunity tc
                  left join t_company tc2 on tc.cust_id = tc2.id
-                 left join t_opportunity_property top on (top.status = '1' and tc.code = top.opportunity_code)
+                 left join t_opportunity_property top on (top.status = '0' and tc.code = top.opportunity_code)
                  left join remote_db.sys_dept sd on tc.dept_id = sd.dept_id
                  left join remote_db.sys_user su on su.user_id = tc.owner_id
     </sql>
@@ -525,7 +525,7 @@
                  left join t_contact tc
                            on tc.id = toci.contact_id and tc.source_id = toci.opportunity_code
                  left join t_company tc2 on tc.company_code = tc2.code
-        where tc.source_type = 'opportunity'
+        where tc.source_type = 'OPPO'
           and tc.source_id = #{oppCode}
         order by tc.create_time desc, tc.update_time desc
     </select>

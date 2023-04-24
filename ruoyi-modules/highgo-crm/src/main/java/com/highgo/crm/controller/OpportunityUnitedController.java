@@ -122,7 +122,7 @@ public class OpportunityUnitedController extends BaseController
         log.info("getPropertiesMap res:{},", JSON.toJSONString(properties));
         for (OpportunityProperty property:properties)
         {
-            if (!StringUtils.equals(property.getStatus(),"1")){
+            if (!StringUtils.equals(property.getStatus(),"0")){
                 continue;
             }
             res.put(property.getPropertyKey(),property);
