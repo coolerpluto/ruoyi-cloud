@@ -18,9 +18,9 @@
             <dict-tag :options="dict.type.crm_company_properties_type" :value="scope.row.companyProperty" />
           </template>
         </el-table-column>
-        <el-table-column label="人员角色" align="center" prop="roleInCompany" :show-overflow-tooltip="true">
+        <el-table-column label="人员角色" align="center" prop="roleInOppo" :show-overflow-tooltip="true">
           <template slot-scope="scope">
-            <dict-tag :options="dict.type.crm_external_person_role" :value="scope.row.roleInCompany" />
+            <dict-tag :options="dict.type.crm_external_person_role" :value="scope.row.roleInOppo" />
           </template>
         </el-table-column>
         <el-table-column label="人员职务" align="center" prop="postInCompany" :show-overflow-tooltip="true" />
@@ -120,8 +120,8 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="人员角色" prop="roleInCompany">
-              <el-select v-model="keyContactsDialog.form.roleInCompany" placeholder="请录入人员角色">
+            <el-form-item label="人员角色" prop="roleInOppo">
+              <el-select v-model="keyContactsDialog.form.roleInOppo" placeholder="请录入人员角色">
                 <el-option v-for="dict in dict.type.crm_external_person_role" :key="dict.value" :label="dict.label"
                   :value="dict.value"></el-option>
               </el-select>
@@ -271,7 +271,7 @@ export default {
           relationship: [
             { required: true, message: "关系程度不能为空", trigger: "blur" }
           ],
-          roleInCompany: [
+          roleInOppo: [
             { required: true, message: "人员角色不能为空", trigger: "blur" }
           ],
         },

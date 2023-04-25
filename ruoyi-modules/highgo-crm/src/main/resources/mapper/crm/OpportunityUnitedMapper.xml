@@ -494,6 +494,7 @@
         <result property="company" column="company"/>
         <result property="companyCode" column="company_code"/>
         <result property="companyProperty" column="properties"/>
+        <result property="roleInOppo" column="role_in_oppo"/>
         <result property="roleInCompany" column="role_in_company"/>
         <result property="postInCompany" column="post_in_company"/>
         <result property="deptInCompany" column="dept_in_company"/>

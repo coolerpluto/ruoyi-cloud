@@ -295,12 +295,28 @@
       </el-steps>
       <div id="stepsArea" v-if="baseCompanyReadOnly">
         <div id="channelOppArea" v-if="companyDetailActive === 1">
-          <el-table v-loading="loading" :data="channelContactList" key="one">
-            <el-table-column label="联系人" align="center" prop="name" :show-overflow-tooltip="true"/>
-            <el-table-column label="手机(主)" align="center" prop="priPhone" :show-overflow-tooltip="true"/>
-            <el-table-column label="邮件(主)" align="center" prop="priEmail" :show-overflow-tooltip="true"/>
+          <el-table v-loading="loading" :data="channelOppoList" key="one">
+            <el-table-column label="商机Code" align="center" prop="code" :show-overflow-tooltip="true">
+              <template slot-scope="scope">
+                <router-link :to="'/crm/opportunity-data/index/'+scope.row.code+ '/V'" class="link-type">
+                  <span>{{ scope.row.code }}</span>
+                </router-link>
+              </template>
+            </el-table-column>
+            <el-table-column label="商机名称" align="center" prop="name" :show-overflow-tooltip="true"/>
+            <el-table-column label="当前阶段" align="center" prop="currentStage" :show-overflow-tooltip="true">
+              <template slot-scope="scope">
+                <dict-tag :options="dict.type.crm_opportunity_status" :value="scope.row.currentStage"/>
+              </template>
+            </el-table-column>
+            <el-table-column label="归属者" align="center" prop="nickName" :show-overflow-tooltip="true"/>
+            <el-table-column label="投标时间" align="center" prop="preTenderDate" :show-overflow-tooltip="true"/>
+            <el-table-column label="预计合同金额" align="center" prop="preContractVal" :show-overflow-tooltip="true"/>
+            <el-table-column label="创建时间" align="center" prop="createTime" :show-overflow-tooltip="true"/>
           </el-table>
-          <!-- TODO 待商机完成后完成-->
+          <pagination v-show="channelOppoTotal > 0" :pageSizes="[4, 6, 8]" :total="channelOppoTotal"
+                      :page.sync="queryChannelOppoParams.pageNum" :limit.sync="queryChannelOppoParams.pageSize"
+                      @pagination="queryChannelOppoList"/>
         </div>
         <div id="channelContactArea" v-if="companyDetailActive === 2">
           <el-table v-loading="loading" :data="channelContactList" key="two">
@@ -428,10 +444,24 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="软件门类" prop="category">
-              <el-input v-model="formApp.category" placeholder="请输入应用软件归属门类"/>
+            <el-form-item label="软件分类大类" prop="categoryL1">
+              <el-select v-model="formApp.categoryL1" @change="handleSelectCategoryL1" placeholder="请选择应用软件归属大类">
+                <el-option v-for="item in appArea.categoryL1Options" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue"></el-option>
+              </el-select>
             </el-form-item>
           </el-col>
+          <el-col :span="10">
+            <el-form-item label="软件分类小类" prop="categoryL2">
+              <el-select v-model="formApp.categoryL2" placeholder="请选择应用软件归属小类">
+                <el-option v-for="item in appArea.categoryL2Options" :key="item.dictValue" :label="item.dictLabel"
+                           :value="item.dictValue">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="12">
             <el-form-item label="资金来源" prop="sysBuildMoney">
               <el-select v-model="formApp.sysBuildMoney" placeholder="请选择应用建设资金来源">
@@ -440,18 +470,9 @@
               </el-select>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="12">
-            <el-form-item label="软件开发商" prop="isv">
-              <!-- TODO 待商机完成后完成 整改成下拉框 -->
-              <el-input v-model="formApp.isv" placeholder="请输入应用软件开发商(保存的公司的code)"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="开发商联系人" prop="isvContactId">
-              <!-- TODO 待商机完成后完成 整改成下拉框 -->
-              <el-input v-model="formApp.isvContactId" placeholder="请输入应用软件开发商联系人(保存的人的ID)" :disabled="!formApp.isv"/>
+            <el-form-item label="软件开发商" prop="isvName">
+              <el-input v-model="formApp.isvName" placeholder="请输入应用软件开发商"/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -619,9 +640,6 @@
         <el-button @click="cancelContact">取 消</el-button>
       </div>
     </el-dialog>
-    渠道管理开发中。。。<br>
-    完成：渠道基本信息 渠道联系人 渠道应用管理 （新增 修改 删除）<br>
-    待完成：商机关联查询
   </div>
 </template>
 
@@ -630,23 +648,15 @@ import {listEmployee, deptTreeSelect} from "@/api/crm/employee";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 import {
-  listCompany,
-  transferCompanyOwner,
-  tianYanChaSearch,
-  getCompany,
-  delCompany,
-  addCompany,
-  updateCompany
+  listCompany, transferCompanyOwner, tianYanChaSearch,
+  getCompany, delCompany, addCompany, updateCompany,
+  listOppoByCompany, listAppByCompany, listContactByCompany
 } from "@/api/crm/company";
 import {listAddr} from "@/api/system/addr";
 import {
-  listApplication,
-  getApplication,
-  delApplication,
-  addApplication,
-  updateApplication
+  getApplication, delApplication, addApplication, updateApplication
 } from "@/api/crm/application";
-import {listContact, getContact, delContact, addContact, updateContact} from "@/api/crm/contact";
+import {getContact, delContact, addContact, updateContact} from "@/api/crm/contact";
 import {getDicts as getDicts} from '@/api/system/dict/data'
 import fecha from 'element-ui/src/utils/date';
 
@@ -663,6 +673,7 @@ export default {
     'sys_work_progress',
     'sys_system_db_type',
     'sys_operating_system',
+    'crm_opportunity_status',
   ],
   data() {
     return {
@@ -682,10 +693,13 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
+      channelOppoTotal: 0,
       channelContactTotal: 0,
       channelAppTotal: 0,
       // 公司表格数据
       companyList: [],
+      // 公司商机表格数据
+      channelOppoList: [],
       // 公司联系人表格数据
       channelContactList: [],
       // 公司项目应用表格数据
@@ -714,12 +728,20 @@ export default {
         pageNum: 1,
         pageSize: 4,
       },
+      queryChannelOppoParams: {
+        pageNum: 1,
+        pageSize: 4,
+      },
       // 表单参数
       form: {},
       personOptions: [],
       industryCategories: [],
       industrySubcategories: [],
       formApp: {},
+      appArea: {
+        categoryL1Options: [],
+        categoryL2Options: [],
+      },
       formContact: {},
       // 表单校验
       rules: {
@@ -1139,8 +1161,7 @@ export default {
       this.companyDetailActive = newStep;
       switch (newStep) {
         case 1:
-          // TODO
-          this.queryChannelContactList();
+          this.queryChannelOppoList();
           break;
         case 2:
           this.queryChannelContactList();
@@ -1150,11 +1171,25 @@ export default {
           break;
       }
     },
+    queryChannelOppoList() {
+      this.loading = true;
+      this.queryChannelOppoParams.id = this.form.id;//公司ID
+      this.queryChannelOppoParams.code = this.form.code;//公司编码
+      listOppoByCompany(this.queryChannelOppoParams).then(response => {
+        this.channelOppoList = response.rows;
+        this.channelOppoTotal = response.total;
+        this.loading = false;
+      });
+    },
+    handleOppoView(row) {
+      const code = row.code;
+      this.$router.push("/crm/opportunity-data/index/" + code + "/V");
+    },
     queryChannelContactList() {
       this.loading = true;
-      this.queryChannelContactParams.sourceId = this.form.id;
-      this.queryChannelContactParams.sourceType = "CHAN";
-      listContact(this.queryChannelContactParams).then(response => {
+      this.queryChannelContactParams.id = this.form.id;
+      this.queryChannelContactParams.code = this.form.code;
+      listContactByCompany(this.queryChannelContactParams).then(response => {
         this.channelContactList = response.rows;
         this.channelContactTotal = response.total;
         this.loading = false;
@@ -1162,13 +1197,38 @@ export default {
     },
     queryChannelAppList() {
       this.loading = true;
-      this.queryChannelAppParams.sourceId = this.form.id;
-      this.queryChannelAppParams.sourceType = "CHAN";
-      listApplication(this.queryChannelAppParams).then(response => {
+      this.queryChannelAppParams.id = this.form.id;
+      listAppByCompany(this.queryChannelAppParams).then(response => {
         this.channelAppList = response.rows;
         this.channelAppTotal = response.total;
         this.loading = false;
       });
+    },
+    handleSelectCategoryL1(val) {
+      let select = this.appArea.categoryL1Options.find(item => {
+        return item.dictValue == val;
+      })
+      debugger
+      if (!select) {
+        return;
+      }
+      var _this = this;
+      this.getCtegoryByCode(select.remark, function (res) {
+        _this.appArea.categoryL2Options = res;
+        _this.$set(_this.formApp, 'categoryL2', '');
+      });
+    },
+    getSelectCategoryL1(func) {
+      var _this = this;
+      this.getCtegoryByCode('crm_software_category', function (res) {
+        _this.appArea.categoryL1Options = res;
+        _this.appArea.categoryL2Options = [];
+        if (typeof func == 'function') {
+          func();
+        }
+      });
+      this.$set(this.appArea, 'categoryL1Options', []);
+      this.$set(this.appArea, 'categoryL2Options', []);
     },
     cancelApp() {
       this.openAppArea = false;
@@ -1181,6 +1241,13 @@ export default {
     submitAppForm() {
       this.$refs["formApp"].validate(valid => {
         if (valid) {
+          let selectCategoryL1 = this.appArea.categoryL1Options.find(item => {
+            return item.dictValue == this.formApp.categoryL1;
+          });
+          let selectCategoryL2 = this.appArea.categoryL2Options.find(item => {
+            return item.dictValue == this.formApp.categoryL2;
+          })
+          this.formApp.category = selectCategoryL1.dictLabel + "/" + selectCategoryL2.dictLabel;
           if (this.formApp.id != null) {
             updateApplication(this.formApp).then(response => {
               this.$modal.msgSuccess("修改成功");
@@ -1289,6 +1356,7 @@ export default {
       this.formApp.sourceId = this.form.id;
       this.formApp.sourceType = "CHAN";
       this.appAreaTitle = "添加渠道项目/应用";
+      this.getSelectCategoryL1();
     },
     handleUpdateChannelContact(row) {
       this.resetContact();
@@ -1306,6 +1374,18 @@ export default {
         this.formApp = response.data;
         this.openAppArea = true;
         this.appAreaTitle = "修改渠道项目/应用";
+        var _this = this;
+        this.getSelectCategoryL1(function () {
+          let select = _this.appArea.categoryL1Options.find(item => {
+            return item.dictValue == _this.formApp.categoryL1;
+          })
+          if (!select) {
+            return;
+          }
+          _this.getCtegoryByCode(select.remark, function (res) {
+            _this.appArea.categoryL2Options = res;
+          });
+        });
       });
     },
     handleDeleteChannelApp(row) {

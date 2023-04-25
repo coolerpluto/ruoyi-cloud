@@ -44,6 +44,7 @@ public class Contact extends BaseEntity {
      */
     @Excel(name = "公司内角色")
     private String roleInCompany;
+    private String roleInOppo;
 
     /**
      * 公司内职务
@@ -128,6 +129,16 @@ public class Contact extends BaseEntity {
      * 更新者ID
      */
     private Long updateId;
+
+    public String getRoleInOppo()
+    {
+        return roleInOppo;
+    }
+
+    public void setRoleInOppo(String roleInOppo)
+    {
+        this.roleInOppo = roleInOppo;
+    }
 
     public String getOwnerName() {
         return ownerName;

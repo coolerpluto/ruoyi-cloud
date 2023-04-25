@@ -10,6 +10,7 @@
         <result property="sex" column="sex"/>
         <result property="company" column="company"/>
         <result property="companyCode" column="company_code"/>
+        <result property="roleInOppo" column="role_in_oppo"/>
         <result property="roleInCompany" column="role_in_company"/>
         <result property="postInCompany" column="post_in_company"/>
         <result property="deptInCompany" column="dept_in_company"/>
@@ -40,6 +41,7 @@
                sex,
                company,
                company_code,
+               role_in_oppo,
                role_in_company,
                post_in_company,
                dept_in_company,
@@ -70,6 +72,7 @@
             <if test="sex != null  and sex != ''">and sex = #{sex}</if>
             <if test="company != null  and company != ''">and company like concat('%', #{company}, '%')</if>
             <if test="companyCode != null  and companyCode != ''">and company_code like concat('%', #{companyCode}, '%')</if>
+            <if test="roleInOppo != null  and roleInOppo != ''">and role_in_oppo = #{roleInOppo}</if>
             <if test="roleInCompany != null  and roleInCompany != ''">and role_in_company = #{roleInCompany}</if>
             <if test="postInCompany != null  and postInCompany != ''">and post_in_company = #{postInCompany}</if>
             <if test="deptInCompany != null  and deptInCompany != ''">and dept_in_company = #{deptInCompany}</if>
@@ -106,6 +109,7 @@
             <if test="sex != null and sex != ''">sex,</if>
             <if test="company != null and company != ''">company,</if>
             <if test="companyCode != null and companyCode != ''">company_code,</if>
+            <if test="roleInOppo != null">role_in_oppo,</if>
             <if test="roleInCompany != null">role_in_company,</if>
             <if test="postInCompany != null">post_in_company,</if>
             <if test="deptInCompany != null">dept_in_company,</if>
@@ -133,6 +137,7 @@
             <if test="sex != null and sex != ''">#{sex},</if>
             <if test="company != null and company != ''">#{company},</if>
             <if test="companyCode != null and companyCode != ''">#{companyCode},</if>
+            <if test="roleInOppo != null">#{roleInOppo},</if>
             <if test="roleInCompany != null">#{roleInCompany},</if>
             <if test="postInCompany != null">#{postInCompany},</if>
             <if test="deptInCompany != null">#{deptInCompany},</if>
@@ -163,6 +168,7 @@
             <if test="sex != null and sex != ''">sex = #{sex},</if>
             <if test="company != null and company != ''">company = #{company},</if>
             <if test="companyCode != null and companyCode != ''">company_code = #{companyCode},</if>
+            <if test="roleInOppo != null">role_in_oppo = #{roleInOppo},</if>
             <if test="roleInCompany != null">role_in_company = #{roleInCompany},</if>
             <if test="postInCompany != null">post_in_company = #{postInCompany},</if>
             <if test="deptInCompany != null">dept_in_company = #{deptInCompany},</if>

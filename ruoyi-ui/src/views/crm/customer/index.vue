@@ -1155,7 +1155,6 @@ export default {
       this.companyDetailActive = newStep;
       switch (newStep) {
         case 1:
-          // TODO
           this.queryCustomerOppoList();
           break;
         case 2:
