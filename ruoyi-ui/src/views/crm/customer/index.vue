@@ -341,14 +341,7 @@
         <div id="customerAppArea" v-if="companyDetailActive === 3">
           <el-table v-loading="loading" :data="customerAppList" key="third">
             <el-table-column label="项目/应用名" align="center" prop="name" :show-overflow-tooltip="true" />
-            <el-table-column label="当前版本" align="center" prop="version" :show-overflow-tooltip="true" />
-            <el-table-column label="开发进度" align="center" prop="devStatus" :show-overflow-tooltip="true">
-              <template slot-scope="scope">
-                <dict-tag :options="dict.type.sys_work_progress" :value="scope.row.devStatus" />
-              </template>
-            </el-table-column>
             <el-table-column label="开发商" align="center" prop="isv" :show-overflow-tooltip="true" />
-            <el-table-column label="开发商联系人" align="center" prop="isvContactId" :show-overflow-tooltip="true" />
             <el-table-column label="当前数据库" align="center" prop="dataBase" :show-overflow-tooltip="true">
               <template slot-scope="scope">
                 <dict-tag :options="dict.type.sys_system_db_type" :value="scope.row.dataBase" />
