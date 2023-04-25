@@ -1,7 +1,11 @@
 package com.highgo.crm.mapper;
 
 import java.util.List;
+
+import com.highgo.crm.domain.Application;
 import com.highgo.crm.domain.Company;
+import com.highgo.crm.domain.Contact;
+import com.highgo.crm.domain.OpportunityUnited;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -63,4 +67,10 @@ public interface CompanyMapper
     int changeCompanyOwners(Company company);
 
     int batchInsertCompany(@Param("companyList") List<Company> companyList);
+
+    List<OpportunityUnited> selectOppoList(Company company);
+
+    List<Application> selectApplicationList(Company company);
+
+    List<Contact> selectContactList(Company company);
 }

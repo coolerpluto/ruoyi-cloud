@@ -270,4 +270,59 @@
             #{id}
         </foreach>
     </delete>
+    <select id="selectOppoList" resultMap="com.highgo.crm.mapper.OpportunityUnitedMapper.OpportunityUnitedResult"
+            parameterType="Company">
+        select tc.id,
+               tc.code,
+               tc.current_stage,
+               tc.name,
+               tc.cust_id,
+               tc2.company_name                                                             cust_name,
+               tc.dept_id,
+               tc.owner_id,
+               su.user_name                                                                 owner_name,
+               su.nick_name                                                                 nick_name,
+               tc.shared_id,
+               tc.shared_dept_id,
+               tc.create_time,
+               tc.update_time,
+               tc.remark,
+               max(case when top.property_key = 'preTenderDate' then top.property_val end)  preTenderDate,
+               max(case when top.property_key = 'preSignDate' then top.property_val end)    preSignDate,
+               max(case when top.property_key = 'preContractVal' then top.property_val end) preContractVal
+        from t_opportunity tc
+                 left join t_company tc2 on tc.cust_id = tc2.id
+                 left join t_opportunity_property top on (top.status = '0' and tc.code = top.opportunity_code and
+                                                          top.property_key in ('preTenderDate', 'preSignDate', 'preContractVal'))
+                 left join remote_db.sys_dept sd on tc.dept_id = sd.dept_id
+                 left join remote_db.sys_user su on su.user_id = tc.owner_id
+        where tc.code in (
+            select top2.opportunity_code
+                from t_opportunity_property top2
+                where top2.model = 'cust'
+                  and top2.property_key = 'userCompanyid'
+                  and top2.property_val = #{id}
+            union
+            select opportunity_code
+                from t_opportunity_software_operation toso
+                where operational_id = #{id}
+            union
+                select toso.opportunity_code
+                from t_opportunity_software_operation toso,
+                     t_application ta
+                where ta.isv = #{id}
+                  and ta.id = toso.application_id
+        )
+        group by code
+    </select>
+    <select id="selectApplicationList" parameterType="Company" resultMap="com.highgo.crm.mapper.ApplicationMapper.ApplicationResult">
+        select * from t_application ta where isv=#{id} or source_id =#{id}
+    </select>
+    <select id="selectContactList" parameterType="Company" resultMap="com.highgo.crm.mapper.ContactMapper.ContactResult">
+        select * from t_contact tc
+        <where>
+            <if test="code != null  and code != ''">or tc.company_code =#{code} </if>
+            <if test="id != null  and id != ''"> or tc.source_id =#{id} </if>
+        </where>
+    </select>
 </mapper>

@@ -8,7 +8,30 @@ export function listCompany(query) {
     params: query
   })
 }
-
+// 查询公司商机列表
+export function listOppoByCompany(query) {
+  return request({
+    url: '/crm/company/listOppo',
+    method: 'get',
+    params: query
+  })
+}
+// 查询公司应用列表
+export function listAppByCompany(query) {
+  return request({
+    url: '/crm/company/listApp',
+    method: 'get',
+    params: query
+  })
+}
+// 查询公司联系人列表
+export function listContactByCompany(query) {
+  return request({
+    url: '/crm/company/listContact',
+    method: 'get',
+    params: query
+  })
+}
 // 查询公司列表联通企查查
 export function tianYanChaSearch(query) {
   return request({

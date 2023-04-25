@@ -4,7 +4,9 @@ import java.util.List;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
+import com.highgo.crm.domain.Application;
 import com.highgo.crm.domain.Contact;
+import com.highgo.crm.domain.OpportunityUnited;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +28,7 @@ import com.ruoyi.common.core.web.page.TableDataInfo;
 
 /**
  * 公司Controller
- * 
+ *
  * @author eszhang
  * @date 2023-02-02
  */
@@ -47,6 +49,30 @@ public class CompanyController extends BaseController
         startPage();
         List<Company> list = companyService.selectCompanyList(company);
         return getDataTable(list);
+    }
+
+    @GetMapping("/listOppo")
+    public TableDataInfo listOppo(Company company)
+    {
+        startPage();
+        List<OpportunityUnited> oppList = companyService.selectOppoList(company);
+        return getDataTable(oppList);
+    }
+
+    @GetMapping("/listApp")
+    public TableDataInfo listApplication(Company company)
+    {
+        startPage();
+        List<Application> appList = companyService.selectApplicationList(company);
+        return getDataTable(appList);
+    }
+
+    @GetMapping("/listContact")
+    public TableDataInfo listContact(Company company)
+    {
+        startPage();
+        List<Contact> contactList = companyService.selectContactList(company);
+        return getDataTable(contactList);
     }
 
     @GetMapping("/tianYanChaSearch")
@@ -106,7 +132,8 @@ public class CompanyController extends BaseController
     @RequiresPermissions("crm:company:transfer")
     @Log(title = "联系人", businessType = BusinessType.UPDATE)
     @PutMapping("/transfer")
-    public AjaxResult transfer(@RequestBody Company company) {
+    public AjaxResult transfer(@RequestBody Company company)
+    {
         return toAjax(companyService.transfer(company));
     }
     /**
@@ -114,7 +141,7 @@ public class CompanyController extends BaseController
      */
     @RequiresPermissions("crm:company:remove")
     @Log(title = "公司", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{ids}")
+    @DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable String[] ids)
     {
         return toAjax(companyService.deleteCompanyByIds(ids));

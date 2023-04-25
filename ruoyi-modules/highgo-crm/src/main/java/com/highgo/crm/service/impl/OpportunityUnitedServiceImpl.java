@@ -440,6 +440,7 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
                 application.setCategoryL4(opera.getCategoryL4());
                 application.setName(opera.getApplicationName());
                 application.setIsv(Long.valueOf(opera.getIsvId()));
+                application.setIsvName(opera.getIsv());
                 application.setDataBase(opera.getDbBase());
                 application.setDbAdaptStatus(opera.getCurrentAdaptedProgress());
                 application.setSourceType("OPPO");

@@ -1,7 +1,11 @@
 package com.highgo.crm.service;
 
 import java.util.List;
+
+import com.highgo.crm.domain.Application;
 import com.highgo.crm.domain.Company;
+import com.highgo.crm.domain.Contact;
+import com.highgo.crm.domain.OpportunityUnited;
 
 /**
  * 公司Service接口
@@ -62,4 +66,10 @@ public interface ICompanyService
     int transfer(Company company);
 
     List<Company> searchCompanyByName(Company company);
+
+    List<OpportunityUnited> selectOppoList(Company company);
+
+    List<Application> selectApplicationList(Company company);
+
+    List<Contact> selectContactList(Company company);
 }

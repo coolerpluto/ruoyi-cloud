@@ -3,7 +3,10 @@ package com.highgo.crm.service.impl;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
+import com.highgo.crm.domain.Application;
 import com.highgo.crm.domain.Company;
+import com.highgo.crm.domain.Contact;
+import com.highgo.crm.domain.OpportunityUnited;
 import com.highgo.crm.domain.TransferLog;
 import com.highgo.crm.mapper.CompanyMapper;
 import com.highgo.crm.mapper.TransferLogMapper;
@@ -14,6 +17,8 @@ import com.ruoyi.common.core.utils.StringUtils;
 import com.ruoyi.common.datascope.annotation.CrmDataScope;
 import com.ruoyi.common.security.utils.SecurityUtils;
 import com.ruoyi.system.api.domain.SysUser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -33,6 +38,8 @@ import java.util.regex.Pattern;
 @Service
 public class CompanyServiceImpl implements ICompanyService
 {
+    private static final Logger log = LoggerFactory.getLogger(CompanyServiceImpl.class);
+
     @Autowired
     private CompanyMapper companyMapper;
 
@@ -225,5 +232,35 @@ public class CompanyServiceImpl implements ICompanyService
         Pattern p = Pattern.compile(regEx);
         Matcher m = p.matcher(str);
         return m.replaceAll("").trim();
+    }
+
+    @Override
+    public List<OpportunityUnited> selectOppoList(Company company)
+    {
+        log.debug("selectOppoList req: {}",JSON.toJSONString(company));
+        assert StringUtils.isNotBlank(company.getId());
+        List<OpportunityUnited> oppoList =  companyMapper.selectOppoList(company);
+        log.debug("selectOppoList res: {}",JSON.toJSONString(oppoList));
+        return oppoList;
+    }
+
+    @Override
+    public List<Application> selectApplicationList(Company company)
+    {
+        log.debug("selectApplicationList req: {}",JSON.toJSONString(company));
+        assert StringUtils.isNotBlank(company.getId());
+        List<Application> appList =  companyMapper.selectApplicationList(company);
+        log.debug("selectApplicationList res: {}",JSON.toJSONString(appList));
+        return appList;
+    }
+
+    @Override
+    public List<Contact> selectContactList(Company company)
+    {
+        log.debug("selectContactList req: {}",JSON.toJSONString(company));
+        assert StringUtils.isNotBlank(company.getId()) || StringUtils.isNotBlank(company.getCode());
+        List<Contact> contactList =  companyMapper.selectContactList(company);
+        log.debug("selectContactList res: {}",JSON.toJSONString(contactList));
+        return contactList;
     }
 }
