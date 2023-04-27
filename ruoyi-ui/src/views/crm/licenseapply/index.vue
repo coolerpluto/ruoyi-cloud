@@ -17,10 +17,18 @@
         </el-select>
       </el-form-item>
       <el-form-item label="隶属部门" prop="deptId">
-        <el-input v-model="queryParams.deptId" placeholder="请输入商机所在部门" clearable @keyup.enter.native="handleQuery"/>
+        <treeselect v-model="queryParams.deptId" style="width: 215px" :options="deptOptions" :show-count="true"
+                    placeholder="请选择归属部门"/>
       </el-form-item>
       <el-form-item label="主负责人" prop="ownerId">
-        <el-input v-model="queryParams.ownerId" placeholder="请输入商机负责人员" clearable @keyup.enter.native="handleQuery"/>
+        <el-select v-model="queryParams.ownerId" collapse-tags placeholder="请输入 关键字拼音检索" filterable remote
+                   :remote-method="getPersonOptions" :loading="flag.personOptionsLoading">
+          <el-option v-for="item in personOptions" :key="item.userName" :label="item.nickName" :value="item.userId">
+            <span style="float: left">{{ item.nickName }}</span>
+            <span style="float: right; color: #8492a6; font-size: 13px">
+              {{ item.dept.deptName }}</span>
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="创建时间">
         <el-date-picker v-model="daterangeCreateTime" style="width: 240px" value-format="yyyy-MM-dd" type="daterange"
@@ -92,10 +100,14 @@
 </template>
 
 <script>
-import { listLicenseApply, getLicenseApply, delLicenseApply } from "@/api/crm/licenseApply";
+import {listLicenseApply, delLicenseApply} from "@/api/crm/licenseApply";
+import {listEmployee, deptTreeSelect} from "@/api/crm/employee";
+import Treeselect from "@riophae/vue-treeselect";
+import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
 export default {
   name: "LicenseApply",
+  components: {Treeselect},
   dicts: ['crm_lic_purposes_type'],
   data() {
     return {
@@ -114,6 +126,8 @@ export default {
       total: 0,
       // license申请表格数据
       licenseApplyList: [],
+      personOptions: [],
+      deptOptions: [],
       // $comment时间范围
       daterangeCreateTime: [],
       // 查询参数
@@ -131,11 +145,13 @@ export default {
       flag: {
         transferTargetPersonLoading: false,
         selectedUnBeLongYou: false,
+        personOptionsLoading: false,
       },
     };
   },
   created() {
     this.getList();
+    this.getDeptTree();
   },
   methods: {
     /** 查询license申请列表 */
@@ -150,6 +166,23 @@ export default {
         this.licenseApplyList = response.rows;
         this.total = response.total;
         this.loading = false;
+      });
+    },
+    /** 查询部门下拉树结构 */
+    getDeptTree() {
+      deptTreeSelect().then(response => {
+        this.deptOptions = response.data;
+      });
+    },
+    getPersonOptions(query) {
+      this.flag.personOptionsLoading = true
+      listEmployee({
+        pageNum: 1,
+        pageSize: 20,
+        userName: query,
+      }).then(response => {
+        this.personOptions = response.rows;
+        this.flag.personOptionsLoading = false;
       });
     },
     /** 搜索按钮操作 */
@@ -169,7 +202,9 @@ export default {
       this.codes = selection.map(item => item.code)
       this.single = selection.length !== 1
       this.multiple = !selection.length
-      this.flag.selectedUnBeLongYou = selection.findIndex(item => { return item.ownerName != this.$store.getters.name }) > -1 ? true : false;
+      this.flag.selectedUnBeLongYou = selection.findIndex(item => {
+        return item.ownerName != this.$store.getters.name
+      }) > -1 ? true : false;
     },
     /** 新增按钮操作 */
     handleAdd() {
