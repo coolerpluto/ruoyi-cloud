@@ -2,6 +2,7 @@ package com.highgo.crm.service;
 
 import java.util.List;
 import com.highgo.crm.domain.LicenseApply;
+import com.highgo.crm.domain.LicenseSaveAndUpReq;
 
 /**
  * license申请Service接口
@@ -58,4 +59,8 @@ public interface ILicenseApplyService
      * @return 结果
      */
     public int deleteLicenseApplyById(Long id);
+
+    LicenseApply getLicApplyByCode(String code);
+
+    int saveAndUpdate(LicenseSaveAndUpReq licenseReq);
 }

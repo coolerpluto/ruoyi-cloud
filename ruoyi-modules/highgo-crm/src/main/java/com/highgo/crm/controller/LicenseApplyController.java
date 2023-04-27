@@ -1,8 +1,17 @@
 package com.highgo.crm.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.io.IOException;
+import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
+
+import com.highgo.crm.domain.LicenseSaveAndUpReq;
+import com.highgo.crm.domain.OpportunityQuotation;
+import com.highgo.crm.domain.OpportunitySoftwareOperation;
+import com.highgo.crm.service.IOpportunityUnitedService;
+import com.ruoyi.common.core.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -69,7 +78,35 @@ public class LicenseApplyController extends BaseController
     {
         return success(licenseApplyService.selectLicenseApplyById(id));
     }
+    @Autowired
+    private IOpportunityUnitedService opportunityService;
 
+    @GetMapping(value = "/getLicApplyByCode")
+    public AjaxResult getLicApplyByCode(LicenseApply licenseApply)
+    {
+        Map<String, Object> res = new HashMap<>();
+        if (StringUtils.isBlank(licenseApply.getCode())){
+            res.put("licenseData",new LicenseApply());
+            res.put("applicationList",new ArrayList<>());
+            res.put("quotationList",new ArrayList<>());
+            return success(res);
+        }
+        String code = licenseApply.getCode();
+        res.put("code",code);
+        LicenseApply licenseData = licenseApplyService.getLicApplyByCode(code);
+        res.put("licenseData",licenseData);
+        List<OpportunitySoftwareOperation> operations =opportunityService.querySoftwareOperationByCode(code);
+        res.put("applicationList",operations);
+        List<OpportunityQuotation> quotationList = opportunityService.queryQuotationByOppCode(code);
+        res.put("quotationList",quotationList);
+        return success(res);
+    }
+    @Log(title = "license申请", businessType = BusinessType.UPDATE)
+    @PostMapping("/saveAndUpdate")
+    public AjaxResult saveAndUpdate(@RequestBody LicenseSaveAndUpReq licenseReq)
+    {
+        return toAjax(licenseApplyService.saveAndUpdate(licenseReq));
+    }
     /**
      * 新增license申请
      */

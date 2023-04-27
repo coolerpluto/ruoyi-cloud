@@ -5,7 +5,7 @@
       <el-step v-for="(item, index) in stageList" :key="index" :title="item.label" :icon="item.icon"
         v-if="stageShowList.includes(item.value)" @click.native="changeStage(item.value)" />
     </el-steps>
-    
+
     <stage-l01 ref="stage01" v-if="stageActive === 1" :oppdata="inputReq" />
     <stage-l02 ref="stage02" v-if="stageActive === 2" :oppdata="inputReq" />
     <stage-l03 ref="stage03" v-if="stageActive === 3" :oppdata="inputReq" />
@@ -18,7 +18,7 @@
     <stage-l11 ref="stage11" v-if="stageActive === 11" :oppdata="inputReq" />
     <div style="text-align: center;" v-if="inputReq.action != 'V'">
       <div id="currentStageButArea">
-        <el-button-group>          
+        <el-button-group>
           <el-button type="primary" icon="el-icon-finished" v-if="flag.showSaveUpdateBut"
             @click="saveOrupdateOpportunityData()">
             保存/更新
@@ -159,7 +159,7 @@ export default {
         // 针对L9界面是不是可以点击
         this.flag.clickEnable = this.updateEveryStagePerson.includes(this.$store.getters.name);
         // 保存/更新 当前阶段不为L9时必显示 为9时查看是否赋予特殊权限
-        this.flag.showSaveUpdateBut = this.stageActive !==9 ? true : this.flag.clickEnable;        
+        this.flag.showSaveUpdateBut = this.stageActive !==9 ? true : this.flag.clickEnable;
         // 新建时和终点时不显示下一步操作相关按钮
         this.flag.showNextBut = this.inputReq.action == "A" ? false : ![6, 7, 8, 9, 11].includes(this.stageActive);
         this.flag.showNextStageOptions = this.flag.showNextBut;
@@ -174,7 +174,7 @@ export default {
         }else{
           // 推进最新继续下行
           this.flag.showNewStageSaveBut = true;
-        }        
+        }
       }
     },
     init() {
@@ -469,7 +469,7 @@ export default {
       }).catch(() => {
         this.$modal.msgError("更新阶段失败");
         this.flag.pageLoading = false;
-      });;
+      });
     },
     updateOpportunityData() {
       if (!this.updateEveryStagePerson.includes(this.$store.getters.name)) {
@@ -493,7 +493,7 @@ export default {
       }).catch(() => {
         this.$modal.msgError("更新失败");
         this.flag.pageLoading = false;
-      });;
+      });
     },
     saveOrupdateOpportunityData() {
       this.flag.hasSaveOrUpdate = true;
@@ -517,7 +517,7 @@ export default {
       }).catch(() => {
         this.$modal.msgError("操作失败");
         this.flag.pageLoading = false;
-      });;
+      });
     },
     changeOpportunityStage() {
       this.changeStage(this.targetNextStage)
@@ -539,6 +539,6 @@ export default {
 .click-disenable {
 	cursor: default;
   /* 禁止点击事件 */
-  pointer-events: none;    
+  pointer-events: none;
 }
 </style>

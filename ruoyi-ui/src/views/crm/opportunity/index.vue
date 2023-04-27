@@ -243,7 +243,7 @@ export default {
       },
       flag: {
         transferTargetPersonLoading: false,
-        selectedUnbeLongYou: false,
+        selectedUnBeLongYou: false,
       },
       // 表单参数
       form: {},
@@ -360,7 +360,7 @@ export default {
       this.codes = selection.map(item => item.code);
       this.single = selection.length !== 1;
       this.multiple = !selection.length;
-      this.flag.selectedUnbeLongYou = selection.findIndex(item => { return item.ownerName != this.$store.getters.name }) > -1 ? true : false;
+      this.flag.selectedUnBeLongYou = selection.findIndex(item => { return item.ownerName != this.$store.getters.name }) > -1 ? true : false;
     },
     /** 新增按钮操作 */
     handleAdd() {
@@ -370,7 +370,7 @@ export default {
     handleUpdate(row) {
       const code = row.code || this.codes
       if (typeof code != 'string') {
-        if (this.flag.selectedUnbeLongYou) {
+        if (this.flag.selectedUnBeLongYou) {
           this.$modal.msgError("禁止操作，您选择了不属于您的数据请检查后再操作！");
           return;
         }
@@ -408,7 +408,7 @@ export default {
       const ids = row.id || this.ids;
       const codes = row.code || this.codes;
       if (typeof ids != 'string') {
-        if (this.flag.selectedUnbeLongYou) {
+        if (this.flag.selectedUnBeLongYou) {
           this.$modal.msgError("禁止操作，您选择了不属于您的数据请检查后再操作！");
           return;
         }
@@ -433,7 +433,7 @@ export default {
         this.form.selectedCodes = [codes];
       } else {
         this.form.selectedCodes = codes;
-        if (this.flag.selectedUnbeLongYou) {
+        if (this.flag.selectedUnBeLongYou) {
           this.$modal.msgError("禁止操作，您选择了不属于您的数据请检查后再操作！");
           return;
         }

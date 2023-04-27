@@ -16,6 +16,7 @@
         <result property="deptName" column="dept_name"/>
         <result property="ownerId" column="owner_id"/>
         <result property="ownerName" column="owner_name"/>
+        <result property="nickName" column="nick_name"/>
         <result property="sharedId" column="shared_id"/>
         <result property="sharedDeptId" column="shared_dept_id"/>
         <result property="createBy" column="create_by"/>
@@ -36,7 +37,8 @@
                tla.dept_id,
                sd.dept_name,
                tla.owner_id,
-               su.nick_name owner_name,
+               su.nick_name,
+               su.user_name owner_name,
                tla.shared_id,
                tla.shared_dept_id,
                tla.create_by,
@@ -141,4 +143,58 @@
             #{id}
         </foreach>
     </delete>
+    <select id="getLicApplyByCode" parameterType="String" resultMap="LicenseApplyResult">
+        select * from t_license_apply tla where tla.code  = #{code}
+    </select>
+    <insert id="saveAndUpdate" parameterType="LicenseSaveAndUpReq">
+        insert into t_license_apply
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="code != null and code != ''">code,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="custCode != null">cust_code,</if>
+            <if test="custName != null">cust_name,</if>
+            <if test="useTime != null">use_time,</if>
+            <if test="purposes != null and purposes != ''">purposes,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="ownerId != null">owner_id,</if>
+            <if test="sharedId != null">shared_id,</if>
+            <if test="sharedDeptId != null">shared_dept_id,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="code != null and code != ''">#{code},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="custCode != null">#{custCode},</if>
+            <if test="custName != null">#{custName},</if>
+            <if test="useTime != null">#{useTime},</if>
+            <if test="purposes != null and purposes != ''">#{purposes},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="ownerId != null">#{ownerId},</if>
+            <if test="sharedId != null">#{sharedId},</if>
+            <if test="sharedDeptId != null">#{sharedDeptId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+        ON DUPLICATE KEY UPDATE
+        <trim prefix="" suffixOverrides=",">
+            <if test="code != null and code != ''">code =#{code},</if>
+            <if test="name != null and name != ''">name =#{name},</if>
+            <if test="custCode != null">cust_code = #{custCode},</if>
+            <if test="custName != null">cust_name = #{custName},</if>
+            <if test="useTime != null">use_time =#{useTime},</if>
+            <if test="purposes != null and purposes != ''">purposes = #{purposes},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="ownerId != null">owner_id = #{ownerId},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+    </insert>
 </mapper>

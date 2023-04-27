@@ -175,6 +175,20 @@ export const dynamicRoutes = [
         meta: { title: '商机详细数据', activeMenu: '/crm/opportunity' }
       }
     ]
+  },
+  {
+    path: '/crm/licenseApply-data',
+    component: Layout,
+    hidden: true,
+    permissions: ['crm:licenseApply:list'],
+    children: [
+      {
+        path: 'index/:code/:action',
+        component: () => import('@/views/crm/licenseapply/detailData'),
+        name: 'DetailData',
+        meta: { title: '详细数据', activeMenu: '/crm/licenseapply' }
+      }
+    ]
   }
 ]
 

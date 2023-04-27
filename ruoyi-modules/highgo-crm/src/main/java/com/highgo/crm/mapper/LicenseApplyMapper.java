@@ -2,6 +2,7 @@ package com.highgo.crm.mapper;
 
 import java.util.List;
 import com.highgo.crm.domain.LicenseApply;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * license申请Mapper接口
@@ -58,4 +59,8 @@ public interface LicenseApplyMapper
      * @return 结果
      */
     public int deleteLicenseApplyByIds(Long[] ids);
+
+    LicenseApply getLicApplyByCode(@Param("code") String code);
+
+    int saveAndUpdate(LicenseApply licenseData);
 }

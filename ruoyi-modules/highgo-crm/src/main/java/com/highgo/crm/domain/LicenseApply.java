@@ -70,8 +70,9 @@ public class LicenseApply extends BaseEntity
     /**
      * 商机负责人员
      */
-    @Excel(name = "商机负责人员")
     private String ownerName;
+    @Excel(name = "商机负责人员")
+    private String nickName;
     private Long ownerId;
 
     /**
@@ -99,6 +100,16 @@ public class LicenseApply extends BaseEntity
     public String getOwnerName()
     {
         return ownerName;
+    }
+
+    public String getNickName()
+    {
+        return nickName;
+    }
+
+    public void setNickName(String nickName)
+    {
+        this.nickName = nickName;
     }
 
     public void setOwnerName(String ownerName)

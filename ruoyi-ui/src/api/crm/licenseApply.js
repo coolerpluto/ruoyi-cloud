@@ -16,7 +16,20 @@ export function getLicenseApply(id) {
     method: 'get'
   })
 }
-
+export function getLicenseApplyByCode(query) {
+  return request({
+    url: '/crm/licenseApply/getLicApplyByCode',
+    method: 'get',
+    params: query
+  })
+}
+export function saveAndUpdateLicenseApply(data) {
+  return request({
+    url: '/crm/licenseApply/saveAndUpdate',
+    method: 'post',
+    data: data
+  })
+}
 // 新增license申请 主
 export function addLicenseApply(data) {
   return request({
