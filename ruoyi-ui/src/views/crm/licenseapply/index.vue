@@ -213,15 +213,15 @@ export default {
     /** 修改按钮操作 */
     handleUpdate(row) {
       const code = row.code || this.codes;
-      if (typeof code != 'string') {
-        if (this.flag.selectedUnBeLongYou) {
-          this.$modal.msgError("禁止操作，您选择了不属于您的数据请检查后再操作！");
-          return;
-        }
-      } else if (this.$store.getters.name != row.ownerName) {
-        this.$modal.msgError("禁止操作，您选择了不属于您的数据请检查后再操作！");
-        return;
-      }
+      // if (typeof code != 'string') {
+      //   if (this.flag.selectedUnBeLongYou) {
+      //     this.$modal.msgError("禁止操作，您选择了不属于您的数据请检查后再操作！");
+      //     return;
+      //   }
+      // } else if (this.$store.getters.name != row.ownerName) {
+      //   this.$modal.msgError("禁止操作，您选择了不属于您的数据请检查后再操作！");
+      //   return;
+      // }
       this.$router.push("/crm/licenseApply-data/index/" + code + "/M");
     },
     /** 删除按钮操作 */
