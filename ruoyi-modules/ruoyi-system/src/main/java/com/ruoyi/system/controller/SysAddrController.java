@@ -50,7 +50,7 @@ public class SysAddrController extends BaseController
     /**
      * 获取参数配置列表
      */
-    @RequiresPermissions("system:config:list")
+    @RequiresPermissions("system:addr:list")
     @GetMapping("/listPage")
     public TableDataInfo listPage(SysAddr sysAddr)
     {

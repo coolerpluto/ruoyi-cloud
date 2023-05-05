@@ -251,7 +251,7 @@ public class OpportunityUnitedController extends BaseController
     /**
      * 新增商机统一管理
      */
-    //@RequiresRoles(value = {"crm:opportunity", "crm:mangment"}, logical = Logical.OR)
+    @RequiresRoles(value = {"crm:opportunity", "crm:mangment"}, logical = Logical.OR)
     @Log(title = "商机统一管理", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody OpportunityUnitedReq opportunity)
@@ -262,7 +262,7 @@ public class OpportunityUnitedController extends BaseController
     /**
      * 修改商机统一管理
      */
-    //@RequiresRoles(value = {"crm:opportunity", "crm:mangment"}, logical = Logical.OR)
+    @RequiresRoles(value = {"crm:opportunity", "crm:mangment"}, logical = Logical.OR)
     @Log(title = "商机统一管理", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody OpportunityUnitedReq opportunity)
