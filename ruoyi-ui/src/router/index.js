@@ -166,7 +166,7 @@ export const dynamicRoutes = [
     path: '/crm/opportunity-data',
     component: Layout,
     hidden: true,
-    permissions: ['crm:opportunity:list'],
+    permissions: ['crm:oppUnited:query'],
     children: [
       {
         path: 'index/:code/:action',
@@ -180,7 +180,7 @@ export const dynamicRoutes = [
     path: '/crm/licenseApply-data',
     component: Layout,
     hidden: true,
-    permissions: ['crm:licenseApply:list'],
+    permissions: ['crm:licenseApply:query'],
     children: [
       {
         path: 'index/:code/:action',
