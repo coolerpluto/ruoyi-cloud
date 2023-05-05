@@ -55,7 +55,7 @@
       <el-col :span="1.5">
         <el-button type="success" plain icon="el-icon-s-promotion" size="mini" :disabled="multiple"
                    @click="handleTransfer"
-                   v-hasPermi="['crm:contact:transfer']">批量交接
+                   v-hasPermi="['crm:company:transfer']">批量交接
         </el-button>
       </el-col>
       <el-col :span="1.5">

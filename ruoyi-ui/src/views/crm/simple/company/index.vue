@@ -25,7 +25,7 @@
           placeholder="请输入行业归属"
           clearable
           @keyup.enter.native="handleQuery"
-        />        
+        />
       </el-form-item>
       <el-form-item label="公司法人" prop="legal">
         <el-input
@@ -93,7 +93,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['crm:contact:transfer']"
+          v-hasPermi="['crm:company:transfer']"
         >批量转交
         </el-button>
       </el-col>

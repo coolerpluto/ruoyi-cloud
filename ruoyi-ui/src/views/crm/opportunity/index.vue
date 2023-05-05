@@ -82,27 +82,27 @@
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd"
-          v-hasPermi="['crm:opportunity:add']">新增
+          v-hasPermi="['crm:oppUnited:add']">新增
         </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button type="success" plain icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate"
-          v-hasPermi="['crm:opportunity:edit']">修改
+          v-hasPermi="['crm:oppUnited:edit']">修改
         </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete"
-          v-hasPermi="['crm:opportunity:remove']">删除
+          v-hasPermi="['crm:oppUnited:remove']">删除
         </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button type="success" plain icon="el-icon-s-promotion" size="mini" :disabled="multiple"
-          @click="handleTransfer" v-hasPermi="['crm:opportunity:transfer']">批量转交
+          @click="handleTransfer" v-hasPermi="['crm:oppUnited:transfer']">批量转交
         </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
-          v-hasPermi="['crm:opportunity:export']">导出查询结果
+          v-hasPermi="['crm:oppUnited:export']">导出查询结果
         </el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" :columns="columns" @queryTable="getList"></right-toolbar>
@@ -139,13 +139,13 @@
             查看
           </el-button>
           <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
-            v-if="$store.getters.name == scope.row.ownerName" v-hasPermi="['crm:opportunity:edit']">修改
+            v-if="$store.getters.name == scope.row.ownerName" v-hasPermi="['crm:oppUnited:edit']">修改
           </el-button>
           <el-button size="mini" type="text" icon="el-icon-s-promotion" @click="handleTransfer(scope.row)"
-            v-if="$store.getters.name == scope.row.ownerName" v-hasPermi="['crm:opportunity:transfer']">转交
+            v-if="$store.getters.name == scope.row.ownerName" v-hasPermi="['crm:oppUnited:transfer']">转交
           </el-button>
           <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
-            v-if="$store.getters.name == scope.row.ownerName" v-hasPermi="['crm:opportunity:remove']">删除
+            v-if="$store.getters.name == scope.row.ownerName" v-hasPermi="['crm:oppUnited:remove']">删除
           </el-button>
         </template>
       </el-table-column>
