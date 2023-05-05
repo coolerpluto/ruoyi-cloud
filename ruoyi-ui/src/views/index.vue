@@ -9,6 +9,9 @@
           <p style="float: left;">
             <b>当前版本:</b> <span>v{{ version }}</span>
           </p>
+          <div style="text-align: end;">
+            <iframe scrolling="no" src="https://tianqiapi.com/api.php?style=tz&skin=pitaya" frameborder="0" width="275" height="20" allowtransparency="true"></iframe>
+          </div>
           <p style="float: right;">
             <b>当前时间:</b> <span>{{ dateFormat(currentTime) }}</span>
           </p>
