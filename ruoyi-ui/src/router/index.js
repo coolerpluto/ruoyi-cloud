@@ -171,7 +171,7 @@ export const dynamicRoutes = [
       {
         path: 'index/:code/:action',
         component: () => import('@/views/crm/opportunity/detailData'),
-        name: 'DetailData',
+        name: 'opportunityDetailData',
         meta: { title: '商机详细数据', activeMenu: '/crm/opportunity' }
       }
     ]
@@ -185,7 +185,7 @@ export const dynamicRoutes = [
       {
         path: 'index/:code/:action',
         component: () => import('@/views/crm/licenseapply/detailData'),
-        name: 'DetailData',
+        name: 'licenseApplyDetailData',
         meta: { title: '详细数据', activeMenu: '/crm/licenseapply' }
       }
     ]
