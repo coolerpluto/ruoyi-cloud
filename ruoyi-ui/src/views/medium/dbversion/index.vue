@@ -328,8 +328,7 @@ export default {
     },
     /** 返回按钮操作 */
     handleClose() {
-      const obj = { path: "/system/dict" };
-      this.$tab.closeOpenPage(obj);
+      this.$tab.closePage();
     },
     /** 重置按钮操作 */
     resetQuery() {

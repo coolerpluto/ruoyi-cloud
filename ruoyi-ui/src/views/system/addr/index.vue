@@ -155,7 +155,7 @@ export default {
     };
   },
   created() {
-    this.getList();
+    //this.getList();
   },
   methods: {
     /** 查询地址联动列表 */
@@ -164,7 +164,7 @@ export default {
       listAddr(this.queryParams).then(response => {
         //this.addrList = this.handleTree(response.data, "code", "parent");
         this.addrListCopy = this.handleTree(response.data, "code", "parent");
-        console.log(this.addrListCopy);
+        this.addrList = [];
         for (let i = 0; i < this.addrListCopy.length; i++) {
           this.addrList.push({
             id: this.addrListCopy[i].id,
