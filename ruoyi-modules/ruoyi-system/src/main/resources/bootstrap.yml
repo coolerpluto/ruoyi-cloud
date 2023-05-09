@@ -4,7 +4,7 @@ server:
 
 # nacos
 nacos:
-  server-addr: 192.168.110.201:8848
+  server-addr: 192.168.110.204:8848
   # 命名空间选择
   namespace-dev: cdbcb16d-3531-49c2-a205-c3c1c52270a9
   namespace-uat: b57afa1a-893b-43f6-bc6b-09a3515758bd
