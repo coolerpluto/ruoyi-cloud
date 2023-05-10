@@ -15,6 +15,7 @@
         <module>ruoyi-file</module>
         <module>highgo-crm</module>
         <module>highgo-medium</module>
+        <module>highgo-message</module>
     </modules>
 
     <artifactId>ruoyi-modules</artifactId>
