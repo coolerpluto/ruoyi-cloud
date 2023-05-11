@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.highgo.message.mapper.EmailRecordEntityMapper">
+
+    <resultMap type="EmailRecordEntity" id="EmailRecordEntityResult">
+        <result property="id"    column="id"    />
+        <result property="sourceUser"    column="source_user"    />
+        <result property="targetUser"    column="target_user"    />
+        <result property="copyUser"    column="copy_user"    />
+        <result property="sendDate"    column="send_date"    />
+        <result property="subject"    column="subject"    />
+        <result property="content"    column="content"    />
+        <result property="attachment"    column="attachment"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectEmailRecordEntityVo">
+        select id, source_user, target_user, copy_user, send_date, subject, content, attachment, create_by, create_time from email_record
+    </sql>
+
+    <select id="selectEmailRecordEntityList" parameterType="EmailRecordEntity" resultMap="EmailRecordEntityResult">
+        <include refid="selectEmailRecordEntityVo"/>
+        <where>
+            <if test="sourceUser != null  and sourceUser != ''"> and source_user like concat('%', #{sourceUser}, '%')</if>
+            <if test="targetUser != null  and targetUser != ''"> and target_user like concat('%', #{targetUser}, '%')</if>
+            <if test="copyUser != null  and copyUser != ''"> and copy_user like concat('%', #{copyUser}, '%')</if>
+            <if test="params.beginSendDate != null and params.beginSendDate != '' and params.endSendDate != null and params.endSendDate != ''"> and send_date between #{params.beginSendDate} and #{params.endSendDate}</if>
+            <if test="subject != null  and subject != ''"> and subject like concat('%', #{subject}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectEmailRecordEntityById" parameterType="Long" resultMap="EmailRecordEntityResult">
+        <include refid="selectEmailRecordEntityVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertEmailRecordEntity" parameterType="EmailRecordEntity">
+        insert into email_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="sourceUser != null and sourceUser != ''">source_user,</if>
+            <if test="targetUser != null and targetUser != ''">target_user,</if>
+            <if test="copyUser != null">copy_user,</if>
+            <if test="sendDate != null">send_date,</if>
+            <if test="subject != null">subject,</if>
+            <if test="content != null and content != ''">content,</if>
+            <if test="attachment != null">attachment,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="sourceUser != null and sourceUser != ''">#{sourceUser},</if>
+            <if test="targetUser != null and targetUser != ''">#{targetUser},</if>
+            <if test="copyUser != null">#{copyUser},</if>
+            <if test="sendDate != null">#{sendDate},</if>
+            <if test="subject != null">#{subject},</if>
+            <if test="content != null and content != ''">#{content},</if>
+            <if test="attachment != null">#{attachment},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateEmailRecordEntity" parameterType="EmailRecordEntity">
+        update email_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="sourceUser != null and sourceUser != ''">source_user = #{sourceUser},</if>
+            <if test="targetUser != null and targetUser != ''">target_user = #{targetUser},</if>
+            <if test="copyUser != null">copy_user = #{copyUser},</if>
+            <if test="sendDate != null">send_date = #{sendDate},</if>
+            <if test="subject != null">subject = #{subject},</if>
+            <if test="content != null and content != ''">content = #{content},</if>
+            <if test="attachment != null">attachment = #{attachment},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteEmailRecordEntityById" parameterType="Long">
+        delete from email_record where id = #{id}
+    </delete>
+
+    <delete id="deleteEmailRecordEntityByIds" parameterType="String">
+        delete from email_record where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

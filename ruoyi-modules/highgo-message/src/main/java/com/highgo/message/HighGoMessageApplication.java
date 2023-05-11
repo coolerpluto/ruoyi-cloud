@@ -1,4 +1,4 @@
-package com.highgo.medium;
+package com.highgo.message;
 
 import com.ruoyi.common.security.annotation.EnableCustomConfig;
 import com.ruoyi.common.security.annotation.EnableRyFeignClients;

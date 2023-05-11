@@ -1,4 +1,4 @@
-package com.highgo.medium.utils;
+package com.highgo.message.utils;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;

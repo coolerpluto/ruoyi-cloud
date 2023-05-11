@@ -1,4 +1,4 @@
-package com.highgo.medium.utils;
+package com.highgo.message.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
