@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="模板Code" prop="templateCode">
+      <el-form-item label="模板" prop="templateCode">
         <el-select v-model="queryParams.templateCode" placeholder="请选择模板Code" clearable>
           <el-option
             v-for="dict in dict.type.sys_sms_templates"
@@ -74,7 +74,7 @@
     <el-table v-loading="loading" :data="smsList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="主键" align="center" prop="id" />
-      <el-table-column label="模板Code" align="center" prop="templateCode">
+      <el-table-column label="模板" align="center" prop="templateCode">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_sms_templates" :value="scope.row.templateCode"/>
         </template>
@@ -104,7 +104,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -116,7 +116,7 @@
     <!-- 添加或修改短信记录对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="模板Code" prop="templateCode">
+        <el-form-item label="模板" prop="templateCode">
           <el-select v-model="form.templateCode" placeholder="请选择模板Code">
             <el-option
               v-for="dict in dict.type.sys_sms_templates"
@@ -129,14 +129,16 @@
         <el-form-item label="电话号码" prop="phoneNumber">
           <el-input v-model="form.phoneNumber" placeholder="请输入电话号码" />
         </el-form-item>
-        <el-form-item label="模板其他参数" prop="templateParam">
-          <el-input v-model="form.templateParam" type="textarea" placeholder="请输入内容" />
+        <el-form-item label="其他参数" prop="templateParam">
+          <el-input v-model="form.templateParam" type="textarea" placeholder="请使用json格式,如{name:'张三';age:23}" />
         </el-form-item>
         <el-form-item label="发送内容" prop="value">
           <el-input v-model="form.value" type="textarea" placeholder="请输入内容" />
         </el-form-item>
         <el-form-item label="缓存key" prop="cacheKey">
-          <el-input v-model="form.cacheKey" placeholder="请输入缓存key" />
+          <el-input v-model="form.cacheKey" placeholder="请输入缓存key" >
+            <el-button slot="append" v-on:click="refreshCacheKey" icon="el-icon-refresh">随机11位</el-button>
+          </el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -188,7 +190,8 @@ export default {
           { required: true, message: "模板Code不能为空", trigger: "change" }
         ],
         phoneNumber: [
-          { required: true, message: "电话号码不能为空", trigger: "blur" }
+          { required: true, message: "电话号码不能为空", trigger: "blur" },
+          { pattern: /^1[3456789]\d{9}$/, message: '手机号码格式不正确', trigger: 'blur' }
         ],
         value: [
           { required: true, message: "发送内容不能为空", trigger: "blur" }
@@ -299,7 +302,10 @@ export default {
       this.download('message/sms/export', {
         ...this.queryParams
       }, `sms_${new Date().getTime()}.xlsx`)
-    }
+    },
+    refreshCacheKey(){
+      this.form.cacheKey = Math.random().toString(36).slice(-11);
+    },
   }
 };
 </script>

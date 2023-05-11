@@ -149,10 +149,10 @@
           <el-input v-model="form.sourceUser" placeholder="请输入发件人" />
         </el-form-item>
         <el-form-item label="收件人" prop="targetUser">
-          <el-input v-model="form.targetUser" placeholder="请输入收件人" />
+          <el-input v-model="form.targetUser" placeholder="请输入收件人,多人时使用;分割" />
         </el-form-item>
         <el-form-item label="抄送人" prop="copyUser">
-          <el-input v-model="form.copyUser" placeholder="请输入抄送人" />
+          <el-input v-model="form.copyUser" placeholder="请输入抄送人,多人时使用;分割" />
         </el-form-item>
         <el-form-item label="发送时间" prop="sendDate">
           <el-date-picker clearable
@@ -186,6 +186,22 @@ import { listEmail, getEmail, delEmail, addEmail, updateEmail } from "@/api/mess
 export default {
   name: "Email",
   data() {
+    var mutEmail = (rule, value, callback) => {
+      let testStr = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/;
+      let emailArray = value?value.split(';'):[];
+      if(emailArray.length==0){
+        callback(new Error('不能为空'))
+      }else{
+        let newArray = emailArray.filter(item=>{
+          return !testStr.test(item)
+        });
+        if(newArray.length>0){
+          callback(new Error("请输入正确的邮箱！"))
+        }else{
+          callback();
+        }
+      }
+    };
     return {
       // 遮罩层
       loading: true,
@@ -224,10 +240,15 @@ export default {
       // 表单校验
       rules: {
         sourceUser: [
-          { required: true, message: "发件人不能为空", trigger: "blur" }
+          { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+          { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change']},
         ],
         targetUser: [
-          { required: true, message: "收件人不能为空", trigger: "blur" }
+          { required: true, message: "收件人不能为空", trigger: "blur" },
+          { validator: mutEmail, trigger: ['blur', 'change'] }
+        ],
+        copyUser: [
+          { validator: mutEmail, trigger: ['blur', 'change'] }
         ],
         content: [
           { required: true, message: "邮件内容不能为空", trigger: "blur" }
