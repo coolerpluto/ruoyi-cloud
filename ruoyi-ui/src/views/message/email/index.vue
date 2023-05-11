@@ -190,7 +190,7 @@ export default {
       let testStr = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/;
       let emailArray = value?value.split(';'):[];
       if(emailArray.length==0){
-        callback(new Error('不能为空'))
+        callback()
       }else{
         let newArray = emailArray.filter(item=>{
           return !testStr.test(item)
