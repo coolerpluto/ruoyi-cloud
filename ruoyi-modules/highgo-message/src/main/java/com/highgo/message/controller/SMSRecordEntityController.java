@@ -1,30 +1,32 @@
 package com.highgo.message.controller;
 
-import java.util.List;
-import java.io.IOException;
-import javax.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.highgo.message.domain.SMSRecordEntity;
+import com.highgo.message.domain.SmsReq;
+import com.highgo.message.service.ISMSRecordEntityService;
+import com.ruoyi.common.core.utils.poi.ExcelUtil;
+import com.ruoyi.common.core.web.controller.BaseController;
+import com.ruoyi.common.core.web.domain.AjaxResult;
+import com.ruoyi.common.core.web.page.TableDataInfo;
 import com.ruoyi.common.log.annotation.Log;
 import com.ruoyi.common.log.enums.BusinessType;
 import com.ruoyi.common.security.annotation.RequiresPermissions;
-import com.highgo.message.domain.SMSRecordEntity;
-import com.highgo.message.service.ISMSRecordEntityService;
-import com.ruoyi.common.core.web.controller.BaseController;
-import com.ruoyi.common.core.web.domain.AjaxResult;
-import com.ruoyi.common.core.utils.poi.ExcelUtil;
-import com.ruoyi.common.core.web.page.TableDataInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * 短信记录Controller
- * 
+ *
  * @author eszhang
  * @date 2023-05-11
  */
@@ -97,9 +99,36 @@ public class SMSRecordEntityController extends BaseController
      */
     @RequiresPermissions("message:sms:remove")
     @Log(title = "短信记录", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{ids}")
+    @DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
     {
         return toAjax(sMSRecordEntityService.deleteSMSRecordEntityByIds(ids));
+    }
+
+    /**
+     * 发短信
+     */
+    @PostMapping("/message")
+    public AjaxResult message(@RequestBody @Validated SmsReq smsReq)
+    {
+        return AjaxResult.success(sMSRecordEntityService.message(smsReq));
+    }
+
+    /**
+     * 发验证
+     */
+    @PostMapping("/captcha")
+    public AjaxResult captcha(@RequestBody @Validated SmsReq smsReq)
+    {
+        return AjaxResult.success(sMSRecordEntityService.captcha(smsReq));
+    }
+
+    /**
+     * 发短信
+     */
+    @PostMapping("/captchaValidate")
+    public AjaxResult captchaValidate(@RequestBody @Validated SmsReq smsReq)
+    {
+        return AjaxResult.success(sMSRecordEntityService.captchaValidate(smsReq));
     }
 }

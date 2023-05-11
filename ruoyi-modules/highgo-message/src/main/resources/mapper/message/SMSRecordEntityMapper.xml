@@ -1,38 +1,53 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.highgo.message.mapper.SMSRecordEntityMapper">
-    
+
     <resultMap type="SMSRecordEntity" id="SMSRecordEntityResult">
-        <result property="id"    column="id"    />
-        <result property="templateCode"    column="template_code"    />
-        <result property="phoneNumber"    column="phone_number"    />
-        <result property="templateParam"    column="template_param"    />
-        <result property="value"    column="sms_value"    />
-        <result property="cacheKey"    column="cache_key"    />
-        <result property="createBy"    column="create_by"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="responseJson"    column="response_json"    />
+        <result property="id" column="id"/>
+        <result property="templateCode" column="template_code"/>
+        <result property="phoneNumber" column="phone_number"/>
+        <result property="templateParam" column="template_param"/>
+        <result property="value" column="sms_value"/>
+        <result property="cacheKey" column="cache_key"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="responseJson" column="response_json"/>
+        <result property="resCode" column="res_code"/>
+        <result property="resMessage" column="res_message"/>
     </resultMap>
 
     <sql id="selectSMSRecordEntityVo">
-        select id, template_code, phone_number, template_param, sms_value, cache_key, create_by, create_time, response_json from sms_record
+        select id,
+               template_code,
+               phone_number,
+               template_param,
+               sms_value,
+               cache_key,
+               create_by,
+               create_time,
+               response_json,
+               res_code,
+               res_message
+        from sms_record
     </sql>
 
     <select id="selectSMSRecordEntityList" parameterType="SMSRecordEntity" resultMap="SMSRecordEntityResult">
         <include refid="selectSMSRecordEntityVo"/>
-        <where>  
-            <if test="templateCode != null  and templateCode != ''"> and template_code = #{templateCode}</if>
-            <if test="phoneNumber != null  and phoneNumber != ''"> and phone_number like concat('%', #{phoneNumber}, '%')</if>
+        <where>
+            <if test="templateCode != null  and templateCode != ''">and template_code = #{templateCode}</if>
+            <if test="phoneNumber != null  and phoneNumber != ''">and phone_number like concat('%', #{phoneNumber},
+                '%')
+            </if>
         </where>
     </select>
-    
+
     <select id="selectSMSRecordEntityById" parameterType="Long" resultMap="SMSRecordEntityResult">
         <include refid="selectSMSRecordEntityVo"/>
         where id = #{id}
     </select>
-        
+
     <insert id="insertSMSRecordEntity" parameterType="SMSRecordEntity" useGeneratedKeys="true" keyProperty="id">
         insert into sms_record
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -44,7 +59,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
             <if test="responseJson != null">response_json,</if>
-         </trim>
+            <if test="resCode != null">res_code,</if>
+            <if test="resMessage != null">res_message,</if>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="templateCode != null and templateCode != ''">#{templateCode},</if>
             <if test="phoneNumber != null and phoneNumber != ''">#{phoneNumber},</if>
@@ -54,7 +71,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="responseJson != null">#{responseJson},</if>
-         </trim>
+            <if test="resCode != null">#{resCode},</if>
+            <if test="resMessage != null">#{resMessage},</if>
+        </trim>
     </insert>
 
     <update id="updateSMSRecordEntity" parameterType="SMSRecordEntity">
@@ -68,16 +87,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createBy != null">create_by = #{createBy},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="responseJson != null">response_json = #{responseJson},</if>
+            <if test="resCode != null">res_code = #{resCode},</if>
+            <if test="resMessage != null">res_message = #{resMessage},</if>
         </trim>
         where id = #{id}
     </update>
 
     <delete id="deleteSMSRecordEntityById" parameterType="Long">
-        delete from sms_record where id = #{id}
+        delete
+        from sms_record
+        where id = #{id}
     </delete>
 
     <delete id="deleteSMSRecordEntityByIds" parameterType="String">
-        delete from sms_record where id in 
+        delete from sms_record where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>

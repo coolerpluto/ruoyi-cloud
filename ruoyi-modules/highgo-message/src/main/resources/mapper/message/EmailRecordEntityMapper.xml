@@ -5,30 +5,48 @@
 <mapper namespace="com.highgo.message.mapper.EmailRecordEntityMapper">
 
     <resultMap type="EmailRecordEntity" id="EmailRecordEntityResult">
-        <result property="id"    column="id"    />
-        <result property="sourceUser"    column="source_user"    />
-        <result property="targetUser"    column="target_user"    />
-        <result property="copyUser"    column="copy_user"    />
-        <result property="sendDate"    column="send_date"    />
-        <result property="subject"    column="subject"    />
-        <result property="content"    column="content"    />
-        <result property="attachment"    column="attachment"    />
-        <result property="createBy"    column="create_by"    />
-        <result property="createTime"    column="create_time"    />
+        <result property="id" column="id"/>
+        <result property="sourceUser" column="source_user"/>
+        <result property="targetUser" column="target_user"/>
+        <result property="copyUser" column="copy_user"/>
+        <result property="sendDate" column="send_date"/>
+        <result property="subject" column="subject"/>
+        <result property="content" column="content"/>
+        <result property="attachment" column="attachment"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="resCode" column="res_code"/>
+        <result property="resMessage" column="res_message"/>
     </resultMap>
 
     <sql id="selectEmailRecordEntityVo">
-        select id, source_user, target_user, copy_user, send_date, subject, content, attachment, create_by, create_time from email_record
+        select id,
+               source_user,
+               target_user,
+               copy_user,
+               send_date,
+               subject,
+               content,
+               attachment,
+               create_by,
+               create_time,
+               res_code,
+               res_message
+        from email_record
     </sql>
 
     <select id="selectEmailRecordEntityList" parameterType="EmailRecordEntity" resultMap="EmailRecordEntityResult">
         <include refid="selectEmailRecordEntityVo"/>
         <where>
-            <if test="sourceUser != null  and sourceUser != ''"> and source_user like concat('%', #{sourceUser}, '%')</if>
-            <if test="targetUser != null  and targetUser != ''"> and target_user like concat('%', #{targetUser}, '%')</if>
-            <if test="copyUser != null  and copyUser != ''"> and copy_user like concat('%', #{copyUser}, '%')</if>
-            <if test="params.beginSendDate != null and params.beginSendDate != '' and params.endSendDate != null and params.endSendDate != ''"> and send_date between #{params.beginSendDate} and #{params.endSendDate}</if>
-            <if test="subject != null  and subject != ''"> and subject like concat('%', #{subject}, '%')</if>
+            <if test="sourceUser != null  and sourceUser != ''">and source_user like concat('%', #{sourceUser}, '%')
+            </if>
+            <if test="targetUser != null  and targetUser != ''">and target_user like concat('%', #{targetUser}, '%')
+            </if>
+            <if test="copyUser != null  and copyUser != ''">and copy_user like concat('%', #{copyUser}, '%')</if>
+            <if test="params.beginSendDate != null and params.beginSendDate != '' and params.endSendDate != null and params.endSendDate != ''">
+                and send_date between #{params.beginSendDate} and #{params.endSendDate}
+            </if>
+            <if test="subject != null  and subject != ''">and subject like concat('%', #{subject}, '%')</if>
         </where>
     </select>
 
@@ -50,6 +68,8 @@
             <if test="attachment != null">attachment,</if>
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
+            <if test="resCode != null">res_code,</if>
+            <if test="resMessage != null">res_message,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
@@ -62,6 +82,8 @@
             <if test="attachment != null">#{attachment},</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
+            <if test="resCode != null">#{resCode},</if>
+            <if test="resMessage != null">#{resMessage},</if>
         </trim>
     </insert>
 
@@ -77,12 +99,16 @@
             <if test="attachment != null">attachment = #{attachment},</if>
             <if test="createBy != null">create_by = #{createBy},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="resCode != null">res_code = #{resCode},</if>
+            <if test="resMessage != null">res_message = #{resMessage},</if>
         </trim>
         where id = #{id}
     </update>
 
     <delete id="deleteEmailRecordEntityById" parameterType="Long">
-        delete from email_record where id = #{id}
+        delete
+        from email_record
+        where id = #{id}
     </delete>
 
     <delete id="deleteEmailRecordEntityByIds" parameterType="String">
