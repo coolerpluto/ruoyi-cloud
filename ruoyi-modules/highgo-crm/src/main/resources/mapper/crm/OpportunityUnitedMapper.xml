@@ -151,10 +151,16 @@
                     ${params.crmDataScope}
                     <!--下面的是共享过来的判读-->
                     <if test="params.sharedId != null and params.sharedId != ''">
-                        or find_in_set( #{params.sharedId} , tc.shared_id)
+                        <if test="params.crmDataScope != null and params.crmDataScope != ''">
+                            or
+                        </if>
+                        find_in_set( #{params.sharedId} , tc.shared_id)
                     </if>
                     <if test="params.sharedDeptId != null and params.sharedDeptId != ''">
-                        or find_in_set( #{params.sharedDeptId} , tc.shared_dept_id)
+                        <if test="(params.crmDataScope != null and params.crmDataScope != '') or (params.sharedId != null and params.sharedId != '')">
+                            or
+                        </if>
+                        find_in_set( #{params.sharedDeptId} , tc.shared_dept_id)
                     </if>
                 </trim>
             </if>
@@ -583,12 +589,12 @@
     </update>
     <update id="deleteOppoShareByCode" parameterType="OpportunityUnited">
         update t_opportunity
-        set shared_id = replace(shared_id,concat(',',#{sharedId}),'')
-        where code =#{code}
+        set shared_id = replace(shared_id, concat(',', #{sharedId}), '')
+        where code = #{code}
     </update>
     <update id="addOppoShareByCode" parameterType="OpportunityUnited">
         update t_opportunity
-        set shared_id = concat_ws(',',shared_id,#{sharedId})
+        set shared_id = concat_ws(',', shared_id, #{sharedId})
         where code = #{code}
     </update>
 </mapper>
