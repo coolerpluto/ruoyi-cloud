@@ -35,7 +35,7 @@ export default {
   },
   data() {
     return {
-      title: '综合管理系统',
+      title: '综合信息管理系统',
       logo: logoImg
     }
   }

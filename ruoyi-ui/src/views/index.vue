@@ -3,7 +3,7 @@
     <el-row :gutter="20">
       <el-col :sm="24" style="padding-left: 20px">
         <div style="width: 100%;text-align: center;" >
-          <span style="font-size: xx-large;color: darkorchid;" >欢迎进入综合管理系统</span>
+          <span style="font-size: xx-large;color: darkorchid;" >欢迎进入综合信息管理系统</span>
         </div>
         <div style="width: 100%;">
           <p style="float: left;">
@@ -39,7 +39,7 @@
       </el-col>
 
       <el-col :sm="24" :lg="5" style="padding-left: 20px">
-        <h2>技术支持</h2>
+        <h2>系统支持人员</h2>
         <el-collapse accordion>
           <el-collapse-item v-for="(dict,index) in dict.type.sys_user_standby" :name="index">
             <template slot="title">
