@@ -164,7 +164,7 @@
             width="160"
             class-name="small-padding fixed-width"
           >
-            <template slot-scope="scope" v-if="scope.row.userId !== 1">
+            <template slot-scope="scope" v-if="scope.row.userId !== 1 && $store.getters.name !== scope.row.userName">
               <el-button
                 size="mini"
                 type="text"
