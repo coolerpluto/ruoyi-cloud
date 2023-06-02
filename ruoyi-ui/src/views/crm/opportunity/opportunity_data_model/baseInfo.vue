@@ -135,7 +135,7 @@
               </el-select>
             </el-form-item>
           </el-col>
-        </el-row>        
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitDialogForm">确 定</el-button>
@@ -297,16 +297,27 @@ export default {
         return m < 10 ? '00' + m : m < 100 ? '0' + m : m
       }
       const currentTime = new Date();
-      let year = currentTime.getFullYear();
+      let year = currentTime.getFullYear().toString().slice(-2);
       let month = currentTime.getMonth() + 1,
         date = currentTime.getDate(),
         hours = currentTime.getHours(),
         minutes = currentTime.getMinutes(),
         seconds = currentTime.getSeconds(),
         milliseconds = currentTime.getMilliseconds();
-      let code = "A" + year + add0(month) + add0(date) + "N" + add0(hours) + add0(minutes) + add0(seconds) + add00(milliseconds);
+      let code = "A" + year + add0(month) + add0(date) + "N" + add0(hours) + add0(minutes) + add0(seconds) + this.getRanBigChar(2);
       this.baseInfoForm.oppInfo.code = code;
       return code;
+    },
+    getRanBigChar(length) {
+      if (!length) {
+        return "";
+      }
+      let result = [];
+      for (let i = 0; i < length; i++) {
+        let ranNum = Math.ceil(Math.random() * 25);
+        result.push(String.fromCharCode(65 + ranNum));
+      }
+      return result.join('');
     },
     getOperationalOptions(query) {
       this.flag.operationalOptionsLoading = true
@@ -360,7 +371,7 @@ export default {
           func();
         }
         return;
-      }      
+      }
       getDicts(dictCode).then(res => {
         if (typeof func == 'function') {
           func(res.data);
@@ -420,7 +431,7 @@ export default {
       this.$refs["baseInfoDialog.form"].validate(valid => {
         if (!valid) {
           return;
-        }        
+        }
         let selectCategoryL1 = this.baseInfoDialog.categoryL1Options.find(item=>{
           return item.dictValue == this.baseInfoDialog.form.categoryL1;
         });
