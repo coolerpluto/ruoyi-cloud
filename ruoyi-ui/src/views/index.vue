@@ -27,7 +27,7 @@
           <right-toolbar @queryTable="getNoticeList"></right-toolbar>
         </h2>
         <el-collapse accordion>
-          <el-collapse-item v-for="(notice,index) in noticeList" :name="index">
+          <el-collapse-item v-for="(notice,index) in noticeList" :name="index" :key="index">
             <template slot="title">
               <div style="width: 100%;">
                 <p style="float: left;"> 主题：{{ notice.noticeTitle }}</p>
@@ -42,7 +42,7 @@
       <el-col :sm="24" :lg="5" style="padding-left: 20px">
         <h2>系统支持人员</h2>
         <el-collapse accordion>
-          <el-collapse-item v-for="(dict,index) in dict.type.sys_user_standby" :name="index">
+          <el-collapse-item v-for="(dict,index) in dict.type.sys_user_standby" :name="index" :key="index">
             <template slot="title">
               <div style="width: 100%;">
                 <p style="float: left;"> {{ dict.label }}</p>
