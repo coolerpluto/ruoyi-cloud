@@ -2,15 +2,16 @@
   <div class="app-container home">
     <el-row :gutter="20">
       <el-col :sm="24" style="padding-left: 20px">
-        <div style="width: 100%;text-align: center;" >
-          <span style="font-size: xx-large;color: darkorchid;" >欢迎进入综合信息管理系统</span>
+        <div style="width: 100%;text-align: center;">
+          <span style="font-size: xx-large;color: darkorchid;">欢迎进入综合信息管理系统</span>
         </div>
         <div style="width: 100%;">
           <p style="float: left;">
             <b>当前版本:</b> <span>v{{ version }}</span>
           </p>
           <div style="text-align: end;">
-            <iframe scrolling="no" src="https://tianqiapi.com/api.php?style=tz&skin=pitaya" frameborder="0" width="275" height="20" allowtransparency="true"></iframe>
+            <iframe scrolling="no" src="https://tianqiapi.com/api.php?style=tz&skin=pitaya" frameborder="0" width="275"
+                    height="20" allowtransparency="true"></iframe>
           </div>
           <p style="float: right;">
             <b>当前时间:</b> <span>{{ dateFormat(currentTime) }}</span>
@@ -43,7 +44,10 @@
         <el-collapse accordion>
           <el-collapse-item v-for="(dict,index) in dict.type.sys_user_standby" :name="index">
             <template slot="title">
-              {{ dict.label }}--EM 账户：{{ dict.value }}
+              <div style="width: 100%;">
+                <p style="float: left;"> {{ dict.label }}</p>
+                <p align="right"> {{ dict.value }}</p>
+              </div>
             </template>
             <div> {{ dict.raw.remark }}</div>
           </el-collapse-item>
