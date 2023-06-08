@@ -546,16 +546,27 @@ export default {
       }
 
       const currentTime = new Date();
-      let year = currentTime.getFullYear();
+      let year = currentTime.getFullYear().toString().slice(-2);
       let month = currentTime.getMonth() + 1,
         date = currentTime.getDate(),
         hours = currentTime.getHours(),
         minutes = currentTime.getMinutes(),
         seconds = currentTime.getSeconds(),
         milliseconds = currentTime.getMilliseconds();
-      let code = "B" + year + add0(month) + add0(date) + "N" + add0(hours) + add0(minutes) + add0(seconds) + add00(milliseconds);
+      let code = "B" + year + add0(month) + add0(date) + "N" + add0(hours) + add0(minutes) + add0(seconds) + this.getRanBigChar(2);
       this.data.code = this.data.licenseData.code = code;
       return code;
+    },
+    getRanBigChar(length) {
+      if (!length) {
+        return "";
+      }
+      let result = [];
+      for (let i = 0; i < length; i++) {
+        let ranNum = Math.ceil(Math.random() * 25);
+        result.push(String.fromCharCode(65 + ranNum));
+      }
+      return result.join('');
     },
     // 取消按钮
     cancel() {
