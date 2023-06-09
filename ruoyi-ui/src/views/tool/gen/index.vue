@@ -70,6 +70,17 @@
       </el-col>
       <el-col :span="1.5">
         <el-button
+          type="info"
+          plain
+          icon="el-icon-upload"
+          size="mini"
+          @click="openImportTableAssignedDB"
+          v-hasPermi="['tool:gen:import']"
+        >别库导入
+        </el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
           type="success"
           plain
           icon="el-icon-edit"
@@ -203,6 +214,7 @@
       </el-tabs>
     </el-dialog>
     <import-table ref="import" @ok="handleQuery"/>
+    <import-table-assigned-d-b ref="importAssignedDB" @ok="handleQuery"/>
     <add-new-table ref="addNew" @ok="handleQuery"/>
   </div>
 </template>
@@ -210,6 +222,7 @@
 <script>
 import {listTable, previewTable, delTable, genCode, synchDb} from "@/api/tool/gen";
 import importTable from "./importTable";
+import importTableAssignedDB from "./importTableAssignedDB";
 import addNewTable from "./addNewTable";
 import hljs from "highlight.js/lib/highlight";
 import "highlight.js/styles/github-gist.css";
@@ -223,7 +236,7 @@ hljs.registerLanguage("sql", require("highlight.js/lib/languages/sql"));
 
 export default {
   name: "Gen",
-  components: {importTable, addNewTable},
+  components: {importTable, addNewTable,importTableAssignedDB},
   data() {
     return {
       // 遮罩层
@@ -321,6 +334,9 @@ export default {
     /** 打开导入表弹窗 */
     openImportTable() {
       this.$refs.import.show();
+    },
+    openImportTableAssignedDB(){
+      this.$refs.importAssignedDB.show();
     },
     /** 重置按钮操作 */
     resetQuery() {

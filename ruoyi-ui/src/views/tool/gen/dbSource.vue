@@ -163,15 +163,15 @@
         <el-row v-if="form.dbType == 'oracle'">
           <el-col :span="12">
             <el-form-item label="oracle连接方式" prop="oracleConnMode">
-              <el-input v-model="form.oracleConnMode" placeholder="请输入oracle连接方式"/>
+              <el-radio-group v-model="form.oracleConnMode">
+                <el-radio label="service_name">服务名</el-radio>
+                <el-radio label="sid">SID</el-radio>
+              </el-radio-group>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="oracle连接服务名或SID" prop="serviceNameOrSid">
-              <el-radio-group v-model="form.serviceNameOrSid">
-                <el-radio label="service_name">服务名</el-radio>
-                <el-radio label="sid">SID</el-radio>
-              </el-radio-group>
+              <el-input v-model="form.serviceNameOrSid" placeholder="oracle连接服务名或SID"/>
             </el-form-item>
           </el-col>
         </el-row>
