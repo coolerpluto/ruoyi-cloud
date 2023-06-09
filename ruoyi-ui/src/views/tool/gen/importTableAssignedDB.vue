@@ -99,7 +99,7 @@
 </template>
 
 <script>
-import { listDbTable, importTable } from "@/api/tool/gen";
+import { listAssignedDbTable, importTableAssignedDB } from "@/api/tool/gen";
 import { listGenDbSource } from "@/api/tool/genDbSource";
 export default {
   name: "ImportTableAssignedDB",
@@ -119,7 +119,8 @@ export default {
         pageNum: 1,
         pageSize: 4,
         tableName: undefined,
-        tableComment: undefined
+        tableComment: undefined,
+        params:{}
       },
       // 选择的数据源
       dbSourceSelectedLabel:"",
@@ -167,6 +168,7 @@ export default {
     /** row:点击的那一行, column:点击的那一列, event:触发的事件 */
     handleDbSourceRowClick(row, column, event){
       this.dbSourceSelected = row;
+      this.queryParams.params["dataSourceId"] = row.id;
       this.dbSourceSelectedLabel = row.host+":"+row.port+"/"+row.name;
     },
     // 显示弹框
@@ -183,7 +185,7 @@ export default {
     },
     // 查询表数据
     getList() {
-      listDbTable(this.queryParams).then(res => {
+      listAssignedDbTable(this.queryParams).then(res => {
         if (res.code === 200) {
           this.dbTableList = res.rows;
           this.total = res.total;
@@ -202,12 +204,19 @@ export default {
     },
     /** 导入按钮操作 */
     handleImportTable() {
+      if (!this.dbSourceSelected.id) {
+        this.$modal.msgError("请选择导入的表对应的数据源");
+        return;
+      }
       const tableNames = this.tables.join(",");
       if (tableNames == "") {
         this.$modal.msgError("请选择要导入的表");
         return;
       }
-      importTable({ tables: tableNames }).then(res => {
+      importTableAssignedDB({
+        tables: tableNames,
+        dataSourceId: this.dbSourceSelected.id
+      }).then(res => {
         this.$modal.msgSuccess(res.msg);
         if (res.code === 200) {
           this.visible = false;

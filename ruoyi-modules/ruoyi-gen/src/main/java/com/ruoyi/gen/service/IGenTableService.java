@@ -120,4 +120,8 @@ public interface IGenTableService
     public void validateEdit(GenTable genTable);
 
     void addGenTable(GenTable genTable);
+
+    List<GenTable> selectAssignedDBTableList(GenTable genTable);
+
+    List<GenTable> selectAssignedDbTableListByNames(String[] tableNames, Long dataSourceId);
 }

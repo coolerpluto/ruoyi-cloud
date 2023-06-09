@@ -16,6 +16,14 @@ export function listDbTable(query) {
     params: query
   })
 }
+// 查询db数据库列表
+export function listAssignedDbTable(query) {
+  return request({
+    url: '/code/gen/assignedDB/list',
+    method: 'get',
+    params: query
+  })
+}
 
 // 查询表详细信息
 export function getGenTable(tableId) {
@@ -38,6 +46,14 @@ export function updateGenTable(data) {
 export function importTable(data) {
   return request({
     url: '/code/gen/importTable',
+    method: 'post',
+    params: data
+  })
+}
+// 导入表
+export function importTableAssignedDB(data) {
+  return request({
+    url: '/code/gen/assignedDB/importTable',
     method: 'post',
     params: data
   })

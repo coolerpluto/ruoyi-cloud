@@ -84,7 +84,23 @@ public class GenController extends BaseController
         List<GenTable> list = genTableService.selectDbTableList(genTable);
         return getDataTable(list);
     }
-
+    @GetMapping("/assignedDB/list")
+    public TableDataInfo dataAssignedDBList(GenTable genTable)
+    {
+        startPage();
+        List<GenTable> list = genTableService.selectAssignedDBTableList(genTable);
+        return getDataTable(list);
+    }
+    @PostMapping("/assignedDB/importTable")
+    public AjaxResult importTableAssignedDBSave(String tables, Long dataSourceId)
+    {
+        logger.info("importTableAssignedDBSave req  tables:{},dataSourceId:{}",tables,dataSourceId);
+        String[] tableNames = Convert.toStrArray(tables);
+        // 查询表信息
+        List<GenTable> tableList = genTableService.selectAssignedDbTableListByNames(tableNames,dataSourceId);
+        genTableService.importGenTable(tableList);
+        return success();
+    }
     /**
      * 查询数据表字段列表
      */

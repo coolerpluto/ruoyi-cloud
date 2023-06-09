@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -431,6 +432,20 @@ public class GenTableServiceImpl implements IGenTableService
     @Override
     public void addGenTable(GenTable genTable) {
         genTableMapper.insertGenTable(genTable);
+    }
+
+    @Override
+    public List<GenTable> selectAssignedDBTableList(GenTable genTable)
+    {
+        log.info("selectAssignedDBTableList req:{}",JSON.toJSONString(genTable));
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<GenTable> selectAssignedDbTableListByNames(String[] tableNames, Long dataSourceId)
+    {
+        log.info("selectAssignedDbTableListByNames req tableNames:{},dataSourceId:{}",JSON.toJSONString(tableNames),dataSourceId);
+        return new ArrayList<>();
     }
 
     /**
