@@ -168,6 +168,20 @@ export const dynamicRoutes = [
     ]
   },
   {
+    path: '/tool/gen-db-source',
+    component: Layout,
+    hidden: true,
+    permissions: ["tool:gen:import"],
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/tool/gen/dbSource'),
+        name: 'DBSource',
+        meta: { title: '数据源配置', activeMenu: '/tool/gen' }
+      }
+    ]
+  },
+  {
     path: '/crm/opportunity-data',
     component: Layout,
     hidden: true,

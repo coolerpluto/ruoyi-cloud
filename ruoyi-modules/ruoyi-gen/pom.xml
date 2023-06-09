@@ -14,7 +14,11 @@
     <description>
         ruoyi-modules-gen代码生成
     </description>
-
+    <properties>
+        <oracle.version>10.2.0.4.0</oracle.version>
+        <sqlserver.version>7.4.1.jre8</sqlserver.version>
+        <highgo.jdbc.version>6.2.3</highgo.jdbc.version>
+    </properties>
     <dependencies>
     	
     	<!-- SpringCloud Alibaba Nacos -->
@@ -59,7 +63,46 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
-        
+
+        <!-- MariaDB Connector -->
+        <dependency>
+            <groupId>org.mariadb.jdbc</groupId>
+            <artifactId>mariadb-java-client</artifactId>
+            <version>3.1.4</version>
+        </dependency>
+
+        <!--oracle驱动-->
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc14</artifactId>
+            <version>${oracle.version}</version>
+        </dependency>
+
+        <!-- Sqlite驱动包 -->
+        <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+        </dependency>
+
+        <!-- SqlServer驱动包 -->
+        <dependency>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
+        </dependency>
+
+        <!-- PostgreSql驱动包 -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
+
+        <!-- highgo-jdbc 驱动包 -->
+        <dependency>
+            <groupId>com.highgo</groupId>
+            <artifactId>highgo-jdbc</artifactId>
+            <version>${highgo.jdbc.version}</version>
+        </dependency>
+
         <!-- RuoYi Common Log -->
         <dependency>
             <groupId>com.ruoyi</groupId>

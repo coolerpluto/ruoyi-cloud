@@ -92,6 +92,17 @@
         >删除
         </el-button>
       </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="success"
+          plain
+          icon="el-icon-plus"
+          size="mini"
+          @click="handleAddDbSource"
+          v-hasPermi="['tool:gen:import']"
+        >添加数据源
+        </el-button>
+      </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
@@ -360,7 +371,11 @@ export default {
         this.$modal.msgSuccess("删除成功");
       }).catch(() => {
       });
-    }
+    },
+    /** 修改按钮操作 */
+    handleAddDbSource() {
+      this.$tab.openPage("数据源配置", '/tool/gen-db-source/index',{});
+    },
   }
 };
 </script>
