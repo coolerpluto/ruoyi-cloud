@@ -12,6 +12,12 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+
+import com.ruoyi.common.core.enums.DataSourceType;
+import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.gen.config.datasource.DynamicDataSourceContextHolder;
+import com.ruoyi.gen.domain.GenDbSource;
+import com.ruoyi.gen.mapper.GenDbSourceMapper;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.velocity.Template;
@@ -40,7 +46,7 @@ import com.ruoyi.gen.util.VelocityUtils;
 
 /**
  * 业务 服务层实现
- * 
+ *
  * @author ruoyi
  */
 @Service
@@ -56,7 +62,7 @@ public class GenTableServiceImpl implements IGenTableService
 
     /**
      * 查询业务信息
-     * 
+     *
      * @param id 业务ID
      * @return 业务信息
      */
@@ -70,7 +76,7 @@ public class GenTableServiceImpl implements IGenTableService
 
     /**
      * 查询业务列表
-     * 
+     *
      * @param genTable 业务信息
      * @return 业务集合
      */
@@ -82,7 +88,7 @@ public class GenTableServiceImpl implements IGenTableService
 
     /**
      * 查询据库列表
-     * 
+     *
      * @param genTable 业务信息
      * @return 数据库表集合
      */
@@ -94,7 +100,7 @@ public class GenTableServiceImpl implements IGenTableService
 
     /**
      * 查询据库列表
-     * 
+     *
      * @param tableNames 表名称组
      * @return 数据库表集合
      */
@@ -106,7 +112,7 @@ public class GenTableServiceImpl implements IGenTableService
 
     /**
      * 查询所有表信息
-     * 
+     *
      * @return 表信息集合
      */
     @Override
@@ -117,7 +123,7 @@ public class GenTableServiceImpl implements IGenTableService
 
     /**
      * 修改业务
-     * 
+     *
      * @param genTable 业务信息
      * @return 结果
      */
@@ -139,7 +145,7 @@ public class GenTableServiceImpl implements IGenTableService
 
     /**
      * 删除业务对象
-     * 
+     *
      * @param tableIds 需要删除的数据ID
      * @return 结果
      */
@@ -153,7 +159,7 @@ public class GenTableServiceImpl implements IGenTableService
 
     /**
      * 导入表结构
-     * 
+     *
      * @param tableList 导入表列表
      */
     @Override
@@ -188,7 +194,7 @@ public class GenTableServiceImpl implements IGenTableService
 
     /**
      * 预览代码
-     * 
+     *
      * @param tableId 表编号
      * @return 预览数据列表
      */
@@ -221,7 +227,7 @@ public class GenTableServiceImpl implements IGenTableService
 
     /**
      * 生成代码（下载方式）
-     * 
+     *
      * @param tableName 表名称
      * @return 数据
      */
@@ -237,7 +243,7 @@ public class GenTableServiceImpl implements IGenTableService
 
     /**
      * 生成代码（自定义路径）
-     * 
+     *
      * @param tableName 表名称
      */
     @Override
@@ -279,7 +285,7 @@ public class GenTableServiceImpl implements IGenTableService
 
     /**
      * 同步数据库
-     * 
+     *
      * @param tableName 表名称
      */
     @Override
@@ -288,7 +294,7 @@ public class GenTableServiceImpl implements IGenTableService
     {
         GenTable table = genTableMapper.selectGenTableByName(tableName);
         List<GenTableColumn> tableColumns = table.getColumns();
-        Map<String, GenTableColumn> tableColumnMap = tableColumns.stream().collect(Collectors.toMap(GenTableColumn::getColumnName, Function.identity()));
+            Map<String, GenTableColumn> tableColumnMap = tableColumns.stream().collect(Collectors.toMap(GenTableColumn::getColumnName, Function.identity()));
 
         List<GenTableColumn> dbTableColumns = genTableColumnMapper.selectDbTableColumnsByName(tableName);
         if (StringUtils.isEmpty(dbTableColumns))
@@ -297,7 +303,8 @@ public class GenTableServiceImpl implements IGenTableService
         }
         List<String> dbTableColumnNames = dbTableColumns.stream().map(GenTableColumn::getColumnName).collect(Collectors.toList());
 
-        dbTableColumns.forEach(column -> {
+        dbTableColumns.forEach(column ->
+        {
             GenUtils.initColumnField(column, table);
             if (tableColumnMap.containsKey(column.getColumnName()))
             {
@@ -334,7 +341,7 @@ public class GenTableServiceImpl implements IGenTableService
 
     /**
      * 批量生成代码（下载方式）
-     * 
+     *
      * @param tableNames 表数组
      * @return 数据
      */
@@ -393,7 +400,7 @@ public class GenTableServiceImpl implements IGenTableService
 
     /**
      * 修改保存参数校验
-     * 
+     *
      * @param genTable 业务信息
      */
     @Override
@@ -430,27 +437,113 @@ public class GenTableServiceImpl implements IGenTableService
     }
 
     @Override
-    public void addGenTable(GenTable genTable) {
+    public void addGenTable(GenTable genTable)
+    {
         genTableMapper.insertGenTable(genTable);
     }
+
+    @Autowired
+    private GenDbSourceMapper genDbSourceMapper;
 
     @Override
     public List<GenTable> selectAssignedDBTableList(GenTable genTable)
     {
-        log.info("selectAssignedDBTableList req:{}",JSON.toJSONString(genTable));
-        return new ArrayList<>();
+        Long dataSourceId = genTable.getDataSourceId();
+        GenDbSource dbSource = genDbSourceMapper.selectGenDbSourceById(dataSourceId);
+        try
+        {
+            // 切库
+            DynamicDataSourceContextHolder.setDataSourceType(DataSourceType.SLAVE.name() + Convert.toChar(dbSource.getId()));
+            return genDbSourceMapper.selectDbTableList(genTable, dbSource.getDbType());
+        }
+        finally
+        {
+            // 还原
+            DynamicDataSourceContextHolder.clearDataSourceType();
+        }
     }
 
     @Override
     public List<GenTable> selectAssignedDbTableListByNames(String[] tableNames, Long dataSourceId)
     {
-        log.info("selectAssignedDbTableListByNames req tableNames:{},dataSourceId:{}",JSON.toJSONString(tableNames),dataSourceId);
-        return new ArrayList<>();
+        GenDbSource dbSource = genDbSourceMapper.selectGenDbSourceById(dataSourceId);
+        try
+        {
+            // 切换数据源
+            DynamicDataSourceContextHolder
+                    .setDataSourceType(DataSourceType.SLAVE.name() + Convert.toStr(dbSource.getId()));
+            return genDbSourceMapper.selectDbTableListByNames(tableNames, dbSource.getDbType());
+        }
+        finally
+        {
+            DynamicDataSourceContextHolder.clearDataSourceType();
+        }
+    }
+
+    @Override
+    public void importGenTableAssignedDB(List<GenTable> tableList, Long dataSourceId)
+    {
+        GenDbSource dbSource = genDbSourceMapper.selectGenDbSourceById(dataSourceId);
+        String operName = SecurityUtils.getUsername();
+        for (GenTable table : tableList)
+        {
+            try
+            {
+                String tableName = table.getTableName();
+                GenUtils.initTable(table, operName);
+                table.setDataSourceId(dataSourceId);
+                int row = genTableMapper.insertGenTable(table);
+                if (row > 0)
+                {
+                    List<GenTableColumn> dbTableColumns = selectDbTableColumnsByName(dbSource.getId(), tableName);
+                    for (GenTableColumn column : dbTableColumns)
+                    {
+                        GenUtils.initColumnField(column, table);
+                        genTableColumnMapper.insertGenTableColumn(column);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                log.error("表名 " + table.getTableName() + " 导入失败：", e);
+            }
+        }
     }
 
     /**
+     * 根据表名获取列
+     *
+     * @param dataSourceId 数据源主键
+     * @param tableName    表名
+     * @return
+     */
+    private List<GenTableColumn> selectDbTableColumnsByName(Long dataSourceId, String tableName)
+    {
+        GenDbSource dataSource = genDbSourceMapper.selectGenDbSourceById(dataSourceId);
+        try
+        {
+            // 切换数据源
+            DynamicDataSourceContextHolder
+                    .setDataSourceType(DataSourceType.SLAVE.name() + Convert.toStr(dataSource.getId()));
+            return genDbSourceMapper.selectDbTableColumnsByName(tableName, dataSource.getDbType());
+        }
+        finally
+        {
+            DynamicDataSourceContextHolder.clearDataSourceType();
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void synchAssignedDBDb(Long dataSourceId, String tableName)
+    {
+        // TODO 待完善
+    }
+
+
+    /**
      * 设置主键列信息
-     * 
+     *
      * @param table 业务表信息
      */
     public void setPkColumn(GenTable table)
@@ -486,7 +579,7 @@ public class GenTableServiceImpl implements IGenTableService
 
     /**
      * 设置主子表信息
-     * 
+     *
      * @param table 业务表信息
      */
     public void setSubTable(GenTable table)
@@ -500,7 +593,7 @@ public class GenTableServiceImpl implements IGenTableService
 
     /**
      * 设置代码生成其他选项值
-     * 
+     *
      * @param genTable 设置后的生成对象
      */
     public void setTableFromOptions(GenTable genTable)
@@ -524,8 +617,8 @@ public class GenTableServiceImpl implements IGenTableService
 
     /**
      * 获取代码生成地址
-     * 
-     * @param table 业务表信息
+     *
+     * @param table    业务表信息
      * @param template 模板文件路径
      * @return 生成地址
      */

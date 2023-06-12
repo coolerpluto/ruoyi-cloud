@@ -2,6 +2,9 @@ package com.ruoyi.gen.mapper;
 
 import java.util.List;
 import com.ruoyi.gen.domain.GenDbSource;
+import com.ruoyi.gen.domain.GenTable;
+import com.ruoyi.gen.domain.GenTableColumn;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 代码生成数据源配置Mapper接口
@@ -58,4 +61,10 @@ public interface GenDbSourceMapper
      * @return 结果
      */
     public int deleteGenDbSourceByIds(Long[] ids);
+
+    List<GenTable> selectDbTableList(@Param("genTable") GenTable genTable, @Param("dbType")String dbType);
+
+    List<GenTable> selectDbTableListByNames(@Param("tableNames")String[] tableNames, @Param("dbType")String dbType);
+
+    List<GenTableColumn> selectDbTableColumnsByName(@Param("tableName")String tableName,  @Param("dbType")String dbType);
 }

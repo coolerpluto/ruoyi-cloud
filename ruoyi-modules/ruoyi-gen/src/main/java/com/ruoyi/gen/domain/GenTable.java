@@ -79,7 +79,7 @@ public class GenTable extends BaseEntity
 
     /** 其它生成选项 */
     private String options;
-
+    private Long dataSourceId;
     /** 树编码字段 */
     private String treeCode;
 
@@ -94,6 +94,16 @@ public class GenTable extends BaseEntity
 
     /** 上级菜单名称字段 */
     private String parentMenuName;
+
+    public Long getDataSourceId()
+    {
+        return dataSourceId;
+    }
+
+    public void setDataSourceId(Long dataSourceId)
+    {
+        this.dataSourceId = dataSourceId;
+    }
 
     public Long getTableId()
     {

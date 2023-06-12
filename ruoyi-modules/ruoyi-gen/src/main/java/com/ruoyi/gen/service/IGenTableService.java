@@ -124,4 +124,8 @@ public interface IGenTableService
     List<GenTable> selectAssignedDBTableList(GenTable genTable);
 
     List<GenTable> selectAssignedDbTableListByNames(String[] tableNames, Long dataSourceId);
+
+    void synchAssignedDBDb(Long dataSourceId, String tableName);
+
+    void importGenTableAssignedDB(List<GenTable> tableList, Long dataSourceId);
 }

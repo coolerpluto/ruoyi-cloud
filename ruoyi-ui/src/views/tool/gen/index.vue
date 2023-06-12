@@ -220,7 +220,7 @@
 </template>
 
 <script>
-import {listTable, previewTable, delTable, genCode, synchDb} from "@/api/tool/gen";
+import {listTable, previewTable, delTable, genCode, synchDb, synchAssignedDBDb} from "@/api/tool/gen";
 import importTable from "./importTable";
 import importTableAssignedDB from "./importTableAssignedDB";
 import addNewTable from "./addNewTable";
@@ -324,8 +324,9 @@ export default {
     /** 同步数据库操作 */
     handleSynchDb(row) {
       const tableName = row.tableName;
+      const dataSourceId = row.dataSourceId;
       this.$modal.confirm('确认要强制同步"' + tableName + '"表结构吗？').then(function () {
-        return synchDb(tableName);
+        return dataSourceId?synchAssignedDBDb({dataSourceId:dataSourceId,tableName:tableName}):synchDb(tableName);
       }).then(() => {
         this.$modal.msgSuccess("同步成功");
       }).catch(() => {

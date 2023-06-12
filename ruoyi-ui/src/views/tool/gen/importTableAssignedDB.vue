@@ -1,6 +1,6 @@
 <template>
   <!-- 导入表 -->
-  <el-dialog title="指定数据源-导入表" :visible.sync="visible" width="1200px" top="5vh" append-to-body>
+  <el-dialog title="指定数据源-导入表" :visible.sync="visible" width="1200px" top="5vh" append-to-body v-loading="loading">
     <el-form :model="queryDbSourceParams" ref="queryDbSourceParams" size="small" :inline="true" label-width="108px">
       <el-form-item label="数据库名称" prop="name">
         <el-input
@@ -27,7 +27,7 @@
     </el-form>
     <el-row>
       <el-table v-loading="genDbSourceLoading" :data="genDbSourceList"
-                @row-click="handleDbSourceRowClick" height="200px"
+                height="200px" highlight-current-row @current-change="dbSourceChange"
                 @selection-change="handleSelectionDbSourceChange">
         <el-table-column label="数据源主键" align="center" prop="id"/>
         <el-table-column label="数据库名称" align="center" prop="name"/>
@@ -51,13 +51,6 @@
     </el-row>
     <el-divider/>
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true">
-      <el-form-item label="数据源" prop="tableName">
-        <el-input
-          v-model="dbSourceSelectedLabel"
-          placeholder="请输入表名称"
-          readonly
-        />
-      </el-form-item>
       <el-form-item label="表名称" prop="tableName">
         <el-input
           v-model="queryParams.tableName"
@@ -106,6 +99,7 @@ export default {
   dicts: ['sys_yes_no', 'sys_system_db_type'],
   data() {
     return {
+      loading:false,
       // 界面显示和关闭
       visible: false,
       // 选中数组值
@@ -122,8 +116,6 @@ export default {
         tableComment: undefined,
         params:{}
       },
-      // 选择的数据源
-      dbSourceSelectedLabel:"",
       dbSourceSelected:{},
       // 数据源总数
       dbSourceTotal: 0,
@@ -165,11 +157,9 @@ export default {
         this.genDbSourceLoading = false;
       });
     },
-    /** row:点击的那一行, column:点击的那一列, event:触发的事件 */
-    handleDbSourceRowClick(row, column, event){
-      this.dbSourceSelected = row;
-      this.queryParams.params["dataSourceId"] = row.id;
-      this.dbSourceSelectedLabel = row.host+":"+row.port+"/"+row.name;
+    dbSourceChange(current,old){
+      this.dbTableList = [];
+      this.dbSourceSelected = current;
     },
     // 显示弹框
     show() {
@@ -185,6 +175,11 @@ export default {
     },
     // 查询表数据
     getList() {
+      if(!this.dbSourceSelected){
+        this.$modal.msgError("请先点击数据源，再查询");
+        return;
+      }
+      this.queryParams.dataSourceId = this.dbSourceSelected.id
       listAssignedDbTable(this.queryParams).then(res => {
         if (res.code === 200) {
           this.dbTableList = res.rows;
@@ -213,10 +208,12 @@ export default {
         this.$modal.msgError("请选择要导入的表");
         return;
       }
+      this.loading =true;
       importTableAssignedDB({
         tables: tableNames,
         dataSourceId: this.dbSourceSelected.id
       }).then(res => {
+        this.loading =false;
         this.$modal.msgSuccess(res.msg);
         if (res.code === 200) {
           this.visible = false;

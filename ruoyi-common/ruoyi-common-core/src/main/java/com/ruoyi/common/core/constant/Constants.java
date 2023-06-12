@@ -127,4 +127,27 @@ public class Constants
      */
     public static final String[] JOB_ERROR_STR = { "java.net.URL", "javax.naming.InitialContext", "org.yaml.snakeyaml",
             "org.springframework", "org.apache", "com.ruoyi.common.core.utils.file" };
+    /** 数据库类型-MySQL */
+    public static final String DATABASE_TYPE_MYSQL = "mysql";
+    public static final String DATABASE_TYPE_MARIADB = "mariadb";
+
+    /** 数据库类型-Oracle */
+    public static final String DATABASE_TYPE_ORACLE = "oracle";
+
+    /** 数据库类型-PostgreSQL */
+    public static final String DATABASE_TYPE_POSTGRESQL = "pgsql";
+    public static final String DATABASE_TYPE_HIGHGO = "highgo";
+
+
+    /** 数据库类型-DB2 */
+    public static final String DATABASE_TYPE_DB2 = "db2";
+
+    /** 数据库类型-SQL Server */
+    public static final String DATABASE_TYPE_SQLSERVER = "sqlserver";
+
+    /** Oracle数据库连接类型-SID */
+    public static final String ORACLE_CONN_TYPE_SID = "sid";
+
+    /** Oracle数据库连接类型-服务名 */
+    public static final String ORACLE_CONN_TYPE_SERVICE_NAME = "service_name";
 }

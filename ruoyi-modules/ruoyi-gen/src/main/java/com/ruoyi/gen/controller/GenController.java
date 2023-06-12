@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.common.core.utils.StringUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -98,7 +100,7 @@ public class GenController extends BaseController
         String[] tableNames = Convert.toStrArray(tables);
         // 查询表信息
         List<GenTable> tableList = genTableService.selectAssignedDbTableListByNames(tableNames,dataSourceId);
-        genTableService.importGenTable(tableList);
+        genTableService.importGenTableAssignedDB(tableList,dataSourceId);
         return success();
     }
     /**
@@ -226,6 +228,14 @@ public class GenController extends BaseController
     public AjaxResult synchDb(@PathVariable("tableName") String tableName)
     {
         genTableService.synchDb(tableName);
+        return success();
+    }
+
+    @GetMapping("/assignedDB/synchDb")
+    public AjaxResult synchAssignedDBDb(GenTable genTable)
+    {
+        assert StringUtils.isNotNull(genTable.getDataSourceId()) && StringUtils.isNotEmpty(genTable.getTableName()):"表信息不全，不能进行同步操作！";
+        genTableService.synchAssignedDBDb(genTable.getDataSourceId(),genTable.getTableName());
         return success();
     }
 

@@ -97,6 +97,14 @@ export function synchDb(tableName) {
     method: 'get'
   })
 }
+// 同步数据库
+export function synchAssignedDBDb(data) {
+  return request({
+    url: '/code/gen/assignedDB/synchDb/',
+    method: 'get',
+    params: data
+  })
+}
 // 添加字段
 export function addTableColumn(data) {
   return request({
