@@ -170,14 +170,14 @@
             v-hasPermi="['tool:gen:remove']"
           >删除
           </el-button>
-          <el-button
-            type="text"
-            size="small"
-            icon="el-icon-refresh"
-            @click="handleSynchDb(scope.row)"
-            v-hasPermi="['tool:gen:edit']"
-          >同步
-          </el-button>
+<!--          <el-button-->
+<!--            type="text"-->
+<!--            size="small"-->
+<!--            icon="el-icon-refresh"-->
+<!--            @click="handleSynchDb(scope.row)"-->
+<!--            v-hasPermi="['tool:gen:edit']"-->
+<!--          >同步-->
+<!--          </el-button>-->
           <el-button
             type="text"
             size="small"
