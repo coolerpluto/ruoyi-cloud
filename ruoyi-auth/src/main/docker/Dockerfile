@@ -12,4 +12,4 @@ WORKDIR /home/ruoyi
 # 复制jar文件到路径
 COPY ./ruoyi-auth.jar /home/ruoyi/ruoyi-auth.jar
 # 启动认证服务
-ENTRYPOINT ["java","-jar","ruoyi-auth.jar"]
+ENTRYPOINT ["java","-Duser.timezone=GMT+8","-jar","ruoyi-auth.jar"]

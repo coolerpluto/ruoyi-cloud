@@ -12,4 +12,4 @@ WORKDIR /home/ruoyi
 # 复制jar文件到路径
 COPY ./ruoyi-modules-gen.jar /home/ruoyi/ruoyi-modules-gen.jar
 # 启动系统服务
-ENTRYPOINT ["java","-jar","ruoyi-modules-gen.jar"]
+ENTRYPOINT ["java","-Duser.timezone=GMT+8","-jar","ruoyi-modules-gen.jar"]

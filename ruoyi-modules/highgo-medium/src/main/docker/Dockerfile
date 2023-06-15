@@ -16,4 +16,4 @@ WORKDIR /home/highgo
 # 复制jar文件到路径
 COPY ./highgo-modules-medium.jar /home/highgo/highgo-modules-medium.jar
 # 启动系统服务
-ENTRYPOINT ["java","-jar","highgo-modules-medium.jar"]
+ENTRYPOINT ["java","-Duser.timezone=GMT+8","-jar","highgo-modules-medium.jar"]

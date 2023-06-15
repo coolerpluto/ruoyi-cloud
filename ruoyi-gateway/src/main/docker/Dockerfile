@@ -12,4 +12,4 @@ WORKDIR /home/ruoyi
 # 复制jar文件到路径
 COPY ./ruoyi-gateway.jar /home/ruoyi/ruoyi-gateway.jar
 # 启动网关服务
-ENTRYPOINT ["java","-jar","ruoyi-gateway.jar"]
+ENTRYPOINT ["java","-Duser.timezone=GMT+8","-jar","ruoyi-gateway.jar"]

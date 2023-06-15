@@ -12,4 +12,4 @@ WORKDIR /home/ruoyi
 # 复制jar文件到路径
 COPY ./ruoyi-visual-monitor.jar /home/ruoyi/ruoyi-visual-monitor.jar
 # 启动系统服务
-ENTRYPOINT ["java","-jar","ruoyi-visual-monitor.jar"]
+ENTRYPOINT ["java","-Duser.timezone=GMT+8","-jar","ruoyi-visual-monitor.jar"]

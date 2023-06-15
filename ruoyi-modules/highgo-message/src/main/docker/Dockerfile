@@ -16,4 +16,4 @@ WORKDIR /home/highgo
 # 复制jar文件到路径
 COPY ./highgo-modules-message.jar /home/highgo/highgo-modules-message.jar
 # 启动系统服务
-ENTRYPOINT ["java","-jar","highgo-modules-message.jar"]
+ENTRYPOINT ["java","-Duser.timezone=GMT+8","-jar","highgo-modules-message.jar"]
