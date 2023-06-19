@@ -144,20 +144,65 @@
             <if test="params.properties != null and params.properties != ''">
                 and find_in_set(top.property_key,#{params.properties})
             </if>
-            <if test="(params.sharedId != null and params.sharedId != '') or (params.sharedDeptId != null and params.sharedDeptId != '') or (params.crmDataScope != null and params.crmDataScope != '')">
+            <!--下面的自己权限内的判读-->
+            ${params.crmDataScope}
+        </where>
+        group by tc.code
+        union
+        <include refid="select4OpportunityUnitedVo"/>
+        <where>
+            <if test="code != null  and code != ''">and tc.code like concat('%', #{code}, '%')</if>
+            <if test="name != null  and name != ''">and tc.name like concat('%', #{name}, '%')</if>
+            <if test="createBy != null  and createBy != ''">and tc.create_by like concat('%', #{createBy}, '%')</if>
+            <if test="updateTime != null ">and tc.update_time &lt; #{updateTime}</if>
+            <if test="custName != null ">and tc2.company_name like concat('%', #{custName}, '%')</if>
+            <if test="params.deptIds != null and params.deptIds !=''">
+                and tc.dept_id in
+                <foreach collection="params.deptIds.split(',')" separator="," item="deptId" index="index" close=")"
+                         open="(">
+                    #{deptId}
+                </foreach>
+            </if>
+            <if test="params.createBys != null and params.createBys !=''">
+                and tc.create_by in
+                <foreach collection="params.createBys.split(',')" separator="," item="createBy" index="index" close=")"
+                         open="(">
+                    #{createBy}
+                </foreach>
+            </if>
+            <if test="params.ownerIds != null and params.ownerIds !=''">
+                and tc.owner_id in
+                <foreach collection="params.ownerIds.split(',')" separator="," item="ownerId" index="index" close=")"
+                         open="(">
+                    #{ownerId}
+                </foreach>
+            </if>
+            <if test="params.stages != null and params.stages !=''">
+                and tc.current_stage in
+                <foreach collection="params.stages.split(',')" separator="," item="stage" index="index" close=")"
+                         open="(">
+                    #{stage}
+                </foreach>
+            </if>
+            <if test="params.beginUpdateDate != null and params.beginUpdateDate != '' and params.endUpdateDate != null and params.endUpdateDate != ''">
+                and tc.update_time between #{params.beginUpdateDate} and #{params.endUpdateDate}
+            </if>
+            <if test="params.beginCreateDate != null and params.beginCreateDate != '' and params.endCreateDate != null and params.endCreateDate != ''">
+                and tc.create_time between #{params.beginCreateDate} and #{params.endCreateDate}
+            </if>
+            <!--下面的是商机必须已经设置过的属性-->
+            <if test="params.properties != null and params.properties != ''">
+                and find_in_set(top.property_key,#{params.properties})
+            </if>
+            <if test="(params.sharedId != null and params.sharedId != '') or (params.sharedDeptId != null and params.sharedDeptId != '')">
                 and
                 <trim prefixOverrides="and" prefix="(" suffix=")">
-                    <!--下面的自己权限内的判读-->
-                    ${params.crmDataScope}
                     <!--下面的是共享过来的判读-->
                     <if test="params.sharedId != null and params.sharedId != ''">
-                        <if test="params.crmDataScope != null and params.crmDataScope != ''">
-                            or
-                        </if>
                         find_in_set( #{params.sharedId} , tc.shared_id)
                     </if>
                     <if test="params.sharedDeptId != null and params.sharedDeptId != ''">
-                        <if test="(params.crmDataScope != null and params.crmDataScope != '') or (params.sharedId != null and params.sharedId != '')">
+                        <if test="(params.sharedId != null and params.sharedId != '')">
                             or
                         </if>
                         find_in_set( #{params.sharedDeptId} , tc.shared_dept_id)
@@ -166,6 +211,8 @@
             </if>
         </where>
         group by tc.code
+
+        order by update_time desc
     </select>
     <resultMap type="OpportunityUnitedExportFiled" id="OpportunityUnitedExportFiledResult">
         <result property="id" column="id"/>
@@ -244,22 +291,75 @@
             <if test="params.properties != null and params.properties != ''">
                 and find_in_set(top.property_key,#{params.properties})
             </if>
-            <if test="(params.sharedId != null and params.sharedId != '') or (params.sharedDeptId != null and params.sharedDeptId != '') or (params.crmDataScope != null and params.crmDataScope != '')">
+            <!--下面的自己权限内的判读-->
+            ${params.crmDataScope}
+        </where>
+        group by tc.code
+        union
+        <include refid="select4OpportunityUnitedVo"/>
+        <where>
+            <if test="code != null  and code != ''">and tc.code like concat('%', #{code}, '%')</if>
+            <if test="name != null  and name != ''">and tc.name like concat('%', #{name}, '%')</if>
+            <if test="createBy != null  and createBy != ''">and tc.create_by like concat('%', #{createBy}, '%')</if>
+            <if test="updateTime != null ">and tc.update_time &lt; #{updateTime}</if>
+            <if test="custName != null ">and tc2.company_name like concat('%', #{custName}, '%')</if>
+            <if test="params.deptIds != null and params.deptIds !=''">
+                and tc.dept_id in
+                <foreach collection="params.deptIds.split(',')" separator="," item="deptId" index="index" close=")"
+                         open="(">
+                    #{deptId}
+                </foreach>
+            </if>
+            <if test="params.createBys != null and params.createBys !=''">
+                and tc.create_by in
+                <foreach collection="params.createBys.split(',')" separator="," item="createBy" index="index" close=")"
+                         open="(">
+                    #{createBy}
+                </foreach>
+            </if>
+            <if test="params.ownerIds != null and params.ownerIds !=''">
+                and tc.owner_id in
+                <foreach collection="params.ownerIds.split(',')" separator="," item="ownerId" index="index" close=")"
+                         open="(">
+                    #{ownerId}
+                </foreach>
+            </if>
+            <if test="params.stages != null and params.stages !=''">
+                and tc.current_stage in
+                <foreach collection="params.stages.split(',')" separator="," item="stage" index="index" close=")"
+                         open="(">
+                    #{stage}
+                </foreach>
+            </if>
+            <if test="params.beginUpdateDate != null and params.beginUpdateDate != '' and params.endUpdateDate != null and params.endUpdateDate != ''">
+                and tc.update_time between #{params.beginUpdateDate} and #{params.endUpdateDate}
+            </if>
+            <if test="params.beginCreateDate != null and params.beginCreateDate != '' and params.endCreateDate != null and params.endCreateDate != ''">
+                and tc.create_time between #{params.beginCreateDate} and #{params.endCreateDate}
+            </if>
+            <!--下面的是商机必须已经设置过的属性-->
+            <if test="params.properties != null and params.properties != ''">
+                and find_in_set(top.property_key,#{params.properties})
+            </if>
+            <if test="(params.sharedId != null and params.sharedId != '') or (params.sharedDeptId != null and params.sharedDeptId != '')">
                 and
                 <trim prefixOverrides="and" prefix="(" suffix=")">
-                    <!--下面的自己权限内的判读-->
-                    ${params.crmDataScope}
                     <!--下面的是共享过来的判读-->
                     <if test="params.sharedId != null and params.sharedId != ''">
-                        or find_in_set( #{params.sharedId} , tc.shared_id)
+                        find_in_set( #{params.sharedId} , tc.shared_id)
                     </if>
                     <if test="params.sharedDeptId != null and params.sharedDeptId != ''">
-                        or find_in_set( #{params.sharedDeptId} , tc.shared_dept_id)
+                        <if test="params.sharedId != null and params.sharedId != ''">
+                            or
+                        </if>
+                        find_in_set( #{params.sharedDeptId} , tc.shared_dept_id)
                     </if>
                 </trim>
             </if>
         </where>
         group by tc.code
+
+        order by update_time desc
     </select>
     <select id="selectOpportunityById" parameterType="Long" resultMap="OpportunityUnitedResult">
         <include refid="selectOpportunityVo"/>
