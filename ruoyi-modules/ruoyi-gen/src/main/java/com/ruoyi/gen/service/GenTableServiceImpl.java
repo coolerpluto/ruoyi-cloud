@@ -453,7 +453,7 @@ public class GenTableServiceImpl implements IGenTableService
         try
         {
             // 切库
-            DynamicDataSourceContextHolder.setDataSourceType(DataSourceType.SLAVE.name() + Convert.toChar(dbSource.getId()));
+            DynamicDataSourceContextHolder.setDataSourceType(DataSourceType.SLAVE.name() + Convert.toStr(dbSource.getId()));
             return genDbSourceMapper.selectDbTableList(genTable, dbSource.getDbType());
         }
         finally
