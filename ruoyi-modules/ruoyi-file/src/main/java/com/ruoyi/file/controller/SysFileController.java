@@ -2,6 +2,7 @@ package com.ruoyi.file.controller;
 
 import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.core.utils.file.FileUtils;
+import com.ruoyi.file.config.SFtpServerConfig;
 import com.ruoyi.system.api.domain.FileReq;
 import com.ruoyi.file.service.ISysFileService;
 import com.ruoyi.system.api.domain.SysFile;
@@ -30,7 +31,8 @@ public class SysFileController {
 
     @Autowired
     private ISysFileService sysFileService;
-
+    @Autowired
+    private SFtpServerConfig ftpServerConfig;
     /**
      * 文件上传请求 默认路径
      */
@@ -42,6 +44,8 @@ public class SysFileController {
             SysFile sysFile = new SysFile();
             sysFile.setName(FileUtils.getName(url));
             sysFile.setUrl(url);
+            sysFile.setServerIp(ftpServerConfig.getIp());
+            sysFile.setHomeDir(ftpServerConfig.getHomeDir());
             return R.ok(sysFile);
         } catch (Exception e) {
             log.error("上传文件失败", e);

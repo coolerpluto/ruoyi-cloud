@@ -5,7 +5,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * 文件信息
- * 
  * @author ruoyi
  */
 public class SysFile
@@ -19,6 +18,36 @@ public class SysFile
      * 文件地址
      */
     private String url;
+
+    /**
+     * 文件所在服务器的资源目录根节点
+     */
+    private String homeDir;
+
+    /**
+     * 文件所在服务器
+     */
+    private String serverIp;
+
+    public String getHomeDir()
+    {
+        return homeDir;
+    }
+
+    public void setHomeDir(String homeDir)
+    {
+        this.homeDir = homeDir;
+    }
+
+    public String getServerIp()
+    {
+        return serverIp;
+    }
+
+    public void setServerIp(String serverIp)
+    {
+        this.serverIp = serverIp;
+    }
 
     public String getName()
     {
@@ -41,10 +70,13 @@ public class SysFile
     }
 
     @Override
-    public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("name", getName())
-            .append("url", getUrl())
-            .toString();
+    public String toString()
+    {
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+                .append("name", getName())
+                .append("url", getUrl())
+                .append("homeDir", getHomeDir())
+                .append("serverIp", getServerIp())
+                .toString();
     }
 }
