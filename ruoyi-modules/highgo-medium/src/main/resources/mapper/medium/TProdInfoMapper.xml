@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.highgo.medium.mapper.TProdInfoMapper">
+    
+    <resultMap type="TProdInfo" id="TProdInfoResult">
+        <result property="id"    column="id"    />
+        <result property="prodName"    column="prod_name"    />
+        <result property="prodSname"    column="prod_sname"    />
+        <result property="property"    column="property"    />
+        <result property="type"    column="type"    />
+        <result property="status"    column="status"    />
+        <result property="remark"    column="remark"    />
+        <result property="createId"    column="create_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateId"    column="update_id"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <resultMap id="TProdInfoTProdVersionInfoResult" type="TProdInfo" extends="TProdInfoResult">
+        <collection property="tProdVersionInfoList" notNullColumn="sub_id" javaType="java.util.List" resultMap="TProdVersionInfoResult" />
+    </resultMap>
+
+    <resultMap type="TProdVersionInfo" id="TProdVersionInfoResult">
+        <result property="id"    column="sub_id"    />
+        <result property="prodId"    column="sub_prod_id"    />
+        <result property="version"    column="sub_version"    />
+        <result property="prodPic"    column="sub_prod_pic"    />
+        <result property="pmPic"    column="sub_pm_pic"    />
+        <result property="deptId"    column="sub_dept_id"    />
+        <result property="registrationId"    column="sub_registration_id"    />
+        <result property="licToolId"    column="sub_lic_tool_id"    />
+        <result property="macToolFileId"    column="sub_mac_tool_file_id"    />
+        <result property="status"    column="sub_status"    />
+        <result property="signFlag"    column="sub_sign_flag"    />
+        <result property="remark"    column="sub_remark"    />
+        <result property="createId"    column="sub_create_id"    />
+        <result property="createBy"    column="sub_create_by"    />
+        <result property="createTime"    column="sub_create_time"    />
+        <result property="updateId"    column="sub_update_id"    />
+        <result property="updateBy"    column="sub_update_by"    />
+        <result property="updateTime"    column="sub_update_time"    />
+    </resultMap>
+
+    <sql id="selectTProdInfoVo">
+        select id, prod_name, prod_sname, property, type, status, remark, create_id, create_by, create_time, update_id, update_by, update_time from t_prod_info
+    </sql>
+
+    <select id="selectTProdInfoList" parameterType="TProdInfo" resultMap="TProdInfoResult">
+        <include refid="selectTProdInfoVo"/>
+        <where>  
+            <if test="prodName != null  and prodName != ''"> and prod_name like concat('%', #{prodName}, '%')</if>
+            <if test="prodSname != null  and prodSname != ''"> and prod_sname like concat('%', #{prodSname}, '%')</if>
+            <if test="property != null  and property != ''"> and property = #{property}</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="createId != null "> and create_id = #{createId}</if>
+            <if test="updateId != null "> and update_id = #{updateId}</if>
+        </where>
+    </select>
+    
+    <select id="selectTProdInfoById" parameterType="Long" resultMap="TProdInfoTProdVersionInfoResult">
+        select a.id, a.prod_name, a.prod_sname, a.property, a.type, a.status, a.remark, a.create_id, a.create_by, a.create_time, a.update_id, a.update_by, a.update_time,
+ b.id as sub_id, b.prod_id as sub_prod_id, b.version as sub_version, b.prod_pic as sub_prod_pic, b.pm_pic as sub_pm_pic, b.dept_id as sub_dept_id, b.registration_id as sub_registration_id, b.lic_tool_id as sub_lic_tool_id, b.mac_tool_file_id as sub_mac_tool_file_id, b.status as sub_status, b.sign_flag as sub_sign_flag, b.remark as sub_remark, b.create_id as sub_create_id, b.create_by as sub_create_by, b.create_time as sub_create_time, b.update_id as sub_update_id, b.update_by as sub_update_by, b.update_time as sub_update_time
+        from t_prod_info a
+        left join t_prod_version_info b on b.prod_id = a.id
+        where a.id = #{id}
+    </select>
+        
+    <insert id="insertTProdInfo" parameterType="TProdInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into t_prod_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="prodName != null and prodName != ''">prod_name,</if>
+            <if test="prodSname != null">prod_sname,</if>
+            <if test="property != null">property,</if>
+            <if test="type != null">type,</if>
+            <if test="status != null">status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createId != null">create_id,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateId != null">update_id,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="prodName != null and prodName != ''">#{prodName},</if>
+            <if test="prodSname != null">#{prodSname},</if>
+            <if test="property != null">#{property},</if>
+            <if test="type != null">#{type},</if>
+            <if test="status != null">#{status},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createId != null">#{createId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateId != null">#{updateId},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTProdInfo" parameterType="TProdInfo">
+        update t_prod_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="prodName != null and prodName != ''">prod_name = #{prodName},</if>
+            <if test="prodSname != null">prod_sname = #{prodSname},</if>
+            <if test="property != null">property = #{property},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createId != null">create_id = #{createId},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateId != null">update_id = #{updateId},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTProdInfoById" parameterType="Long">
+        delete from t_prod_info where id = #{id}
+    </delete>
+
+    <delete id="deleteTProdInfoByIds" parameterType="String">
+        delete from t_prod_info where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+    <delete id="deleteTProdVersionInfoByProdIds" parameterType="String">
+        delete from t_prod_version_info where prod_id in 
+        <foreach item="prodId" collection="array" open="(" separator="," close=")">
+            #{prodId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteTProdVersionInfoByProdId" parameterType="Long">
+        delete from t_prod_version_info where prod_id = #{prodId}
+    </delete>
+
+    <insert id="batchTProdVersionInfo">
+        insert into t_prod_version_info( id, prod_id, version, prod_pic, pm_pic, dept_id, registration_id, lic_tool_id, mac_tool_file_id, status, sign_flag, remark, create_id, create_by, create_time, update_id, update_by, update_time) values
+		<foreach item="item" index="index" collection="list" separator=",">
+            ( #{item.id}, #{item.prodId}, #{item.version}, #{item.prodPic}, #{item.pmPic}, #{item.deptId}, #{item.registrationId}, #{item.licToolId}, #{item.macToolFileId}, #{item.status}, #{item.signFlag}, #{item.remark}, #{item.createId}, #{item.createBy}, #{item.createTime}, #{item.updateId}, #{item.updateBy}, #{item.updateTime})
+        </foreach>
+    </insert>
+</mapper>
