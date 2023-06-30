@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.highgo.medium.mapper.TLicToolInfoMapper">
+    
+    <resultMap type="TLicToolInfo" id="TLicToolInfoResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="systemAdapter"    column="system_adapter"    />
+        <result property="macNeed"    column="mac_need"    />
+        <result property="maxConnectNum"    column="max_connect_num"    />
+        <result property="cpuNum"    column="cpu_num"    />
+        <result property="clusterNodes"    column="cluster_nodes"    />
+        <result property="deployServer"    column="deploy_server"    />
+        <result property="deployPath"    column="deploy_path"    />
+        <result property="toolFileId"    column="tool_file_id"    />
+        <result property="toolFileName"    column="tool_file_name"    />
+        <result property="macFileId"    column="mac_file_id"    />
+        <result property="macFileName"    column="mac_file_Name"    />
+        <result property="status"    column="status"    />
+        <result property="createId"    column="create_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateId"    column="update_id"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectTLicToolInfoVo">
+        select tlti.id,
+               tlti.name,
+               tlti.system_adapter,
+               tlti.mac_need,
+               tlti.max_connect_num,
+               tlti.cpu_num,
+               tlti.cluster_nodes,
+               tlti.deploy_server,
+               tlti.deploy_path,
+               tlti.tool_file_id,
+               (select tfi.file_name  from t_file_info tfi where tfi.id = tlti.tool_file_id) tool_file_name,
+               tlti.mac_file_id,
+               (select tfi.file_name  from t_file_info tfi where tfi.id = tlti.mac_file_id) mac_file_name,
+               tlti.status,
+               tlti.create_id,
+               tlti.create_by,
+               tlti.create_time,
+               tlti.update_id,
+               tlti.update_by,
+               tlti.update_time,
+               tlti.remark
+        from t_lic_tool_info tlti
+    </sql>
+
+    <select id="selectTLicToolInfoList" parameterType="TLicToolInfo" resultMap="TLicToolInfoResult">
+        <include refid="selectTLicToolInfoVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and tlti.name like concat('%', #{name}, '%')</if>
+            <if test="systemAdapter != null  and systemAdapter != ''"> and tlti.system_adapter = #{systemAdapter}</if>
+            <if test="macNeed != null  and macNeed != ''"> and tlti.mac_need = #{macNeed}</if>
+            <if test="maxConnectNum != null "> and tlti.max_connect_num = #{maxConnectNum}</if>
+            <if test="cpuNum != null "> and tlti.cpu_num = #{cpuNum}</if>
+            <if test="clusterNodes != null "> and tlti.cluster_nodes = #{clusterNodes}</if>
+            <if test="deployServer != null  and deployServer != ''"> and tlti.deploy_server = #{deployServer}</if>
+            <if test="deployPath != null  and deployPath != ''"> and tlti.deploy_path = #{deployPath}</if>
+            <if test="toolFileId != null "> and tlti.tool_file_id = #{toolFileId}</if>
+            <if test="macFileId != null "> and tlti.mac_file_id = #{macFileId}</if>
+            <if test="status != null  and status != ''"> and tlti.status = #{status}</if>
+            <if test="createId != null "> and tlti.create_id = #{createId}</if>
+            <if test="updateId != null "> and tlti.update_id = #{updateId}</if>
+        </where>
+    </select>
+    
+    <select id="selectTLicToolInfoById" parameterType="Long" resultMap="TLicToolInfoResult">
+        <include refid="selectTLicToolInfoVo"/>
+        where tlti.id = #{id}
+    </select>
+        
+    <insert id="insertTLicToolInfo" parameterType="TLicToolInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into t_lic_tool_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="systemAdapter != null and systemAdapter != ''">system_adapter,</if>
+            <if test="macNeed != null">mac_need,</if>
+            <if test="maxConnectNum != null">max_connect_num,</if>
+            <if test="cpuNum != null">cpu_num,</if>
+            <if test="clusterNodes != null">cluster_nodes,</if>
+            <if test="deployServer != null">deploy_server,</if>
+            <if test="deployPath != null">deploy_path,</if>
+            <if test="toolFileId != null">tool_file_id,</if>
+            <if test="macFileId != null">mac_file_id,</if>
+            <if test="status != null">status,</if>
+            <if test="createId != null">create_id,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateId != null">update_id,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="systemAdapter != null and systemAdapter != ''">#{systemAdapter},</if>
+            <if test="macNeed != null">#{macNeed},</if>
+            <if test="maxConnectNum != null">#{maxConnectNum},</if>
+            <if test="cpuNum != null">#{cpuNum},</if>
+            <if test="clusterNodes != null">#{clusterNodes},</if>
+            <if test="deployServer != null">#{deployServer},</if>
+            <if test="deployPath != null">#{deployPath},</if>
+            <if test="toolFileId != null">#{toolFileId},</if>
+            <if test="macFileId != null">#{macFileId},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createId != null">#{createId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateId != null">#{updateId},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTLicToolInfo" parameterType="TLicToolInfo">
+        update t_lic_tool_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="systemAdapter != null and systemAdapter != ''">system_adapter = #{systemAdapter},</if>
+            <if test="macNeed != null">mac_need = #{macNeed},</if>
+            <if test="maxConnectNum != null">max_connect_num = #{maxConnectNum},</if>
+            <if test="cpuNum != null">cpu_num = #{cpuNum},</if>
+            <if test="clusterNodes != null">cluster_nodes = #{clusterNodes},</if>
+            <if test="deployServer != null">deploy_server = #{deployServer},</if>
+            <if test="deployPath != null">deploy_path = #{deployPath},</if>
+            <if test="toolFileId != null">tool_file_id = #{toolFileId},</if>
+            <if test="macFileId != null">mac_file_id = #{macFileId},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createId != null">create_id = #{createId},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateId != null">update_id = #{updateId},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTLicToolInfoById" parameterType="Long">
+        delete from t_lic_tool_info where id = #{id}
+    </delete>
+
+    <delete id="deleteTLicToolInfoByIds" parameterType="String">
+        delete from t_lic_tool_info where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
