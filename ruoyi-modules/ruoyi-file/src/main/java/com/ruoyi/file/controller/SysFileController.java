@@ -68,6 +68,8 @@ public class SysFileController {
             SysFile sysFile = new SysFile();
             sysFile.setName(FileUtils.getName(url));
             sysFile.setUrl(url);
+            sysFile.setServerIp(ftpServerConfig.getIp());
+            sysFile.setHomeDir(ftpServerConfig.getHomeDir());
             return R.ok(sysFile);
         } catch (Exception e) {
             log.error("上传文件失败", e);
