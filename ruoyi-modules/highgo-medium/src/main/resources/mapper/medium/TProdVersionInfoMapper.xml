@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.highgo.medium.mapper.TProdVersionInfoMapper">
+    
+    <resultMap type="TProdVersionInfo" id="TProdVersionInfoResult">
+        <result property="id"    column="id"    />
+        <result property="prodId"    column="prod_id"    />
+        <result property="version"    column="version"    />
+        <result property="prodPic"    column="prod_pic"    />
+        <result property="pmPic"    column="pm_pic"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="registrationId"    column="registration_id"    />
+        <result property="licToolId"    column="lic_tool_id"    />
+        <result property="macToolFileId"    column="mac_tool_file_id"    />
+        <result property="status"    column="status"    />
+        <result property="signFlag"    column="sign_flag"    />
+        <result property="remark"    column="remark"    />
+        <result property="createId"    column="create_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateId"    column="update_id"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+
+        <result property="prodName"    column="prod_name"    />
+        <result property="prodSname"    column="prod_sname"    />
+        <result property="deptName"    column="dept_name"    />
+        <result property="registrationNum"    column="registration_num"    />
+        <result property="registrationName"    column="registration_name"    />
+        <result property="licToolName"    column="lic_tool_name"    />
+        <result property="licToolFileName"    column="lic_tool_file_name"    />
+        <result property="macToolFileName"    column="mac_tool_file_name"    />
+    </resultMap>
+
+    <sql id="selectTProdVersionInfoVoOld">
+        select id,
+               prod_id,
+               version,
+               prod_pic,
+               pm_pic,
+               dept_id,
+               registration_id,
+               lic_tool_id,
+               mac_tool_file_id,
+               status,
+               sign_flag,
+               remark,
+               create_id,
+               create_by,
+               create_time,
+               update_id,
+               update_by,
+               update_time
+        from t_prod_version_info tpvi
+    </sql>
+    <sql id="selectTProdVersionInfoVo">
+        select
+            tpvi.id,
+            tpvi.prod_id,
+            tpi.prod_name ,
+            tpi.prod_sname ,
+            tpvi.version,
+            tpvi.prod_pic,
+            tpvi.pm_pic,
+            tpvi.dept_id,
+            sd.dept_name ,
+            tpvi.registration_id,
+            tsr.registration_num ,
+            tsr.name registration_name,
+            tpvi.lic_tool_id,
+            tlti.name lic_tool_name,
+            tfi2.file_name lic_tool_file_name,
+            tpvi.mac_tool_file_id,
+            tfi.file_name mac_tool_file_name,
+            tpvi.status,
+            tpvi.sign_flag,
+            tpvi.remark,
+            tpvi.create_id,
+            tpvi.create_by,
+            tpvi.create_time,
+            tpvi.update_id,
+            tpvi.update_by,
+            tpvi.update_time
+        from
+            t_prod_version_info tpvi
+                left join t_prod_info tpi on
+                tpi.id = tpvi .prod_id
+                left join t_lic_tool_info tlti on
+                tlti.id = tpvi .lic_tool_id
+                left join t_file_info tfi on
+                tfi.id = tpvi.mac_tool_file_id
+                left join t_file_info tfi2 on
+                tfi2.id = tlti.tool_file_id
+                left join remote_db.sys_dept sd on
+                sd.dept_id = tpvi.dept_id
+                left join t_soft_registration tsr on
+                tsr.id = tpvi.registration_id
+    </sql>
+
+    <select id="selectTProdVersionInfoList" parameterType="TProdVersionInfo" resultMap="TProdVersionInfoResult">
+        <include refid="selectTProdVersionInfoVo"/>
+        <where>
+            <if test="prodName != null "> and tpi.prod_name like concat('%', #{prodName}, '%')</if>
+            <if test="prodId != null "> and tpvi.prod_id = #{prodId}</if>
+            <if test="version != null  and version != ''"> and tpvi.version like concat('%', #{version}, '%')</if>
+            <if test="prodPic != null  and prodPic != ''"> and tpvi.prod_pic = #{prodPic}</if>
+            <if test="pmPic != null  and pmPic != ''"> and tpvi.pm_pic = #{pmPic}</if>
+            <if test="deptId != null "> and tpvi.dept_id = #{deptId}</if>
+            <if test="registrationId != null "> and tpvi.registration_id = #{registrationId}</if>
+            <if test="registrationNum != null "> and tsr.registration_num like concat('%', #{registrationNum},'%')</if>
+            <if test="licToolId != null "> and tpvi.lic_tool_id = #{licToolId}</if>
+            <if test="macToolFileId != null "> and tpvi.mac_tool_file_id = #{macToolFileId}</if>
+            <if test="status != null  and status != ''"> and tpvi.status = #{status}</if>
+            <if test="signFlag != null  and signFlag != ''"> and tpvi.sign_flag = #{signFlag}</if>
+            <if test="createId != null "> and tpvi.create_id = #{createId}</if>
+            <if test="createBy != null  and createBy != ''"> and tpvi.create_by = #{createBy}</if>
+            <if test="createTime != null "> and tpvi.create_time = #{createTime}</if>
+            <if test="updateId != null "> and tpvi.update_id = #{updateId}</if>
+            <if test="updateBy != null  and updateBy != ''"> and tpvi.update_by = #{updateBy}</if>
+            <if test="updateTime != null "> and tpvi.update_time = #{updateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectTProdVersionInfoById" parameterType="Long" resultMap="TProdVersionInfoResult">
+        <include refid="selectTProdVersionInfoVo"/>
+        where tpvi.id = #{id}
+    </select>
+        
+    <insert id="insertTProdVersionInfo" parameterType="TProdVersionInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into t_prod_version_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="prodId != null">prod_id,</if>
+            <if test="version != null">version,</if>
+            <if test="prodPic != null">prod_pic,</if>
+            <if test="pmPic != null">pm_pic,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="registrationId != null">registration_id,</if>
+            <if test="licToolId != null">lic_tool_id,</if>
+            <if test="macToolFileId != null">mac_tool_file_id,</if>
+            <if test="status != null">status,</if>
+            <if test="signFlag != null">sign_flag,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createId != null">create_id,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateId != null">update_id,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="prodId != null">#{prodId},</if>
+            <if test="version != null">#{version},</if>
+            <if test="prodPic != null">#{prodPic},</if>
+            <if test="pmPic != null">#{pmPic},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="registrationId != null">#{registrationId},</if>
+            <if test="licToolId != null">#{licToolId},</if>
+            <if test="macToolFileId != null">#{macToolFileId},</if>
+            <if test="status != null">#{status},</if>
+            <if test="signFlag != null">#{signFlag},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createId != null">#{createId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateId != null">#{updateId},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTProdVersionInfo" parameterType="TProdVersionInfo">
+        update t_prod_version_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="prodId != null">prod_id = #{prodId},</if>
+            <if test="version != null">version = #{version},</if>
+            <if test="prodPic != null">prod_pic = #{prodPic},</if>
+            <if test="pmPic != null">pm_pic = #{pmPic},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="registrationId != null">registration_id = #{registrationId},</if>
+            <if test="licToolId != null">lic_tool_id = #{licToolId},</if>
+            <if test="macToolFileId != null">mac_tool_file_id = #{macToolFileId},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="signFlag != null">sign_flag = #{signFlag},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createId != null">create_id = #{createId},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateId != null">update_id = #{updateId},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTProdVersionInfoById" parameterType="Long">
+        delete from t_prod_version_info where id = #{id}
+    </delete>
+
+    <delete id="deleteTProdVersionInfoByIds" parameterType="String">
+        delete from t_prod_version_info where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
