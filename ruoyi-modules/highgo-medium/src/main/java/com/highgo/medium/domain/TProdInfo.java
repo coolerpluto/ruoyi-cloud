@@ -1,6 +1,9 @@
 package com.highgo.medium.domain;
 
 import java.util.List;
+
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.core.annotation.Excel;
@@ -17,6 +20,7 @@ public class TProdInfo extends BaseEntity
     private static final long serialVersionUID = 1L;
 
     /** 主键 */
+    @JsonSerialize(using= ToStringSerializer.class)
     private Long id;
 
     /** 名称 */
@@ -41,9 +45,11 @@ public class TProdInfo extends BaseEntity
 
     /** 创建者id */
     @Excel(name = "创建者id")
+    @JsonSerialize(using=ToStringSerializer.class)
     private Long createId;
 
     /** 更新者id */
+    @JsonSerialize(using=ToStringSerializer.class)
     @Excel(name = "更新者id")
     private Long updateId;
 

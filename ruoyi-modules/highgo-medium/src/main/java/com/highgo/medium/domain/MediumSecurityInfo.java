@@ -1,5 +1,7 @@
 package com.highgo.medium.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.core.annotation.Excel;
@@ -47,9 +49,11 @@ public class MediumSecurityInfo extends BaseEntity
     private String status;
 
     /** 创建者ID */
+    @JsonSerialize(using= ToStringSerializer.class)
     private Long createId;
 
     /** 更新者ID */
+    @JsonSerialize(using=ToStringSerializer.class)
     private Long updateId;
 
     public String getMediumName() {

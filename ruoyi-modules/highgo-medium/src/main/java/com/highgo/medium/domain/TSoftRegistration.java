@@ -1,5 +1,7 @@
 package com.highgo.medium.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.core.annotation.Excel;
@@ -16,6 +18,7 @@ public class TSoftRegistration extends BaseEntity
     private static final long serialVersionUID = 1L;
 
     /** 主键 */
+    @JsonSerialize(using= ToStringSerializer.class)
     private Long id;
 
     /** 软件名称 */
@@ -28,10 +31,12 @@ public class TSoftRegistration extends BaseEntity
 
     /** 创建者id */
     @Excel(name = "创建者id")
+    @JsonSerialize(using=ToStringSerializer.class)
     private Long createId;
 
     /** 更新者id */
     @Excel(name = "更新者id")
+    @JsonSerialize(using=ToStringSerializer.class)
     private Long updateId;
 
     public void setId(Long id) 

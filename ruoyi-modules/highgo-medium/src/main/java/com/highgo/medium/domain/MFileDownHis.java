@@ -1,5 +1,7 @@
 package com.highgo.medium.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.ruoyi.common.core.annotation.Excel;
 import com.ruoyi.common.core.web.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -16,6 +18,7 @@ public class MFileDownHis extends BaseEntity
     private static final long serialVersionUID = 1L;
 
     /** 记录ID */
+    @JsonSerialize(using= ToStringSerializer.class)
     private Long id;
 
     /** 商机编号 */
@@ -34,10 +37,12 @@ public class MFileDownHis extends BaseEntity
     private String fileType;
 
     /** 创建者ID */
+    @JsonSerialize(using=ToStringSerializer.class)
     private Long createId;
     @Excel(name = "下载人")
     private String createBy;
     /** 更新者ID */
+    @JsonSerialize(using=ToStringSerializer.class)
     private Long updateId;
 
     @Override

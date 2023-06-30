@@ -2,6 +2,8 @@ package com.highgo.medium.domain;
 
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.core.annotation.Excel;
@@ -18,6 +20,7 @@ public class MLicenseFileInfo extends BaseEntity
     private static final long serialVersionUID = 1L;
 
     /** 记录ID */
+    @JsonSerialize(using= ToStringSerializer.class)
     private Long id;
 
     /** License序列号 */
@@ -75,9 +78,11 @@ public class MLicenseFileInfo extends BaseEntity
     @Excel(name = "License文件")
     private String licFileId;
     /** 创建者ID */
+    @JsonSerialize(using=ToStringSerializer.class)
     private Long createId;
 
     /** 更新者ID */
+    @JsonSerialize(using=ToStringSerializer.class)
     private Long updateId;
 
     public String getLicFileId() {

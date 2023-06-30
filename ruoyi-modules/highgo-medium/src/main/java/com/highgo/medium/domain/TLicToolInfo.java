@@ -1,5 +1,7 @@
 package com.highgo.medium.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.core.annotation.Excel;
@@ -19,6 +21,7 @@ public class TLicToolInfo extends BaseEntity
     /**
      * 主键ID
      */
+    @JsonSerialize(using= ToStringSerializer.class)
     private Long id;
 
     /**
@@ -73,6 +76,7 @@ public class TLicToolInfo extends BaseEntity
      * Lic工具文件 ID
      */
     @Excel(name = "Lic工具文件 ID")
+    @JsonSerialize(using=ToStringSerializer.class)
     private Long toolFileId;
     @Excel(name = "Lic工具文件名称")
     private String toolFileName;
@@ -81,6 +85,7 @@ public class TLicToolInfo extends BaseEntity
      * 机器码文件ID
      */
     @Excel(name = "机器码文件ID")
+    @JsonSerialize(using=ToStringSerializer.class)
     private Long macFileId;
     @Excel(name = "机器码文件名称")
     private String macFileName;
@@ -95,12 +100,14 @@ public class TLicToolInfo extends BaseEntity
      * 创建者id
      */
     @Excel(name = "创建者id")
+    @JsonSerialize(using=ToStringSerializer.class)
     private Long createId;
 
     /**
      * 更新者id
      */
     @Excel(name = "更新者id")
+    @JsonSerialize(using=ToStringSerializer.class)
     private Long updateId;
 
     public String getToolFileName()
