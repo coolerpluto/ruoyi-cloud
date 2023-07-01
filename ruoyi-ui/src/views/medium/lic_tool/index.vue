@@ -111,8 +111,24 @@
       </el-table-column>
       <el-table-column label="部署IP" align="center" prop="deployServer" v-if="columns[5].visible"/>
       <el-table-column label="部署路径" align="center" prop="deployPath" v-if="columns[6].visible"/>
-      <el-table-column label="Lic工具文件" align="center" prop="toolFileName" v-if="columns[7].visible"/>
-      <el-table-column label="机器码文件" align="center" prop="macFileName" v-if="columns[8].visible"/>
+      <el-table-column label="Lic工具文件" align="center" prop="toolFileName" v-if="columns[7].visible">
+        <template slot-scope="scope">
+          <el-button
+            type="text"
+            icon="el-icon-download"
+            @click="handleDownloadFileByFileId(scope.row.toolFileId,scope.row.toolFileName)"
+          >{{ scope.row.toolFileName }}</el-button>
+        </template>
+      </el-table-column>
+      <el-table-column label="机器码文件" align="center" prop="macFileName" v-if="columns[8].visible">
+        <template slot-scope="scope">
+          <el-button
+            type="text"
+            icon="el-icon-download"
+            @click="handleDownloadFileByFileId(scope.row.macFileId,scope.row.macFileName)"
+          >{{ scope.row.macFileName }}</el-button>
+        </template>
+      </el-table-column>
       <el-table-column label="Lic工具状态" align="center" prop="status" v-if="columns[9].visible">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_normal_disable" :value="scope.row.status"/>
@@ -407,6 +423,7 @@ export default {
   },
   created() {
     this.getList();
+    // 待完成文件下载
   },
   methods: {
     /** 查询License工具信息列表 */
@@ -592,6 +609,10 @@ export default {
         this.$message.error("上传文件大小不能超过 500MB");
         return false;
       }
+    },
+    handleDownloadFileByFileId(fileId,fileName){
+      fileName = fileName+".zip";
+      this.download("medium/file/download",{id:fileId},fileName,{timeout: 120000});
     },
   }
 };
