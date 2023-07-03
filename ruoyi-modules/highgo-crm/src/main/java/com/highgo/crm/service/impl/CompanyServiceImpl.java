@@ -11,6 +11,7 @@ import com.highgo.crm.domain.TransferLog;
 import com.highgo.crm.mapper.CompanyMapper;
 import com.highgo.crm.mapper.TransferLogMapper;
 import com.highgo.crm.service.ICompanyService;
+import com.ruoyi.common.core.exception.ServiceException;
 import com.ruoyi.common.core.utils.DateUtils;
 import com.ruoyi.common.core.utils.RandomUtils;
 import com.ruoyi.common.core.utils.StringUtils;
@@ -20,6 +21,11 @@ import com.ruoyi.system.api.domain.SysUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -153,14 +159,52 @@ public class CompanyServiceImpl implements ICompanyService
         {
             return new ArrayList<>();
         }
-//        Company company = new Company();
-//        company.setCompanyName(companyReq.getSearchValue());
-//        List<Company> companyInDb = companyMapper.selectCompanyList(company);
-//        if (CollectionUtils.isEmpty(companyInDb)){
-//            // 数据库没值调天眼查查10个返回去
-//            return searchFromTanYanCha(companyReq.getSearchValue(),companyReq.getSourceType());
-//        }
+        try
+        {
+            return searchFromTanYanChaAuth(companyReq.getSearchValue(),companyReq.getSourceType());
+        }
+        catch (Exception e)
+        {
+            log.error("收费接口出现问题:{},临时调用免费接口应急",e.getMessage());
+        }
         return searchFromTanYanCha(companyReq.getSearchValue(), companyReq.getSourceType());
+    }
+    private List<Company> searchFromTanYanChaAuth(String word, String sourceType) {
+        String url = "http://open.api.tianyancha.com/services/open/search/2.0?pageSize=10&word={key}";
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "871bf862-2598-4161-bf48-4a3205637722");
+        HttpEntity request = new HttpEntity(headers);
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<JSONObject> response = restTemplate.exchange(url, HttpMethod.GET, request, JSONObject.class, word);
+
+        JSONObject body = response.getBody();
+        if(response.getStatusCodeValue() != HttpStatus.OK.value()){
+            throw new ServiceException(body.getString("reason"),body.getInteger("error_code"));
+        }
+        JSONObject result = JSONObject.parseObject(JSON.toJSONString(body.get("result")));
+        JSONArray items = result.getJSONArray("items");
+
+        List<Company> resReturn = new ArrayList<>();
+        for (int i = 0; i < items.size(); i++)
+        {
+            JSONObject jsonObject = items.getJSONObject(i);
+            Company companyTemp = new Company();
+
+            String rt = DateUtils.parseDateToStr("yyyyMMdd HHmmss", new Date());
+            String code = rt.replace(" ", RandomUtils.generateString(6));
+            companyTemp.setCode(sourceType + code);
+
+            companyTemp.setCompanyName(jsonObject.getString("name"));
+            companyTemp.setCapitalReg(jsonObject.getString("regCapital"));
+            companyTemp.setLegal(jsonObject.getString("legalPersonName"));
+            companyTemp.setRegNumber(jsonObject.getString("regNumber"));
+            companyTemp.setCreditCode(jsonObject.getString("creditCode"));
+            companyTemp.setOrgNumber(jsonObject.getString("orgNumber"));
+            companyTemp.setAddr(jsonObject.getString("base"));
+            companyTemp.setAddrDetail(jsonObject.getString("base"));
+            resReturn.add(companyTemp);
+        }
+        return resReturn;
     }
 
 
