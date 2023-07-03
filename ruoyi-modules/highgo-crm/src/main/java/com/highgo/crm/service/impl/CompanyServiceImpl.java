@@ -219,6 +219,14 @@ public class CompanyServiceImpl implements ICompanyService
             companyTemp.setCreateBy(currentUserName);
             companyTemp.setCreateTime(new Date());
 
+            companyTemp.setEnglishName((String) companyJson.get("englishName"));
+            companyTemp.setTaxCode((String) companyJson.get("taxCode"));
+            companyTemp.setEmails((String) companyJson.get("emails"));
+            companyTemp.setPhone((String) companyJson.get("phone"));
+            companyTemp.setRegNumber((String) companyJson.get("regNumber"));
+            companyTemp.setOrgNumber((String) companyJson.get("orgNumber"));
+            companyTemp.setCreditCode((String) companyJson.get("creditCode"));
+
             resReturn.add(companyTemp);
         }
         //companyMapper.batchInsertCompany(resReturn);

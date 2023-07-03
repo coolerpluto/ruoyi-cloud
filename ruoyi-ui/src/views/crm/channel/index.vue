@@ -76,6 +76,8 @@
       <el-table-column label="编码" align="center" prop="code" v-if="columns[6].visible" :show-overflow-tooltip="true"/>
       <el-table-column label="名称" align="center" prop="companyName" v-if="columns[0].visible"
                        :show-overflow-tooltip="true"/>
+      <el-table-column label="英文名称" align="center" prop="englishName" v-if="columns[17].visible"
+                       :show-overflow-tooltip="true"/>
       <el-table-column label="公司性质" align="center" prop="properties" v-if="columns[1].visible"
                        :show-overflow-tooltip="true">
         <template slot-scope="scope">
@@ -85,6 +87,14 @@
       <el-table-column label="行业类别" align="center" prop="industry" v-if="columns[2].visible"
                        :show-overflow-tooltip="true"/>
       <el-table-column label="公司法人" align="center" prop="legal" v-if="columns[3].visible"
+                       :show-overflow-tooltip="true"/>
+      <el-table-column label="纳税人识别号" align="center" prop="taxCode" v-if="columns[18].visible"
+                       :show-overflow-tooltip="true"/>
+      <el-table-column label="工商注册号" align="center" prop="regNumber" v-if="columns[19].visible"
+                       :show-overflow-tooltip="true"/>
+      <el-table-column label="组织机构代码" align="center" prop="orgNumber" v-if="columns[20].visible"
+                       :show-overflow-tooltip="true"/>
+      <el-table-column label="统一社会信用代码" align="center" prop="creditCode" v-if="columns[21].visible"
                        :show-overflow-tooltip="true"/>
       <el-table-column label="注册资金" align="center" prop="capitalReg" v-if="columns[4].visible"
                        :show-overflow-tooltip="true">
@@ -96,6 +106,10 @@
           <dict-tag :options="dict.type.crm_capital_pay_type" :value="scope.row.capitalPayType"/>
         </template>
       </el-table-column>
+      <el-table-column label="联系邮件" align="center" prop="emails" v-if="columns[22].visible"
+                       :show-overflow-tooltip="true"/>
+      <el-table-column label="联系电话" align="center" prop="phone" v-if="columns[23].visible"
+                       :show-overflow-tooltip="true"/>
       <el-table-column label="公司官网" align="center" prop="website" v-if="columns[7].visible"
                        :show-overflow-tooltip="true"/>
       <el-table-column label="地址代号" align="center" prop="addr" v-if="columns[8].visible" :show-overflow-tooltip="true"/>
@@ -174,14 +188,20 @@
         <label style="font-size: large;">渠道基本信息</label>
         <el-form ref="form" :model="form" :rules="rules" label-width="120px" :disabled="baseCompanyReadOnly">
           <el-row>
-            <el-col :span="12">
+            <el-col :span="10">
               <el-form-item label="公司名称" prop="companyName">
                 <el-input v-model="form.companyName" placeholder="请输入公司名称">
                   <el-button slot="append" icon="el-icon-search" @click="openCompanyDialog">选择</el-button>
                 </el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="8">
+              <el-form-item label="英文名称" prop="englishName">
+                <el-input v-model="form.englishName" placeholder="请输入公司名称">
+                </el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
               <el-form-item label="公司性质" prop="properties">
                 <el-select v-model="form.properties" placeholder="请选择公司性质" clearable>
                   <el-option v-for="dict in dict.type.crm_company_properties_type" :key="dict.value" :label="dict.label"
@@ -191,7 +211,7 @@
             </el-col>
           </el-row>
           <el-row>
-            <el-col :span="12">
+            <el-col :span="10">
               <el-form-item label="行业归属" prop="industry">
                 <el-select v-model="form.industryCategory" placeholder="请选择行业大类" @change="handleSelectIndustryCategory">
                   <el-option v-for="dict in industryCategories" :key="dict.dictValue" :label="dict.dictLabel"
@@ -203,21 +223,21 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="6">
               <el-form-item label="公司法人" prop="legal">
                 <el-input v-model="form.legal" placeholder="请选择输入公司法人"/>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
-            <el-col :span="12">
+            <el-col :span="8">
               <el-form-item label="注册资金" prop="capitalReg">
                 <el-input type="number" v-model="form.capitalReg" placeholder="请输入公司注册资金">
                   <template slot="append">万元</template>
                 </el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="8">
               <el-form-item label="缴纳方式" prop="capitalPayType">
                 <el-select v-model="form.capitalPayType" placeholder="请选择公司注册资金缴纳方式" clearable>
                   <el-option v-for="dict in dict.type.crm_capital_pay_type" :key="dict.value" :label="dict.label"
@@ -225,14 +245,48 @@
                 </el-select>
               </el-form-item>
             </el-col>
+            <el-col :span="8">
+              <el-form-item label="纳税人识别号" prop="taxCode">
+                <el-input v-model="form.taxCode" placeholder="请输入公司纳税人识别号">
+                </el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="工商注册号" prop="regNumber">
+                <el-input v-model="form.regNumber" placeholder="请输入公司工商注册号">
+                </el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="组织机构代码" prop="orgNumber">
+                <el-input v-model="form.orgNumber" placeholder="请输入公司组织机构代码">
+                </el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="统一社会信用代码" prop="creditCode" label-width="150px">
+                <el-input v-model="form.creditCode" placeholder="请输入公司统一社会信用代码">
+                </el-input>
+              </el-form-item>
+            </el-col>
           </el-row>
           <el-row>
-            <el-col :span="12">
+            <el-col :span="6">
               <el-form-item label="公司官网" prop="website">
                 <el-input v-model="form.website" placeholder="请输入公司官网地址"/>
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="6">
+              <el-form-item label="联系邮件" prop="emails">
+                <el-input v-model="form.emails" placeholder="请输入公司联系邮件"/>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="联系电话" prop="phone">
+                <el-input v-model="form.phone" placeholder="请输入公司联系电话"/>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
               <el-form-item label="业务范围" prop="businessScope">
                 <el-select v-model="form.businessScope" placeholder="请选择公司业务范围" clearable>
                   <el-option v-for="dict in dict.type.crm_companny_business_scope" :key="dict.value" :label="dict.label"
@@ -242,7 +296,7 @@
             </el-col>
           </el-row>
           <el-row>
-            <el-col :span="12">
+            <el-col :span="6">
               <el-form-item prop="addr">
                 <span slot="label">
                   公司地址
@@ -254,7 +308,7 @@
                 </el-cascader>
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="6">
               <el-form-item prop="zipCode">
                 <span slot="label">
                   地址邮编
@@ -265,9 +319,7 @@
                 <el-input v-model="form.zipCode" placeholder="请输入邮编"/>
               </el-form-item>
             </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="24">
+            <el-col :span="12">
               <el-form-item label="详细地址" prop="addrDetail">
                 <el-input v-model="form.addrDetail" placeholder="请输入公司其他描述"/>
               </el-form-item>
@@ -282,7 +334,7 @@
                     <i class="el-icon-question"></i>
                   </el-tooltip>
                 </span>
-                <el-input v-model="form.remark" type="textarea" :rows="1" placeholder="请输入公司其他描述"/>
+                <el-input v-model="form.remark" type="textarea" resize="none" :rows="2" placeholder="请输入公司其他描述"/>
               </el-form-item>
             </el-col>
           </el-row>
@@ -803,6 +855,13 @@ export default {
         {key: 14, label: `创建时间`, visible: true},
         {key: 15, label: `更新者`, visible: false},
         {key: 16, label: `更新时间`, visible: true},
+        {key: 17, label: `英文名称`, visible: false},
+        {key: 18, label: `纳税人识别号`, visible: false},
+        {key: 19, label: `工商注册号`, visible: false},
+        {key: 20, label: `组织机构代码`, visible: false},
+        {key: 21, label: `统一社会信用代码`, visible: false},
+        {key: 22, label: `联系邮件`, visible: false},
+        {key: 23, label: `联系电话`, visible: false},
       ],
       // 部门树选项
       deptOptions: [],
@@ -814,6 +873,7 @@ export default {
         label: 'name',
         children: 'children',
         checkStrictly: true,
+        expandTrigger:'hover',
         lazyLoad: function (node, resolve) {
           let addrParams = {
             level: 'province',

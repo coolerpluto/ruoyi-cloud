@@ -118,6 +118,91 @@ public class Company extends BaseEntity
      */
     private Long updateId;
 
+    @Excel(name = "英文名称")
+    private String englishName;
+    @Excel(name = "纳税人识别号")
+    private String taxCode;
+    @Excel(name = "联系邮件")
+    private String emails;
+    @Excel(name = "联系电话")
+    private String phone;
+    @Excel(name = "工商注册号")
+    private String regNumber;
+    @Excel(name = "组织机构代码")
+    private String orgNumber;
+    @Excel(name = "统一社会信用代码")
+    private String creditCode;
+
+    public String getEnglishName()
+    {
+        return englishName;
+    }
+
+    public void setEnglishName(String englishName)
+    {
+        this.englishName = englishName;
+    }
+
+    public String getTaxCode()
+    {
+        return taxCode;
+    }
+
+    public void setTaxCode(String taxCode)
+    {
+        this.taxCode = taxCode;
+    }
+
+    public String getEmails()
+    {
+        return emails;
+    }
+
+    public void setEmails(String emails)
+    {
+        this.emails = emails;
+    }
+
+    public String getPhone()
+    {
+        return phone;
+    }
+
+    public void setPhone(String phone)
+    {
+        this.phone = phone;
+    }
+
+    public String getRegNumber()
+    {
+        return regNumber;
+    }
+
+    public void setRegNumber(String regNumber)
+    {
+        this.regNumber = regNumber;
+    }
+
+    public String getOrgNumber()
+    {
+        return orgNumber;
+    }
+
+    public void setOrgNumber(String orgNumber)
+    {
+        this.orgNumber = orgNumber;
+    }
+
+    public String getCreditCode()
+    {
+        return creditCode;
+    }
+
+    public void setCreditCode(String creditCode)
+    {
+        this.creditCode = creditCode;
+    }
+
     public String getNickName()
     {
         return nickName;

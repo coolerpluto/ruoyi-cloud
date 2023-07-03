@@ -34,12 +34,26 @@
         <result property="updateId" column="update_id"/>
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
+        <result property="englishName" column="english_name"/>
+        <result property="taxCode" column="tax_code"/>
+        <result property="emails" column="emails"/>
+        <result property="phone" column="phone"/>
+        <result property="regNumber" column="reg_number"/>
+        <result property="orgNumber" column="org_number"/>
+        <result property="creditCode" column="credit_code"/>
     </resultMap>
 
     <sql id="selectCompanyVo">
         select tc.id,
                tc.code,
                tc.company_name,
+               tc.english_name,
+               tc.tax_code,
+               tc.emails,
+               tc.phone,
+               tc.reg_number,
+               tc.org_number,
+               tc.credit_code,
                tc.properties,
                tc.industry,
                tc.industry_category,
@@ -168,6 +182,13 @@
             <if test="updateId != null">update_id,</if>
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
+            <if test="englishName != null">english_name,</if>
+            <if test="taxCode != null">tax_code,</if>
+            <if test="emails != null">emails,</if>
+            <if test="phone != null">phone,</if>
+            <if test="regNumber != null">reg_number,</if>
+            <if test="orgNumber != null">org_number,</if>
+            <if test="creditCode != null">credit_code,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
@@ -196,6 +217,13 @@
             <if test="updateId != null">#{updateId},</if>
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
+            <if test="englishName != null">#{englishName},</if>
+            <if test="taxCode != null">#{taxCode},</if>
+            <if test="emails != null">#{emails},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="regNumber != null">#{regNumber},</if>
+            <if test="orgNumber != null">#{orgNumber},</if>
+            <if test="creditCode != null">#{creditCode},</if>
         </trim>
     </insert>
     <insert id="batchInsertCompany">
@@ -204,7 +232,9 @@
         source_id, source_type, website, addr, addr_detail,
         zip_code, business_scope, remark,
         owner_id, dept_id, create_id, create_by, create_time,
-        update_id, update_by, update_time)
+        update_id, update_by, update_time,
+        english_name,tax_code,emails,phone,
+        reg_number,org_number,credit_code)
         VALUES
         <foreach collection="companyList" index="index" item="item" separator=",">
             (#{item.id}, #{item.code},#{item.companyName},#{item.properties},#{item.industry},#{item.industryCategory},#{item.industrySubcategory}
@@ -212,7 +242,9 @@
             ,#{item.sourceId},#{item.sourceType},#{item.website},#{item.addr},#{item.addrDetail}
             ,#{item.zipCode},#{item.businessScope},#{item.remark}
             ,#{item.ownerId},#{item.deptId},#{item.createId},#{item.createBy},#{item.createTime}
-            ,#{item.updateId},#{item.updateBy},#{item.updateTime})
+            ,#{item.updateId},#{item.updateBy},#{item.updateTime},
+            #{item.englishName},#{item.taxCode},#{item.emails},#{item.phone},
+            #{item.regNumber},#{item.orgNumber},#{item.creditCode},)
         </foreach>
     </insert>
     <update id="updateCompany" parameterType="Company">
@@ -242,6 +274,13 @@
             <if test="updateId != null">update_id = #{updateId},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="englishName != null">english_name = #{englishName},</if>
+            <if test="taxCode != null">tax_code = #{taxCode},</if>
+            <if test="emails != null">emails = #{emails},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="regNumber != null">reg_number = #{regNumber},</if>
+            <if test="orgNumber != null">org_number = #{orgNumber},</if>
+            <if test="creditCode != null">credit_code = #{creditCode},</if>
         </trim>
         where id = #{id}
     </update>
