@@ -443,15 +443,8 @@
 </template>
 
 <script>
-import {
-  listMedium,
-  getMedium,
-  delMedium,
-  addMedium,
-  addMediumWithFile,
-  updateMedium,
-  updateMediumWithFile,
-} from "@/api/medium/medium";
+import { listMedium,getMedium, delMedium, addMedium, addMediumWithFile, updateMedium, updateMediumWithFile, } from "@/api/medium/medium";
+import { listProdTree } from "@/api/medium/prod";
 
 export default {
   name: "Medium",
@@ -517,10 +510,15 @@ export default {
           { required: true, message: "介质文件未选择上传", trigger: "blur" },
         ],
       },
+      listProdVersionTree:[],
+      versionProps:{
+        expandTrigger:'hover',
+      }
     };
   },
   created() {
     this.getList();
+    this.listProdTree();
   },
   methods: {
     /** 查询介质文件信息记录列表 */
@@ -697,6 +695,14 @@ export default {
         this.$message.error("上传文件大小不能超过1个");
         return false;
       }
+    },
+    listProdTree(searchValue){
+      listProdTree({
+        searchValue:searchValue
+      }).then((response) => {
+        this.listProdVersionTree = response.data;
+        console.log(this.listProdVersionTree)
+      });
     },
   },
 };

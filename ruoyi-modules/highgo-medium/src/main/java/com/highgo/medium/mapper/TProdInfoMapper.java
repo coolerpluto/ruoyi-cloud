@@ -84,4 +84,6 @@ public interface TProdInfoMapper
      * @return 结果
      */
     public int deleteTProdVersionInfoByProdId(Long id);
+
+    List<TProdInfo> selectProdAncVersionAsTree(String searchValue);
 }

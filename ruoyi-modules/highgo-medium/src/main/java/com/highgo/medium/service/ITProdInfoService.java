@@ -1,6 +1,8 @@
 package com.highgo.medium.service;
 
 import java.util.List;
+import java.util.Map;
+
 import com.highgo.medium.domain.TProdInfo;
 
 /**
@@ -58,4 +60,8 @@ public interface ITProdInfoService
      * @return 结果
      */
     public int deleteTProdInfoById(Long id);
+
+    List<TProdInfo> selectListAsTree(String searchValue);
+
+    List<Map<String,Object>> buildTreeSelect(List<TProdInfo> prodInfos);
 }

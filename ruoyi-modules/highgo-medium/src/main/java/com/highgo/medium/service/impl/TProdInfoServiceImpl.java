@@ -1,11 +1,14 @@
 package com.highgo.medium.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import com.ruoyi.common.core.utils.DateUtils;
 import com.ruoyi.common.security.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
+import java.util.Map;
+
 import com.ruoyi.common.core.utils.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
 import com.highgo.medium.domain.TProdVersionInfo;
@@ -111,6 +114,51 @@ public class TProdInfoServiceImpl implements ITProdInfoService
     {
         tProdInfoMapper.deleteTProdVersionInfoByProdId(id);
         return tProdInfoMapper.deleteTProdInfoById(id);
+    }
+
+    @Override
+    public List<TProdInfo> selectListAsTree(String searchValue)
+    {
+        return tProdInfoMapper.selectProdAncVersionAsTree(searchValue);
+    }
+
+    /**
+     *
+     * @return [{label:'label',value:'value',children:[]}]
+     */
+    @Override
+    public List<Map<String, Object>> buildTreeSelect(List<TProdInfo> prodInfos)
+    {
+        List<Map<String, Object>> res = new ArrayList<>();
+        for (TProdInfo prodInfo : prodInfos)
+        {
+            Map<String, Object> prod = new HashMap<>();
+            prod.put("label", prodInfo.getProdName());
+            prod.put("value", prodInfo.getId().toString());
+            List<TProdVersionInfo> prodVersions = prodInfo.getTProdVersionInfoList();
+            if (prodVersions.size() == 0)
+            {
+                res.add(prod);
+                continue;
+            }
+            List<Map<String, Object>> versions = new ArrayList<>();
+            for (TProdVersionInfo version : prodVersions)
+            {
+                Map<String, Object> prod_v = new HashMap<>();
+                prod_v.put("label", version.getVersion());
+                prod_v.put("value", version.getId().toString());
+                prod_v.put("prod_pic", version.getProdPic());
+                prod_v.put("pm_pic", version.getPmPic());
+                prod_v.put("sign_flag", version.getSignFlag());
+                prod_v.put("mac_tool_file_id", version.getMacToolFileId());
+                prod_v.put("lic_tool_id", version.getLicToolId());
+                prod_v.put("registration_id", version.getRegistrationId());
+                versions.add(prod_v);
+            }
+            prod.put("children", versions);
+            res.add(prod);
+        }
+        return res;
     }
 
     /**

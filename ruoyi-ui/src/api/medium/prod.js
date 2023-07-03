@@ -8,6 +8,14 @@ export function listProd(query) {
     params: query
   })
 }
+// 查询产品信息树列表
+export function listProdTree(query) {
+  return request({
+    url: '/medium/prod/treeSelect',
+    method: 'get',
+    params: query
+  })
+}
 
 // 查询产品信息详细
 export function getProd(id) {

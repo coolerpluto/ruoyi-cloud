@@ -149,4 +149,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             ( #{item.id}, #{item.prodId}, #{item.version}, #{item.prodPic}, #{item.pmPic}, #{item.deptId}, #{item.registrationId}, #{item.licToolId}, #{item.macToolFileId}, #{item.status}, #{item.signFlag}, #{item.remark}, #{item.createId}, #{item.createBy}, #{item.createTime}, #{item.updateId}, #{item.updateBy}, #{item.updateTime})
         </foreach>
     </insert>
+
+
+    <select id="selectProdAncVersionAsTree" parameterType="String" resultMap="TProdInfoTProdVersionInfoResult">
+        select a.id, a.prod_name, a.prod_sname, a.property, a.type, a.status, a.remark, a.create_id, a.create_by, a.create_time, a.update_id, a.update_by, a.update_time,
+               b.id as sub_id, b.prod_id as sub_prod_id, b.version as sub_version, b.prod_pic as sub_prod_pic, b.pm_pic as sub_pm_pic, b.dept_id as sub_dept_id, b.registration_id as sub_registration_id, b.lic_tool_id as sub_lic_tool_id, b.mac_tool_file_id as sub_mac_tool_file_id, b.status as sub_status, b.sign_flag as sub_sign_flag, b.remark as sub_remark, b.create_id as sub_create_id, b.create_by as sub_create_by, b.create_time as sub_create_time, b.update_id as sub_update_id, b.update_by as sub_update_by, b.update_time as sub_update_time
+        from t_prod_info a
+                 left join t_prod_version_info b on b.prod_id = a.id
+        where a.status = '0' and b.status  = '0'
+        <if test="searchValue != null">
+            and (a.prod_name like concat('%', #{searchValue}, '%') or b.version like concat('%', #{searchValue}, '%'))
+        </if>
+    </select>
 </mapper>
