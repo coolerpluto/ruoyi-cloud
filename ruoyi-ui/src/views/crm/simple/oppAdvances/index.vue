@@ -28,7 +28,7 @@
         </el-date-picker>
       </el-form-item>
       <el-form-item label="提报人" prop="creator">
-        <el-select v-model="queryParams.creator" clearable placeholder="请输入 关键字拼音检索" filterable remote
+        <el-select v-model="queryParams.creator" clearable placeholder="请输入 关键字检索" filterable remote
           :remote-method="getPersonOptions" :loading="flag.transferTargetPersonLoading">
           <el-option v-for="item in personOptions" :key="item.userName" :label="item.nickName" :value="item.userName">
             <span style="float: left">{{ item.nickName }}</span>
@@ -136,7 +136,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -239,7 +239,7 @@ export default {
       listEmployee({
         pageNum: 1,
         pageSize: 20,
-        userName: query,
+        nickName: query,
       }).then(response => {
         this.personOptions = response.rows;
         this.flag.transferTargetPersonLoading = false;

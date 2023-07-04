@@ -13,7 +13,7 @@
                         :default-time="['00:00:00', '23:59:59']"></el-date-picker>
       </el-form-item>
       <el-form-item label="创建人" prop="params.createBys">
-        <el-select v-model="queryParams.params.createBys" collapse-tags placeholder="请输入 关键字拼音检索" filterable remote
+        <el-select v-model="queryParams.params.createBys" collapse-tags placeholder="请输入 关键字检索" filterable remote
                    multiple :remote-method="getPersonOptions" :loading="flag.personOptionsLoading">
           <el-option v-for="item in personOptions" :key="item.userName" :label="item.nickName" :value="item.userName">
             <span style="float: left">{{ item.nickName }}</span>
@@ -23,7 +23,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="主负责人" prop="params.ownerIds">
-        <el-select v-model="queryParams.params.ownerIds" collapse-tags placeholder="请输入 关键字拼音检索" filterable remote
+        <el-select v-model="queryParams.params.ownerIds" collapse-tags placeholder="请输入 关键字检索" filterable remote
                    multiple :remote-method="getPersonOptions" :loading="flag.personOptionsLoading">
           <el-option v-for="item in personOptions" :key="item.userName" :label="item.nickName" :value="item.userId">
             <span style="float: left">{{ item.nickName }}</span>
@@ -159,7 +159,7 @@
         <el-row>
           <el-col :span="18">
             <el-form-item label="转移目标人" prop="ownerName">
-              <el-select v-model="transfer.form.ownerName" @change="getTargetPerson" placeholder="请输入 关键字拼音" filterable
+              <el-select v-model="transfer.form.ownerName" @change="getTargetPerson" placeholder="请输入 关键字" filterable
                          remote :remote-method="getPersonOptions" :loading="flag.transferTargetPersonLoading">
                 <el-option v-for="item in personOptions" :key="item.id" :label="item.nickName" :value="item.userName">
                   <span style="float: left">{{ item.nickName }}</span>
@@ -413,9 +413,9 @@
               </template>
             </el-table-column>
             <el-table-column label="归属门类" align="center" prop="category" :show-overflow-tooltip="true"/>
-            <el-table-column label="HGDB适配进度" align="center" prop="dbAdaptStatus" :show-overflow-tooltip="true">
+            <el-table-column label="完成HGDB适配" align="center" prop="dbAdaptStatus" :show-overflow-tooltip="true">
               <template slot-scope="scope">
-                <dict-tag :options="dict.type.sys_work_progress" :value="scope.row.dbAdaptStatus"/>
+                <dict-tag :options="dict.type.sys_yes_no_num" :value="scope.row.dbAdaptStatus"/>
               </template>
             </el-table-column>
             <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -524,17 +524,17 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="应用开发进度" prop="devStatus">
+            <el-form-item label="完成应用开发" prop="devStatus">
               <el-select v-model="formApp.devStatus" placeholder="请选择应用开发进度">
-                <el-option v-for="dict in dict.type.sys_work_progress" :key="dict.value" :label="dict.label"
+                <el-option v-for="dict in dict.type.sys_yes_no_num" :key="dict.value" :label="dict.label"
                            :value="dict.value"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="HGDB适配进度" prop="dbAdaptStatus">
+            <el-form-item label="完成HGDB适配" prop="dbAdaptStatus">
               <el-select v-model="formApp.dbAdaptStatus" placeholder="请选择HGDB适配进度">
-                <el-option v-for="dict in dict.type.sys_work_progress" :key="dict.value" :label="dict.label"
+                <el-option v-for="dict in dict.type.sys_yes_no_num" :key="dict.value" :label="dict.label"
                            :value="dict.value"></el-option>
               </el-select>
             </el-form-item>
@@ -716,7 +716,7 @@ export default {
     'crm_business_type',
     'crm_fund_source_type',
     'sys_user_sex',
-    'sys_work_progress',
+    'sys_yes_no_num',
     'sys_system_db_type',
     'sys_operating_system',
     'crm_opportunity_status',
@@ -964,7 +964,7 @@ export default {
       listEmployee({
         pageNum: 1,
         pageSize: 20,
-        userName: query,
+        nickName: query,
       }).then(response => {
         this.personOptions = response.rows;
         this.flag.personOptionsLoading = false;

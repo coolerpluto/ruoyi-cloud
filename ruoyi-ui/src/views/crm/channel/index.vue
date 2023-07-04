@@ -13,7 +13,7 @@
                         :default-time="['00:00:00', '23:59:59']"></el-date-picker>
       </el-form-item>
       <el-form-item label="创建人" prop="params.createBys">
-        <el-select v-model="queryParams.params.createBys" collapse-tags placeholder="请输入 关键字拼音检索" filterable remote
+        <el-select v-model="queryParams.params.createBys" collapse-tags placeholder="请输入 关键字检索" filterable remote
                    multiple :remote-method="getPersonOptions" :loading="flag.personOptionsLoading">
           <el-option v-for="item in personOptions" :key="item.userName" :label="item.nickName" :value="item.userName">
             <span style="float: left">{{ item.nickName }}</span>
@@ -23,7 +23,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="主负责人" prop="params.ownerIds">
-        <el-select v-model="queryParams.params.ownerIds" collapse-tags placeholder="请输入 关键字拼音检索" filterable remote
+        <el-select v-model="queryParams.params.ownerIds" collapse-tags placeholder="请输入 关键字检索" filterable remote
                    multiple :remote-method="getPersonOptions" :loading="flag.personOptionsLoading">
           <el-option v-for="item in personOptions" :key="item.userName" :label="item.nickName" :value="item.userId">
             <span style="float: left">{{ item.nickName }}</span>
@@ -159,7 +159,7 @@
         <el-row>
           <el-col :span="18">
             <el-form-item label="转移目标人" prop="ownerName">
-              <el-select v-model="transfer.form.ownerName" @change="getTargetPerson" placeholder="请输入 关键字拼音" filterable
+              <el-select v-model="transfer.form.ownerName" @change="getTargetPerson" placeholder="请输入 关键字" filterable
                          remote :remote-method="getPersonOptions" :loading="flag.transferTargetPersonLoading">
                 <el-option v-for="item in personOptions" :key="item.id" :label="item.nickName" :value="item.userName">
                   <span style="float: left">{{ item.nickName }}</span>
@@ -970,7 +970,7 @@ export default {
       listEmployee({
         pageNum: 1,
         pageSize: 20,
-        userName: query,
+        nickName: query,
       }).then(response => {
         this.personOptions = response.rows;
         this.flag.personOptionsLoading = false;

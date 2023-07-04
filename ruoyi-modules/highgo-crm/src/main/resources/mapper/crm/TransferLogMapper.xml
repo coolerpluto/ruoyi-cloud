@@ -26,6 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="userFrom != null  and userFrom != ''"> and user_from = #{userFrom}</if>
             <if test="userTo != null  and userTo != ''"> and user_to = #{userTo}</if>
             <if test="actionTime != null "> and action_time &lt;= #{actionTime}</if>
+            <if test="recordIds != null "> and record_ids like concat('%', #{recordIds}, '%')</if>
         </where>
     </select>
     

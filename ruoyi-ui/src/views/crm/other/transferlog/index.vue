@@ -1,14 +1,23 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="88px">
       <el-form-item label="数据模块" prop="model">
         <el-select v-model="queryParams.model" placeholder="请选择数据模块" clearable>
           <el-option v-for="dict in dict.type.crm_business_type" :key="dict.value" :label="dict.label"
                      :value="dict.value"/>
         </el-select>
       </el-form-item>
+      <el-form-item prop="recordIds">
+         <span slot="label">
+            记录编码
+            <el-tooltip content="商机编码、渠道编码、用户编码" placement="top">
+              <i class="el-icon-question"></i>
+            </el-tooltip>
+          </span>
+        <el-input v-model="queryParams.recordIds" placeholder="可输入商机编码、渠道编码、用户编码" clearable @keyup.enter.native="handleQuery" />
+      </el-form-item>
       <el-form-item label="转移人" prop="userFrom">
-        <el-select v-model="queryParams.userFrom" clearable placeholder="请输入 关键字拼音检索" filterable remote
+        <el-select v-model="queryParams.userFrom" clearable placeholder="请输入 关键字检索" filterable remote
           :remote-method="getPersonOptions" :loading="flag.transferTargetPersonLoading">
           <el-option v-for="item in personOptions" :key="item.userName" :label="item.nickName" :value="item.userName">
             <span style="float: left">{{ item.nickName }}</span>
@@ -18,7 +27,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="接收人" prop="userTo">
-        <el-select v-model="queryParams.userTo" clearable placeholder="请输入 关键字拼音检索" filterable remote
+        <el-select v-model="queryParams.userTo" clearable placeholder="请输入 关键字检索" filterable remote
           :remote-method="getPersonOptions" :loading="flag.transferTargetPersonLoading">
           <el-option v-for="item in personOptions" :key="item.userName" :label="item.nickName" :value="item.userId">
             <span style="float: left">{{ item.nickName }}</span>
@@ -71,8 +80,8 @@
       </el-table-column>
       <el-table-column label="来源" align="center" prop="userFrom" :show-overflow-tooltip="true" v-if="columns[1].visible"/>
       <el-table-column label="目标" align="center" prop="userTo" :show-overflow-tooltip="true" v-if="columns[2].visible"/>
-      <el-table-column label="操作的记录的ID" align="center" prop="recordIds" :show-overflow-tooltip="true" v-if="columns[3].visible"/>
-      <el-table-column label="单次转移数量" align="center" prop="quantity" v-if="columns[4].visible"/>
+      <el-table-column label="记录编码" align="center" prop="recordIds" :show-overflow-tooltip="true" v-if="columns[3].visible"/>
+      <el-table-column label="转移数量" align="center" prop="quantity" v-if="columns[4].visible"/>
       <el-table-column label="转移原因" align="center" prop="reason" :show-overflow-tooltip="true" v-if="columns[5].visible"/>
       <el-table-column label="操作时间" align="center" prop="actionTime" v-if="columns[6].visible"/>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -172,7 +181,7 @@ export default {
       listEmployee({
         pageNum: 1,
         pageSize: 20,
-        userName: query,
+        nickName: query,
       }).then(response => {
         this.personOptions = response.rows;
         this.flag.transferTargetPersonLoading = false;

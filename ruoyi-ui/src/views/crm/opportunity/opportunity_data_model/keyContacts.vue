@@ -263,13 +263,13 @@ export default {
             { required: true, message: "联系人意向厂商不能为空", trigger: "blur" }
           ],
           exposure: [
-            { required: true, message: "对接情况不能为空", trigger: "blur" }
+            { required: false, message: "对接情况不能为空", trigger: "blur" }
           ],
           sideVisited: [
-            { required: true, message: "是否会面对手不能为空", trigger: "blur" }
+            { required: false, message: "是否会面对手不能为空", trigger: "blur" }
           ],
           relationship: [
-            { required: true, message: "关系程度不能为空", trigger: "blur" }
+            { required: false, message: "关系程度不能为空", trigger: "blur" }
           ],
           roleInOppo: [
             { required: true, message: "人员角色不能为空", trigger: "blur" }

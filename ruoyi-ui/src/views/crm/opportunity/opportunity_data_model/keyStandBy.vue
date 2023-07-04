@@ -38,7 +38,7 @@
         <el-row>
           <el-col :span="10">
             <el-form-item label="支持人员" prop="supportName">
-              <el-select v-model="keyStandByDialog.form.supportName" @change="getSupportor" placeholder="请输入 关键字拼音" :disabled="flag.disableReSelect"
+              <el-select v-model="keyStandByDialog.form.supportName" @change="getSupportor" placeholder="请输入 关键字" :disabled="flag.disableReSelect"
                 filterable remote :remote-method="getSupportorOptions" :loading="flag.keyStandByOptionsLoading">
                 <el-option v-for="item in keyStandByDialog.personOptions" :key="item.id" :label="item.userName"
                   :value="item.userName">
@@ -204,7 +204,7 @@ export default {
       listEmployee({
         pageNum: 1,
         pageSize: 20,
-        userName: query,
+        nickName: query,
       }).then(response => {
         this.keyStandByDialog.personOptions = response.rows;
         this.flag.keyStandByOptionsLoading = false;

@@ -115,7 +115,7 @@
                           @select="node => sourceDeptHandleSelect(node)" style="line-height: 15px;"
                           @deselect="node => sourceDeptHandleDelSelect(node)"
                           v-model="form.sourceIdList" :options="deptOptions" :show-count="true" placeholder="请选择归属部门"/>
-              <el-select v-if="form.sourceType=='u'" v-model="form.sourceIdList" placeholder="可拼音搜索+多选" remote
+              <el-select v-if="form.sourceType=='u'" v-model="form.sourceIdList" placeholder="可搜索+多选" remote
                          multiple clearable filterable :remote-method="handleUserQuery" :loading="loading"
                          @change="$forceUpdate()">
                 <el-option v-for="item in userList" :key="item.userId" :label="item.nickName"
@@ -140,7 +140,7 @@
                           @select="node => targetDeptHandleSelect(node)" style="line-height: 15px;"
                           @deselect="node => targetDeptHandleDelSelect(node)"
                           v-model="form.targetIdList" :options="deptOptions" :show-count="true" placeholder="请选择归属部门"/>
-              <el-select v-if="form.targetType=='u'" v-model="form.targetIdList" placeholder="可拼音搜索+多选" remote
+              <el-select v-if="form.targetType=='u'" v-model="form.targetIdList" placeholder="可搜索+多选" remote
                          multiple clearable filterable :remote-method="handleUserQuery" :loading="loading"
                          @change="$forceUpdate()">
                 <el-option v-for="item in userList" :key="item.userId" :label="item.nickName"
@@ -275,7 +275,7 @@ export default {
   methods: {
     handleUserQuery(param) {
       debugger
-      listEmployee({userName: param}).then(response => {
+      listEmployee({nickName: param}).then(response => {
         this.userList = response.rows;
       });
     },

@@ -27,20 +27,20 @@
           />
         </el-select>
       </el-form-item> -->
-      <el-form-item label="招标前完成度" prop="targetAdaptedProgress">
+      <el-form-item label="招标前必须完成" prop="targetAdaptedProgress">
         <el-select v-model="queryParams.targetAdaptedProgress" placeholder="请选择招标前目标进度" clearable>
           <el-option
-            v-for="dict in dict.type.sys_work_progress"
+            v-for="dict in dict.type.sys_yes_no_num"
             :key="dict.value"
             :label="dict.label"
             :value="dict.value"
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="当前适配进度" prop="currentAdaptedProgress">
+      <el-form-item label="当前完成适配" prop="currentAdaptedProgress">
         <el-select v-model="queryParams.currentAdaptedProgress" placeholder="请选择当前适配进度" clearable>
           <el-option
-            v-for="dict in dict.type.sys_work_progress"
+            v-for="dict in dict.type.sys_yes_no_num"
             :key="dict.value"
             :label="dict.label"
             :value="dict.value"
@@ -116,14 +116,14 @@
           <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.isvNeedAdapted"/>
         </template>
       </el-table-column>
-      <el-table-column label="招标前目标进度" align="center" prop="targetAdaptedProgress">
+      <el-table-column label="招标前必须完成" align="center" prop="targetAdaptedProgress">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.sys_work_progress" :value="scope.row.targetAdaptedProgress"/>
+          <dict-tag :options="dict.type.sys_yes_no_num" :value="scope.row.targetAdaptedProgress"/>
         </template>
       </el-table-column>
-      <el-table-column label="当前适配进度" align="center" prop="currentAdaptedProgress">
+      <el-table-column label="当前完成适配" align="center" prop="currentAdaptedProgress">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.sys_work_progress" :value="scope.row.currentAdaptedProgress"/>
+          <dict-tag :options="dict.type.sys_yes_no_num" :value="scope.row.currentAdaptedProgress"/>
         </template>
       </el-table-column>
       <el-table-column label="运作主体名字" align="center" prop="operationalName" />
@@ -151,7 +151,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -179,20 +179,20 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="招标前目标进度" prop="targetAdaptedProgress">
+        <el-form-item label="招标前必须完成" prop="targetAdaptedProgress">
           <el-select v-model="form.targetAdaptedProgress" placeholder="请选择招标前目标进度">
             <el-option
-              v-for="dict in dict.type.sys_work_progress"
+              v-for="dict in dict.type.sys_yes_no_num"
               :key="dict.value"
               :label="dict.label"
               :value="dict.value"
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="当前适配进度" prop="currentAdaptedProgress">
+        <el-form-item label="当前完成适配" prop="currentAdaptedProgress">
           <el-select v-model="form.currentAdaptedProgress" placeholder="请选择当前适配进度">
             <el-option
-              v-for="dict in dict.type.sys_work_progress"
+              v-for="dict in dict.type.sys_yes_no_num"
               :key="dict.value"
               :label="dict.label"
               :value="dict.value"
@@ -216,7 +216,7 @@ import { listOppSoftwareOperation, getOppSoftwareOperation, delOppSoftwareOperat
 
 export default {
   name: "OppSoftwareOperation",
-  dicts: ['sys_yes_no', 'sys_work_progress'],
+  dicts: ['sys_yes_no', 'sys_yes_no_num'],
   data() {
     return {
       // 遮罩层

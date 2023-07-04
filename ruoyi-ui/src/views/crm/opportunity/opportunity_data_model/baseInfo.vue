@@ -25,16 +25,16 @@
             <el-table :data="baseInfoForm.operations">
               <el-table-column label="客户系统名称" align="center" fixed prop="applicationName" :show-overflow-tooltip="true" />
               <el-table-column label="系统开发商" align="center" fixed prop="isv" :show-overflow-tooltip="true" />
-              <el-table-column label="适配进度" align="center" fixed prop="currentAdaptedProgress"
+              <el-table-column label="当前完成适配" align="center" fixed prop="currentAdaptedProgress"
                 :show-overflow-tooltip="true">
                 <template slot-scope="scope">
-                  <dict-tag :options="dict.type.sys_work_progress" :value="scope.row.currentAdaptedProgress" />
+                  <dict-tag :options="dict.type.sys_yes_no_num" :value="scope.row.currentAdaptedProgress" />
                 </template>
               </el-table-column>
-              <el-table-column label="招标前必须完成度" align="center" fixed prop="targetAdaptedProgress"
+              <el-table-column label="招标前必须完成" align="center" fixed prop="targetAdaptedProgress"
                 :show-overflow-tooltip="true">
                 <template slot-scope="scope">
-                  <dict-tag :options="dict.type.sys_work_progress" :value="scope.row.targetAdaptedProgress" />
+                  <dict-tag :options="dict.type.sys_yes_no_num" :value="scope.row.targetAdaptedProgress" />
                 </template>
               </el-table-column>
               <el-table-column label="软件分类" align="center" fixed prop="category" :show-overflow-tooltip="true">
@@ -120,17 +120,17 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="招标前必须完成度" prop="targetAdaptedProgress">
+            <el-form-item label="招标前必须完成" prop="targetAdaptedProgress">
               <el-select v-model="baseInfoDialog.form.targetAdaptedProgress" placeholder="请选择招标前必须完成度">
-                <el-option v-for="dict in dict.type.sys_work_progress" :key="dict.value" :label="dict.label"
+                <el-option v-for="dict in dict.type.sys_yes_no_num" :key="dict.value" :label="dict.label"
                   :value="dict.value"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="10">
-            <el-form-item label="当前适配进度" prop="currentAdaptedProgress">
+            <el-form-item label="当前完成适配" prop="currentAdaptedProgress">
               <el-select v-model="baseInfoDialog.form.currentAdaptedProgress" placeholder="请选择HGDB适配进度">
-                <el-option v-for="dict in dict.type.sys_work_progress" :key="dict.value" :label="dict.label"
+                <el-option v-for="dict in dict.type.sys_yes_no_num" :key="dict.value" :label="dict.label"
                   :value="dict.value"></el-option>
               </el-select>
             </el-form-item>
@@ -154,7 +154,7 @@ import {
 } from "@/api/crm/oppUnitedInfo"
 export default {
   name: "baseInfo",
-  dicts: ['sys_work_progress', 'sys_system_db_type'],
+  dicts: ['sys_yes_no_num', 'sys_system_db_type'],
   props: {
     oppdata: {
       type: Object,
@@ -304,7 +304,7 @@ export default {
         minutes = currentTime.getMinutes(),
         seconds = currentTime.getSeconds(),
         milliseconds = currentTime.getMilliseconds();
-      let code = "A" + year + add0(month) + add0(date) + "N" + add0(hours) + add0(minutes) + add0(seconds) + this.getRanBigChar(2);
+      let code = "A" + year + add0(month) + add0(date) + this.getRanBigChar(3) + add0(hours) + add0(minutes) + add0(seconds);
       this.baseInfoForm.oppInfo.code = code;
       return code;
     },

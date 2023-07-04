@@ -160,7 +160,7 @@
         <el-row>
           <el-col :span="18">
             <el-form-item label="转移目标人" prop="ownerName">
-              <el-select v-model="form.ownerName" @change="getTargetPerson" placeholder="请输入 关键字拼音" filterable remote
+              <el-select v-model="form.ownerName" @change="getTargetPerson" placeholder="请输入 关键字" filterable remote
                 :remote-method="getPersonOptions" :loading="flag.transferTargetPersonLoading">
                 <el-option v-for="item in personOptions" :key="item.id" :label="item.nickName" :value="item.userName">
                   <span style="float: left">{{ item.nickName }}</span>
@@ -304,7 +304,7 @@ export default {
       listEmployee({
         pageNum: 1,
         pageSize: 20,
-        userName: query,
+        nickName: query,
       }).then(response => {
         this.personOptions = response.rows;
         this.flag.transferTargetPersonLoading = false;

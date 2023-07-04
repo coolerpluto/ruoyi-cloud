@@ -67,7 +67,7 @@
         <el-row>
           <el-col :span="10">
             <el-form-item label="投入人员" prop="inputUserName">
-              <el-select v-model="costInfosDialog.form.inputUserName" @change="getSupportor" placeholder="请输入关键字拼音查询"
+              <el-select v-model="costInfosDialog.form.inputUserName" @change="getSupportor" placeholder="请输入关键字查询"
                 filterable remote :remote-method="getSupportorOptions" :loading="flag.personOptionsLoading">
                 <el-option v-for="item in costInfosDialog.personOptions" :key="item.id" :label="item.userName"
                   :value="item.userName">
@@ -226,7 +226,7 @@ export default {
       listEmployee({
         pageNum: 1,
         pageSize: 20,
-        userName: query,
+        nickName: query,
       }).then(response => {
         this.costInfosDialog.personOptions = response.rows;
         this.flag.personOptionsLoading = false;

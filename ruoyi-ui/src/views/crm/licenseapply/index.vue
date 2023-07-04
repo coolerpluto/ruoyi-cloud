@@ -21,7 +21,7 @@
                     placeholder="请选择归属部门"/>
       </el-form-item>
       <el-form-item label="主负责人" prop="ownerId">
-        <el-select v-model="queryParams.ownerId" collapse-tags placeholder="请输入 关键字拼音检索" filterable remote
+        <el-select v-model="queryParams.ownerId" collapse-tags placeholder="请输入 关键字检索" filterable remote
                    :remote-method="getPersonOptions" :loading="flag.personOptionsLoading">
           <el-option v-for="item in personOptions" :key="item.userName" :label="item.nickName" :value="item.userId">
             <span style="float: left">{{ item.nickName }}</span>
@@ -179,7 +179,7 @@ export default {
       listEmployee({
         pageNum: 1,
         pageSize: 20,
-        userName: query,
+        nickName: query,
       }).then(response => {
         this.personOptions = response.rows;
         this.flag.personOptionsLoading = false;
