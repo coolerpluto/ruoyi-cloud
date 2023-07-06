@@ -17,9 +17,9 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="分组" prop="group">
+      <el-form-item label="分组" prop="groupName">
         <el-input
-          v-model="queryParams.group"
+          v-model="queryParams.groupName"
           placeholder="请输入分组"
           clearable
           @keyup.enter.native="handleQuery"
