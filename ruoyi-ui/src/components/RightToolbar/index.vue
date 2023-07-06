@@ -10,6 +10,9 @@
       <el-tooltip class="item" effect="dark" content="显隐列" placement="top" v-if="columns">
         <el-button size="mini" circle icon="el-icon-menu" @click="showColumn()" />
       </el-tooltip>
+      <el-tooltip class="item" effect="dark" content="切模式" placement="top" v-if="['list', 'card'].includes(showListType)">
+        <el-button size="mini" circle :icon="cardType?'el-icon-s-fold':'el-icon-s-grid'" @click="changeListType(showListType)" />
+      </el-tooltip>
     </el-row>
     <el-dialog :title="title" :visible.sync="open" append-to-body width="fit-content">
       <el-transfer
@@ -32,12 +35,19 @@ export default {
       title: "显示/隐藏",
       // 是否显示弹出层
       open: false,
+      cardType:false,
     };
   },
   props: {
     showSearch: {
       type: Boolean,
       default: true,
+    },
+    showListType: {
+      type: String,
+      validator: function (value) {
+        return ["list", "card"].includes(value);
+      },
     },
     columns: {
       type: Array,
@@ -67,6 +77,7 @@ export default {
         this.value.push(parseInt(item));
       }
     }
+    this.cardType = this.showListType === 'card';
   },
   methods: {
     // 搜索
@@ -87,6 +98,11 @@ export default {
     // 打开显隐列dialog
     showColumn() {
       this.open = true;
+    },
+    changeListType(value) {
+      this.cardType = !this.cardType
+      console.log(2)
+      this.$emit("update:showListType", value === 'list'?"card":"list");
     },
   },
 };
