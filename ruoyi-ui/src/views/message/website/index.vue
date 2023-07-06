@@ -50,9 +50,10 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['message:website:add']"
-        >新增</el-button>
+        >新增
+        </el-button>
       </el-col>
-      <el-col :span="1.5">
+      <el-col :span="1.5" v-if="showListType ==='list'">
         <el-button
           type="success"
           plain
@@ -61,9 +62,10 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['message:website:edit']"
-        >修改</el-button>
+        >修改
+        </el-button>
       </el-col>
-      <el-col :span="1.5">
+      <el-col :span="1.5" v-if="showListType ==='list'">
         <el-button
           type="danger"
           plain
@@ -72,7 +74,8 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['message:website:remove']"
-        >删除</el-button>
+        >删除
+        </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -82,21 +85,25 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['message:website:export']"
-        >导出</el-button>
+        >导出
+        </el-button>
       </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList" :showListType.sync="showListType"></right-toolbar>
+      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"
+                     :showListType.sync="showListType"></right-toolbar>
     </el-row>
-    <el-row :gutter="10" class="mb8" v-if="showListType =='list'">
+    <el-row :gutter="10" class="mb8" v-if="showListType ==='list'">
       <el-table v-loading="loading" :data="websiteList" @selection-change="handleSelectionChange">
-        <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="名称" align="center" prop="name" />
-        <el-table-column label="地址链接" align="center" prop="url" >
+        <el-table-column type="selection" width="55" align="center"/>
+        <el-table-column label="名称" align="center" prop="name" :show-overflow-tooltip="true"/>
+        <el-table-column label="地址链接" align="center" prop="url" :show-overflow-tooltip="true">
           <template slot-scope="{row}">
-            <el-link :href="row.url" target="_blank" class="buttonText"  type="primary" :underline="false">{{row.url}}</el-link>
+            <el-link :href="row.url" target="_blank" class="buttonText" type="primary" :underline="false">
+              {{ row.url }}
+            </el-link>
           </template>
         </el-table-column>
-        <el-table-column label="分组" align="center" prop="groupName" />
-        <el-table-column label="备注" align="center" prop="remark" />
+        <el-table-column label="分组" align="center" prop="groupName"/>
+        <el-table-column label="备注" align="center" prop="remark" :show-overflow-tooltip="true"/>
         <el-table-column label="状态" align="center" prop="status">
           <template slot-scope="scope">
             <dict-tag :options="dict.type.sys_normal_disable" :value="scope.row.status"/>
@@ -110,20 +117,59 @@
               icon="el-icon-edit"
               @click="handleUpdate(scope.row)"
               v-hasPermi="['message:website:edit']"
-            >修改</el-button>
+            >修改
+            </el-button>
             <el-button
               size="mini"
               type="text"
               icon="el-icon-delete"
               @click="handleDelete(scope.row)"
               v-hasPermi="['message:website:remove']"
-            >删除</el-button>
+            >删除
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
     </el-row>
-    <el-row :gutter="10" class="mb8" v-if="showListType =='card'">
-      card
+    <el-row :gutter="10" class="mb8" v-if="showListType ==='card'">
+      <el-col v-for="item in websiteList" :key="item.id" :span="4">
+        <el-card shadow="always" style="height: 12em;">
+          <div slot="header" class="clearfix">
+            <span style="">
+              <i class="el-icon-s-promotion"/>
+              {{ item.groupName +':   '}}
+              <el-link :href="item.url" target="_blank" class="buttonText" type="primary"
+                       :underline="false" style="word-break: break-all;word-wrap: break-word;font-size: large">
+                  {{ item.name }}
+                </el-link>
+            </span>
+            <div style="display: inline-block; float: right; " @click="handleUpdate(item)">
+              <el-tooltip effect="dark" content="编辑角色" placement="top">
+                <i class="el-icon-edit-outline" style=""/>
+              </el-tooltip>
+            </div>
+          </div>
+          <div style="height: 90px;">
+            <el-col :span="6">
+              <img :src="item.logo" style="height: 50px;">
+            </el-col>
+            <el-col :span="18"  align="middle" >
+              <el-row>{{ item.remark }}</el-row>
+              <el-row >
+                <el-link :href="item.url" target="_blank" class="buttonText" type="primary"
+                         :underline="false" style="word-break: break-all;word-wrap: break-word">
+                  {{ item.url }}
+                </el-link>
+              </el-row>
+            </el-col>
+          </div>
+          <div style="display: inline-block; float: right;" @click="handleDelete(item)">
+            <el-tooltip effect="dark" content="删除角色" placement="bottom">
+              <i class="el-icon-delete" style=""/>
+            </el-tooltip>
+          </div>
+        </el-card>
+      </el-col>
     </el-row>
     <pagination
       v-show="total>0"
@@ -137,19 +183,19 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="名称" prop="name">
-          <el-input v-model="form.name" placeholder="请输入名称" />
+          <el-input v-model="form.name" placeholder="请输入名称"/>
         </el-form-item>
         <el-form-item label="悬浮提示" prop="title">
-          <el-input v-model="form.title" placeholder="请输入悬浮提示" />
+          <el-input v-model="form.title" placeholder="请输入悬浮提示"/>
         </el-form-item>
         <el-form-item label="地址链接" prop="url">
-          <el-input v-model="form.url" placeholder="请输入地址链接" />
+          <el-input v-model="form.url" placeholder="请输入地址链接"/>
         </el-form-item>
         <el-form-item label="地址图标" prop="logo">
-          <el-input v-model="form.logo" placeholder="请输入图标地址链接" />
+          <el-input v-model="form.logo" placeholder="请输入图标地址链接 暂时不提供上传"/>
         </el-form-item>
         <el-form-item label="分组" prop="groupName">
-          <el-input v-model="form.groupName" placeholder="请输入分组" />
+          <el-input v-model="form.groupName" placeholder="请输入分组"/>
         </el-form-item>
 
         <el-form-item label="状态" prop="status">
@@ -158,11 +204,12 @@
               v-for="dict in dict.type.sys_normal_disable"
               :key="dict.value"
               :label="dict.value"
-            >{{dict.label}}</el-radio>
+            >{{ dict.label }}
+            </el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" resize="none" :rows="3" placeholder="请输入内容" />
+          <el-input v-model="form.remark" type="textarea" resize="none" :rows="3" placeholder="请输入内容"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -174,7 +221,7 @@
 </template>
 
 <script>
-import { listWebsite, getWebsite, delWebsite, addWebsite, updateWebsite } from "@/api/message/website";
+import {listWebsite, getWebsite, delWebsite, addWebsite, updateWebsite} from "@/api/message/website";
 
 export default {
   name: "Website",
@@ -214,7 +261,7 @@ export default {
       // 表单校验
       rules: {
         url: [
-          { required: true, message: "地址链接不能为空", trigger: "blur" }
+          {required: true, message: "地址链接不能为空", trigger: "blur"}
         ],
       }
     };
@@ -268,7 +315,7 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
-      this.single = selection.length!==1
+      this.single = selection.length !== 1
       this.multiple = !selection.length
     },
     /** 新增按钮操作 */
@@ -310,12 +357,13 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
-      this.$modal.confirm('是否确认删除内部网站收藏编号为"' + ids + '"的数据项？').then(function() {
+      this.$modal.confirm('是否确认删除内部网站收藏编号为"' + ids + '"的数据项？').then(function () {
         return delWebsite(ids);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
-      }).catch(() => {});
+      }).catch(() => {
+      });
     },
     /** 导出按钮操作 */
     handleExport() {
