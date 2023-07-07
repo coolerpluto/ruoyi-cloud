@@ -66,7 +66,7 @@ export default {
   data() {
     return {
       // 版本号
-      version: "3.6.2",
+      version: "3.6.3",
       currentTime: new Date(),
       activeName: '1',
       // 公告表格数据
