@@ -39,6 +39,32 @@ public class SFtpServerConfig {
      */
     private String protocol = "sftp";
 
+    /**
+     * 下载文件URL前缀
+     */
+    private String downloadPrefix;
+
+    /**
+     * 下载文件URL后缀
+     */
+    private String downloadSuffix;
+
+    public String getDownloadPrefix() {
+        return downloadPrefix;
+    }
+
+    public void setDownloadPrefix(String downloadPrefix) {
+        this.downloadPrefix = downloadPrefix;
+    }
+
+    public String getDownloadSuffix() {
+        return downloadSuffix;
+    }
+
+    public void setDownloadSuffix(String downloadSuffix) {
+        this.downloadSuffix = downloadSuffix;
+    }
+
     public String getProtocol() {
         return protocol;
     }

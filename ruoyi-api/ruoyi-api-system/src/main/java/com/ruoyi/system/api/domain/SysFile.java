@@ -29,6 +29,36 @@ public class SysFile
      */
     private String serverIp;
 
+    /**
+     * 文件链接 前缀
+     */
+    private String httpPrefixUrl;
+
+    /**
+     * 文件链接 后缀
+     */
+    private String httpSuffixUrl;
+
+    public String getHttpPrefixUrl()
+    {
+        return httpPrefixUrl;
+    }
+
+    public void setHttpPrefixUrl(String httpPrefixUrl)
+    {
+        this.httpPrefixUrl = httpPrefixUrl;
+    }
+
+    public String getHttpSuffixUrl()
+    {
+        return httpSuffixUrl;
+    }
+
+    public void setHttpSuffixUrl(String httpSuffixUrl)
+    {
+        this.httpSuffixUrl = httpSuffixUrl;
+    }
+
     public String getHomeDir()
     {
         return homeDir;

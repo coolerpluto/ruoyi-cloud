@@ -41,16 +41,22 @@ public class SysFileController {
         try {
             // 上传并返回访问地址
             String url = sysFileService.uploadFile(file);
-            SysFile sysFile = new SysFile();
-            sysFile.setName(FileUtils.getName(url));
-            sysFile.setUrl(url);
-            sysFile.setServerIp(ftpServerConfig.getIp());
-            sysFile.setHomeDir(ftpServerConfig.getHomeDir());
-            return R.ok(sysFile);
+            return R.ok(packageRes(url));
         } catch (Exception e) {
             log.error("上传文件失败", e);
             return R.fail(930022000, "下载文件流失败!请稍后重试或联系管理员");
         }
+    }
+
+    private SysFile packageRes(String fileRelativePath){
+        SysFile sysFile = new SysFile();
+        sysFile.setName(FileUtils.getName(fileRelativePath));
+        sysFile.setUrl(fileRelativePath);
+        sysFile.setHttpPrefixUrl(ftpServerConfig.getDownloadPrefix());
+        sysFile.setHttpSuffixUrl(ftpServerConfig.getDownloadSuffix());
+        sysFile.setServerIp(ftpServerConfig.getIp());
+        sysFile.setHomeDir(ftpServerConfig.getHomeDir());
+        return sysFile;
     }
 
     /**
@@ -65,12 +71,7 @@ public class SysFileController {
         try {
             // 上传并返回访问地址
             String url = sysFileService.uploadFile(file, specify);
-            SysFile sysFile = new SysFile();
-            sysFile.setName(FileUtils.getName(url));
-            sysFile.setUrl(url);
-            sysFile.setServerIp(ftpServerConfig.getIp());
-            sysFile.setHomeDir(ftpServerConfig.getHomeDir());
-            return R.ok(sysFile);
+            return R.ok(packageRes(url));
         } catch (Exception e) {
             log.error("上传文件失败", e);
             return R.fail(930022000, "下载文件流失败!请稍后重试或联系管理员");

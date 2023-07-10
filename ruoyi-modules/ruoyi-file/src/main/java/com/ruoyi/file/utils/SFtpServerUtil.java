@@ -2,6 +2,8 @@ package com.ruoyi.file.utils;
 
 import com.jcraft.jsch.*;
 import com.ruoyi.common.core.utils.DateUtils;
+import com.ruoyi.common.core.utils.StringUtils;
+import com.ruoyi.common.core.utils.uuid.IdUtils;
 import com.ruoyi.file.config.SFtpServerConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +20,8 @@ import java.util.Properties;
  * Ftp 服务器 工具类
  */
 @Component
-public class SFtpServerUtil {
+public class SFtpServerUtil
+{
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
@@ -26,18 +29,23 @@ public class SFtpServerUtil {
 
     private static SFtpServerUtil instance = null;
 
-    private SFtpServerUtil() {
+    private SFtpServerUtil()
+    {
     }
 
     //初始化 为了使Autowired注入的生效对象生效
     @PostConstruct
-    public void init() {
+    public void init()
+    {
         instance = this;
     }
 
-    public static SFtpServerUtil getInstance() {
-        if (instance == null) {
-            if (instance == null) {
+    public static SFtpServerUtil getInstance()
+    {
+        if (instance == null)
+        {
+            if (instance == null)
+            {
                 instance = new SFtpServerUtil();
             }
         }
@@ -49,16 +57,21 @@ public class SFtpServerUtil {
      *
      * @return 返回session
      */
-    public Session createSession() throws Exception {
+    public Session createSession() throws Exception
+    {
 
         Session session;
         JSch jsch = new JSch();
-        if (instance.ftpServerConfig.getPort() <= 0) {
+        if (instance.ftpServerConfig.getPort() <= 0)
+        {
             session = jsch.getSession(instance.ftpServerConfig.getAccessKey(), instance.ftpServerConfig.getIp());
-        } else {
+        }
+        else
+        {
             session = jsch.getSession(instance.ftpServerConfig.getAccessKey(), instance.ftpServerConfig.getIp(), instance.ftpServerConfig.getPort());
         }
-        if (session == null) {
+        if (session == null)
+        {
             throw new Exception("获取session失败：" + instance.ftpServerConfig.getIp());
         }
         Properties sshConfig = new Properties();
@@ -79,11 +92,14 @@ public class SFtpServerUtil {
      *
      * @param session 要关闭的对象
      */
-    public void closeSession(Session session) {
-        if (null == session) {
+    public void closeSession(Session session)
+    {
+        if (null == session)
+        {
             return;
         }
-        if (session.isConnected()) {
+        if (session.isConnected())
+        {
             return;
         }
         session.disconnect();
@@ -94,19 +110,27 @@ public class SFtpServerUtil {
      *
      * @return
      */
-    public void closeChannel(Channel channel) {
-        if (channel == null) {
+    public void closeChannel(Channel channel)
+    {
+        if (channel == null)
+        {
             return;
         }
-        if (channel.isConnected()) {
+        if (channel.isConnected())
+        {
             channel.disconnect();
-        } else if (channel.isClosed()) {
+        }
+        else if (channel.isClosed())
+        {
             System.out.println("已经关闭");
             log.debug("SFTP 连接已经完成关闭");
         }
-        try {
+        try
+        {
             closeSession(channel.getSession());
-        } catch (JSchException e) {
+        }
+        catch (JSchException e)
+        {
             e.printStackTrace();
         }
 
@@ -117,16 +141,20 @@ public class SFtpServerUtil {
      *
      * @return 返回通道
      */
-    public ChannelSftp getSftpChannel(Session sshSession) {
+    public ChannelSftp getSftpChannel(Session sshSession)
+    {
         ChannelSftp sftp = null;
-        try {
+        try
+        {
             Channel channel = sshSession.openChannel("sftp");
             channel.connect();
             log.debug(instance.ftpServerConfig.getProtocol() + "连接通道已经完成构建");
 
             sftp = (ChannelSftp) channel;
             sftp.cd(instance.ftpServerConfig.getHomeDir());
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             closeChannel(sftp);
             throw new RuntimeException(e);
         }
@@ -140,15 +168,19 @@ public class SFtpServerUtil {
      * @param commandStr 命令
      * @return 返回通道
      */
-    public ChannelExec getExecChannel(Session session, String commandStr) {
+    public ChannelExec getExecChannel(Session session, String commandStr)
+    {
         ChannelExec sftp;
-        try {
+        try
+        {
             Channel channel = session.openChannel("exec");
             ((ChannelExec) channel).setCommand(commandStr);
             channel.connect();
             sftp = (ChannelExec) channel;
             return sftp;
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
 
             return null;
@@ -161,9 +193,11 @@ public class SFtpServerUtil {
      * @param command 命令内容
      * @return 命令输出
      */
-    private String execute(String command) {
+    private String execute(String command)
+    {
         StringBuilder strBuffer = new StringBuilder();
-        try {
+        try
+        {
             Session session = createSession();
             ChannelExec channelExec = getExecChannel(session, command);
             BufferedReader input = new BufferedReader(new InputStreamReader(channelExec.getInputStream()));
@@ -171,13 +205,16 @@ public class SFtpServerUtil {
             log.debug("命令: {}", command);
             // 获取命令的输出
             String line;
-            while ((line = input.readLine()) != null) {
+            while ((line = input.readLine()) != null)
+            {
                 strBuffer.append(line);
             }
             input.close();
             closeSession(session);
             closeChannel(channelExec);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
         }
         return strBuffer.toString();
@@ -191,12 +228,16 @@ public class SFtpServerUtil {
      * @param additionalName 压缩附加名
      * @return 压缩结果
      */
-    public boolean zipDir(String fileDir, String fileName, String additionalName) {
-        try {
+    public boolean zipDir(String fileDir, String fileName, String additionalName)
+    {
+        try
+        {
             String execute = execute("cd " + fileDir + "\n" +
                     "zip  -r " + fileDir + "/" + additionalName + ".zip " + fileName);
             System.out.println(execute);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             return false;
         }
         return true;
@@ -208,12 +249,16 @@ public class SFtpServerUtil {
      * @param directory 目录
      * @return 存在结果
      */
-    public boolean isDirExist(String directory, ChannelSftp sftp) {
+    public boolean isDirExist(String directory, ChannelSftp sftp)
+    {
         boolean isDirExistFlag = false;
-        try {
+        try
+        {
             SftpATTRS sftpATTRS = sftp.lstat(directory);
             isDirExistFlag = sftpATTRS.isDir();
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             log.debug(e.getMessage());
         }
         return isDirExistFlag;
@@ -225,20 +270,26 @@ public class SFtpServerUtil {
      * @param directory  要删除文件所在目录
      * @param deleteFile 要删除的文件
      */
-    public boolean delete(String directory, String deleteFile) {
+    public boolean delete(String directory, String deleteFile)
+    {
         boolean res = true;
         Session session = null;
         ChannelSftp sftp = null;
-        try {
+        try
+        {
             session = createSession();
             sftp = getSftpChannel(session);
 
             sftp.cd(directory);
             sftp.rm(deleteFile);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             res = false;
             log.error("文件删除失败:{}", e.getMessage());
-        }finally {
+        }
+        finally
+        {
             closeChannel(sftp);
             closeSession(session);
         }
@@ -252,20 +303,26 @@ public class SFtpServerUtil {
      * @param createPath 目录路径
      * @return 返回是不是创建完成
      */
-    public boolean createDir(String createPath, ChannelSftp sftp) {
-        try {
-            if (isDirExist(createPath, sftp)) {
+    public boolean createDir(String createPath, ChannelSftp sftp)
+    {
+        try
+        {
+            if (isDirExist(createPath, sftp))
+            {
                 sftp.cd(createPath);
                 return true;
             }
             String[] pathArray = createPath.split("/");
             StringBuilder filePath = new StringBuilder("/");
-            for (String path : pathArray) {
-                if (path.equals("")) {
+            for (String path : pathArray)
+            {
+                if (path.equals(""))
+                {
                     continue;
                 }
                 filePath.append(path).append("/");
-                if (!isDirExist(filePath.toString(), sftp)) {
+                if (!isDirExist(filePath.toString(), sftp))
+                {
                     // 建立目录
                     sftp.mkdir(filePath.toString());
                 }
@@ -274,7 +331,9 @@ public class SFtpServerUtil {
             }
             sftp.cd(createPath);
             return true;
-        } catch (SftpException e) {
+        }
+        catch (SftpException e)
+        {
             closeChannel(sftp);
             log.error("创建路径失败:{}", e.getMessage());
         }
@@ -290,10 +349,14 @@ public class SFtpServerUtil {
      * @param fileDir 文件夹路径
      * @return 创建结果
      */
-    public boolean createFileDir(String fileDir) {
-        try {
+    public boolean createFileDir(String fileDir)
+    {
+        try
+        {
             execute("mkdir -p " + fileDir + "");
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             return false;
         }
         return true;
@@ -305,7 +368,8 @@ public class SFtpServerUtil {
      * @param fileName    文件名
      * @param inputStream 文件流
      */
-    public String upload(String fileName, InputStream inputStream) throws Exception {
+    public String upload(String fileName, InputStream inputStream) throws Exception
+    {
         return upload(null, fileName, inputStream);
     }
 
@@ -316,26 +380,42 @@ public class SFtpServerUtil {
      * @param fileName     文件名
      * @param inputStream  文件流
      */
-    public String upload(String relativePath, String fileName, InputStream inputStream) throws Exception {
+    public String upload(String relativePath, String fileName, InputStream inputStream) throws Exception
+    {
         Session session = createSession();
         ChannelSftp sftpChannel = getSftpChannel(session);
         createDir(instance.ftpServerConfig.getHomeDir(), sftpChannel);
         String filePath = instance.ftpServerConfig.getHomeDir();
         String pathChild = "";
-        if (relativePath != null && !relativePath.trim().isEmpty()) {
+        if (relativePath != null && !relativePath.trim().isEmpty())
+        {
             pathChild = relativePath + "/";
         }
         pathChild = pathChild + DateUtils.datePath();
         filePath = filePath + "/" + pathChild;
         createFileDir(filePath);
-        filePath = filePath + "/" + fileName;
-        try {
+        filePath = filePath + "/" + IdUtils.fastSimpleUUID() + "_" + fileName;
+        try
+        {
             sftpChannel.put(inputStream, filePath);
-        } finally {
+        }
+        finally
+        {
             closeChannel(sftpChannel);
             closeSession(session);
+            inputStream.close();
         }
-        return filePath.substring(instance.ftpServerConfig.getHomeDir().length() + 1);
+        String url = "";
+        if (StringUtils.isNotBlank(instance.ftpServerConfig.getDownloadPrefix()))
+        {
+            url = url + instance.ftpServerConfig.getDownloadPrefix();
+        }
+        url = url + filePath.substring(instance.ftpServerConfig.getHomeDir().length() + 1);
+        if (StringUtils.isNotBlank(instance.ftpServerConfig.getDownloadSuffix()))
+        {
+            url = url + "?" + instance.ftpServerConfig.getDownloadSuffix();
+        }
+        return url;
     }
 
     /**
@@ -345,7 +425,8 @@ public class SFtpServerUtil {
      * @param filePath 文件路径 不带名称
      * @param fileName 文名名
      */
-    public void download(HttpServletResponse response, String filePath, String fileName) throws Exception {
+    public void download(HttpServletResponse response, String filePath, String fileName) throws Exception
+    {
         Session session = createSession();
         ChannelSftp sftp = getSftpChannel(session);
         response.setContentType("application/octet-stream");// 设置强制下载不打开
@@ -354,37 +435,51 @@ public class SFtpServerUtil {
         byte[] buffer = new byte[1024];
         BufferedInputStream bis = null;
         InputStream inputStream = null;
-        System.out.println("下载文件流:准备：fileName:"+fileName+":"+System.currentTimeMillis());
-        try {
+        System.out.println("下载文件流:准备：fileName:" + fileName + ":" + System.currentTimeMillis());
+        try
+        {
             sftp.cd(instance.ftpServerConfig.getHomeDir());
             sftp.cd(filePath);
             inputStream = sftp.get(fileName);
             bis = new BufferedInputStream(inputStream);
             OutputStream os = response.getOutputStream();
             int i = bis.read(buffer);
-            while (i != -1) {
+            while (i != -1)
+            {
                 os.write(buffer, 0, i);
                 i = bis.read(buffer);
             }
-            System.out.println("下载文件流:完成：fileName:"+fileName+":"+System.currentTimeMillis());
-        } catch (Exception e) {
-            System.out.println("下载文件流:异常：fileName:"+fileName+":"+System.currentTimeMillis());
+            System.out.println("下载文件流:完成：fileName:" + fileName + ":" + System.currentTimeMillis());
+        }
+        catch (Exception e)
+        {
+            System.out.println("下载文件流:异常：fileName:" + fileName + ":" + System.currentTimeMillis());
             e.printStackTrace();
-        } finally { // 做关闭操作
-            System.out.println("下载文件流:完成 关闭文件流准备：fileName:"+fileName+":"+System.currentTimeMillis());
-            if (bis != null) {
-                try {
+        }
+        finally
+        { // 做关闭操作
+            System.out.println("下载文件流:完成 关闭文件流准备：fileName:" + fileName + ":" + System.currentTimeMillis());
+            if (bis != null)
+            {
+                try
+                {
                     bis.close();
-                } catch (IOException e) {
+                }
+                catch (IOException e)
+                {
                     e.printStackTrace();
                 }
             }
             closeChannel(sftp);
             closeSession(session);
-            if (inputStream != null) {
-                try {
+            if (inputStream != null)
+            {
+                try
+                {
                     inputStream.close();
-                } catch (IOException e) {
+                }
+                catch (IOException e)
+                {
                     e.printStackTrace();
                 }
             }
@@ -397,11 +492,13 @@ public class SFtpServerUtil {
      * @param filePath 文件路径 不带名称
      * @param fileName 文名名
      */
-    public byte[] download(String filePath, String fileName) {
+    public byte[] download(String filePath, String fileName)
+    {
         Session session = null;
         ChannelSftp sftp = null;
         byte[] res = null;
-        try {
+        try
+        {
             session = createSession();
             sftp = getSftpChannel(session);
             sftp.cd(instance.ftpServerConfig.getHomeDir());
@@ -410,9 +507,13 @@ public class SFtpServerUtil {
             res = MinioUtil.getInstance().inputStreamToByteArray(inputStream);
             inputStream.close();
             return res;
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
-        } finally {
+        }
+        finally
+        {
             closeChannel(sftp);
             closeSession(session);
         }
