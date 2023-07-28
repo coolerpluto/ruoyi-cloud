@@ -91,7 +91,7 @@ public class MLicenseFileInfoController extends BaseController
     }
 
     //@RequiresPermissions("medium:license:generator")
-    @Log(title = "License文件记录", businessType = BusinessType.INSERT)
+    @Log(title = "License文件生成", businessType = BusinessType.INSERT)
     @PostMapping("/generator")
     public AjaxResult generator(@RequestBody JSONObject json) {
         Map<String, Object> generatorRes = mLicenseFileInfoService.generator(json);
