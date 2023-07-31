@@ -42,7 +42,8 @@ import java.util.zip.ZipOutputStream;
  * @date 2022-12-01
  */
 @Service
-public class MLicenseFileInfoServiceImpl implements IMLicenseFileInfoService {
+public class MLicenseFileInfoServiceImpl implements IMLicenseFileInfoService
+{
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
@@ -57,6 +58,7 @@ public class MLicenseFileInfoServiceImpl implements IMLicenseFileInfoService {
     private IMFileInfoService imFileInfoService;
     @Autowired
     private IMFileDownHisService fileDownHisService;
+
     /**
      * 查询License文件记录
      *
@@ -64,7 +66,8 @@ public class MLicenseFileInfoServiceImpl implements IMLicenseFileInfoService {
      * @return License文件记录
      */
     @Override
-    public MLicenseFileInfo selectMLicenseFileInfoById(Long id) {
+    public MLicenseFileInfo selectMLicenseFileInfoById(Long id)
+    {
         return mLicenseFileInfoMapper.selectMLicenseFileInfoById(id);
     }
 
@@ -75,7 +78,8 @@ public class MLicenseFileInfoServiceImpl implements IMLicenseFileInfoService {
      * @return License文件记录
      */
     @Override
-    public List<MLicenseFileInfo> selectMLicenseFileInfoList(MLicenseFileInfo mLicenseFileInfo) {
+    public List<MLicenseFileInfo> selectMLicenseFileInfoList(MLicenseFileInfo mLicenseFileInfo)
+    {
         return mLicenseFileInfoMapper.selectMLicenseFileInfoList(mLicenseFileInfo);
     }
 
@@ -86,7 +90,8 @@ public class MLicenseFileInfoServiceImpl implements IMLicenseFileInfoService {
      * @return 结果
      */
     @Override
-    public int insertMLicenseFileInfo(MLicenseFileInfo mLicenseFileInfo) {
+    public int insertMLicenseFileInfo(MLicenseFileInfo mLicenseFileInfo)
+    {
         mLicenseFileInfo.setCreateTime(DateUtils.getNowDate());
         mLicenseFileInfo.setCreateBy(SecurityUtils.getUsername());
         mLicenseFileInfo.setCreateId(SecurityUtils.getUserId());
@@ -100,7 +105,8 @@ public class MLicenseFileInfoServiceImpl implements IMLicenseFileInfoService {
      * @return 结果
      */
     @Override
-    public int updateMLicenseFileInfo(MLicenseFileInfo mLicenseFileInfo) {
+    public int updateMLicenseFileInfo(MLicenseFileInfo mLicenseFileInfo)
+    {
         mLicenseFileInfo.setUpdateTime(DateUtils.getNowDate());
         mLicenseFileInfo.setUpdateBy(SecurityUtils.getUsername());
         mLicenseFileInfo.setUpdateId(SecurityUtils.getUserId());
@@ -114,7 +120,8 @@ public class MLicenseFileInfoServiceImpl implements IMLicenseFileInfoService {
      * @return 结果
      */
     @Override
-    public int deleteMLicenseFileInfoByIds(Long[] ids) {
+    public int deleteMLicenseFileInfoByIds(Long[] ids)
+    {
         return mLicenseFileInfoMapper.deleteMLicenseFileInfoByIds(ids);
     }
 
@@ -125,20 +132,25 @@ public class MLicenseFileInfoServiceImpl implements IMLicenseFileInfoService {
      * @return 结果
      */
     @Override
-    public int deleteMLicenseFileInfoById(Long id) {
+    public int deleteMLicenseFileInfoById(Long id)
+    {
         return mLicenseFileInfoMapper.deleteMLicenseFileInfoById(id);
     }
 
     @Override
-    public void download(HttpServletResponse response, String licenseId) {
-        if (log.isDebugEnabled()) {
+    public void download(HttpServletResponse response, String licenseId)
+    {
+        if (log.isDebugEnabled())
+        {
             log.debug("MLicenseFileInfoServiceImpl.downLoad req:{}", JSON.toJSONString(licenseId));
         }
         List<MLicenseFileInfo> licenseInfo = mLicenseFileInfoMapper.selectMLicenseFileInfoByIds(licenseId);
-        if (log.isDebugEnabled()) {
+        if (log.isDebugEnabled())
+        {
             log.debug("MLicenseFileInfoServiceImpl.downLoad licenseInfo:{}", JSON.toJSONString(licenseInfo));
         }
-        if (licenseInfo.size()==0){
+        if (licenseInfo.size() == 0)
+        {
             return;
         }
         String fileId = licenseInfo.get(0).getLicFileId();
@@ -149,10 +161,13 @@ public class MLicenseFileInfoServiceImpl implements IMLicenseFileInfoService {
 
         String finalPath = "";
         int index = filePath.lastIndexOf(fileNameInDB);
-        if (index==-1|| filePath.endsWith("/")){
+        if (index == -1 || filePath.endsWith("/"))
+        {
             finalPath = filePath;
-        }else {
-            finalPath = filePath.substring(0,index);
+        }
+        else
+        {
+            finalPath = filePath.substring(0, index);
         }
         // 准备下载
         FileReq fileMReq = new FileReq();
@@ -161,27 +176,36 @@ public class MLicenseFileInfoServiceImpl implements IMLicenseFileInfoService {
         Response fileMResp = remoteFileService.downLoad(fileMReq);
         Response.Body fileMBody = fileMResp.body();
         // 准备压缩
-        response.setHeader("Content-Disposition","attachment; filename="+serial+".zip");
+        response.setHeader("Content-Disposition", "attachment; filename=" + serial + ".zip");
         // 创建 ZipOutputStream
         ZipOutputStream zipOutputStream;
         // 创建 输出流到 response
-        OutputStream outputStream= null;
-        try {
+        OutputStream outputStream = null;
+        try
+        {
             outputStream = response.getOutputStream();
             zipOutputStream = new ZipOutputStream(outputStream);
             zipOutputStream.setMethod(ZipOutputStream.DEFLATED);
             Map<String, InputStream> fileInputStream = new HashMap<>();
-            fileInputStream.put(serial+"_"+fileNameInDB,fileMBody.asInputStream());
-            ZipUtil.zipStream(fileInputStream,outputStream);
-        } catch (IOException e) {
+            fileInputStream.put(serial + "_" + fileNameInDB, fileMBody.asInputStream());
+            ZipUtil.zipStream(fileInputStream, outputStream);
+        }
+        catch (IOException e)
+        {
             e.printStackTrace();
-        }finally {
-            try {
-                if (outputStream!=null){
+        }
+        finally
+        {
+            try
+            {
+                if (outputStream != null)
+                {
                     outputStream.flush();
                     outputStream.close();
                 }
-            } catch (IOException e) {
+            }
+            catch (IOException e)
+            {
                 e.printStackTrace();
             }
         }
@@ -197,8 +221,10 @@ public class MLicenseFileInfoServiceImpl implements IMLicenseFileInfoService {
     }
 
     @Override
-    public Map<String, Object> generator(JSONObject json) {
-        if (log.isDebugEnabled()) {
+    public Map<String, Object> generator(JSONObject json)
+    {
+        if (log.isDebugEnabled())
+        {
             log.debug("MLicenseFileInfoServiceImpl.downLoad req:{}", JSON.toJSONString(json));
         }
 
@@ -215,13 +241,17 @@ public class MLicenseFileInfoServiceImpl implements IMLicenseFileInfoService {
 
         Date expireTime = param.getExpireTime();
         String expireTimeStr;
-        if (expireTime != null) {
+        if (expireTime != null)
+        {
             expireTimeStr = DateFormatUtils.format(expireTime, "yyyyMMdd");
-        } else {
+        }
+        else
+        {
             expireTimeStr = "u";// 不限制
         }
 
-        switch (param.getProdType()) {
+        switch (param.getProdType())
+        {
             case "2":
                 command.append(" -p").append("db_ha/").append(expireTimeStr);//加装要管控的其他产品和有效期 格式为db_ha/xxx、hg_proxy/xxx
                 break;
@@ -233,13 +263,15 @@ public class MLicenseFileInfoServiceImpl implements IMLicenseFileInfoService {
                 command.append(" -a").append(expireTimeStr);//加装截止时间
                 command.append(" -v").append(param.getDbVersion());//加装数据库版本
         }
-        if (log.isDebugEnabled()) {
+        if (log.isDebugEnabled())
+        {
             log.debug("MLicenseFileInfoServiceImpl.command req:{}", command.toString());
         }
         // 调用执行命令
         String commandRes = SSHLinuxUtil.exeCommand(sFtpServerConfig.getIp(), sFtpServerConfig.getPort(),
                 sFtpServerConfig.getAccessKey(), sFtpServerConfig.getSecretKey(), command.toString());
-        if (log.isDebugEnabled()) {
+        if (log.isDebugEnabled())
+        {
             log.debug("MLicenseFileInfoServiceImpl.command res:{}", commandRes);
         }
         JSONObject licenseFile = JsonUtils.parse(commandRes, JSONObject.class);
@@ -271,7 +303,7 @@ public class MLicenseFileInfoServiceImpl implements IMLicenseFileInfoService {
         //插入数据记录
         param.setLicFileId(fileId);
         param.setSerial((String) licenseFile.get("serial"));
-        param.setApplyTime(DateUtils.dateTime(DateUtils.YYYY_MM_DD_HH_MM_SS,(String)licenseFile.get("product_time")));
+        param.setApplyTime(DateUtils.dateTime(DateUtils.YYYY_MM_DD_HH_MM_SS, (String) licenseFile.get("product_time")));
 
         StringBuilder serverUrl = new StringBuilder(sFtpServerConfig.getLicUrlTemplate());
         int firstParamIndex = serverUrl.indexOf("{1}");
@@ -279,7 +311,7 @@ public class MLicenseFileInfoServiceImpl implements IMLicenseFileInfoService {
         int secParamIndex = serverUrl.indexOf("{2}");
         serverUrl.replace(secParamIndex, secParamIndex + 3, param.getDbVersion());
         param.setServerUrl(serverUrl.toString());
-        licenseFile.put("serverUrl",serverUrl);
+        licenseFile.put("serverUrl", serverUrl);
 
         insertMLicenseFileInfo(param);
         // 构造返回数据
@@ -289,6 +321,24 @@ public class MLicenseFileInfoServiceImpl implements IMLicenseFileInfoService {
         //resultMap.put("request", json);
         resultMap.put("code", 200);
         return resultMap;
+    }
+
+    @Override
+    public Map<String, Object> generatorHGDB(JSONObject json)
+    {
+        return null;
+    }
+
+    @Override
+    public Map<String, Object> generatorHGDW(JSONObject json)
+    {
+        return null;
+    }
+
+    @Override
+    public Map<String, Object> generatorV9(JSONObject json)
+    {
+        return null;
     }
 
 

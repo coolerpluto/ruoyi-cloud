@@ -51,3 +51,27 @@ export function generate(data) {
       data: data
   })
 }
+
+export function generatorHGDB458(data) {
+  return request({
+    url: '/medium/license/generatorHGDB458',
+    method: 'post',
+    data: data
+  })
+}
+
+export function generatorHGDW610(data) {
+  return request({
+    url: '/medium/license/generatorHGDW610',
+    method: 'post',
+    data: data
+  })
+}
+
+export function generatorV9(data) {
+  return request({
+    url: '/medium/license/generatorV9',
+    method: 'post',
+    data: data
+  })
+}

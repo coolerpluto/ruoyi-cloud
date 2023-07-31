@@ -97,6 +97,30 @@ public class MLicenseFileInfoController extends BaseController
         Map<String, Object> generatorRes = mLicenseFileInfoService.generator(json);
         return success(generatorRes);
     }
+
+    @Log(title = "License HGDB 文件生成", businessType = BusinessType.INSERT)
+    @PostMapping("/generatorHGDB458")
+    public AjaxResult generatorHGDB458(@RequestBody JSONObject json)
+    {
+        Map<String, Object> generatorRes = mLicenseFileInfoService.generatorHGDB(json);
+        return success(generatorRes);
+    }
+
+    @Log(title = "License HGDW 文件生成", businessType = BusinessType.INSERT)
+    @PostMapping("/generatorHGDW610")
+    public AjaxResult generatorHGDW610(@RequestBody JSONObject json)
+    {
+        Map<String, Object> generatorRes = mLicenseFileInfoService.generatorHGDW(json);
+        return success(generatorRes);
+    }
+
+    @Log(title = "License HGDW 文件生成", businessType = BusinessType.INSERT)
+    @PostMapping("/generatorV9")
+    public AjaxResult generatorV9(@RequestBody JSONObject json)
+    {
+        Map<String, Object> generatorRes = mLicenseFileInfoService.generatorV9(json);
+        return success(generatorRes);
+    }
     /**
      * 修改License文件记录
      */

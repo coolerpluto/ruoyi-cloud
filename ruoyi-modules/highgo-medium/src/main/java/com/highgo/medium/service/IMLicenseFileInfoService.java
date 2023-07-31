@@ -10,15 +10,15 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * License文件记录Service接口
- * 
+ *
  * @author eshzhang
  * @date 2022-12-01
  */
-public interface IMLicenseFileInfoService 
+public interface IMLicenseFileInfoService
 {
     /**
      * 查询License文件记录
-     * 
+     *
      * @param id License文件记录主键
      * @return License文件记录
      */
@@ -26,7 +26,7 @@ public interface IMLicenseFileInfoService
 
     /**
      * 查询License文件记录列表
-     * 
+     *
      * @param mLicenseFileInfo License文件记录
      * @return License文件记录集合
      */
@@ -34,7 +34,7 @@ public interface IMLicenseFileInfoService
 
     /**
      * 新增License文件记录
-     * 
+     *
      * @param mLicenseFileInfo License文件记录
      * @return 结果
      */
@@ -42,7 +42,7 @@ public interface IMLicenseFileInfoService
 
     /**
      * 修改License文件记录
-     * 
+     *
      * @param mLicenseFileInfo License文件记录
      * @return 结果
      */
@@ -50,7 +50,7 @@ public interface IMLicenseFileInfoService
 
     /**
      * 批量删除License文件记录
-     * 
+     *
      * @param ids 需要删除的License文件记录主键集合
      * @return 结果
      */
@@ -58,7 +58,7 @@ public interface IMLicenseFileInfoService
 
     /**
      * 删除License文件记录信息
-     * 
+     *
      * @param id License文件记录主键
      * @return 结果
      */
@@ -68,4 +68,9 @@ public interface IMLicenseFileInfoService
 
     Map<String, Object> generator(JSONObject json);
 
+    Map<String, Object> generatorHGDB(JSONObject json);
+
+    Map<String, Object> generatorHGDW(JSONObject json);
+
+    Map<String, Object> generatorV9(JSONObject json);
 }
