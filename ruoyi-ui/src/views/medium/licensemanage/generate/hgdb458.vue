@@ -72,7 +72,7 @@
     </el-row>
     <el-row>
       <el-card class="box-card" style="width:55%;white-space:pre-line;">
-        458 License-V2 生成工具介绍<br>
+        458 License-V3 生成工具介绍<br>
         <br>
         参数说明：<br>
         1. -a 指定授权有效期, 可为'u'或'unlimited'（永久）或具体时间（xxxxxxxx 必须为 8 位未来时间）<br>

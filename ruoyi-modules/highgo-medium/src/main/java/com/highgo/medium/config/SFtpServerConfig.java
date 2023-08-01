@@ -38,6 +38,9 @@ public class SFtpServerConfig {
      * 命令文件所在的根目录
      */
     private String commandDir;
+    private String hgdbCommand;
+    private String hgdwCommand;
+    private String v9Command;
     /**
      * 执行命令时所在的路径
      */
@@ -101,6 +104,36 @@ public class SFtpServerConfig {
 
     public void setCommandDir(String commandDir) {
         this.commandDir = commandDir;
+    }
+
+    public String getHgdbCommand()
+    {
+        return hgdbCommand;
+    }
+
+    public void setHgdbCommand(String hgdbCommand)
+    {
+        this.hgdbCommand = hgdbCommand;
+    }
+
+    public String getHgdwCommand()
+    {
+        return hgdwCommand;
+    }
+
+    public void setHgdwCommand(String hgdwCommand)
+    {
+        this.hgdwCommand = hgdwCommand;
+    }
+
+    public String getV9Command()
+    {
+        return v9Command;
+    }
+
+    public void setV9Command(String v9Command)
+    {
+        this.v9Command = v9Command;
     }
 
     public String getExecHome() {

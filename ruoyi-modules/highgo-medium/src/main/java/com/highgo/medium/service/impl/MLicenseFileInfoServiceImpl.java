@@ -225,7 +225,7 @@ public class MLicenseFileInfoServiceImpl implements IMLicenseFileInfoService
     {
         if (log.isDebugEnabled())
         {
-            log.debug("MLicenseFileInfoServiceImpl.downLoad req:{}", JSON.toJSONString(json));
+            log.debug("MLicenseFileInfoServiceImpl.generator req:{}", JSON.toJSONString(json));
         }
 
         MLicenseFileInfo param = JSONObject.toJavaObject(json, MLicenseFileInfo.class);
@@ -233,7 +233,7 @@ public class MLicenseFileInfoServiceImpl implements IMLicenseFileInfoService
         // 生成lic执行命令
         StringBuilder command = new StringBuilder();
         command.append(sFtpServerConfig.getCommandDir()).append(" ");// 工具的执行命令文件的全路径
-        command.append(" -f").append(sFtpServerConfig.getHomeDir());// 生成文件的指定路径
+        command.append(" -f").append(sFtpServerConfig.getHomeDir()+"license-generator/");// 生成文件的指定路径
         command.append(" -b").append(param.getOpportunityNum());// 加装商机编号
         command.append(" -i").append(param.getAuthType());// 加装数据库授权方式
         command.append(" -u").append(param.getCustomerName());// 加装最终用户
@@ -323,23 +323,30 @@ public class MLicenseFileInfoServiceImpl implements IMLicenseFileInfoService
         return resultMap;
     }
 
+    @Autowired
+    private MHGDBLicenseServiceImpl mhgdbLicenseService;
+
     @Override
     public Map<String, Object> generatorHGDB(JSONObject json)
     {
-        return null;
+        return mhgdbLicenseService.generator(json);
     }
+
+    @Autowired
+    private MHGDWLicenseServiceImpl mhgdwLicenseService;
 
     @Override
     public Map<String, Object> generatorHGDW(JSONObject json)
     {
-        return null;
+        return mhgdwLicenseService.generator(json);
     }
+
+    @Autowired
+    private MV9LicenseServiceImpl mv9LicenseService;
 
     @Override
     public Map<String, Object> generatorV9(JSONObject json)
     {
-        return null;
+        return mv9LicenseService.generator(json);
     }
-
-
 }
