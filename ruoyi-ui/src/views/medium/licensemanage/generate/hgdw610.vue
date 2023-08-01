@@ -52,7 +52,7 @@
           <el-col :span="16">
             <el-form-item label="机器码" prop="mac">
               <el-input type="textarea" resize="none" :rows="2"
-                placeholder="请输入机器码或者MAC地址,只能输入一种格式,多个时试用逗号分割" v-model="formData.mac">
+                placeholder="请输入MAC地址,多个时试用逗号分割" v-model="formData.mac">
               </el-input>
             </el-form-item>
           </el-col>
