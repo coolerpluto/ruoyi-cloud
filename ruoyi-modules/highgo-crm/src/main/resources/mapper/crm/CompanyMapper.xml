@@ -70,10 +70,10 @@
                tc.remark,
                tc.source_id,
                tc.owner_id,
-               su.nick_name,
-               su.user_name owner_name,
+               (select su.nick_name from remote_db.sys_user su where su.user_id = tc.owner_id) nick_name,
+               (select su.user_name  from remote_db.sys_user su where su.user_id = tc.owner_id) owner_name,
                tc.dept_id,
-               sd.dept_name dept_name,
+               (select sd.dept_name from remote_db.sys_dept sd where tc.dept_id = sd.dept_id) dept_name,
                tc.create_id,
                tc.create_by,
                tc.create_time,
@@ -81,10 +81,6 @@
                tc.update_by,
                tc.update_time
         from t_company tc
-                 left join remote_db.sys_dept sd on
-            tc.dept_id = sd.dept_id
-                 left join remote_db.sys_user su on
-            su.user_id = tc.owner_id
     </sql>
 
     <select id="selectCompanyList" parameterType="Company" resultMap="CompanyResult">
@@ -146,6 +142,7 @@
 
             ${params.crmDataScope}
         </where>
+        order by tc.update_time desc,tc.create_time desc
     </select>
 
     <select id="selectCompanyById" parameterType="String" resultMap="CompanyResult">

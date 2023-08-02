@@ -1401,6 +1401,7 @@ export default {
       this.resetContact();
       this.openContactArea = true;
       this.formContact.sourceId = this.form.id;
+      this.formContact.companyCode = this.form.code;
       this.formContact.sourceType = "CUST";
       this.formContact.company = this.form.companyName;
       this.contactAreaTitle = "添加客户联系人";
