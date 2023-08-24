@@ -168,7 +168,7 @@ public class LicenseApplyServiceImpl implements ILicenseApplyService
                 application.setIsvName(opera.getIsv());
                 application.setDataBase(opera.getDbBase());
                 application.setDbAdaptStatus(opera.getCurrentAdaptedProgress());
-                application.setSourceType("OPPO");
+                application.setSourceType("TEST");
                 applicationService.insertApplication(application);
                 opera.setApplicationId(Long.valueOf(application.getId()));
                 if(StringUtils.isBlank(opera.getOpportunityCode())){
