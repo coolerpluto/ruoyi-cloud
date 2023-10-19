@@ -55,7 +55,7 @@ public class TSoftRegistrationServiceImpl implements ITSoftRegistrationService
     public int insertTSoftRegistration(TSoftRegistration tSoftRegistration)
     {
         tSoftRegistration.setCreateTime(DateUtils.getNowDate());
-        tSoftRegistration.setCreateBy(SecurityUtils.getUsername());
+        tSoftRegistration.setCreateBy(SecurityUtils.getNickName());
         tSoftRegistration.setCreateId(SecurityUtils.getUserId());
         return tSoftRegistrationMapper.insertTSoftRegistration(tSoftRegistration);
     }
@@ -70,7 +70,7 @@ public class TSoftRegistrationServiceImpl implements ITSoftRegistrationService
     public int updateTSoftRegistration(TSoftRegistration tSoftRegistration)
     {
         tSoftRegistration.setUpdateTime(DateUtils.getNowDate());
-        tSoftRegistration.setUpdateBy(SecurityUtils.getUsername());
+        tSoftRegistration.setUpdateBy(SecurityUtils.getNickName());
         tSoftRegistration.setUpdateId(SecurityUtils.getUserId());
         return tSoftRegistrationMapper.updateTSoftRegistration(tSoftRegistration);
     }

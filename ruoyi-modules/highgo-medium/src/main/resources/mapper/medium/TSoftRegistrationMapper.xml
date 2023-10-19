@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.highgo.medium.mapper.TSoftRegistrationMapper">
-    
+
     <resultMap type="TSoftRegistration" id="TSoftRegistrationResult">
-        <result property="id"    column="id"    />
-        <result property="name"    column="name"    />
-        <result property="registrationNum"    column="registration_num"    />
-        <result property="regVersion"    column="reg_version"    />
-        <result property="createId"    column="create_id"    />
-        <result property="createBy"    column="create_by"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="updateId"    column="update_id"    />
-        <result property="updateBy"    column="update_by"    />
-        <result property="updateTime"    column="update_time"    />
-        <result property="remark"    column="remark"    />
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="registrationNum" column="registration_num"/>
+        <result property="regVersion" column="reg_version"/>
+        <result property="applicantScope" column="applicant_scope"/>
+        <result property="createId" column="create_id"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateId" column="update_id"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
     </resultMap>
 
     <sql id="selectTSoftRegistrationVo">
@@ -23,6 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                name,
                registration_num,
                reg_version,
+               applicant_scope,
                create_id,
                create_by,
                create_time,
@@ -35,25 +37,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectTSoftRegistrationList" parameterType="TSoftRegistration" resultMap="TSoftRegistrationResult">
         <include refid="selectTSoftRegistrationVo"/>
-        <where>  
-            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
-            <if test="registrationNum != null  and registrationNum != ''"> and registration_num = #{registrationNum}</if>
-            <if test="createId != null "> and create_id = #{createId}</if>
-            <if test="updateId != null "> and update_id = #{updateId}</if>
+        <where>
+            <if test="name != null  and name != ''">and name like concat('%', #{name}, '%')</if>
+            <if test="registrationNum != null  and registrationNum != ''">and registration_num = #{registrationNum}</if>
+            <if test="createId != null ">and create_id = #{createId}</if>
+            <if test="updateId != null ">and update_id = #{updateId}</if>
         </where>
     </select>
-    
+
     <select id="selectTSoftRegistrationById" parameterType="Long" resultMap="TSoftRegistrationResult">
         <include refid="selectTSoftRegistrationVo"/>
         where id = #{id}
     </select>
-        
+
     <insert id="insertTSoftRegistration" parameterType="TSoftRegistration" useGeneratedKeys="true" keyProperty="id">
         insert into t_soft_registration
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="name != null and name != ''">name,</if>
             <if test="registrationNum != null and registrationNum != ''">registration_num,</if>
-            <if test="regVersion != null and regVersion != ''">reg_version,</if>
+            <if test="regVersion != null">reg_version,</if>
+            <if test="applicantScope != null">applicant_scope,</if>
             <if test="createId != null">create_id,</if>
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
@@ -61,11 +64,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="remark != null">remark,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="name != null and name != ''">#{name},</if>
             <if test="registrationNum != null and registrationNum != ''">#{registrationNum},</if>
-            <if test="regVersion != null and regVersion != ''">#{regVersion},</if>
+            <if test="regVersion != null">#{regVersion},</if>
+            <if test="applicantScope != null">#{applicantScope},</if>
             <if test="createId != null">#{createId},</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
@@ -73,7 +77,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="remark != null">#{remark},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateTSoftRegistration" parameterType="TSoftRegistration">
@@ -81,7 +85,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="SET" suffixOverrides=",">
             <if test="name != null and name != ''">name = #{name},</if>
             <if test="registrationNum != null and registrationNum != ''">registration_num = #{registrationNum},</if>
-            <if test="regVersion != null and regVersion != ''">reg_version = #{regVersion},</if>
+            <if test="regVersion != null">reg_version = #{regVersion},</if>
+            <if test="applicantScope != null">applicant_scope = #{applicantScope},</if>
             <if test="createId != null">create_id = #{createId},</if>
             <if test="createBy != null">create_by = #{createBy},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
@@ -94,11 +99,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteTSoftRegistrationById" parameterType="Long">
-        delete from t_soft_registration where id = #{id}
+        delete
+        from t_soft_registration
+        where id = #{id}
     </delete>
 
     <delete id="deleteTSoftRegistrationByIds" parameterType="String">
-        delete from t_soft_registration where id in 
+        delete from t_soft_registration where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>

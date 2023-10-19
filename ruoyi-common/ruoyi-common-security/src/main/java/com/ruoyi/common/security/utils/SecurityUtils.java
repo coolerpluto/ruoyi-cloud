@@ -33,6 +33,14 @@ public class SecurityUtils
     }
 
     /**
+     * 获取用户昵称
+     */
+    public static String getNickName()
+    {
+        return  getLoginUser().getSysUser().getNickName();
+    }
+
+    /**
      * 获取用户key
      */
     public static String getUserKey()

@@ -118,6 +118,16 @@
         <el-form-item label="登记版本" prop="regVersion">
           <el-input v-model="form.regVersion" placeholder="请输入软著登记版本" />
         </el-form-item>
+        <el-form-item label="指定申请人" prop="applicantScope">
+          <el-select v-model="form.applicantScope" collapse-tags placeholder="默认不限制" filterable remote
+                     multiple :remote-method="getPersonOptions" :loading="flag.transferTargetPersonLoading">
+            <el-option v-for="item in personOptions" :key="item.userId" :label="item.nickName" :value="item.nickName">
+              <span style="float: left">{{ item.nickName }}</span>
+              <span style="float: right; color: #8492a6; font-size: 13px">
+                  {{ item.dept.deptName }}</span>
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" type="textarea" resize="none" :rows="3" placeholder="请输入内容"></el-input>
         </el-form-item>
@@ -133,6 +143,7 @@
 
 <script>
 import { listSoft_registration, getSoft_registration, delSoft_registration, addSoft_registration, updateSoft_registration } from "@/api/medium/soft_registration";
+import { listEmployee } from "@/api/crm/employee";
 
 export default {
   name: "Soft_registration",
@@ -165,6 +176,11 @@ export default {
         createId: null,
         updateId: null,
       },
+      flag: {
+        transferTargetPersonLoading: false,
+        selectedUnBeLongYou: false,
+      },
+      personOptions: [],
       // 表单参数
       form: {},
       // 表单校验
@@ -191,6 +207,17 @@ export default {
         this.loading = false;
       });
     },
+    getPersonOptions(query) {
+      this.flag.transferTargetPersonLoading = true
+      listEmployee({
+        pageNum: 1,
+        pageSize: 20,
+        nickName: query,
+      }).then(response => {
+        this.personOptions = response.rows;
+        this.flag.transferTargetPersonLoading = false;
+      });
+    },
     // 取消按钮
     cancel() {
       this.open = false;
@@ -203,6 +230,7 @@ export default {
         name: null,
         registrationNum: null,
         regVersion: null,
+        applicantScope: null,
         createId: null,
         createBy: null,
         createTime: null,
@@ -240,6 +268,7 @@ export default {
       const id = row.id || this.ids
       getSoft_registration(id).then(response => {
         this.form = response.data;
+        this.form.applicantScope?this.form.applicantScope=this.form.applicantScope.split(","):"";
         this.open = true;
         this.title = "修改软著登记记录";
       });
@@ -248,6 +277,7 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          this.form.applicantScope?this.form.applicantScope=this.form.applicantScope.join(","):"";
           if (this.form.id != null) {
             updateSoft_registration(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");

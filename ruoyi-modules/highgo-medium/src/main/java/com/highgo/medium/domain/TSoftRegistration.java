@@ -32,6 +32,7 @@ public class TSoftRegistration extends BaseEntity
     /** 登记版本 */
     @Excel(name = "登记版本")
     private String regVersion;
+    private String applicantScope;
 
     /** 创建者id */
     @Excel(name = "创建者id")
@@ -73,6 +74,16 @@ public class TSoftRegistration extends BaseEntity
     public void setCreateId(Long createId) 
     {
         this.createId = createId;
+    }
+
+    public String getApplicantScope()
+    {
+        return applicantScope;
+    }
+
+    public void setApplicantScope(String applicantScope)
+    {
+        this.applicantScope = applicantScope;
     }
 
     public String getRegVersion()
