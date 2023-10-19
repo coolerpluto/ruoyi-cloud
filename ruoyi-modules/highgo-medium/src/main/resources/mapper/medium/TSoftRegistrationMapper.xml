@@ -8,6 +8,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="id"    column="id"    />
         <result property="name"    column="name"    />
         <result property="registrationNum"    column="registration_num"    />
+        <result property="regVersion"    column="reg_version"    />
         <result property="createId"    column="create_id"    />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
@@ -18,7 +19,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectTSoftRegistrationVo">
-        select id, name, registration_num, create_id, create_by, create_time, update_id, update_by, update_time,remark from t_soft_registration
+        select id,
+               name,
+               registration_num,
+               reg_version,
+               create_id,
+               create_by,
+               create_time,
+               update_id,
+               update_by,
+               update_time,
+               remark
+        from t_soft_registration
     </sql>
 
     <select id="selectTSoftRegistrationList" parameterType="TSoftRegistration" resultMap="TSoftRegistrationResult">
@@ -41,6 +53,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="name != null and name != ''">name,</if>
             <if test="registrationNum != null and registrationNum != ''">registration_num,</if>
+            <if test="regVersion != null and regVersion != ''">reg_version,</if>
             <if test="createId != null">create_id,</if>
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
@@ -52,6 +65,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="name != null and name != ''">#{name},</if>
             <if test="registrationNum != null and registrationNum != ''">#{registrationNum},</if>
+            <if test="regVersion != null and regVersion != ''">#{regVersion},</if>
             <if test="createId != null">#{createId},</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
@@ -67,6 +81,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="SET" suffixOverrides=",">
             <if test="name != null and name != ''">name = #{name},</if>
             <if test="registrationNum != null and registrationNum != ''">registration_num = #{registrationNum},</if>
+            <if test="regVersion != null and regVersion != ''">reg_version = #{regVersion},</if>
             <if test="createId != null">create_id = #{createId},</if>
             <if test="createBy != null">create_by = #{createBy},</if>
             <if test="createTime != null">create_time = #{createTime},</if>

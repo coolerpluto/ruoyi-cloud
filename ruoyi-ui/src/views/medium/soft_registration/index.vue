@@ -74,6 +74,7 @@
       <el-table-column label="记录ID" align="center" width="100" prop="id" />
       <el-table-column label="软件名称" align="center" prop="name" />
       <el-table-column label="软著登记号" align="center" prop="registrationNum" />
+      <el-table-column label="登记版本" align="center" prop="regVersion" />
       <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="创建人" align="center" width="150" prop="createBy" />
       <el-table-column label="更新人" align="center" width="150" prop="updateBy" />
@@ -113,6 +114,9 @@
         </el-form-item>
         <el-form-item label="软著登记号" prop="registrationNum">
           <el-input v-model="form.registrationNum" placeholder="请输入软著登记号" />
+        </el-form-item>
+        <el-form-item label="登记版本" prop="regVersion">
+          <el-input v-model="form.regVersion" placeholder="请输入软著登记版本" />
         </el-form-item>
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" type="textarea" resize="none" :rows="3" placeholder="请输入内容"></el-input>
@@ -198,6 +202,7 @@ export default {
         id: null,
         name: null,
         registrationNum: null,
+        regVersion: null,
         createId: null,
         createBy: null,
         createTime: null,

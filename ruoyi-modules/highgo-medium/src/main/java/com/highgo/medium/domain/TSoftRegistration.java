@@ -29,6 +29,10 @@ public class TSoftRegistration extends BaseEntity
     @Excel(name = "软著登记号")
     private String registrationNum;
 
+    /** 登记版本 */
+    @Excel(name = "登记版本")
+    private String regVersion;
+
     /** 创建者id */
     @Excel(name = "创建者id")
     @JsonSerialize(using=ToStringSerializer.class)
@@ -71,7 +75,17 @@ public class TSoftRegistration extends BaseEntity
         this.createId = createId;
     }
 
-    public Long getCreateId() 
+    public String getRegVersion()
+    {
+        return regVersion;
+    }
+
+    public void setRegVersion(String regVersion)
+    {
+        this.regVersion = regVersion;
+    }
+
+    public Long getCreateId()
     {
         return createId;
     }
