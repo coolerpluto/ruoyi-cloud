@@ -295,7 +295,7 @@
         </el-row>
 
         <el-row>
-          <el-form-item label="工具状态" prop="status">
+          <el-form-item label="工具状态" prop="status" v-hasPermi="['medium:lictool:public']">
             <el-radio-group v-model="form.status">
               <el-radio
                 v-for="dict in dict.type.sys_normal_disable"
