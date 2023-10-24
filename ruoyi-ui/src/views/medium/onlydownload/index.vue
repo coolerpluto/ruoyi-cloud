@@ -51,6 +51,8 @@
         </el-table-column>
         <el-table-column label="过期时间" align="center" prop="expireTime" :show-overflow-tooltip="true"
                          v-if="licColumns[6].visible"/>
+        <el-table-column label="生成Lic系统" align="center" prop="buildLicSystem" :show-overflow-tooltip="true"
+                         v-if="licColumns[15].visible"/>
         <el-table-column label="产品类型" align="center" prop="prodType" v-if="licColumns[7].visible">
           <template slot-scope="scope">
             <dict-tag :options="dict.type.medium_lic_prod_type" :value="scope.row.prodType"/>
@@ -333,6 +335,7 @@ export default {
         {key: 12, label: `申请人账户`, visible: false},
         {key: 13, label: `创建时间`, visible: false},
         {key: 14, label: `备注`, visible: false},
+        {key: 15, label: `生成Lic系统`, visible: true},
       ],
       // 总条数
       lictTotal: 0,
