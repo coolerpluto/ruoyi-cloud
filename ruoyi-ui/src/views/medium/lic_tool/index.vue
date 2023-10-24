@@ -86,7 +86,7 @@
       <el-table-column label="License工具名称" align="center" prop="name" />
       <el-table-column label="Lic文件适用系统" align="center" prop="systemAdapter" v-if="columns[0].visible">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.medium_file_system_mapping" :value="scope.row.systemAdapter"/>
+          <dict-tag :options="dict.type.medium_file_system_mapping" :value="scope.row.systemAdapter.split(',')"/>
         </template>
       </el-table-column>
       <el-table-column label="需机器码" align="center" prop="macNeed" v-if="columns[1].visible">
@@ -176,7 +176,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="Lic适用系统" prop="systemAdapter">
-              <el-select v-model="form.systemAdapter" placeholder="请选择适用系统">
+              <el-select v-model="form.systemAdapter" placeholder="请选择适用系统" multiple collapse-tags>
                 <el-option
                   v-for="dict in dict.type.medium_file_system_mapping"
                   :key="dict.value"
@@ -405,7 +405,7 @@ export default {
       },
       // 列信息
       columns: [
-        { key: 0, label: `适用系统`, visible: true },
+        { key: 0, label: `适用系统`, visible: false },
         { key: 1, label: `需机器码`, visible: false },
         { key: 2, label: `最大连接数`, visible: false },
         { key: 3, label: `CPU数量`, visible: false },
@@ -500,6 +500,9 @@ export default {
       const id = row.id || this.ids
       getLic_tool(id).then(response => {
         this.form = response.data;
+        if(this.form.systemAdapter){
+          this.form.systemAdapter = this.form.systemAdapter.split(",");
+        }
         this.open = true;
         this.rules.toolFile =  [
           { required: false, message: "License工具文件未选择上传", trigger: "blur" },
