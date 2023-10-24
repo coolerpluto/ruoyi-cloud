@@ -113,6 +113,11 @@
           <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.signFlag"/>
         </template>
       </el-table-column>
+      <el-table-column label="是否有GIS" align="center" prop="gisFlag" v-if="columns[15].visible">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.gisFlag"/>
+        </template>
+      </el-table-column>
       <el-table-column label="备注" align="center" prop="remark" v-if="columns[10].visible"/>
       <el-table-column label="创建者" align="center" prop="createBy" v-if="columns[11].visible"/>
       <el-table-column label="创建时间" align="center" prop="createTime" width="180" v-if="columns[12].visible">
@@ -285,6 +290,17 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
+            <el-form-item label="是否有GIS" prop="gisFlag">
+              <el-radio-group v-model="form.gisFlag">
+                <el-radio
+                  v-for="dict in dict.type.sys_yes_no"
+                  :key="dict.value"
+                  :label="dict.value"
+                >{{dict.label}}</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
             <el-form-item label="产品状态" prop="status">
               <el-radio-group v-model="form.status">
                 <el-radio
@@ -407,6 +423,7 @@ export default {
         { key: 12, label: `创建时间`, visible: false },
         { key: 13, label: `更新者`, visible: false },
         { key: 14, label: `更新时间`, visible: false },
+        { key: 15, label: `是否有GIS`, visible: false },
       ],
       employeeOptions: [],
       // 部门树选项
@@ -452,6 +469,7 @@ export default {
         macToolFileId: null,
         status: null,
         signFlag: null,
+        gisFlag: null,
         remark: null,
         createId: null,
         createBy: null,

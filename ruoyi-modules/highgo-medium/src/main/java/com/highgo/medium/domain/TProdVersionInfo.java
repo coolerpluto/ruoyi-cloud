@@ -101,6 +101,8 @@ public class TProdVersionInfo extends BaseEntity
      */
     @Excel(name = "是否签名")
     private String signFlag;
+    @Excel(name = "是否有GIS")
+    private String gisFlag;
 
     /**
      * 创建者id
@@ -117,6 +119,16 @@ public class TProdVersionInfo extends BaseEntity
     private Long updateId;
 
     // 非表中字段 开始
+
+    public String getGisFlag()
+    {
+        return gisFlag;
+    }
+
+    public void setGisFlag(String gisFlag)
+    {
+        this.gisFlag = gisFlag;
+    }
 
     public String getProdName()
     {
