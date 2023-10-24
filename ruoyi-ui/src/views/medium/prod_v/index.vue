@@ -596,6 +596,7 @@ export default {
           pageNum: 1,
           pageSize: 20,
           name: query,
+          status: 0,
         }).then(response => {
           this.optionsLicTool = response.rows;
           this.loadingQueryLicTool = false;
