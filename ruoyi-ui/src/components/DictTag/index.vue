@@ -19,6 +19,7 @@
         >
           {{ item.label }}
         </el-tag>
+        <span v-show="Array.isArray(value)">,</span>
       </template>
     </template>
   </div>
