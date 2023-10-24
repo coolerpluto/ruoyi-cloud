@@ -77,6 +77,8 @@ public class MLicenseFileInfo extends BaseEntity
      */
     @Excel(name = "License文件")
     private String licFileId;
+    @Excel(name = "生成Lic系统")
+    private String buildLicSystem;
     /** 创建者ID */
     @JsonSerialize(using=ToStringSerializer.class)
     private Long createId;
@@ -84,6 +86,16 @@ public class MLicenseFileInfo extends BaseEntity
     /** 更新者ID */
     @JsonSerialize(using=ToStringSerializer.class)
     private Long updateId;
+
+    public String getBuildLicSystem()
+    {
+        return buildLicSystem;
+    }
+
+    public void setBuildLicSystem(String buildLicSystem)
+    {
+        this.buildLicSystem = buildLicSystem;
+    }
 
     public String getLicFileId() {
         return licFileId;

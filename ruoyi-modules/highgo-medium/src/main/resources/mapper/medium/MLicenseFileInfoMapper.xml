@@ -26,10 +26,33 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
         <result property="remark"    column="remark"    />
         <result property="licFileId"    column="lic_file_id"    />
+        <result property="buildLicSystem"    column="build_lic_system"    />
     </resultMap>
 
     <sql id="selectMLicenseFileInfoVo">
-        select id, serial, apply_time, opportunity_num, auth_type, customer_name, purpose, expire_time, prod_type, db_version, server_url, other_param, status, create_id, create_by, create_time, update_id, update_by, update_time, remark, lic_file_id from t_license_info
+        select id,
+               serial,
+               apply_time,
+               opportunity_num,
+               auth_type,
+               customer_name,
+               purpose,
+               expire_time,
+               prod_type,
+               db_version,
+               server_url,
+               other_param,
+               status,
+               create_id,
+               create_by,
+               create_time,
+               update_id,
+               update_by,
+               update_time,
+               remark,
+               lic_file_id,
+               build_lic_system
+        from t_license_info
     </sql>
 
     <select id="selectMLicenseFileInfoList" parameterType="MLicenseFileInfo" resultMap="MLicenseFileInfoResult">
@@ -70,7 +93,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                db_version,
                server_url,
                create_id,
-               lic_file_id
+               lic_file_id,
+               build_lic_system
         from t_license_info
         where status = 0 and id in (#{ids})
     </select>
@@ -97,6 +121,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">update_time,</if>
             <if test="remark != null">remark,</if>
             <if test="licFileId != null">lic_file_id,</if>
+            <if test="buildLicSystem != null">build_lic_system,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="serial != null">#{serial},</if>
@@ -119,6 +144,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">#{updateTime},</if>
             <if test="remark != null">#{remark},</if>
             <if test="licFileId != null">#{licFileId},</if>
+            <if test="buildLicSystem != null">#{buildLicSystem},</if>
          </trim>
     </insert>
 
