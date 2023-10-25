@@ -114,10 +114,12 @@
           icon="el-icon-search"
           size="mini"
           @click="handleQuery"
-          >搜索</el-button
+        >搜索
+        </el-button
         >
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery"
-          >重置</el-button
+        >重置
+        </el-button
         >
       </el-form-item>
     </el-form>
@@ -131,7 +133,8 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['medium:medium:add']"
-          >新增</el-button
+        >新增
+        </el-button
         >
       </el-col>
       <el-col :span="1.5">
@@ -143,7 +146,8 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['medium:medium:edit']"
-          >修改</el-button
+        >修改
+        </el-button
         >
       </el-col>
       <el-col :span="1.5">
@@ -155,7 +159,8 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['medium:medium:remove']"
-          >删除</el-button
+        >删除
+        </el-button
         >
       </el-col>
       <el-col :span="1.5">
@@ -166,7 +171,8 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['medium:medium:export']"
-          >导出</el-button
+        >导出
+        </el-button
         >
       </el-col>
       <right-toolbar
@@ -180,9 +186,9 @@
       :data="mediumList"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column type="selection" width="55" align="center" />
+      <el-table-column type="selection" width="55" align="center"/>
       <!--      <el-table-column label="记录ID" align="center" prop="id" />-->
-      <el-table-column label="介质别名" align="center" prop="mediumName" />
+      <el-table-column label="介质别名" align="center" prop="mediumName"/>
       <el-table-column label="版本类型" align="center" prop="mediumType">
         <template slot-scope="scope">
           <dict-tag
@@ -226,7 +232,7 @@
         align="center"
         prop="mediumMd5FileName" :show-overflow-tooltip="true"
       />
-      <el-table-column label="文件状态" align="center" prop="status" >
+      <el-table-column label="文件状态" align="center" prop="status">
         <template slot-scope="scope">
           <dict-tag
             :options="dict.type.sys_normal_disable"
@@ -235,7 +241,7 @@
         </template>
       </el-table-column>
       <!--      <el-table-column label="创建者ID" align="center" prop="createId" />-->
-      <el-table-column label="创建者名" align="center" prop="createBy" />
+      <el-table-column label="创建者名" align="center" prop="createBy"/>
       <el-table-column
         label="创建时间"
         align="center"
@@ -243,7 +249,7 @@
         :show-overflow-tooltip="true"
       />
       <!--      <el-table-column label="更新者ID" align="center" prop="updateId" />-->
-      <el-table-column label="更新者名" align="center" prop="updateBy" />
+      <el-table-column label="更新者名" align="center" prop="updateBy"/>
       <el-table-column
         label="更新时间"
         align="center"
@@ -256,10 +262,10 @@
         prop="remark"
         :show-overflow-tooltip="true"
       />
-      <el-table-column  min-width="120px"
-        label="操作"
-        align="center"
-        class-name="small-padding fixed-width"
+      <el-table-column min-width="120px"
+                       label="操作"
+                       align="center"
+                       class-name="small-padding fixed-width"
       >
         <template slot-scope="scope">
           <el-button
@@ -268,7 +274,8 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['medium:medium:edit']"
-            >修改</el-button
+          >修改
+          </el-button
           >
           <el-button
             size="mini"
@@ -276,7 +283,8 @@
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['medium:medium:remove']"
-            >删除</el-button
+          >删除
+          </el-button
           >
           <el-button
             size="mini"
@@ -284,7 +292,8 @@
             icon="el-icon-download"
             @click="handleDownload(scope.row)"
             v-hasPermi="['medium:medium:download']"
-            >下载</el-button
+          >下载
+          </el-button
           >
         </template>
       </el-table-column>
@@ -432,6 +441,16 @@
               </el-upload>
             </el-form-item>
           </el-col>
+          <el-col :span="12">
+            <el-form-item label="上次文件名">
+              <el-input disabled v-model="form.mediumFileName"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="上次文件名">
+              <el-input disabled v-model="form.mediumMd5FileName"/>
+            </el-form-item>
+          </el-col>
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -443,8 +462,16 @@
 </template>
 
 <script>
-import { listMedium,getMedium, delMedium, addMedium, addMediumWithFile, updateMedium, updateMediumWithFile, } from "@/api/medium/medium";
-import { listProdTree } from "@/api/medium/prod";
+import {
+  listMedium,
+  getMedium,
+  delMedium,
+  addMedium,
+  addMediumWithFile,
+  updateMedium,
+  updateMediumWithFile,
+} from "@/api/medium/medium";
+import {listProdTree} from "@/api/medium/prod";
 
 export default {
   name: "Medium",
@@ -488,31 +515,31 @@ export default {
         createBy: null,
         createTime: null,
         updateBy: null,
-        params:{hasSignature:null,hasPostgis:null},
+        params: {hasSignature: null, hasPostgis: null},
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
         dbVersion: [
-          { required: true, message: "数据库版本未选择", trigger: "blur" },
+          {required: true, message: "数据库版本未选择", trigger: "blur"},
         ],
         cpuType: [
-          { required: true, message: "CPU版本未选择", trigger: "blur" },
+          {required: true, message: "CPU版本未选择", trigger: "blur"},
         ],
         packageType: [
-          { required: true, message: "打包方式未选择", trigger: "blur" },
+          {required: true, message: "打包方式未选择", trigger: "blur"},
         ],
         mediumType: [
-          { required: true, message: "版本类型未选择", trigger: "blur" },
+          {required: true, message: "版本类型未选择", trigger: "blur"},
         ],
         mediumFile: [
-          { required: true, message: "介质文件未选择上传", trigger: "blur" },
+          {required: true, message: "介质文件未选择上传", trigger: "blur"},
         ],
       },
-      listProdVersionTree:[],
-      versionProps:{
-        expandTrigger:'hover',
+      listProdVersionTree: [],
+      versionProps: {
+        expandTrigger: 'hover',
       }
     };
   },
@@ -574,9 +601,9 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.rules.mediumFile =  [
-          { required: true, message: "介质文件未选择上传", trigger: "blur" },
-        ]
+      this.rules.mediumFile = [
+        {required: true, message: "介质文件未选择上传", trigger: "blur"},
+      ]
       this.title = "添加文件及相关配置";
     },
     /** 修改按钮操作 */
@@ -586,8 +613,8 @@ export default {
       getMedium(id).then((response) => {
         this.form = response.data;
         this.open = true;
-        this.rules.mediumFile =  [
-          { required: false, message: "介质文件未选择上传", trigger: "blur" },
+        this.rules.mediumFile = [
+          {required: false, message: "介质文件未选择上传", trigger: "blur"},
         ]
         this.title = "修改文件及相关配置";
       });
@@ -632,7 +659,7 @@ export default {
           // 弹框关闭后 清理一下上传文件的列表
           this.$refs.uploadMediumFile.clearFiles()
           this.$refs.uploadMediumFileMd5.clearFiles()
-        }else{
+        } else {
           this.loading = false;
         }
       });
@@ -649,15 +676,16 @@ export default {
           this.getList();
           this.$modal.msgSuccess("删除成功");
         })
-        .catch(() => {});
+        .catch(() => {
+        });
     },
     /**
      * 下载文件
      */
-    handleDownload(row){
-      const fileName = row.mediumName+".zip";
+    handleDownload(row) {
+      const fileName = row.mediumName + ".zip";
       // 修改默认时间 2min
-      this.download("medium/medium/download",{...row,},fileName,{timeout: 120000});
+      this.download("medium/medium/download", {...row,}, fileName, {timeout: 120000});
     },
     /** 导出按钮操作 */
     handleExport() {
@@ -679,7 +707,7 @@ export default {
 
     handleBeforeUpload(file) {
       const fileSuffix = file.name.substring(file.name.lastIndexOf(".") + 1);
-      const whiteList = ["tar", "deb", "rpm", "zip","rar", "7z", "rar", "txt","md5"];
+      const whiteList = ["tar", "deb", "rpm", "zip", "rar", "7z", "rar", "txt", "md5"];
       if (whiteList.indexOf(fileSuffix) === -1) {
         this.$message.error("上传文件只能是特定格式");
         return false;
@@ -696,9 +724,9 @@ export default {
         return false;
       }
     },
-    listProdTree(searchValue){
+    listProdTree(searchValue) {
       listProdTree({
-        searchValue:searchValue
+        searchValue: searchValue
       }).then((response) => {
         this.listProdVersionTree = response.data;
         console.log(this.listProdVersionTree)
