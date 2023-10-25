@@ -176,7 +176,7 @@
         <el-row>
           <el-col :span="8">
           <el-form-item label="CPU版本">
-            <el-select v-model="mediumSelect.cpuType" disabled  placeholder="请选择">
+            <el-select v-model="mediumSelect.cpuType" disabled multiple collapse-tags placeholder="请选择">
               <el-option
               v-for="item in dict.type.medium_cpu_model"
               :key="item.value"
@@ -446,6 +446,9 @@ export default {
       this.mediumSelect = this.mediumSimpleList.find(item=>{
         return item.id == current;
       });
+      if(this.mediumSelect.cpuType){
+        this.mediumSelect.cpuType= this.mediumSelect.cpuType.split(",");
+      }
     },
     /** 搜索按钮操作 */
     handleQuery() {
@@ -485,6 +488,9 @@ export default {
         this.mediumSelect = this.mediumSimpleList.find(item=>{
           return item.id == this.form.mediumId;
         });
+        if(this.mediumSelect.cpuType){
+          this.mediumSelect.cpuType= this.mediumSelect.cpuType.split(",");
+        }
         this.title = "修改介质安全文件记录";
       });
     },

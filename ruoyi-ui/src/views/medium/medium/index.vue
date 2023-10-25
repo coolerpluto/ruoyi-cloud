@@ -210,11 +210,11 @@
           />
         </template>
       </el-table-column>
-      <el-table-column label="CPU版本" align="center" prop="cpuType">
+      <el-table-column label="CPU版本" align="center" prop="cpuType" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           <dict-tag
             :options="dict.type.medium_cpu_model"
-            :value="scope.row.cpuType"
+            :value="scope.row.cpuType.split(',')"
           />
         </template>
       </el-table-column>
@@ -345,7 +345,7 @@
               <el-select
                 v-model="form.cpuType"
                 placeholder="请选择CPU版本"
-                clearable
+                multiple collapse-tags clearable
               >
                 <el-option
                   v-for="dict in dict.type.medium_cpu_model"
@@ -612,6 +612,9 @@ export default {
       const id = row.id || this.ids;
       getMedium(id).then((response) => {
         this.form = response.data;
+        if(this.form.cpuType){
+          this.form.cpuType = this.form.cpuType.split(",")
+        }
         this.open = true;
         this.rules.mediumFile = [
           {required: false, message: "介质文件未选择上传", trigger: "blur"},

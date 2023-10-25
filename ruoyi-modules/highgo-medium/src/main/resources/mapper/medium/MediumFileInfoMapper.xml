@@ -36,14 +36,18 @@
         t_medium_info tmi
         where
         status = '0'
-        <if test="mediumName != null and mediumName != ''">and tmi.medium_name like concat('%', #{mediumName}, '%')
+        <if test="mediumName != null and mediumName != ''">
+            and tmi.medium_name like concat('%', #{mediumName}, '%')
         </if>
-        <if test="mediumType != null and mediumType != ''">and tmi.medium_type like concat('%', #{mediumType}, '%')
+        <if test="mediumType != null and mediumType != ''">
+            and tmi.medium_type like concat('%', #{mediumType}, '%')
         </if>
         <if test="dbVersion != null and dbVersion != ''">and tmi.db_version like concat('%', #{dbVersion}, '%')</if>
-        <if test="cpuType != null and cpuType != ''">and tmi.cpu_type like concat('%', #{cpuType}, '%')</if>
-        <if test="packageType != null and packageType != ''">and tmi.package_type like concat('%', #{packageType},
-            '%')
+        <if test="cpuType != null and cpuType != ''">
+            and concat(tmi.cpu_type, ',') regexp concat(replace(#{cpuType},',',',|'),',')
+        </if>
+        <if test="packageType != null and packageType != ''">
+            and tmi.package_type like concat('%', #{packageType},'%')
         </if>
     </select>
     <sql id="selectMediumFileInfoVo">
@@ -77,7 +81,9 @@
             <if test="mediumName != null and mediumName != ''">and tmi.medium_name = #{mediumName}</if>
             <if test="mediumType != null and mediumType != ''">and tmi.medium_type = #{mediumType}</if>
             <if test="dbVersion != null and dbVersion != ''">and tmi.db_version = #{dbVersion}</if>
-            <if test="cpuType != null and cpuType != ''">and tmi.cpu_type = #{cpuType}</if>
+            <if test="cpuType != null and cpuType != ''">
+                and concat(tmi.cpu_type, ',') regexp concat(replace(#{cpuType},',',',|'),',')
+            </if>
             <if test="packageType != null and packageType != ''">and tmi.package_type = #{packageType}</if>
             <if test="status != null and status != ''">and tmi.status = #{status}</if>
             <if test="createBy != null and createBy != ''">and tmi.create_by like concat('%', #{createBy}, '%')</if>
