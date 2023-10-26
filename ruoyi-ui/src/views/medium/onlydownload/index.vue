@@ -116,6 +116,20 @@
                        :value="dict.value"/>
           </el-select>
         </el-form-item>
+        <el-form-item label="适用系统" prop="systemAdapter">
+          <el-select
+            v-model="mediumQueryParams.systemAdapter"
+            placeholder="请选择适用系统"
+            clearable
+          >
+            <el-option
+              v-for="dict in dict.type.medium_file_system_mapping"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            />
+          </el-select>
+        </el-form-item>
         <el-form-item label="打包方式" prop="packageType">
           <el-select v-model="mediumQueryParams.packageType" placeholder="请选择打包方式" clearable>
             <el-option v-for="dict in dict.type.medium_package_type" :key="dict.value" :label="dict.label"
@@ -174,7 +188,12 @@
         </el-table-column>
         <el-table-column label="CPU版本" align="center" prop="cpuType" v-if="mediumColumns[3].visible">
           <template slot-scope="scope">
-            <dict-tag :options="dict.type.medium_cpu_model" :value="scope.row.cpuType"/>
+            <dict-tag :options="dict.type.medium_cpu_model" :value="scope.row.cpuType.split(',')"/>
+          </template>
+        </el-table-column>
+        <el-table-column label="适用系统" align="center" prop="systemAdapter" v-if="mediumColumns[13].visible">
+          <template slot-scope="scope">
+            <dict-tag :options="dict.type.medium_file_system_mapping" :value="scope.row.systemAdapter.split(',')"/>
           </template>
         </el-table-column>
         <el-table-column label="打包方式" align="center" prop="packageType" :show-overflow-tooltip="true"
@@ -298,6 +317,7 @@ export default {
     "medium_version_type",
     "medium_db_version",
     "medium_cpu_model",
+    "medium_file_system_mapping",
   ],
   data() {
     return {
@@ -374,8 +394,7 @@ export default {
         {key: 10, label: `更新者名`, visible: false},
         {key: 11, label: `更新时间`, visible: false},
         {key: 12, label: `备注`, visible: false},
-        {key: 13, label: `创建时间`, visible: false},
-        {key: 14, label: `备注`, visible: false},
+        {key: 13, label: `适用系统`, visible: true},
       ],
       // 总条数
       mediumTotal: 0,
@@ -391,7 +410,7 @@ export default {
         dbVersion: null,
         cpuType: null,
         packageType: null,
-        status: null,
+        status: 0,
         createBy: null,
         createTime: null,
         updateBy: null,
