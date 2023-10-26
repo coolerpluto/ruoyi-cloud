@@ -218,14 +218,7 @@
         prop="dbVersion"
         :show-overflow-tooltip="true"
         v-if="columns[2].visible"
-      >
-        <template slot-scope="scope">
-          <dict-tag
-            :options="dict.type.medium_db_version"
-            :value="scope.row.dbVersion"
-          />
-        </template>
-      </el-table-column>
+      />
       <el-table-column
         label="CPU版本" align="center" prop="cpuType"
         :show-overflow-tooltip="true"
@@ -377,18 +370,15 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="数据库版本" prop="dbVersion">
-              <el-select
+              <el-cascader
+                ref="cascader"
+                :props="dbVersionProps"
                 v-model="form.dbVersion"
                 placeholder="请选择数据库版本"
-                clearable
+                :options="listProdVersionTree"
+                @change="handleDbVersionChange"
               >
-                <el-option
-                  v-for="dict in dict.type.medium_db_version"
-                  :key="dict.value"
-                  :label="dict.label"
-                  :value="dict.value"
-                />
-              </el-select>
+              </el-cascader>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -626,6 +616,10 @@ export default {
         {key: 12, label: `备注`, visible: false},
         {key: 13, label: `MD5文件`, visible: false},
       ],
+      dbVersionProps: {
+        value: 'label',
+        label: 'label',
+      },
     };
   },
   created() {
@@ -703,12 +697,19 @@ export default {
         if (this.form.systemAdapter) {
           this.form.systemAdapter = this.form.systemAdapter.split(",")
         }
+        if (this.form.dbVersion) {
+          this.form.dbVersion = this.form.dbVersion.split("/")
+        }
         this.open = true;
         this.rules.mediumFile = [
           {required: false, message: "介质文件未选择上传", trigger: "blur"},
         ]
         this.title = "修改文件及相关配置";
       });
+    },
+    handleDbVersionChange(value){
+      let nodesObjs = this.$refs['cascader'].getCheckedNodes();
+      this.form.versionId = nodesObjs[0].data.value;
     },
     /** 提交按钮 */
     submitForm() {
@@ -820,7 +821,6 @@ export default {
         searchValue: searchValue
       }).then((response) => {
         this.listProdVersionTree = response.data;
-        console.log(this.listProdVersionTree)
       });
     },
   },

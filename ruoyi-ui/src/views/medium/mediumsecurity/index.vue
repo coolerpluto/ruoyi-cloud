@@ -285,9 +285,10 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="数据库版本">
+              <!-- 使用下来就为了右边下拉标识 不可编辑 -->
               <el-select v-model="mediumSelect.dbVersion" disabled>
                 <el-option
-                  v-for="item in dict.type.medium_db_version"
+                  v-for="item in []"
                   :key="item.value"
                   :label="item.label"
                   :value="item.value">
@@ -417,7 +418,7 @@ export default {
   dicts: [
     'sys_file_type', 'sys_normal_disable', 'medium_file_system_mapping',
     'medium_file_type', 'medium_version_type', 'medium_cpu_model',
-    "sys_yes_no", "medium_package_type", "medium_db_version"],
+    "sys_yes_no", "medium_package_type"],
   data() {
     return {
       // 遮罩层

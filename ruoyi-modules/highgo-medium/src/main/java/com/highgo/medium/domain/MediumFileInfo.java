@@ -39,6 +39,8 @@ public class MediumFileInfo extends BaseEntity
      */
     @Excel(name = "数据库版本")
     private String dbVersion;
+    @Excel(name = "数据库版本Id")
+    private String versionId;
 
     /**
      * CPU版本
@@ -86,6 +88,16 @@ public class MediumFileInfo extends BaseEntity
      */
     @JsonSerialize(using = ToStringSerializer.class)
     private Long updateId;
+
+    public String getVersionId()
+    {
+        return versionId;
+    }
+
+    public void setVersionId(String versionId)
+    {
+        this.versionId = versionId;
+    }
 
     public String getSystemAdapter()
     {

@@ -9,6 +9,7 @@
         <result property="mediumName" column="medium_name"/>
         <result property="mediumType" column="medium_type"/>
         <result property="dbVersion" column="db_version"/>
+        <result property="versionId" column="version_id"/>
         <result property="cpuType" column="cpu_type"/>
         <result property="systemAdapter" column="system_adapter"/>
         <result property="packageType" column="package_type"/>
@@ -88,7 +89,7 @@
         <where>
             <if test="mediumName != null and mediumName != ''">and tmi.medium_name = #{mediumName}</if>
             <if test="mediumType != null and mediumType != ''">and tmi.medium_type = #{mediumType}</if>
-            <if test="dbVersion != null and dbVersion != ''">and tmi.db_version = #{dbVersion}</if>
+            <if test="dbVersion != null and dbVersion != ''">and tmi.db_version = replace(#{dbVersion},',','/')</if>
             <if test="cpuType != null and cpuType != ''">
                 and concat(tmi.cpu_type, ',') regexp concat(replace(#{cpuType},',',',|'),',')
             </if>
@@ -130,6 +131,7 @@
             <if test="mediumName != null">medium_name,</if>
             <if test="mediumType != null">medium_type,</if>
             <if test="dbVersion != null">db_version,</if>
+            <if test="versionId != null">version_id,</if>
             <if test="cpuType != null">cpu_type,</if>
             <if test="systemAdapter != null">system_adapter,</if>
             <if test="packageType != null">package_type,</if>
@@ -147,7 +149,8 @@
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="mediumName != null">#{mediumName},</if>
             <if test="mediumType != null">#{mediumType},</if>
-            <if test="dbVersion != null">#{dbVersion},</if>
+            <if test="dbVersion != null">replace(#{dbVersion},',','/'),</if>
+            <if test="versionId != null">#{versionId},</if>
             <if test="cpuType != null">#{cpuType},</if>
             <if test="systemAdapter != null">#{systemAdapter},</if>
             <if test="packageType != null">#{packageType},</if>
@@ -169,7 +172,8 @@
         <trim prefix="SET" suffixOverrides=",">
             <if test="mediumName != null">medium_name = #{mediumName},</if>
             <if test="mediumType != null">medium_type = #{mediumType},</if>
-            <if test="dbVersion != null">db_version = #{dbVersion},</if>
+            <if test="dbVersion != null">db_version = replace(#{dbVersion},',','/'),</if>
+            <if test="versionId != null">version_id = #{versionId},</if>
             <if test="cpuType != null">cpu_type = #{cpuType},</if>
             <if test="systemAdapter != null">system_adapter = #{systemAdapter},</if>
             <if test="packageType != null">package_type = #{packageType},</if>
