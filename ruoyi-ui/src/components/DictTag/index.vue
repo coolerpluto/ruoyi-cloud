@@ -19,7 +19,7 @@
         >
           {{ item.label }}
         </el-tag>
-        <span v-show="Array.isArray(value)">,</span>
+        <span v-show="Array.isArray(value)">{{splitFlag}}</span>
       </template>
     </template>
   </div>
@@ -34,6 +34,10 @@ export default {
       default: null,
     },
     value: [Number, String, Array],
+    splitFlag: {
+      type: String,
+      default: ","
+    }
   },
   computed: {
     values() {
