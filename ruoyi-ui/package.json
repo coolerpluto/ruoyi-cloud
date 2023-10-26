@@ -38,6 +38,7 @@
   "dependencies": {
     "@riophae/vue-treeselect": "0.4.0",
     "axios": "0.24.0",
+    "caniuse-lite": "^1.0.30001554",
     "clipboard": "2.0.8",
     "core-js": "3.25.3",
     "echarts": "5.4.0",
