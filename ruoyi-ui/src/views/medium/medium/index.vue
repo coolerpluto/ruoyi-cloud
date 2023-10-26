@@ -50,6 +50,20 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item label="适用系统" prop="systemAdapter">
+        <el-select
+          v-model="queryParams.systemAdapter"
+          placeholder="请选择适用系统"
+          clearable
+        >
+          <el-option
+            v-for="dict in dict.type.medium_file_system_mapping"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item label="打包方式" prop="packageType">
         <el-select
           v-model="queryParams.packageType"
@@ -177,6 +191,7 @@
       </el-col>
       <right-toolbar
         :showSearch.sync="showSearch"
+        :columns="columns"
         @queryTable="getList"
       ></right-toolbar>
     </el-row>
@@ -188,8 +203,8 @@
     >
       <el-table-column type="selection" width="55" align="center"/>
       <!--      <el-table-column label="记录ID" align="center" prop="id" />-->
-      <el-table-column label="介质别名" align="center" prop="mediumName"/>
-      <el-table-column label="版本类型" align="center" prop="mediumType">
+      <el-table-column label="介质别名" align="center" prop="mediumName" v-if="columns[0].visible"/>
+      <el-table-column label="版本类型" align="center" prop="mediumType" v-if="columns[1].visible">
         <template slot-scope="scope">
           <dict-tag
             :options="dict.type.medium_version_type"
@@ -202,6 +217,7 @@
         align="center"
         prop="dbVersion"
         :show-overflow-tooltip="true"
+        v-if="columns[2].visible"
       >
         <template slot-scope="scope">
           <dict-tag
@@ -210,7 +226,11 @@
           />
         </template>
       </el-table-column>
-      <el-table-column label="CPU版本" align="center" prop="cpuType" :show-overflow-tooltip="true">
+      <el-table-column
+        label="CPU版本" align="center" prop="cpuType"
+        :show-overflow-tooltip="true"
+        v-if="columns[3].visible"
+      >
         <template slot-scope="scope">
           <dict-tag
             :options="dict.type.medium_cpu_model"
@@ -218,7 +238,20 @@
           />
         </template>
       </el-table-column>
-      <el-table-column label="打包方式" align="center" prop="packageType" :show-overflow-tooltip="true">
+      <el-table-column
+        label="适用系统" align="center" prop="systemAdapter"
+        :show-overflow-tooltip="true"
+        v-if="columns[4].visible"
+      >
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.medium_file_system_mapping" :value="scope.row.systemAdapter.split(',')"/>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="打包方式" align="center" prop="packageType"
+        :show-overflow-tooltip="true"
+        v-if="columns[5].visible"
+      >
         <template slot-scope="scope">
           <dict-tag
             :options="dict.type.medium_package_type"
@@ -226,13 +259,21 @@
           />
         </template>
       </el-table-column>
-      <el-table-column label="介质文件" align="center" prop="mediumFileName" :show-overflow-tooltip="true"/>
+      <el-table-column
+        label="介质文件" align="center" prop="mediumFileName"
+        :show-overflow-tooltip="true"
+        v-if="columns[6].visible"
+      />
       <el-table-column
         label="MD5文件"
         align="center"
         prop="mediumMd5FileName" :show-overflow-tooltip="true"
+        v-if="columns[13].visible"
       />
-      <el-table-column label="文件状态" align="center" prop="status">
+      <el-table-column
+        label="文件状态" align="center" prop="status"
+        v-if="columns[7].visible"
+      >
         <template slot-scope="scope">
           <dict-tag
             :options="dict.type.sys_normal_disable"
@@ -241,31 +282,41 @@
         </template>
       </el-table-column>
       <!--      <el-table-column label="创建者ID" align="center" prop="createId" />-->
-      <el-table-column label="创建者名" align="center" prop="createBy"/>
+      <el-table-column
+        label="创建者名" align="center" prop="createBy"
+        v-if="columns[8].visible"
+      />
       <el-table-column
         label="创建时间"
         align="center"
         prop="createTime"
         :show-overflow-tooltip="true"
+        v-if="columns[9].visible"
       />
       <!--      <el-table-column label="更新者ID" align="center" prop="updateId" />-->
-      <el-table-column label="更新者名" align="center" prop="updateBy"/>
+      <el-table-column
+        label="更新者名" align="center"
+        prop="updateBy" v-if="columns[10].visible"
+      />
       <el-table-column
         label="更新时间"
         align="center"
         prop="updateTime"
         :show-overflow-tooltip="true"
+        v-if="columns[11].visible"
       />
       <el-table-column
         label="备注"
         align="center"
         prop="remark"
         :show-overflow-tooltip="true"
+        v-if="columns[12].visible"
       />
-      <el-table-column min-width="120px"
-                       label="操作"
-                       align="center"
-                       class-name="small-padding fixed-width"
+      <el-table-column
+        min-width="120px"
+        label="操作"
+        align="center"
+        class-name="small-padding fixed-width"
       >
         <template slot-scope="scope">
           <el-button
@@ -389,6 +440,22 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
+            <el-form-item label="适用系统" prop="systemAdapter">
+              <el-select
+                v-model="form.systemAdapter"
+                placeholder="请选择适用系统"
+                multiple collapse-tags clearable
+              >
+                <el-option
+                  v-for="dict in dict.type.medium_file_system_mapping"
+                  :key="dict.value"
+                  :label="dict.label"
+                  :value="dict.value"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
             <el-form-item label="文件状态" prop="status">
               <el-select
                 v-model="form.status"
@@ -482,6 +549,7 @@ export default {
     "medium_version_type",
     "medium_db_version",
     "medium_cpu_model",
+    "medium_file_system_mapping",
   ],
   data() {
     return {
@@ -540,7 +608,24 @@ export default {
       listProdVersionTree: [],
       versionProps: {
         expandTrigger: 'hover',
-      }
+      },
+      // 列信息
+      columns: [
+        {key: 0, label: `介质别名`, visible: true},
+        {key: 1, label: `版本类型`, visible: true},
+        {key: 2, label: `数据库版本`, visible: true},
+        {key: 3, label: `CPU版本`, visible: true},
+        {key: 4, label: `适用系统`, visible: true},
+        {key: 5, label: `打包方式`, visible: true},
+        {key: 6, label: `介质文件`, visible: true},
+        {key: 13, label: `MD5文件`, visible: false},
+        {key: 7, label: `文件状态`, visible: true},
+        {key: 8, label: `创建者名`, visible: false},
+        {key: 9, label: `创建者名`, visible: false},
+        {key: 10, label: `更新者名`, visible: false},
+        {key: 11, label: `更新者名`, visible: false},
+        {key: 12, label: `备注`, visible: false},
+      ],
     };
   },
   created() {
@@ -612,8 +697,11 @@ export default {
       const id = row.id || this.ids;
       getMedium(id).then((response) => {
         this.form = response.data;
-        if(this.form.cpuType){
+        if (this.form.cpuType) {
           this.form.cpuType = this.form.cpuType.split(",")
+        }
+        if (this.form.systemAdapter) {
+          this.form.systemAdapter = this.form.systemAdapter.split(",")
         }
         this.open = true;
         this.rules.mediumFile = [

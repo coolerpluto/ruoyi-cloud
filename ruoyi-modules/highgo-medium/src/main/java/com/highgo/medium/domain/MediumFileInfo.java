@@ -14,7 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
  * @author eshzhang
  * @date 2022-12-01
  */
-public class MediumFileInfo extends BaseEntity {
+public class MediumFileInfo extends BaseEntity
+{
     private static final long serialVersionUID = 1L;
 
     /**
@@ -45,6 +46,9 @@ public class MediumFileInfo extends BaseEntity {
     @Excel(name = "CPU版本")
     private String cpuType;
 
+    @Excel(name = "适用系统")
+    private String systemAdapter;
+
     /**
      * 打包方式
      */
@@ -74,121 +78,158 @@ public class MediumFileInfo extends BaseEntity {
     /**
      * 创建者ID
      */
-    @JsonSerialize(using= ToStringSerializer.class)
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long createId;
 
     /**
      * 更新者ID
      */
-    @JsonSerialize(using=ToStringSerializer.class)
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long updateId;
 
-    public void setId(String id) {
+    public String getSystemAdapter()
+    {
+        return systemAdapter;
+    }
+
+    public void setSystemAdapter(String systemAdapter)
+    {
+        this.systemAdapter = systemAdapter;
+    }
+
+    public void setId(String id)
+    {
         this.id = id;
     }
 
-    public String getId() {
+    public String getId()
+    {
         return id;
     }
 
-    public String getMediumFileName() {
+    public String getMediumFileName()
+    {
         return mediumFileName;
     }
 
-    public void setMediumFileName(String mediumFileName) {
+    public void setMediumFileName(String mediumFileName)
+    {
         this.mediumFileName = mediumFileName;
     }
 
-    public String getMediumMd5FileName() {
+    public String getMediumMd5FileName()
+    {
         return mediumMd5FileName;
     }
 
-    public void setMediumMd5FileName(String mediumMd5FileName) {
+    public void setMediumMd5FileName(String mediumMd5FileName)
+    {
         this.mediumMd5FileName = mediumMd5FileName;
     }
 
-    public void setMediumName(String mediumName) {
+    public void setMediumName(String mediumName)
+    {
         this.mediumName = mediumName;
     }
 
-    public String getMediumName() {
+    public String getMediumName()
+    {
         return mediumName;
     }
 
-    public void setMediumType(String mediumType) {
+    public void setMediumType(String mediumType)
+    {
         this.mediumType = mediumType;
     }
 
-    public String getMediumType() {
+    public String getMediumType()
+    {
         return mediumType;
     }
 
-    public void setDbVersion(String dbVersion) {
+    public void setDbVersion(String dbVersion)
+    {
         this.dbVersion = dbVersion;
     }
 
-    public String getDbVersion() {
+    public String getDbVersion()
+    {
         return dbVersion;
     }
 
-    public void setCpuType(String cpuType) {
+    public void setCpuType(String cpuType)
+    {
         this.cpuType = cpuType;
     }
 
-    public String getCpuType() {
+    public String getCpuType()
+    {
         return cpuType;
     }
 
-    public void setPackageType(String packageType) {
+    public void setPackageType(String packageType)
+    {
         this.packageType = packageType;
     }
 
-    public String getPackageType() {
+    public String getPackageType()
+    {
         return packageType;
     }
 
-    public void setMediumFileId(String mediumFileId) {
+    public void setMediumFileId(String mediumFileId)
+    {
         this.mediumFileId = mediumFileId;
     }
 
-    public String getMediumFileId() {
+    public String getMediumFileId()
+    {
         return mediumFileId;
     }
 
-    public void setMediumMd5FileId(String mediumMd5FileId) {
+    public void setMediumMd5FileId(String mediumMd5FileId)
+    {
         this.mediumMd5FileId = mediumMd5FileId;
     }
 
-    public String getMediumMd5FileId() {
+    public String getMediumMd5FileId()
+    {
         return mediumMd5FileId;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(String status)
+    {
         this.status = status;
     }
 
-    public String getStatus() {
+    public String getStatus()
+    {
         return status;
     }
 
-    public void setCreateId(Long createId) {
+    public void setCreateId(Long createId)
+    {
         this.createId = createId;
     }
 
-    public Long getCreateId() {
+    public Long getCreateId()
+    {
         return createId;
     }
 
-    public void setUpdateId(Long updateId) {
+    public void setUpdateId(Long updateId)
+    {
         this.updateId = updateId;
     }
 
-    public Long getUpdateId() {
+    public Long getUpdateId()
+    {
         return updateId;
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
                 .append("id", getId())
                 .append("mediumName", getMediumName())
