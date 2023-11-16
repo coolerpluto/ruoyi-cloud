@@ -1,4 +1,4 @@
-package com.highgo.medium.utils;
+package com.ruoyi.common.core.utils.ssh;
 
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
@@ -6,14 +6,20 @@ import com.jcraft.jsch.Session;
 import org.apache.commons.io.IOUtils;
 
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
-public class SSHLinuxUtil {
-
-    public static String exeCommand(String host, int port, String user, String password, String command) {
+/**
+ * SSH连接Linux的账户
+ */
+public class SSHLinuxUtils
+{
+    public static String exeCommand(String host, int port, String user, String password, String command)
+    {
         Session session = null;
         ChannelExec channelExec = null;
         String out = null;
-        try {
+        try
+        {
             JSch jsch = new JSch();
             session = jsch.getSession(user, host, port);
             session.setConfig("StrictHostKeyChecking", "no");
@@ -25,14 +31,24 @@ public class SSHLinuxUtil {
             channelExec.setCommand(command);
             channelExec.setErrStream(System.err);
             channelExec.connect();
-            out = IOUtils.toString(in, "UTF-8");
-        } catch (Exception e) {
+            out = IOUtils.toString(in, StandardCharsets.UTF_8);
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
-        } finally {
-            channelExec.disconnect();
-            session.disconnect();
+        }
+        finally
+        {
+            if (null != channelExec)
+            {
+                channelExec.disconnect();
+
+            }
+            if (null != session)
+            {
+                session.disconnect();
+            }
         }
         return out;
     }
-
 }

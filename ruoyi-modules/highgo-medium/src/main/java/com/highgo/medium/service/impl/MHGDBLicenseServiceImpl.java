@@ -7,10 +7,10 @@ import com.highgo.medium.domain.MFileInfo;
 import com.highgo.medium.domain.MLicenseFileInfo;
 import com.highgo.medium.mapper.MLicenseFileInfoMapper;
 import com.highgo.medium.service.IMFileInfoService;
-import com.highgo.medium.utils.JsonUtils;
 import com.highgo.medium.utils.MediumUtil;
-import com.highgo.medium.utils.SSHLinuxUtil;
 import com.ruoyi.common.core.utils.DateUtils;
+import com.ruoyi.common.core.utils.json.JsonUtils;
+import com.ruoyi.common.core.utils.ssh.SSHLinuxUtils;
 import com.ruoyi.common.security.utils.SecurityUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
@@ -86,7 +86,7 @@ public class MHGDBLicenseServiceImpl
             log.debug("MHGDBLicenseServiceImpl.command req:{}", command.toString());
         }
         // 调用执行命令
-        String commandRes = SSHLinuxUtil.exeCommand(sFtpServerConfig.getIp(), sFtpServerConfig.getPort(),
+        String commandRes = SSHLinuxUtils.exeCommand(sFtpServerConfig.getIp(), sFtpServerConfig.getPort(),
                 sFtpServerConfig.getAccessKey(), sFtpServerConfig.getSecretKey(), command.toString());
         if (log.isDebugEnabled())
         {

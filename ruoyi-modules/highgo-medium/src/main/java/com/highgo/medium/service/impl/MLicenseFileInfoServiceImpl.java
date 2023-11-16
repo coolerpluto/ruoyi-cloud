@@ -10,11 +10,11 @@ import com.highgo.medium.mapper.MLicenseFileInfoMapper;
 import com.highgo.medium.service.IMFileDownHisService;
 import com.highgo.medium.service.IMFileInfoService;
 import com.highgo.medium.service.IMLicenseFileInfoService;
-import com.highgo.medium.utils.JsonUtils;
 import com.highgo.medium.utils.MediumUtil;
-import com.highgo.medium.utils.SSHLinuxUtil;
-import com.highgo.medium.utils.ZipUtil;
 import com.ruoyi.common.core.utils.DateUtils;
+import com.ruoyi.common.core.utils.json.JsonUtils;
+import com.ruoyi.common.core.utils.file.ZipUtils;
+import com.ruoyi.common.core.utils.ssh.SSHLinuxUtils;
 import com.ruoyi.common.security.utils.SecurityUtils;
 import com.ruoyi.system.api.RemoteFileService;
 import com.ruoyi.system.api.domain.FileReq;
@@ -188,7 +188,7 @@ public class MLicenseFileInfoServiceImpl implements IMLicenseFileInfoService
             zipOutputStream.setMethod(ZipOutputStream.DEFLATED);
             Map<String, InputStream> fileInputStream = new HashMap<>();
             fileInputStream.put(serial + "_" + fileNameInDB, fileMBody.asInputStream());
-            ZipUtil.zipStream(fileInputStream, outputStream);
+            ZipUtils.zipStream(fileInputStream, outputStream);
         }
         catch (IOException e)
         {
@@ -268,7 +268,7 @@ public class MLicenseFileInfoServiceImpl implements IMLicenseFileInfoService
             log.debug("MLicenseFileInfoServiceImpl.command req:{}", command.toString());
         }
         // 调用执行命令
-        String commandRes = SSHLinuxUtil.exeCommand(sFtpServerConfig.getIp(), sFtpServerConfig.getPort(),
+        String commandRes = SSHLinuxUtils.exeCommand(sFtpServerConfig.getIp(), sFtpServerConfig.getPort(),
                 sFtpServerConfig.getAccessKey(), sFtpServerConfig.getSecretKey(), command.toString());
         if (log.isDebugEnabled())
         {

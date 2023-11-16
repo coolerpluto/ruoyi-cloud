@@ -7,9 +7,9 @@ import com.highgo.medium.mapper.MFileInfoMapper;
 import com.highgo.medium.service.IMFileDownHisService;
 import com.highgo.medium.service.IMFileInfoService;
 import com.highgo.medium.utils.MediumUtil;
-import com.highgo.medium.utils.ZipUtil;
 import com.ruoyi.common.core.utils.DateUtils;
 import com.ruoyi.common.core.utils.StringUtils;
+import com.ruoyi.common.core.utils.file.ZipUtils;
 import com.ruoyi.common.security.utils.SecurityUtils;
 import com.ruoyi.system.api.RemoteFileService;
 import com.ruoyi.system.api.domain.FileReq;
@@ -237,7 +237,7 @@ public class MFileInfoServiceImpl implements IMFileInfoService
             if (log.isDebugEnabled()){
                 log.debug("MFileInfoServiceImpl.downLoad Stream is null");
             }
-            ZipUtil.zipStream(fileInputStream,outputStream);
+            ZipUtils.zipStream(fileInputStream,outputStream);
         } catch (IOException e) {
             e.printStackTrace();
         }finally {

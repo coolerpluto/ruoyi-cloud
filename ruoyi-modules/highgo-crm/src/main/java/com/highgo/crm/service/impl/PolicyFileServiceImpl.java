@@ -1,18 +1,12 @@
 package com.highgo.crm.service.impl;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.zip.ZipOutputStream;
-
 import com.alibaba.fastjson.JSON;
-import com.highgo.crm.utils.ZipUtil;
+import com.highgo.crm.domain.PolicyFile;
+import com.highgo.crm.mapper.PolicyFileMapper;
+import com.highgo.crm.service.IPolicyFileService;
 import com.ruoyi.common.core.domain.R;
-import com.ruoyi.common.core.exception.InnerAuthException;
 import com.ruoyi.common.core.utils.DateUtils;
+import com.ruoyi.common.core.utils.file.ZipUtils;
 import com.ruoyi.system.api.RemoteFileService;
 import com.ruoyi.system.api.domain.FileReq;
 import com.ruoyi.system.api.domain.SysFile;
@@ -22,12 +16,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.highgo.crm.mapper.PolicyFileMapper;
-import com.highgo.crm.domain.PolicyFile;
-import com.highgo.crm.service.IPolicyFileService;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.zip.ZipOutputStream;
 
 /**
  * 政策文件Service业务层处理
@@ -164,7 +162,7 @@ public class PolicyFileServiceImpl implements IPolicyFileService {
 
             Map<String, InputStream> fileInputStream = new HashMap<>();
             fileInputStream.put(fileMReq.getFileName(),fileMBody.asInputStream());
-            ZipUtil.zipStream(fileInputStream,outputStream);
+            ZipUtils.zipStream(fileInputStream,outputStream);
         } catch (IOException e) {
             e.printStackTrace();
         }finally {

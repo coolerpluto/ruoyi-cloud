@@ -8,9 +8,9 @@ import com.highgo.medium.domain.MLicenseFileInfo;
 import com.highgo.medium.mapper.MLicenseFileInfoMapper;
 import com.highgo.medium.service.IMFileInfoService;
 import com.highgo.medium.utils.MediumUtil;
-import com.highgo.medium.utils.SSHLinuxUtil;
 import com.ruoyi.common.core.utils.DateUtils;
 import com.ruoyi.common.core.utils.RandomUtils;
+import com.ruoyi.common.core.utils.ssh.SSHLinuxUtils;
 import com.ruoyi.common.security.utils.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,7 +84,7 @@ public class MV9LicenseServiceImpl
         command.append(" -D ").append(sFtpServerConfig.getHomeDir()).append("tongruanv9/");// 生成文件的指定路径
         log.info("MV9LicenseServiceImpl.generator command:{}", command);
         // 调用执行命令
-        String commandRes = SSHLinuxUtil.exeCommand(sFtpServerConfig.getIp(), sFtpServerConfig.getPort(),
+        String commandRes = SSHLinuxUtils.exeCommand(sFtpServerConfig.getIp(), sFtpServerConfig.getPort(),
                 sFtpServerConfig.getAccessKey(), sFtpServerConfig.getSecretKey(), command.toString());
 
         log.info("MV9LicenseServiceImpl.generator commandRes:{}", commandRes);

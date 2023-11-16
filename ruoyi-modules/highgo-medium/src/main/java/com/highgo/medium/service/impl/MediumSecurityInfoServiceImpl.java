@@ -14,9 +14,9 @@ import com.alibaba.fastjson.JSON;
 import com.highgo.medium.domain.MFileInfo;
 import com.highgo.medium.service.IMFileInfoService;
 import com.highgo.medium.utils.MediumUtil;
-import com.highgo.medium.utils.ZipUtil;
 import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.core.utils.DateUtils;
+import com.ruoyi.common.core.utils.file.ZipUtils;
 import com.ruoyi.system.api.RemoteFileService;
 import com.ruoyi.system.api.domain.FileReq;
 import com.ruoyi.system.api.domain.SysFile;
@@ -305,7 +305,7 @@ public class MediumSecurityInfoServiceImpl implements IMediumSecurityInfoService
             if (log.isDebugEnabled()){
                 log.debug("SecurityInfoServiceImpl.downLoad Stream is null");
             }
-            ZipUtil.zipStream(fileInputStream,outputStream);
+            ZipUtils.zipStream(fileInputStream,outputStream);
         } catch (IOException e) {
             e.printStackTrace();
         }finally {
