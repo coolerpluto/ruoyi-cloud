@@ -19,7 +19,7 @@ import java.util.Map;
 
 /**
  * Minio 文件存储
- * 
+ *
  * @author ruoyi
  */
 //@Primary
@@ -41,7 +41,8 @@ public class MinioSysFileServiceImpl extends ASysFileService {
      * @throws Exception
      */
     @Override
-    public String uploadFile(MultipartFile file) throws Exception {
+    public String uploadFile(MultipartFile file) throws Exception
+    {
         String fileName = FileUploadUtils.extractFilename(file);
         InputStream inputStream = file.getInputStream();
         PutObjectArgs args = PutObjectArgs.builder()
