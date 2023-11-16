@@ -6,7 +6,7 @@
       </el-form-item>
       <el-form-item>
         <el-link type="primary">
-          默认链接:http://192.168.110.204:5000/v2/_catalog 若修改请至nacos</el-link>
+          默认链接:http://192.168.110.187:5000/v2/_catalog 若修改请至nacos</el-link>
       </el-form-item>
     </el-form>
     <el-table v-loading="loading" :data="list" style="width: 100%">

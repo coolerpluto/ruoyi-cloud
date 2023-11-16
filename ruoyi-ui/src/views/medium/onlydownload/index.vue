@@ -88,7 +88,7 @@
       <el-collapse v-model="activeNames">
         <el-collapse-item title="CPU-操作系统-介质 对应关系" name="showMediumDesc">
           <!-- <el-image :src="require('@/assets/images/medium_system_cpu_mapping.png')"-->
-          <el-image :src="'http://192.168.110.204:9000/public/images/medium/medium_system_cpu_mapping.png'"
+          <el-image :src="'http://192.168.110.187:9000/public/images/medium/medium_system_cpu_mapping.png'"
                     style="width: auto;max-width: 100%;">
             <div slot="placeholder" class="image-slot">加载中<span class="dot">...</span></div>
           </el-image>

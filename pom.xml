@@ -9,8 +9,7 @@
     <version>3.6.3</version>
 
     <name>ruoyi</name>
-    <url>http://www.ruoyi.vip</url>
-    <description>若依微服务系统</description>
+    <description>微服务系统</description>
 
     <properties>
         <ruoyi.version>3.6.3</ruoyi.version>
@@ -265,7 +264,7 @@
             <properties>
                 <imageProfile>uat</imageProfile>
                 <!--测试环境直接放上去,测试完成后,发布镜像推送到仓库,若使用则按需拉取-->
-                <envDockerServer>http://192.168.110.204:2375</envDockerServer>
+                <envDockerServer>http://192.168.110.187:2375</envDockerServer>
             </properties>
         </profile>
     </profiles>

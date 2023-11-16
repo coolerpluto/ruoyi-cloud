@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.19, for Win64 (x86_64)
 --
--- Host: 192.168.110.204    Database: ry-seata
+-- Host: 192.168.110.187    Database: ry-seata
 -- ------------------------------------------------------
 -- Server version	8.0.29
 
