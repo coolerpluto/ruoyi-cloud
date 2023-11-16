@@ -996,6 +996,7 @@ export default {
     },
     handleGetIndustry() {
       if (!this.form.industryCategory) {
+        this.form.industry="";
         return;
       }
       var _this = this
@@ -1143,6 +1144,9 @@ export default {
           let select = _this.industryCategories.find(item => {
             return item.dictValue == _this.form.industryCategory;
           })
+          if(!select || !select.remark){
+            return;
+          }
           _this.getCtegoryByCode(select.remark, function (res) {
             _this.industrySubcategories = res;
           });

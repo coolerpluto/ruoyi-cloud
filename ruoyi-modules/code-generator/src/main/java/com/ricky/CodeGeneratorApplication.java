@@ -10,12 +10,12 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
  * @author ruoyi
  */
 @SpringBootApplication(exclude = { DataSourceAutoConfiguration.class })
-public class WebApplication
+public class CodeGeneratorApplication
 {
     public static void main(String[] args)
     {
         // System.setProperty("spring.devtools.restart.enabled", "false");
-        SpringApplication.run(WebApplication.class, args);
+        SpringApplication.run(CodeGeneratorApplication.class, args);
         System.out.println("代码生成器启动成功 ");
     }
 }
