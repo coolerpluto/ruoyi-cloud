@@ -17,7 +17,7 @@ spring:
     name: ruoyi-job
   profiles:
     # 环境配置
-    active: dev
+    active: @imageProfile@
   cloud:
     nacos:
       discovery:
