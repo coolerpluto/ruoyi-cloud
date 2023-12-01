@@ -8,7 +8,17 @@
         <el-button size="mini" circle icon="el-icon-refresh" @click="refresh()" />
       </el-tooltip>
       <el-tooltip class="item" effect="dark" content="显隐列" placement="top" v-if="columns">
-        <el-button size="mini" circle icon="el-icon-menu" @click="showColumn()" />
+        <el-button size="mini" circle icon="el-icon-menu" @click="showColumn()" v-if="showColumnsType == 'transfer'"/>
+        <el-dropdown trigger="click" :hide-on-click="false" style="padding-left: 12px" v-if="showColumnsType == 'checkbox'">
+          <el-button size="mini" circle icon="el-icon-menu" />
+          <el-dropdown-menu slot="dropdown">
+            <template v-for="item in columns">
+              <el-dropdown-item :key="item.key">
+                <el-checkbox :checked="item.visible" @change="checkboxChange($event, item.label)" :label="item.label" />
+              </el-dropdown-item>
+            </template>
+          </el-dropdown-menu>
+        </el-dropdown>
       </el-tooltip>
       <el-tooltip class="item" effect="dark" content="切模式" placement="top" v-if="['list', 'card'].includes(showListType)">
         <el-button size="mini" circle :icon="cardType?'el-icon-s-fold':'el-icon-s-grid'" @click="changeListType(showListType)" />
@@ -39,6 +49,7 @@ export default {
     };
   },
   props: {
+    /* 是否显示检索条件 */
     showSearch: {
       type: Boolean,
       default: true,
@@ -49,13 +60,21 @@ export default {
         return ["list", "card"].includes(value);
       },
     },
+    /* 显隐列信息 */
     columns: {
       type: Array,
     },
+    /* 是否显示检索图标 */
     search: {
       type: Boolean,
       default: true,
     },
+    /* 显隐列类型（transfer穿梭框、checkbox复选框） */
+    showColumnsType: {
+      type: String,
+      default: "checkbox",
+    },
+    /* 右外边距 */
     gutter: {
       type: Number,
       default: 10,
@@ -71,10 +90,12 @@ export default {
     }
   },
   created() {
-    // 显隐列初始默认隐藏列
-    for (let item in this.columns) {
-      if (this.columns[item].visible === false) {
-        this.value.push(parseInt(item));
+    if (this.showColumnsType == 'transfer') {
+      // 显隐列初始默认隐藏列
+      for (let item in this.columns) {
+        if (this.columns[item].visible === false) {
+          this.value.push(parseInt(item));
+        }
       }
     }
     this.cardType = this.showListType === 'card';
@@ -99,9 +120,12 @@ export default {
     showColumn() {
       this.open = true;
     },
+    // 勾选
+    checkboxChange(event, label) {
+      this.columns.filter(item => item.label == label)[0].visible = event;
+    },
     changeListType(value) {
       this.cardType = !this.cardType
-      console.log(2)
       this.$emit("update:showListType", value === 'list'?"card":"list");
     },
   },
