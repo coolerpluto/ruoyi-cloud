@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.highgo.company.mapper.SearchInfoMapper">
+
+    <resultMap type="SearchInfo" id="SearchInfoResult">
+        <result property="searchId" column="search_id"/>
+        <result property="regStatus" column="reg_status"/>
+        <result property="estiblishTime" column="estiblish_time"/>
+        <result property="regCapital" column="reg_capital"/>
+        <result property="companyType" column="company_type"/>
+        <result property="matchType" column="match_type"/>
+        <result property="type" column="type"/>
+        <result property="legalPersonName" column="legal_person_name"/>
+        <result property="regNumber" column="reg_number"/>
+        <result property="creditCode" column="credit_code"/>
+        <result property="name" column="name"/>
+        <result property="id" column="id"/>
+        <result property="orgNumber" column="org_number"/>
+        <result property="base" column="base"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectSearchInfoVo">
+        select search_id,
+               reg_status,
+               estiblish_time,
+               reg_capital,
+               company_type,
+               match_type,
+               type,
+               legal_person_name,
+               reg_number,
+               credit_code,
+               name,
+               id,
+               org_number,
+               base,
+               create_time,
+               update_time
+        from search_info
+    </sql>
+
+    <select id="selectSearchInfoList" parameterType="SearchInfo" resultMap="SearchInfoResult">
+        <include refid="selectSearchInfoVo"/>
+        <where>
+            <if test="regStatus != null  and regStatus != ''">and reg_status = #{regStatus}</if>
+            <if test="estiblishTime != null  and estiblishTime != ''">and estiblish_time = #{estiblishTime}</if>
+            <if test="regCapital != null  and regCapital != ''">and reg_capital = #{regCapital}</if>
+            <if test="companyType != null  and companyType != ''">and company_type = #{companyType}</if>
+            <if test="matchType != null  and matchType != ''">and match_type = #{matchType}</if>
+            <if test="type != null  and type != ''">and type = #{type}</if>
+            <if test="legalPersonName != null  and legalPersonName != ''">
+                and legal_person_name like concat('%', #{legalPersonName}, '%')
+            </if>
+            <if test="regNumber != null  and regNumber != ''">and reg_number = #{regNumber}</if>
+            <if test="creditCode != null  and creditCode != ''">and credit_code = #{creditCode}</if>
+            <if test="name != null  and name != ''">and name like concat('%', #{name}, '%')</if>
+            <if test="orgNumber != null  and orgNumber != ''">and org_number = #{orgNumber}</if>
+            <if test="base != null  and base != ''">and base = #{base}</if>
+        </where>
+    </select>
+
+    <select id="selectSearchInfoBySearchId" parameterType="String" resultMap="SearchInfoResult">
+        <include refid="selectSearchInfoVo"/>
+        where search_id::varchar = #{searchId}
+    </select>
+
+    <insert id="insertSearchInfo" parameterType="SearchInfo">
+        insert into search_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="searchId != null and searchId != ''">search_id,</if>
+            <if test="regStatus != null">reg_status,</if>
+            <if test="estiblishTime != null">estiblish_time,</if>
+            <if test="regCapital != null">reg_capital,</if>
+            <if test="companyType != null">company_type,</if>
+            <if test="matchType != null">match_type,</if>
+            <if test="type != null">type,</if>
+            <if test="legalPersonName != null">legal_person_name,</if>
+            <if test="regNumber != null">reg_number,</if>
+            <if test="creditCode != null">credit_code,</if>
+            <if test="name != null">name,</if>
+            <if test="id != null">id,</if>
+            <if test="orgNumber != null">org_number,</if>
+            <if test="base != null">base,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="searchId != null and searchId != ''">#{searchId},</if>
+            <if test="regStatus != null">#{regStatus},</if>
+            <if test="estiblishTime != null">#{estiblishTime},</if>
+            <if test="regCapital != null">#{regCapital},</if>
+            <if test="companyType != null">#{companyType},</if>
+            <if test="matchType != null">#{matchType},</if>
+            <if test="type != null">#{type},</if>
+            <if test="legalPersonName != null">#{legalPersonName},</if>
+            <if test="regNumber != null">#{regNumber},</if>
+            <if test="creditCode != null">#{creditCode},</if>
+            <if test="name != null">#{name},</if>
+            <if test="id != null">#{id},</if>
+            <if test="orgNumber != null">#{orgNumber},</if>
+            <if test="base != null">#{base},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSearchInfo" parameterType="SearchInfo">
+        update search_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="regStatus != null">reg_status = #{regStatus},</if>
+            <if test="estiblishTime != null">estiblish_time = #{estiblishTime},</if>
+            <if test="regCapital != null">reg_capital = #{regCapital},</if>
+            <if test="companyType != null">company_type = #{companyType},</if>
+            <if test="matchType != null">match_type = #{matchType},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="legalPersonName != null">legal_person_name = #{legalPersonName},</if>
+            <if test="regNumber != null">reg_number = #{regNumber},</if>
+            <if test="creditCode != null">credit_code = #{creditCode},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="id != null">id = #{id},</if>
+            <if test="orgNumber != null">org_number = #{orgNumber},</if>
+            <if test="base != null">base = #{base},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where search_id::varchar = #{searchId}
+    </update>
+
+    <delete id="deleteSearchInfoBySearchId" parameterType="String">
+        delete
+        from search_info
+        where search_id::varchar = #{searchId}
+    </delete>
+
+    <delete id="deleteSearchInfoBySearchIds" parameterType="String">
+        delete from search_info where search_id::varchar in
+        <foreach item="searchId" collection="array" open="(" separator="," close=")">
+            #{searchId}
+        </foreach>
+    </delete>
+</mapper>

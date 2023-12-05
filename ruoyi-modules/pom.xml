@@ -16,6 +16,7 @@
         <module>highgo-crm</module>
         <module>highgo-medium</module>
         <module>highgo-message</module>
+        <module>highgo-company</module>
     </modules>
 
     <artifactId>ruoyi-modules</artifactId>

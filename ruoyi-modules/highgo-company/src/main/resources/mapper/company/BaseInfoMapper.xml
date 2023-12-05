@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.highgo.company.mapper.BaseInfoMapper">
+
+    <resultMap type="BaseInfo" id="BaseInfoResult">
+        <result property="infoId" column="info_id"/>
+        <result property="errorCode" column="error_code"/>
+        <result property="reason" column="reason"/>
+        <result property="id" column="id"/>
+        <result property="type" column="type"/>
+        <result property="legalPersonName" column="legal_person_name"/>
+        <result property="name" column="name"/>
+        <result property="property3" column="property3"/>
+        <result property="alias" column="alias"/>
+        <result property="historyNames" column="history_names"/>
+        <result property="isMicroEnt" column="is_micro_ent"/>
+        <result property="regStatus" column="reg_status"/>
+        <result property="estiblishTime" column="estiblish_time"/>
+        <result property="fromTime" column="from_time"/>
+        <result property="toTime" column="to_time"/>
+        <result property="staffNumRange" column="staff_num_range"/>
+        <result property="companyOrgType" column="company_org_type"/>
+        <result property="bondType" column="bond_type"/>
+        <result property="bondNum" column="bond_num"/>
+        <result property="bondName" column="bond_name"/>
+        <result property="usedBondName" column="used_bond_name"/>
+        <result property="regNumber" column="reg_number"/>
+        <result property="regCapital" column="reg_capital"/>
+        <result property="regCapitalCurrency" column="reg_capital_currency"/>
+        <result property="actualCapital" column="actual_capital"/>
+        <result property="actualCapitalCurrency" column="actual_capital_currency"/>
+        <result property="taxNumber" column="tax_number"/>
+        <result property="compForm" column="comp_form"/>
+        <result property="approvedTime" column="approved_time"/>
+        <result property="regInstitute" column="reg_institute"/>
+        <result property="orgNumber" column="org_number"/>
+        <result property="creditCode" column="credit_code"/>
+        <result property="socialStaffNum" column="social_staff_num"/>
+        <result property="tags" column="tags"/>
+        <result property="businessScope" column="business_scope"/>
+        <result property="updateTimes" column="update_times"/>
+        <result property="regLocation" column="reg_location"/>
+        <result property="base" column="base"/>
+        <result property="city" column="city"/>
+        <result property="district" column="district"/>
+        <result property="industry" column="industry"/>
+        <result property="category" column="category"/>
+        <result property="categoryBig" column="category_big"/>
+        <result property="categoryMiddle" column="category_middle"/>
+        <result property="categorySmall" column="category_small"/>
+        <result property="revokeDate" column="revoke_date"/>
+        <result property="revokeReason" column="revoke_reason"/>
+        <result property="cancelDate" column="cancel_date"/>
+        <result property="cancelReason" column="cancel_reason"/>
+        <result property="percentileScore" column="percentile_score"/>
+        <result property="keyword" column="keyword"/>
+    </resultMap>
+
+    <sql id="selectBaseInfoVo">
+        select info_id,
+               error_code,
+               reason,
+               id,
+               type,
+               legal_person_name,
+               name,
+               property3,
+               alias,
+               history_names,
+               is_micro_ent,
+               reg_status,
+               estiblish_time,
+               from_time,
+               to_time,
+               staff_num_range,
+               company_org_type,
+               bond_type,
+               bond_num,
+               bond_name,
+               used_bond_name,
+               reg_number,
+               reg_capital,
+               reg_capital_currency,
+               actual_capital,
+               actual_capital_currency,
+               tax_number,
+               comp_form,
+               approved_time,
+               reg_institute,
+               org_number,
+               credit_code,
+               social_staff_num,
+               tags,
+               business_scope,
+               update_times,
+               reg_location,
+               base,
+               city,
+               district,
+               industry,
+               category,
+               category_big,
+               category_middle,
+               category_small,
+               revoke_date,
+               revoke_reason,
+               cancel_date,
+               cancel_reason,
+               percentile_score,
+               keyword
+        from base_info
+    </sql>
+
+    <select id="selectBaseInfoList" parameterType="BaseInfo" resultMap="BaseInfoResult">
+        <include refid="selectBaseInfoVo"/>
+        <where>
+            <if test="legalPersonName != null  and legalPersonName != ''">
+                and legal_person_name like concat('%',#{legalPersonName}, '%')
+            </if>
+            <if test="name != null  and name != ''">and name like concat('%', #{name}, '%')</if>
+            <if test="alias != null  and alias != ''">and alias = #{alias}</if>
+            <if test="regStatus != null  and regStatus != ''">and reg_status = #{regStatus}</if>
+            <if test="regNumber != null  and regNumber != ''">and reg_number = #{regNumber}</if>
+            <if test="taxNumber != null  and taxNumber != ''">and tax_number = #{taxNumber}</if>
+            <if test="regInstitute != null  and regInstitute != ''">and reg_institute = #{regInstitute}</if>
+            <if test="orgNumber != null  and orgNumber != ''">and org_number = #{orgNumber}</if>
+            <if test="creditCode != null  and creditCode != ''">and credit_code = #{creditCode}</if>
+            <if test="businessScope != null  and businessScope != ''">and business_scope = #{businessScope}</if>
+            <if test="regLocation != null  and regLocation != ''">and reg_location = #{regLocation}</if>
+            <if test="base != null  and base != ''">and base = #{base}</if>
+            <if test="city != null  and city != ''">and city = #{city}</if>
+            <if test="industry != null  and industry != ''">and industry = #{industry}</if>
+        </where>
+    </select>
+
+    <select id="selectBaseInfoByInfoId" parameterType="String" resultMap="BaseInfoResult">
+        <include refid="selectBaseInfoVo"/>
+        where info_id ::varchar = #{infoId}
+    </select>
+
+    <insert id="insertBaseInfo" parameterType="BaseInfo">
+        insert into base_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="infoId != null and infoId != ''">info_id,</if>
+            <if test="errorCode != null">error_code,</if>
+            <if test="reason != null">reason,</if>
+            <if test="id != null">id,</if>
+            <if test="type != null">type,</if>
+            <if test="legalPersonName != null">legal_person_name,</if>
+            <if test="name != null">name,</if>
+            <if test="property3 != null">property3,</if>
+            <if test="alias != null">alias,</if>
+            <if test="historyNames != null">history_names,</if>
+            <if test="isMicroEnt != null">is_micro_ent,</if>
+            <if test="regStatus != null">reg_status,</if>
+            <if test="estiblishTime != null">estiblish_time,</if>
+            <if test="fromTime != null">from_time,</if>
+            <if test="toTime != null">to_time,</if>
+            <if test="staffNumRange != null">staff_num_range,</if>
+            <if test="companyOrgType != null">company_org_type,</if>
+            <if test="bondType != null">bond_type,</if>
+            <if test="bondNum != null">bond_num,</if>
+            <if test="bondName != null">bond_name,</if>
+            <if test="usedBondName != null">used_bond_name,</if>
+            <if test="regNumber != null">reg_number,</if>
+            <if test="regCapital != null">reg_capital,</if>
+            <if test="regCapitalCurrency != null">reg_capital_currency,</if>
+            <if test="actualCapital != null">actual_capital,</if>
+            <if test="actualCapitalCurrency != null">actual_capital_currency,</if>
+            <if test="taxNumber != null">tax_number,</if>
+            <if test="compForm != null">comp_form,</if>
+            <if test="approvedTime != null">approved_time,</if>
+            <if test="regInstitute != null">reg_institute,</if>
+            <if test="orgNumber != null">org_number,</if>
+            <if test="creditCode != null">credit_code,</if>
+            <if test="socialStaffNum != null">social_staff_num,</if>
+            <if test="tags != null">tags,</if>
+            <if test="businessScope != null">business_scope,</if>
+            <if test="updateTimes != null">update_times,</if>
+            <if test="regLocation != null">reg_location,</if>
+            <if test="base != null">base,</if>
+            <if test="city != null">city,</if>
+            <if test="district != null">district,</if>
+            <if test="industry != null">industry,</if>
+            <if test="category != null">category,</if>
+            <if test="categoryBig != null">category_big,</if>
+            <if test="categoryMiddle != null">category_middle,</if>
+            <if test="categorySmall != null">category_small,</if>
+            <if test="revokeDate != null">revoke_date,</if>
+            <if test="revokeReason != null">revoke_reason,</if>
+            <if test="cancelDate != null">cancel_date,</if>
+            <if test="cancelReason != null">cancel_reason,</if>
+            <if test="percentileScore != null">percentile_score,</if>
+            <if test="keyword != null">keyword,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="infoId != null and infoId != ''">#{infoId},</if>
+            <if test="errorCode != null">#{errorCode},</if>
+            <if test="reason != null">#{reason},</if>
+            <if test="id != null">#{id},</if>
+            <if test="type != null">#{type},</if>
+            <if test="legalPersonName != null">#{legalPersonName},</if>
+            <if test="name != null">#{name},</if>
+            <if test="property3 != null">#{property3},</if>
+            <if test="alias != null">#{alias},</if>
+            <if test="historyNames != null">#{historyNames},</if>
+            <if test="isMicroEnt != null">#{isMicroEnt},</if>
+            <if test="regStatus != null">#{regStatus},</if>
+            <if test="estiblishTime != null">#{estiblishTime},</if>
+            <if test="fromTime != null">#{fromTime},</if>
+            <if test="toTime != null">#{toTime},</if>
+            <if test="staffNumRange != null">#{staffNumRange},</if>
+            <if test="companyOrgType != null">#{companyOrgType},</if>
+            <if test="bondType != null">#{bondType},</if>
+            <if test="bondNum != null">#{bondNum},</if>
+            <if test="bondName != null">#{bondName},</if>
+            <if test="usedBondName != null">#{usedBondName},</if>
+            <if test="regNumber != null">#{regNumber},</if>
+            <if test="regCapital != null">#{regCapital},</if>
+            <if test="regCapitalCurrency != null">#{regCapitalCurrency},</if>
+            <if test="actualCapital != null">#{actualCapital},</if>
+            <if test="actualCapitalCurrency != null">#{actualCapitalCurrency},</if>
+            <if test="taxNumber != null">#{taxNumber},</if>
+            <if test="compForm != null">#{compForm},</if>
+            <if test="approvedTime != null">#{approvedTime},</if>
+            <if test="regInstitute != null">#{regInstitute},</if>
+            <if test="orgNumber != null">#{orgNumber},</if>
+            <if test="creditCode != null">#{creditCode},</if>
+            <if test="socialStaffNum != null">#{socialStaffNum},</if>
+            <if test="tags != null">#{tags},</if>
+            <if test="businessScope != null">#{businessScope},</if>
+            <if test="updateTimes != null">#{updateTimes},</if>
+            <if test="regLocation != null">#{regLocation},</if>
+            <if test="base != null">#{base},</if>
+            <if test="city != null">#{city},</if>
+            <if test="district != null">#{district},</if>
+            <if test="industry != null">#{industry},</if>
+            <if test="category != null">#{category},</if>
+            <if test="categoryBig != null">#{categoryBig},</if>
+            <if test="categoryMiddle != null">#{categoryMiddle},</if>
+            <if test="categorySmall != null">#{categorySmall},</if>
+            <if test="revokeDate != null">#{revokeDate},</if>
+            <if test="revokeReason != null">#{revokeReason},</if>
+            <if test="cancelDate != null">#{cancelDate},</if>
+            <if test="cancelReason != null">#{cancelReason},</if>
+            <if test="percentileScore != null">#{percentileScore},</if>
+            <if test="keyword != null">#{keyword},</if>
+        </trim>
+    </insert>
+
+    <update id="updateBaseInfo" parameterType="BaseInfo">
+        update base_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="errorCode != null">error_code = #{errorCode},</if>
+            <if test="reason != null">reason = #{reason},</if>
+            <if test="id != null">id = #{id},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="legalPersonName != null">legal_person_name = #{legalPersonName},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="property3 != null">property3 = #{property3},</if>
+            <if test="alias != null">alias = #{alias},</if>
+            <if test="historyNames != null">history_names = #{historyNames},</if>
+            <if test="isMicroEnt != null">is_micro_ent = #{isMicroEnt},</if>
+            <if test="regStatus != null">reg_status = #{regStatus},</if>
+            <if test="estiblishTime != null">estiblish_time = #{estiblishTime},</if>
+            <if test="fromTime != null">from_time = #{fromTime},</if>
+            <if test="toTime != null">to_time = #{toTime},</if>
+            <if test="staffNumRange != null">staff_num_range = #{staffNumRange},</if>
+            <if test="companyOrgType != null">company_org_type = #{companyOrgType},</if>
+            <if test="bondType != null">bond_type = #{bondType},</if>
+            <if test="bondNum != null">bond_num = #{bondNum},</if>
+            <if test="bondName != null">bond_name = #{bondName},</if>
+            <if test="usedBondName != null">used_bond_name = #{usedBondName},</if>
+            <if test="regNumber != null">reg_number = #{regNumber},</if>
+            <if test="regCapital != null">reg_capital = #{regCapital},</if>
+            <if test="regCapitalCurrency != null">reg_capital_currency = #{regCapitalCurrency},</if>
+            <if test="actualCapital != null">actual_capital = #{actualCapital},</if>
+            <if test="actualCapitalCurrency != null">actual_capital_currency = #{actualCapitalCurrency},</if>
+            <if test="taxNumber != null">tax_number = #{taxNumber},</if>
+            <if test="compForm != null">comp_form = #{compForm},</if>
+            <if test="approvedTime != null">approved_time = #{approvedTime},</if>
+            <if test="regInstitute != null">reg_institute = #{regInstitute},</if>
+            <if test="orgNumber != null">org_number = #{orgNumber},</if>
+            <if test="creditCode != null">credit_code = #{creditCode},</if>
+            <if test="socialStaffNum != null">social_staff_num = #{socialStaffNum},</if>
+            <if test="tags != null">tags = #{tags},</if>
+            <if test="businessScope != null">business_scope = #{businessScope},</if>
+            <if test="updateTimes != null">update_times = #{updateTimes},</if>
+            <if test="regLocation != null">reg_location = #{regLocation},</if>
+            <if test="base != null">base = #{base},</if>
+            <if test="city != null">city = #{city},</if>
+            <if test="district != null">district = #{district},</if>
+            <if test="industry != null">industry = #{industry},</if>
+            <if test="category != null">category = #{category},</if>
+            <if test="categoryBig != null">category_big = #{categoryBig},</if>
+            <if test="categoryMiddle != null">category_middle = #{categoryMiddle},</if>
+            <if test="categorySmall != null">category_small = #{categorySmall},</if>
+            <if test="revokeDate != null">revoke_date = #{revokeDate},</if>
+            <if test="revokeReason != null">revoke_reason = #{revokeReason},</if>
+            <if test="cancelDate != null">cancel_date = #{cancelDate},</if>
+            <if test="cancelReason != null">cancel_reason = #{cancelReason},</if>
+            <if test="percentileScore != null">percentile_score = #{percentileScore},</if>
+            <if test="keyword != null">keyword = #{keyword},</if>
+        </trim>
+        where info_id::varchar = #{infoId}
+    </update>
+
+    <delete id="deleteBaseInfoByInfoId" parameterType="String">
+        delete
+        from base_info
+        where info_id = #{infoId}
+    </delete>
+
+    <delete id="deleteBaseInfoByInfoIds" parameterType="String">
+        delete from base_info where info_id ::varchar in
+        <foreach item="infoId" collection="array" open="(" separator="," close=")">
+            #{infoId}
+        </foreach>
+    </delete>
+</mapper>
