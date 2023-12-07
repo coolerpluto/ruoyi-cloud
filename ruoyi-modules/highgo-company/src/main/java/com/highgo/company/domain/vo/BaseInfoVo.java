@@ -18,16 +18,18 @@ import java.util.Date;
 public class BaseInfoVo implements Serializable
 {
     private static final long serialVersionUID = 1L;
+    private Integer errorCode;
 
+    private String reason;
     /**
      * 企业id
      */
-    private String id;
+    private Long id;
 
     /**
      * 法人类型，1 人 2 公司
      */
-    private String type;
+    private Integer type;
 
     /**
      * 法人
@@ -57,7 +59,7 @@ public class BaseInfoVo implements Serializable
     /**
      * 是否是小微企业 0不是 1是
      */
-    private String isMicroEnt;
+    private Integer isMicroEnt;
 
     /**
      * 企业状态
@@ -145,7 +147,7 @@ public class BaseInfoVo implements Serializable
     /**
      * 组成形式，1-个人经营、2-家庭经营
      */
-    private String compForm;
+    private Integer compForm;
 
     /**
      * 核准时间
@@ -171,7 +173,7 @@ public class BaseInfoVo implements Serializable
     /**
      * 参保人数
      */
-    private String socialStaffNum;
+    private Integer socialStaffNum;
 
     /**
      * 企业标签
@@ -259,25 +261,44 @@ public class BaseInfoVo implements Serializable
     /**
      * 企业评分
      */
-    private String percentileScore;
+    private Integer percentileScore;
 
+    public Integer getErrorCode()
+    {
+        return errorCode;
+    }
 
-    public void setId(String id)
+    public void setErrorCode(Integer errorCode)
+    {
+        this.errorCode = errorCode;
+    }
+
+    public String getReason()
+    {
+        return reason;
+    }
+
+    public void setReason(String reason)
+    {
+        this.reason = reason;
+    }
+
+    public void setId(Long id)
     {
         this.id = id;
     }
 
-    public String getId()
+    public Long getId()
     {
         return id;
     }
 
-    public void setType(String type)
+    public void setType(Integer type)
     {
         this.type = type;
     }
 
-    public String getType()
+    public Integer getType()
     {
         return type;
     }
@@ -332,12 +353,12 @@ public class BaseInfoVo implements Serializable
         return historyNames;
     }
 
-    public void setIsMicroEnt(String isMicroEnt)
+    public void setIsMicroEnt(Integer isMicroEnt)
     {
         this.isMicroEnt = isMicroEnt;
     }
 
-    public String getIsMicroEnt()
+    public Integer getIsMicroEnt()
     {
         return isMicroEnt;
     }
@@ -502,12 +523,12 @@ public class BaseInfoVo implements Serializable
         return taxNumber;
     }
 
-    public void setCompForm(String compForm)
+    public void setCompForm(Integer compForm)
     {
         this.compForm = compForm;
     }
 
-    public String getCompForm()
+    public Integer getCompForm()
     {
         return compForm;
     }
@@ -552,12 +573,12 @@ public class BaseInfoVo implements Serializable
         return creditCode;
     }
 
-    public void setSocialStaffNum(String socialStaffNum)
+    public void setSocialStaffNum(Integer socialStaffNum)
     {
         this.socialStaffNum = socialStaffNum;
     }
 
-    public String getSocialStaffNum()
+    public Integer getSocialStaffNum()
     {
         return socialStaffNum;
     }
@@ -722,12 +743,12 @@ public class BaseInfoVo implements Serializable
         return cancelReason;
     }
 
-    public void setPercentileScore(String percentileScore)
+    public void setPercentileScore(Integer percentileScore)
     {
         this.percentileScore = percentileScore;
     }
 
-    public String getPercentileScore()
+    public Integer getPercentileScore()
     {
         return percentileScore;
     }

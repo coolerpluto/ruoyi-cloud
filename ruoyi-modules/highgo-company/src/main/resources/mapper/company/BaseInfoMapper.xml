@@ -122,7 +122,6 @@
             <if test="name != null and name != ''">and name like concat('%', #{name}, '%')</if>
             <if test="alias != null and alias != ''">and alias like concat('%', #{alias}, '%')</if>
             <if test="regStatus != null and regStatus != ''">and reg_status = #{regStatus}</if>
-            <if test="businessScope != null and businessScope != ''">and business_scope = #{businessScope}</if>
             <if test="regLocation != null and regLocation != ''">and reg_location = #{regLocation}</if>
             <if test="city != null and city != ''">and city = #{city}</if>
             <if test="industry != null  and industry != ''">and industry = #{industry}</if>

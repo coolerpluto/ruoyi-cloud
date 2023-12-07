@@ -1,6 +1,9 @@
 package com.highgo.company.domain;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -22,18 +25,16 @@ public class BaseInfo extends BaseEntity
 
     /** 状态码 */
     @Excel(name = "状态码")
-    private String errorCode;
+    private Integer errorCode;
 
-    /** 经营开始时间 */
-    @Excel(name = "经营开始时间")
     private String reason;
 
     /** 企业id */
-    private String id;
+    private Long id;
 
     /** 法人类型，1 人 2 公司 */
     @Excel(name = "法人类型，1 人 2 公司")
-    private String type;
+    private Integer type;
 
     /** 法人 */
     @Excel(name = "法人")
@@ -57,7 +58,7 @@ public class BaseInfo extends BaseEntity
 
     /** 是否是小微企业 0不是 1是 */
     @Excel(name = "是否是小微企业 0不是 1是")
-    private String isMicroEnt;
+    private Integer isMicroEnt;
 
     /** 企业状态 */
     @Excel(name = "企业状态")
@@ -128,7 +129,7 @@ public class BaseInfo extends BaseEntity
 
     /** 组成形式，1-个人经营、2-家庭经营 */
     @Excel(name = "组成形式，1-个人经营、2-家庭经营")
-    private String compForm;
+    private Integer compForm;
 
     /** 核准时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -149,7 +150,7 @@ public class BaseInfo extends BaseEntity
 
     /** 参保人数 */
     @Excel(name = "参保人数")
-    private String socialStaffNum;
+    private Integer socialStaffNum;
 
     /** 企业标签 */
     @Excel(name = "企业标签")
@@ -220,11 +221,35 @@ public class BaseInfo extends BaseEntity
 
     /** 企业评分 */
     @Excel(name = "企业评分")
-    private String percentileScore;
+    private Integer percentileScore;
 
     /** 查询关键字 */
     @Excel(name = "查询关键字")
     private String keyword;
+
+    private Map<String,String> industryAll;
+
+    private List<String> historyNameList;
+
+    public Map<String, String> getIndustryAll()
+    {
+        return industryAll;
+    }
+
+    public void setIndustryAll(Map<String, String> industryAll)
+    {
+        this.industryAll = industryAll;
+    }
+
+    public List<String> getHistoryNameList()
+    {
+        return historyNameList;
+    }
+
+    public void setHistoryNameList(List<String> historyNameList)
+    {
+        this.historyNameList = historyNameList;
+    }
 
     public void setInfoId(String infoId)
     {
@@ -235,12 +260,12 @@ public class BaseInfo extends BaseEntity
     {
         return infoId;
     }
-    public void setErrorCode(String errorCode)
+    public void setErrorCode(Integer errorCode)
     {
         this.errorCode = errorCode;
     }
 
-    public String getErrorCode()
+    public Integer getErrorCode()
     {
         return errorCode;
     }
@@ -253,21 +278,21 @@ public class BaseInfo extends BaseEntity
     {
         return reason;
     }
-    public void setId(String id)
+    public void setId(Long id)
     {
         this.id = id;
     }
 
-    public String getId()
+    public Long getId()
     {
         return id;
     }
-    public void setType(String type)
+    public void setType(Integer type)
     {
         this.type = type;
     }
 
-    public String getType()
+    public Integer getType()
     {
         return type;
     }
@@ -316,12 +341,12 @@ public class BaseInfo extends BaseEntity
     {
         return historyNames;
     }
-    public void setIsMicroEnt(String isMicroEnt)
+    public void setIsMicroEnt(Integer isMicroEnt)
     {
         this.isMicroEnt = isMicroEnt;
     }
 
-    public String getIsMicroEnt()
+    public Integer getIsMicroEnt()
     {
         return isMicroEnt;
     }
@@ -469,12 +494,12 @@ public class BaseInfo extends BaseEntity
     {
         return taxNumber;
     }
-    public void setCompForm(String compForm)
+    public void setCompForm(Integer compForm)
     {
         this.compForm = compForm;
     }
 
-    public String getCompForm()
+    public Integer getCompForm()
     {
         return compForm;
     }
@@ -514,12 +539,12 @@ public class BaseInfo extends BaseEntity
     {
         return creditCode;
     }
-    public void setSocialStaffNum(String socialStaffNum)
+    public void setSocialStaffNum(Integer socialStaffNum)
     {
         this.socialStaffNum = socialStaffNum;
     }
 
-    public String getSocialStaffNum()
+    public Integer getSocialStaffNum()
     {
         return socialStaffNum;
     }
@@ -667,12 +692,12 @@ public class BaseInfo extends BaseEntity
     {
         return cancelReason;
     }
-    public void setPercentileScore(String percentileScore)
+    public void setPercentileScore(Integer percentileScore)
     {
         this.percentileScore = percentileScore;
     }
 
-    public String getPercentileScore()
+    public Integer getPercentileScore()
     {
         return percentileScore;
     }
