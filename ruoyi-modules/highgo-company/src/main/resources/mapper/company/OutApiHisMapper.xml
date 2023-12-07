@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.highgo.company.mapper.OutApiHisMapper">
+
+    <resultMap type="OutApiHis" id="OutApiHisResult">
+        <result property="id"    column="id"    />
+        <result property="url"    column="url"    />
+        <result property="reqParam"    column="req_param"    />
+        <result property="resResult"    column="res_result"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="reqHost"    column="req_host"    />
+    </resultMap>
+
+    <sql id="selectOutApiHisVo">
+        select id, url, req_param, res_result, create_time, create_by, req_host from out_api_his
+    </sql>
+
+    <select id="selectOutApiHisList" parameterType="OutApiHis" resultMap="OutApiHisResult">
+        <include refid="selectOutApiHisVo"/>
+        <where>
+            <if test="url != null  and url != ''"> and url = #{url}</if>
+            <if test="reqParam != null  and reqParam != ''"> and req_param = #{reqParam}</if>
+            <if test="reqHost != null  and reqHost != ''"> and req_host = #{reqHost}</if>
+        </where>
+    </select>
+
+    <select id="selectOutApiHisById" parameterType="String" resultMap="OutApiHisResult">
+        <include refid="selectOutApiHisVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertOutApiHis" parameterType="OutApiHis">
+        insert into out_api_his
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">id,</if>
+            <if test="url != null and url != ''">url,</if>
+            <if test="reqParam != null">req_param,</if>
+            <if test="resResult != null">res_result,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="reqHost != null">req_host,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">#{id},</if>
+            <if test="url != null and url != ''">#{url},</if>
+            <if test="reqParam != null">#{reqParam},</if>
+            <if test="resResult != null">#{resResult},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="reqHost != null">#{reqHost},</if>
+        </trim>
+    </insert>
+
+    <update id="updateOutApiHis" parameterType="OutApiHis">
+        update out_api_his
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="url != null and url != ''">url = #{url},</if>
+            <if test="reqParam != null">req_param = #{reqParam},</if>
+            <if test="resResult != null">res_result = #{resResult},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="reqHost != null">req_host = #{reqHost},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteOutApiHisById" parameterType="String">
+        delete from out_api_his where id = #{id}
+    </delete>
+
+    <delete id="deleteOutApiHisByIds" parameterType="String">
+        delete from out_api_his where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
