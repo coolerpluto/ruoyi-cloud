@@ -149,7 +149,7 @@ public class MFileInfoServiceImpl implements IMFileInfoService
         return mFileInfoMapper.deleteMFileInfoByIds(ids);
     }
     private boolean delFileOnServer(List<MFileInfo> list){
-        log.info("delFileOnServer:{}",JSON.toJSONString(list));
+        log.debug("delFileOnServer:{}",JSON.toJSONString(list));
         try{
             for (MFileInfo file:list) {
                 String filePath = file.getFilePath();

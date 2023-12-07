@@ -3,7 +3,6 @@ package com.highgo.company.controller;
 import com.highgo.company.annotation.CompanyRequireAuth;
 import com.highgo.company.domain.BaseInfo;
 import com.highgo.company.domain.vo.BaseInfoVo;
-import com.highgo.company.domain.vo.SearchInfoVo;
 import com.highgo.company.service.IBaseInfoService;
 import com.ruoyi.common.core.utils.bean.BeanUtils;
 import com.ruoyi.common.core.utils.poi.ExcelUtil;

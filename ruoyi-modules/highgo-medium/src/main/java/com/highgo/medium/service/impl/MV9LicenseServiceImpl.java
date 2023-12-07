@@ -82,12 +82,12 @@ public class MV9LicenseServiceImpl
         command.append("echo '").append(json.toJSONString()).append("' > ").append("req/").append(reqFileName).append(" && ");
         command.append(sFtpServerConfig.getV9Command()).append(" -f ").append("req/").append(reqFileName);
         command.append(" -D ").append(sFtpServerConfig.getHomeDir()).append("tongruanv9/");// 生成文件的指定路径
-        log.info("MV9LicenseServiceImpl.generator command:{}", command);
+        log.debug("MV9LicenseServiceImpl.generator command:{}", command);
         // 调用执行命令
         String commandRes = SSHLinuxUtils.exeCommand(sFtpServerConfig.getIp(), sFtpServerConfig.getPort(),
                 sFtpServerConfig.getAccessKey(), sFtpServerConfig.getSecretKey(), command.toString());
 
-        log.info("MV9LicenseServiceImpl.generator commandRes:{}", commandRes);
+        log.debug("MV9LicenseServiceImpl.generator commandRes:{}", commandRes);
 
         String[] s = commandRes.split("\n");
         String fullPath = "";

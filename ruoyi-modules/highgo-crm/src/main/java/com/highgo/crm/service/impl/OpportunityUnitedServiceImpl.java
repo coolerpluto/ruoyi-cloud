@@ -237,7 +237,7 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
     @Override
     public int updateOppoUnited(OpportunityUnitedReq opportunity)
     {
-        log.info("updateOppoUnited:{}", JSON.toJSONString(opportunity));
+        log.debug("updateOppoUnited:{}", JSON.toJSONString(opportunity));
         inOrUpOppoUnited(opportunity);
         return 1;
     }
@@ -245,7 +245,7 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
     @Override
     public int insertOppoUnited(OpportunityUnitedReq opportunity)
     {
-        log.info("insertOppoUnited:{}", JSON.toJSONString(opportunity));
+        log.debug("insertOppoUnited:{}", JSON.toJSONString(opportunity));
         inOrUpOppoUnited(opportunity);
         return 1;
     }
@@ -295,9 +295,9 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
         Map<String, String> res = new HashMap<>();
         try
         {
-            log.info("等待各个子线程完成任务");
+            log.debug("等待各个子线程完成任务");
             end.await();
-            log.info("各个子线程完成任务,汇集检查结果");
+            log.debug("各个子线程完成任务,汇集检查结果");
             for (Future<Object> future : futureList)
             {
                 Map<String, String> threadItemRes = (Map<String, String>) future.get();
@@ -373,7 +373,7 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
             end.countDown();
             return res;
         }
-        log.info("inOrUpBaseInfo:begin:{}", Thread.currentThread().getName());
+        log.debug("inOrUpBaseInfo:begin:{}", Thread.currentThread().getName());
         OpportunityUnited oppInfo = baseInfo.getOppInfo();
         String name = "";
         String code = "";
@@ -409,13 +409,13 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
             oppo.setOwnerId(String.valueOf(currentUser.getUserId()));
             oppo.setOwnerDeptId(String.valueOf(currentUser.getDeptId()));
             oppo.setCurrentStage(opportunity.getCurrentStage());
-            log.info("商机基本信息新增:{}", JSON.toJSONString(oppo));
+            log.debug("商机基本信息新增:{}", JSON.toJSONString(oppo));
             opportunityUnitedMapper.insertOpportunity(oppo);
         }
         else if (StringUtils.isNotEmpty(name))
         {
             // 更新了商机名称
-            log.info("商机基本信息名称改变:{}", name);
+            log.debug("商机基本信息名称改变:{}", name);
             oppo.setCode(opportunity.getCode());
             oppo.setUpdateBy(currentUser.getUserName());
             oppo.setUpdateTime(DateUtils.getNowDate());
@@ -423,13 +423,13 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
         }
         else
         {
-            log.info("商机基本信息为改变");
+            log.debug("商机基本信息为改变");
         }
 
         List<OpportunitySoftwareOperation> operation_a = baseInfo.getOperations_a();
         if (CollectionUtils.isNotEmpty(operation_a))
         {
-            log.info("添加商机运营信息");
+            log.debug("添加商机运营信息");
             for (OpportunitySoftwareOperation opera : operation_a)
             {
                 Application application = new Application();
@@ -455,7 +455,7 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
         List<OpportunitySoftwareOperation> operation_m = baseInfo.getOperations_m();
         if (CollectionUtils.isNotEmpty(operation_m))
         {
-            log.info("修改商机运营信息");
+            log.debug("修改商机运营信息");
             for (OpportunitySoftwareOperation opera : operation_m)
             {
                 Application application = new Application();
@@ -479,7 +479,7 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
         List<OpportunitySoftwareOperation> operation_d = baseInfo.getOperations_d();
         if (CollectionUtils.isNotEmpty(operation_d))
         {
-            log.info("删除商机运营信息");
+            log.debug("删除商机运营信息");
             for (OpportunitySoftwareOperation opera : operation_d)
             {
                 applicationService.deleteApplicationById(String.valueOf(opera.getApplicationId()));
@@ -487,7 +487,7 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
             }
         }
         end.countDown();
-        log.info("inOrUpBaseInfo:end:{}", Thread.currentThread().getName());
+        log.debug("inOrUpBaseInfo:end:{}", Thread.currentThread().getName());
         return res;
     }
 
@@ -507,12 +507,12 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
             end.countDown();
             return res;
         }
-        log.info("inOrUpKeyContacts:begin:{}", Thread.currentThread().getName());
+        log.debug("inOrUpKeyContacts:begin:{}", Thread.currentThread().getName());
         String code = getOppoCode(opportunity);
         List<OpportunityContactInfo> contact_a = keyContact.getKeyContacts_a();
         if (CollectionUtils.isNotEmpty(contact_a))
         {
-            log.info("添加关键联系人");
+            log.debug("添加关键联系人");
             for (OpportunityContactInfo contact : contact_a)
             {
                 contact.setOpportunityCode(code);
@@ -526,7 +526,7 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
         List<OpportunityContactInfo> contact_m = keyContact.getKeyContacts_m();
         if (CollectionUtils.isNotEmpty(contact_m))
         {
-            log.info("修改关键联系人");
+            log.debug("修改关键联系人");
             for (OpportunityContactInfo contact : contact_m)
             {
                 contact.setOpportunityCode(code);
@@ -537,7 +537,7 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
         List<OpportunityContactInfo> contact_d = keyContact.getKeyContacts_d();
         if (CollectionUtils.isNotEmpty(contact_d))
         {
-            log.info("删除关键联系人");
+            log.debug("删除关键联系人");
             for (OpportunityContactInfo contact : contact_d)
             {
                 contactService.deleteContactById(contact.getId());
@@ -545,7 +545,7 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
             }
         }
         end.countDown();
-        log.info("inOrUpKeyContacts:end:{}", Thread.currentThread().getName());
+        log.debug("inOrUpKeyContacts:end:{}", Thread.currentThread().getName());
         return res;
     }
 
@@ -554,21 +554,21 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
 
     private Map<String, String> inOrUpCustInfo(CountDownLatch end, OpportunityUnitedReq opportunity)
     {
-        log.info("inOrUpCustInfo:begin:{}", Thread.currentThread().getName());
+        log.debug("inOrUpCustInfo:begin:{}", Thread.currentThread().getName());
         Map<String, OpportunityProperty> custInfo = opportunity.getCustInfo();
         Map<String, String> res = inOrUpProperty(end, getOppoCode(opportunity), custInfo);
         res.put("model", "CustInfo");
-        log.info("inOrUpCustInfo:end:{}", Thread.currentThread().getName());
+        log.debug("inOrUpCustInfo:end:{}", Thread.currentThread().getName());
         return res;
     }
 
     private Map<String, String> inOrUpPolicyStandBy(CountDownLatch end, OpportunityUnitedReq opportunity)
     {
-        log.info("inOrUpPolicyStandBy:begin:{}", Thread.currentThread().getName());
+        log.debug("inOrUpPolicyStandBy:begin:{}", Thread.currentThread().getName());
         Map<String, OpportunityProperty> policy = opportunity.getPolicyStandBy();
         Map<String, String> res = inOrUpProperty(end, getOppoCode(opportunity), policy);
         res.put("model", "PolicyStandBy");
-        log.info("inOrUpPolicyStandBy:end:{}", Thread.currentThread().getName());
+        log.debug("inOrUpPolicyStandBy:end:{}", Thread.currentThread().getName());
         return res;
     }
 
@@ -587,7 +587,7 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
             end.countDown();
             return res;
         }
-        log.info("inOrUpCompetitorInfo:begin:{}", Thread.currentThread().getName());
+        log.debug("inOrUpCompetitorInfo:begin:{}", Thread.currentThread().getName());
         List<OpportunityCompetitor> competitor_a = competitor.getCompetitorInfo_a();
         if (CollectionUtils.isNotEmpty(competitor_a))
         {
@@ -613,28 +613,28 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
                 competitorService.deleteOpportunityCompetitorById(comp.getId());
             }
         }
-        log.info("inOrUpCompetitorInfo:end:{}", Thread.currentThread().getName());
+        log.debug("inOrUpCompetitorInfo:end:{}", Thread.currentThread().getName());
         end.countDown();
         return res;
     }
 
     private Map<String, String> inOrUpOppDesc(CountDownLatch end, OpportunityUnitedReq opportunity)
     {
-        log.info("inOrUpOppDesc:begin:{}", Thread.currentThread().getName());
+        log.debug("inOrUpOppDesc:begin:{}", Thread.currentThread().getName());
         Map<String, OpportunityProperty> oppDesc = opportunity.getOppDesc();
         Map<String, String> res = inOrUpProperty(end, getOppoCode(opportunity), oppDesc);
         res.put("model", "OppDesc");
-        log.info("inOrUpOppDesc:end:{}", Thread.currentThread().getName());
+        log.debug("inOrUpOppDesc:end:{}", Thread.currentThread().getName());
         return res;
     }
 
     private Map<String, String> inOrUpOppInfluence(CountDownLatch end, OpportunityUnitedReq opportunity)
     {
-        log.info("inOrUpOppInfluence:begin:{}", Thread.currentThread().getName());
+        log.debug("inOrUpOppInfluence:begin:{}", Thread.currentThread().getName());
         Map<String, OpportunityProperty> oppInfluence = opportunity.getOppInfluence();
         Map<String, String> res = inOrUpProperty(end, getOppoCode(opportunity), oppInfluence);
         res.put("model", "OppInfluence");
-        log.info("inOrUpOppInfluence:end:{}", Thread.currentThread().getName());
+        log.debug("inOrUpOppInfluence:end:{}", Thread.currentThread().getName());
         return res;
     }
 
@@ -654,12 +654,12 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
             end.countDown();
             return res;
         }
-        log.info("inOrUpQuotationInfo:begin:{}", Thread.currentThread().getName());
+        log.debug("inOrUpQuotationInfo:begin:{}", Thread.currentThread().getName());
         String code = getOppoCode(opportunity);
         List<OpportunityQuotation> quotation_a = quotation.getQuotationInfo_a();
         if (CollectionUtils.isNotEmpty(quotation_a))
         {
-            log.info("添加报价信息");
+            log.debug("添加报价信息");
             for (OpportunityQuotation quo : quotation_a)
             {
                 quo.setOpportunityCode(code);
@@ -669,7 +669,7 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
         List<OpportunityQuotation> quotation_m = quotation.getQuotationInfo_m();
         if (CollectionUtils.isNotEmpty(quotation_m))
         {
-            log.info("修改报价信息");
+            log.debug("修改报价信息");
             for (OpportunityQuotation quo : quotation_m)
             {
                 quo.setOpportunityCode(code);
@@ -679,24 +679,24 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
         List<OpportunityQuotation> quotation_d = quotation.getQuotationInfo_d();
         if (CollectionUtils.isNotEmpty(quotation_d))
         {
-            log.info("删除报价信息");
+            log.debug("删除报价信息");
             for (OpportunityQuotation quo : quotation_d)
             {
                 quotationService.deleteOpportunityQuotationById(quo.getId());
             }
         }
         end.countDown();
-        log.info("inOrUpQuotationInfo:end:{}", Thread.currentThread().getName());
+        log.debug("inOrUpQuotationInfo:end:{}", Thread.currentThread().getName());
         return res;
     }
 
     private Map<String, String> inOrUpSummaryInfo(CountDownLatch end, OpportunityUnitedReq opportunity)
     {
-        log.info("inOrUpSummaryInfo:begin:{}", Thread.currentThread().getName());
+        log.debug("inOrUpSummaryInfo:begin:{}", Thread.currentThread().getName());
         Map<String, OpportunityProperty> summaryInfo = opportunity.getSummaryInfo();
         Map<String, String> res = inOrUpProperty(end, getOppoCode(opportunity), summaryInfo);
         res.put("model", "summaryInfo");
-        log.info("inOrUpSummaryInfo:end:{}", Thread.currentThread().getName());
+        log.debug("inOrUpSummaryInfo:end:{}", Thread.currentThread().getName());
         return res;
     }
 
@@ -715,12 +715,12 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
             end.countDown();
             return res;
         }
-        log.info("inOrUpCostInfo:begin:{}", Thread.currentThread().getName());
+        log.debug("inOrUpCostInfo:begin:{}", Thread.currentThread().getName());
         String code = getOppoCode(opportunity);
         List<OpportunityCost> costInfo_a = costInfo.getCostInfos_a();
         if (CollectionUtils.isNotEmpty(costInfo_a))
         {
-            log.info("添加花费信息");
+            log.debug("添加花费信息");
             for (OpportunityCost cost : costInfo_a)
             {
                 cost.setOpportunityCode(code);
@@ -730,7 +730,7 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
         List<OpportunityCost> costInfo_m = costInfo.getCostInfos_m();
         if (CollectionUtils.isNotEmpty(costInfo_m))
         {
-            log.info("修改花费信息");
+            log.debug("修改花费信息");
             for (OpportunityCost cost : costInfo_m)
             {
                 if (StringUtils.isBlank(cost.getOpportunityCode()))
@@ -743,24 +743,24 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
         List<OpportunityCost> costInfo_d = costInfo.getCostInfos_d();
         if (CollectionUtils.isNotEmpty(costInfo_d))
         {
-            log.info("删除花费信息");
+            log.debug("删除花费信息");
             for (OpportunityCost cost : costInfo_d)
             {
                 costService.deleteOpportunityCostById(cost.getId());
             }
         }
         end.countDown();
-        log.info("inOrUpCostInfo:end:{}", Thread.currentThread().getName());
+        log.debug("inOrUpCostInfo:end:{}", Thread.currentThread().getName());
         return res;
     }
 
     private Map<String, String> inOrUpActionReason(CountDownLatch end, OpportunityUnitedReq opportunity)
     {
-        log.info("inOrUpActionReason:begin:{}", Thread.currentThread().getName());
+        log.debug("inOrUpActionReason:begin:{}", Thread.currentThread().getName());
         Map<String, OpportunityProperty> actionReason = opportunity.getActionReason();
         Map<String, String> res = inOrUpProperty(end, getOppoCode(opportunity), actionReason);
         res.put("model", "Reason");
-        log.info("inOrUpActionReason:end:{}", Thread.currentThread().getName());
+        log.debug("inOrUpActionReason:end:{}", Thread.currentThread().getName());
         return res;
     }
 
@@ -775,7 +775,7 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
             res.put("msg", "");
             return res;
         }
-        log.info("inOrUpBiddingInfo:begin:{}", Thread.currentThread().getName());
+        log.debug("inOrUpBiddingInfo:begin:{}", Thread.currentThread().getName());
         Map<String, OpportunityProperty> biddingInfoProperties = new HashMap<>();
         biddingInfoProperties.put("knowExpertList", biddingInfo.getKnowExpertList());
         biddingInfoProperties.put("supportByExpert", biddingInfo.getSupportByExpert());
@@ -791,19 +791,19 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
             }
         }
         res.put("model", "biddingInfo");
-        log.info("inOrUpBiddingInfo:end:{}", Thread.currentThread().getName());
+        log.debug("inOrUpBiddingInfo:end:{}", Thread.currentThread().getName());
         end.countDown();
         return res;
     }
 
     private Map<String, String> inOrUpWinningBidding(CountDownLatch end, OpportunityUnitedReq opportunity)
     {
-        log.info("inOrUpWinningBidding:begin:{}", Thread.currentThread().getName());
+        log.debug("inOrUpWinningBidding:begin:{}", Thread.currentThread().getName());
 
         Map<String, OpportunityProperty> winningBidding = opportunity.getWinningBidding();
         Map<String, String> res = inOrUpProperty(end, getOppoCode(opportunity), winningBidding);
         res.put("model", "winningBidding");
-        log.info("inOrUpWinningBidding:end:{}", Thread.currentThread().getName());
+        log.debug("inOrUpWinningBidding:end:{}", Thread.currentThread().getName());
         return res;
     }
 
@@ -812,7 +812,7 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
 
     private Map<String, String> inOrUpAdvancesInfo(CountDownLatch end, OpportunityUnitedReq opportunity)
     {
-        log.info("inOrUpAdvancesInfo:begin:{}", Thread.currentThread().getName());
+        log.debug("inOrUpAdvancesInfo:begin:{}", Thread.currentThread().getName());
         Map<String, String> res = new HashMap<>();
         res.put("code", "1");
         res.put("msg", "");
@@ -856,7 +856,7 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
             }
         }
         end.countDown();
-        log.info("inOrUpAdvancesInfo:end:{}", Thread.currentThread().getName());
+        log.debug("inOrUpAdvancesInfo:end:{}", Thread.currentThread().getName());
         return res;
     }
 
@@ -876,12 +876,12 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
             end.countDown();
             return res;
         }
-        log.info("inOrUpKeyStandBy:begin:{}", Thread.currentThread().getName());
+        log.debug("inOrUpKeyStandBy:begin:{}", Thread.currentThread().getName());
         String code = getOppoCode(opportunity);
         List<OpportunitySupport> keyStandBy_a = keyStandBy.getKeyStandBy_a();
         if (CollectionUtils.isNotEmpty(keyStandBy_a))
         {
-            log.info("新增内部支持人");
+            log.debug("新增内部支持人");
             for (OpportunitySupport adv : keyStandBy_a)
             {
                 adv.setOpportunityCode(code);
@@ -896,7 +896,7 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
         List<OpportunitySupport> keyStandBy_m = keyStandBy.getKeyStandBy_m();
         if (CollectionUtils.isNotEmpty(keyStandBy_m))
         {
-            log.info("修改内部支持人");
+            log.debug("修改内部支持人");
             for (OpportunitySupport adv : keyStandBy_m)
             {
                 adv.setOpportunityCode(code);
@@ -906,7 +906,7 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
         List<OpportunitySupport> keyStandBy_d = keyStandBy.getKeyStandBy_d();
         if (CollectionUtils.isNotEmpty(keyStandBy_d))
         {
-            log.info("删除内部支持人");
+            log.debug("删除内部支持人");
             for (OpportunitySupport adv : keyStandBy_d)
             {
                 OpportunityUnited opp = new OpportunityUnited();
@@ -917,27 +917,27 @@ public class OpportunityUnitedServiceImpl implements IOpportunityUnitedService
             }
         }
         end.countDown();
-        log.info("inOrUpKeyStandBy:end:{}", Thread.currentThread().getName());
+        log.debug("inOrUpKeyStandBy:end:{}", Thread.currentThread().getName());
         return res;
     }
 
     private Map<String, String> inOrUpOppImplement(CountDownLatch end, OpportunityUnitedReq opportunity)
     {
-        log.info("inOrUpOppImplement:begin:{}", Thread.currentThread().getName());
+        log.debug("inOrUpOppImplement:begin:{}", Thread.currentThread().getName());
         Map<String, OpportunityProperty> oppImplement = opportunity.getOppImplement();
         Map<String, String> res = inOrUpProperty(end, getOppoCode(opportunity), oppImplement);
         res.put("model", "oppImplement");
-        log.info("inOrUpOppImplement:end:{}", Thread.currentThread().getName());
+        log.debug("inOrUpOppImplement:end:{}", Thread.currentThread().getName());
         return res;
     }
 
     private Map<String, String> inOrUpSignInfo(CountDownLatch end, OpportunityUnitedReq opportunity)
     {
-        log.info("inOrUpSignInfo:begin:{}", Thread.currentThread().getName());
+        log.debug("inOrUpSignInfo:begin:{}", Thread.currentThread().getName());
         Map<String, OpportunityProperty> signInfo = opportunity.getSignInfo();
         Map<String, String> res = inOrUpProperty(end, getOppoCode(opportunity), signInfo);
         res.put("model", "signInfo");
-        log.info("inOrUpSignInfo:end:{}", Thread.currentThread().getName());
+        log.debug("inOrUpSignInfo:end:{}", Thread.currentThread().getName());
         return res;
     }
 

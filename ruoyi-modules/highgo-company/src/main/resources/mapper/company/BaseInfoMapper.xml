@@ -119,18 +119,12 @@
             <if test="legalPersonName != null  and legalPersonName != ''">
                 and legal_person_name like concat('%',#{legalPersonName}, '%')
             </if>
-            <if test="name != null  and name != ''">and name like concat('%', #{name}, '%')</if>
-            <if test="alias != null  and alias != ''">and alias = #{alias}</if>
-            <if test="regStatus != null  and regStatus != ''">and reg_status = #{regStatus}</if>
-            <if test="regNumber != null  and regNumber != ''">and reg_number = #{regNumber}</if>
-            <if test="taxNumber != null  and taxNumber != ''">and tax_number = #{taxNumber}</if>
-            <if test="regInstitute != null  and regInstitute != ''">and reg_institute = #{regInstitute}</if>
-            <if test="orgNumber != null  and orgNumber != ''">and org_number = #{orgNumber}</if>
-            <if test="creditCode != null  and creditCode != ''">and credit_code = #{creditCode}</if>
-            <if test="businessScope != null  and businessScope != ''">and business_scope = #{businessScope}</if>
-            <if test="regLocation != null  and regLocation != ''">and reg_location = #{regLocation}</if>
-            <if test="base != null  and base != ''">and base = #{base}</if>
-            <if test="city != null  and city != ''">and city = #{city}</if>
+            <if test="name != null and name != ''">and name like concat('%', #{name}, '%')</if>
+            <if test="alias != null and alias != ''">and alias like concat('%', #{alias}, '%')</if>
+            <if test="regStatus != null and regStatus != ''">and reg_status = #{regStatus}</if>
+            <if test="businessScope != null and businessScope != ''">and business_scope = #{businessScope}</if>
+            <if test="regLocation != null and regLocation != ''">and reg_location = #{regLocation}</if>
+            <if test="city != null and city != ''">and city = #{city}</if>
             <if test="industry != null  and industry != ''">and industry = #{industry}</if>
         </where>
     </select>

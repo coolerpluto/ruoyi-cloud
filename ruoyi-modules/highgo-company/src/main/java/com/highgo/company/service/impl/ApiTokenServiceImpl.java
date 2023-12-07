@@ -53,10 +53,10 @@ public class ApiTokenServiceImpl implements IApiTokenService
         if (StringUtils.isNotEmpty(resCache))
         {
             res = JSON.parseObject(resCache, ApiToken.class);
-            log.info("selectInfoByToken cache token:{},val:{}", token, JSON.toJSONString(res));
+            log.debug("selectInfoByToken cache token:{},val:{}", token, JSON.toJSONString(res));
             return res;
         }
-        log.info("selectInfoByToken token:{}", token);
+        log.debug("selectInfoByToken token:{}", token);
         res = apiTokenMapper.selectInfoByToken(token);
         redisService.setCacheObject(getCacheKey(token), JSON.toJSONString(res), 10L, TimeUnit.MINUTES);
         return res;

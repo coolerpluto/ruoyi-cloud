@@ -42,7 +42,7 @@ public class HttpUtils
         try
         {
             String urlNameString = url + "?" + param;
-            log.info("sendGet - {}", urlNameString);
+            log.debug("sendGet - {}", urlNameString);
             URL realUrl = new URL(urlNameString);
             URLConnection connection = realUrl.openConnection();
             connection.setRequestProperty("accept", "*/*");
@@ -55,7 +55,7 @@ public class HttpUtils
             {
                 result.append(line);
             }
-            log.info("recv - {}", result);
+            log.debug("recv - {}", result);
         }
         catch (ConnectException e)
         {
@@ -105,7 +105,7 @@ public class HttpUtils
         try
         {
             String urlNameString = url + "?" + param;
-            log.info("sendPost - {}", urlNameString);
+            log.debug("sendPost - {}", urlNameString);
             URL realUrl = new URL(urlNameString);
             URLConnection conn = realUrl.openConnection();
             conn.setRequestProperty("accept", "*/*");
@@ -124,7 +124,7 @@ public class HttpUtils
             {
                 result.append(line);
             }
-            log.info("recv - {}", result);
+            log.debug("recv - {}", result);
         }
         catch (ConnectException e)
         {
@@ -169,7 +169,7 @@ public class HttpUtils
         String urlNameString = url + "?" + param;
         try
         {
-            log.info("sendSSLPost - {}", urlNameString);
+            log.debug("sendSSLPost - {}", urlNameString);
             SSLContext sc = SSLContext.getInstance("SSL");
             sc.init(null, new TrustManager[] { new TrustAnyTrustManager() }, new java.security.SecureRandom());
             URL console = new URL(urlNameString);
@@ -195,7 +195,7 @@ public class HttpUtils
                     result.append(new String(ret.getBytes("ISO-8859-1"), "utf-8"));
                 }
             }
-            log.info("recv - {}", result);
+            log.debug("recv - {}", result);
             conn.disconnect();
             br.close();
         }

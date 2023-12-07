@@ -117,9 +117,9 @@ public class OpportunityUnitedController extends BaseController
         for (String propertyKey:propertyKeysReq){
             res.put(propertyKey,new OpportunityProperty());
         }
-        log.info("getPropertiesMap req:{},", JSON.toJSONString(opportunityProperty));
+        log.debug("getPropertiesMap req:{},", JSON.toJSONString(opportunityProperty));
         List<OpportunityProperty> properties = opportunityPropertyService.selectOpportunityPropertyList(opportunityProperty);
-        log.info("getPropertiesMap res:{},", JSON.toJSONString(properties));
+        log.debug("getPropertiesMap res:{},", JSON.toJSONString(properties));
         for (OpportunityProperty property:properties)
         {
             if (!StringUtils.equals(property.getStatus(),"0")){

@@ -125,7 +125,7 @@ public class LicenseApplyServiceImpl implements ILicenseApplyService
     @Override
     public int saveAndUpdate(LicenseSaveAndUpReq licenseReq)
     {
-        log.info("saveAndUpdate req:{},", JSON.toJSONString(licenseReq));
+        log.debug("saveAndUpdate req:{},", JSON.toJSONString(licenseReq));
         inOrUpApplication(licenseReq);
         inOrUpQuotationInfo(licenseReq);
         if(null!=licenseReq.getLicenseData()){
@@ -154,7 +154,7 @@ public class LicenseApplyServiceImpl implements ILicenseApplyService
         List<OpportunitySoftwareOperation> operation_a =licenseReq.getApplicationList_a();
         if (CollectionUtils.isNotEmpty(operation_a))
         {
-            log.info("添加商机运营信息");
+            log.debug("添加商机运营信息");
             for (OpportunitySoftwareOperation opera : operation_a)
             {
                 Application application = new Application();
@@ -184,7 +184,7 @@ public class LicenseApplyServiceImpl implements ILicenseApplyService
         List<OpportunitySoftwareOperation> operation_m = licenseReq.getApplicationList_m();
         if (CollectionUtils.isNotEmpty(operation_m))
         {
-            log.info("修改商机运营信息");
+            log.debug("修改商机运营信息");
             for (OpportunitySoftwareOperation opera : operation_m)
             {
                 Application application = new Application();
@@ -212,7 +212,7 @@ public class LicenseApplyServiceImpl implements ILicenseApplyService
         List<OpportunitySoftwareOperation> operation_d = licenseReq.getApplicationList_d();
         if (CollectionUtils.isNotEmpty(operation_d))
         {
-            log.info("删除商机运营信息");
+            log.debug("删除商机运营信息");
             for (OpportunitySoftwareOperation opera : operation_d)
             {
                 applicationService.deleteApplicationById(String.valueOf(opera.getApplicationId()));

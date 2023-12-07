@@ -46,20 +46,12 @@
     <select id="selectSearchInfoList" parameterType="SearchInfo" resultMap="SearchInfoResult">
         <include refid="selectSearchInfoVo"/>
         <where>
-            <if test="regStatus != null  and regStatus != ''">and reg_status = #{regStatus}</if>
-            <if test="estiblishTime != null  and estiblishTime != ''">and estiblish_time = #{estiblishTime}</if>
-            <if test="regCapital != null  and regCapital != ''">and reg_capital = #{regCapital}</if>
-            <if test="companyType != null  and companyType != ''">and company_type = #{companyType}</if>
-            <if test="matchType != null  and matchType != ''">and match_type = #{matchType}</if>
-            <if test="type != null  and type != ''">and type = #{type}</if>
-            <if test="legalPersonName != null  and legalPersonName != ''">
+            <if test="regStatus != null and regStatus != ''">and reg_status = #{regStatus}</if>
+            <if test="legalPersonName != null and legalPersonName != ''">
                 and legal_person_name like concat('%', #{legalPersonName}, '%')
             </if>
-            <if test="regNumber != null  and regNumber != ''">and reg_number = #{regNumber}</if>
-            <if test="creditCode != null  and creditCode != ''">and credit_code = #{creditCode}</if>
-            <if test="name != null  and name != ''">and name like concat('%', #{name}, '%')</if>
-            <if test="orgNumber != null  and orgNumber != ''">and org_number = #{orgNumber}</if>
-            <if test="base != null  and base != ''">and base = #{base}</if>
+            <if test="name != null and name != ''">and name like concat('%', #{name}, '%')</if>
+            <if test="base != null and base != ''">and base = #{base}</if>
         </where>
     </select>
 
