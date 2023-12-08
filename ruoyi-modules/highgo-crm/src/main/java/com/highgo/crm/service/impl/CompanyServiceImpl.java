@@ -48,7 +48,8 @@ public class CompanyServiceImpl implements ICompanyService
 
     @Autowired
     private CompanyMapper companyMapper;
-
+    @Autowired
+    private RestTemplate restTemplate;
     /**
      * 查询公司
      *
@@ -174,7 +175,6 @@ public class CompanyServiceImpl implements ICompanyService
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "871bf862-2598-4161-bf48-4a3205637722");
         HttpEntity request = new HttpEntity(headers);
-        RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<JSONObject> response = restTemplate.exchange(url, HttpMethod.GET, request, JSONObject.class, word);
 
         JSONObject body = response.getBody();
@@ -210,7 +210,6 @@ public class CompanyServiceImpl implements ICompanyService
 
     private List<Company> searchFromTanYanCha(String word, String sourceType)
     {
-        RestTemplate restTemplate = new RestTemplate();
         String url = "https://capi.tianyancha.com/cloud-tempest/web/searchCompanyV3";
         JSONObject requestJson = new JSONObject();
         requestJson.put("word", word);

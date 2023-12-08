@@ -31,6 +31,8 @@ public class BaseInfoServiceImpl implements IBaseInfoService
     private BaseInfoMapper baseInfoMapper;
     @Autowired
     private TianYanChaConfig tianYanChaConfig;
+    @Autowired
+    private RestTemplate restTemplate;
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     /**
@@ -75,7 +77,6 @@ public class BaseInfoServiceImpl implements IBaseInfoService
 
     private BaseInfo getInfoByName(String keyword)
     {
-        RestTemplate restTemplate = new RestTemplate();
         String url = tianYanChaConfig.getBaseInfoNormal_1116();
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", tianYanChaConfig.getToken());
