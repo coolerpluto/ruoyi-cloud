@@ -1,16 +1,31 @@
 package com.highgo.company.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
+import com.highgo.company.config.TianYanChaConfig;
+import com.highgo.company.domain.BaseInfo;
+import com.ruoyi.common.core.exception.ServiceException;
 import com.ruoyi.common.core.utils.DateUtils;
+import com.ruoyi.common.core.utils.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.highgo.company.mapper.SearchInfoMapper;
 import com.highgo.company.domain.SearchInfo;
 import com.highgo.company.service.ISearchInfoService;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * 企业简单基本信息Service业务层处理
- *
  *
  * @date 2023-12-05
  */
@@ -19,6 +34,11 @@ public class SearchInfoServiceImpl implements ISearchInfoService
 {
     @Autowired
     private SearchInfoMapper searchInfoMapper;
+    @Autowired
+    private TianYanChaConfig tianYanChaConfig;
+    @Autowired
+    private RestTemplate restTemplate;
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     /**
      * 查询企业简单基本信息
@@ -41,7 +61,50 @@ public class SearchInfoServiceImpl implements ISearchInfoService
     @Override
     public List<SearchInfo> selectSearchInfoList(SearchInfo searchInfo)
     {
-        return searchInfoMapper.selectSearchInfoList(searchInfo);
+        List<SearchInfo> list = searchInfoMapper.selectSearchInfoList(searchInfo);
+        if (null != list && list.size() > 0)
+        {
+            log.debug("get from local");
+            return list;
+        }
+        log.debug("get from tian—yan-cha");
+        String key = searchInfo.getName();
+        key = StringUtils.isBlank(key) ? searchInfo.getLegalPersonName() : key;
+        key = StringUtils.isBlank(key) ? searchInfo.getBase() : key;
+        if (StringUtils.isNotBlank(key))
+        {
+            list = getCompanyTianYanChaList(key);
+        }
+        return list;
+    }
+
+    private List<SearchInfo> getCompanyTianYanChaList(String key)
+    {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", tianYanChaConfig.getToken());
+        HttpEntity request = new HttpEntity(headers);
+        ResponseEntity<JSONObject> response = restTemplate.exchange(tianYanChaConfig.getSearch_816(), HttpMethod.GET, request, JSONObject.class, key);
+        response.getHeaders();
+        response.getStatusCodeValue();
+        JSONObject body = response.getBody();
+
+        assert body != null;
+        Integer errorCode = body.getInteger("error_code");
+        String reason = body.getString("reason");
+        if (0 != errorCode)
+        {
+            throw new ServiceException(body.getString("reason"), body.getInteger("error_code"));
+            //return new ArrayList<>();
+        }
+        JSONObject result = JSONObject.parseObject(JSON.toJSONString(body.get("result")));
+        JSONArray items = result.getJSONArray("items");
+        List<SearchInfo> r = JSON.parseArray(items.toJSONString(), SearchInfo.class);
+        if (null != r && r.size() > 0)
+        {
+            log.debug("save from tian—yan-cha:{}", JSON.toJSONString(r));
+            searchInfoMapper.insertBatchSearchInfo(r);
+        }
+        return r;
     }
 
     /**

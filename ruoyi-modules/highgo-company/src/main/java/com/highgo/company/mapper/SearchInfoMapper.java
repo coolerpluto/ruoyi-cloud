@@ -58,4 +58,6 @@ public interface SearchInfoMapper
      * @return 结果
      */
     public int deleteSearchInfoBySearchIds(String[] searchIds);
+
+    int insertBatchSearchInfo(List<SearchInfo> list);
 }

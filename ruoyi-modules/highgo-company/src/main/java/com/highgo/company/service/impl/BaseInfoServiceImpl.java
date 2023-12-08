@@ -55,7 +55,7 @@ public class BaseInfoServiceImpl implements IBaseInfoService
     public List<BaseInfo> selectBaseInfoList(BaseInfo baseInfo)
     {
         List<BaseInfo> list = baseInfoMapper.selectBaseInfoList(baseInfo);
-        if (list.size() > 0)
+        if (null != list && list.size() > 0)
         {
             log.debug("get from local");
             return list;
@@ -105,6 +105,7 @@ public class BaseInfoServiceImpl implements IBaseInfoService
         b2.setCategorySmall(b2.getIndustryAll().get("categorySmall"));
 
         b2.setKeyword(keyword);
+        log.debug("save from tian—yan-cha");
         baseInfoMapper.insertBaseInfo(b2);
         return b2;
     }

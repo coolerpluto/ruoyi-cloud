@@ -1,9 +1,11 @@
 package com.highgo.company.domain.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 企业简单基本信息对象 search_info
@@ -25,13 +27,13 @@ public class SearchInfoVo implements Serializable
     private String regCapital;
 
     /** 机构类型-1：公司；2：香港企业；3：社会组织；4：律所；5：事业单位；6：基金会；7-不存在法人、注册资本、统一社会信用代码、经营状态;8：台湾企业；9-新机构 */
-    private String companyType;
+    private Integer companyType;
 
     /** 匹配原因 */
     private String matchType;
 
     /** 1-公司 2-人 */
-    private String type;
+    private Integer type;
 
     /** 法人 */
     private String legalPersonName;
@@ -46,7 +48,7 @@ public class SearchInfoVo implements Serializable
     private String name;
 
     /** 公司id */
-    private String id;
+    private Long id;
 
     /** 组织机构代码 */
     private String orgNumber;
@@ -82,12 +84,12 @@ public class SearchInfoVo implements Serializable
     {
         return regCapital;
     }
-    public void setCompanyType(String companyType)
+    public void setCompanyType(Integer companyType)
     {
         this.companyType = companyType;
     }
 
-    public String getCompanyType()
+    public Integer getCompanyType()
     {
         return companyType;
     }
@@ -100,12 +102,12 @@ public class SearchInfoVo implements Serializable
     {
         return matchType;
     }
-    public void setType(String type)
+    public void setType(Integer type)
     {
         this.type = type;
     }
 
-    public String getType()
+    public Integer getType()
     {
         return type;
     }
@@ -145,12 +147,12 @@ public class SearchInfoVo implements Serializable
     {
         return name;
     }
-    public void setId(String id)
+    public void setId(Long id)
     {
         this.id = id;
     }
 
-    public String getId()
+    public Long getId()
     {
         return id;
     }

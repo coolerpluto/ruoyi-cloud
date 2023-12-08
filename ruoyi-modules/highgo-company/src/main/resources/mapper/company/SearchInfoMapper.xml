@@ -46,12 +46,11 @@
     <select id="selectSearchInfoList" parameterType="SearchInfo" resultMap="SearchInfoResult">
         <include refid="selectSearchInfoVo"/>
         <where>
-            <if test="regStatus != null and regStatus != ''">and reg_status = #{regStatus}</if>
             <if test="legalPersonName != null and legalPersonName != ''">
                 and legal_person_name like concat('%', #{legalPersonName}, '%')
             </if>
             <if test="name != null and name != ''">and name like concat('%', #{name}, '%')</if>
-            <if test="base != null and base != ''">and base = #{base}</if>
+            <if test="base != null and base != ''">and base like concat('%',#{base}, '%')</if>
         </where>
     </select>
 
@@ -98,6 +97,32 @@
             <if test="createTime != null">#{createTime},</if>
             <if test="updateTime != null">#{updateTime},</if>
         </trim>
+    </insert>
+
+    <insert id="insertBatchSearchInfo">
+        insert into search_info
+        (reg_status, estiblish_time, reg_capital, company_type,
+        match_type, type, legal_person_name, reg_number,
+        credit_code, name, id, org_number, base)
+        values
+        <foreach item="item" collection="list" index="index" separator=",">
+            (#{item.regStatus},#{item.estiblishTime},#{item.regCapital},#{item.companyType},
+            #{item.matchType},#{item.type},#{item.legalPersonName},#{item.regNumber},
+            #{item.creditCode},#{item.name},#{item.id},#{item.orgNumber},#{item.base})
+        </foreach>
+        -- --PGSQL
+        -- ON CONFLICT (credit_code,name)
+        -- DO UPDATE SET update_time = now(),
+        -- reg_status=EXCLUDED.reg_status,
+        -- id=EXCLUDED.id,
+        -- match_type=EXCLUDED.match_type,
+        -- type=EXCLUDED.type,
+        -- legal_person_name=EXCLUDED.legal_person_name,
+        -- reg_number=EXCLUDED.reg_number
+
+        -- --MySQL
+        -- on duplicate key
+        -- update name=values(name), id=values(id), credit_code=values(credit_code)
     </insert>
 
     <update id="updateSearchInfo" parameterType="SearchInfo">

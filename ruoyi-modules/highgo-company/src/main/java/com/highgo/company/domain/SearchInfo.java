@@ -1,9 +1,12 @@
 package com.highgo.company.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.core.annotation.Excel;
 import com.ruoyi.common.core.web.domain.BaseEntity;
+
+import java.util.Date;
 
 /**
  * 企业简单基本信息对象 search_info
@@ -23,7 +26,6 @@ public class SearchInfo extends BaseEntity
     private String regStatus;
 
     /** 成立日期 */
-    @Excel(name = "成立日期")
     private String estiblishTime;
 
     /** 注册资本 */
@@ -32,7 +34,7 @@ public class SearchInfo extends BaseEntity
 
     /** 机构类型-1：公司；2：香港企业；3：社会组织；4：律所；5：事业单位；6：基金会；7-不存在法人、注册资本、统一社会信用代码、经营状态;8：台湾企业；9-新机构 */
     @Excel(name = "机构类型-1：公司；2：香港企业；3：社会组织；4：律所；5：事业单位；6：基金会；7-不存在法人、注册资本、统一社会信用代码、经营状态;8：台湾企业；9-新机构")
-    private String companyType;
+    private Integer companyType;
 
     /** 匹配原因 */
     @Excel(name = "匹配原因")
@@ -40,7 +42,7 @@ public class SearchInfo extends BaseEntity
 
     /** 1-公司 2-人 */
     @Excel(name = "1-公司 2-人")
-    private String type;
+    private Integer type;
 
     /** 法人 */
     @Excel(name = "法人")
@@ -59,7 +61,7 @@ public class SearchInfo extends BaseEntity
     private String name;
 
     /** 公司id */
-    private String id;
+    private Long id;
 
     /** 组织机构代码 */
     @Excel(name = "组织机构代码")
@@ -105,12 +107,12 @@ public class SearchInfo extends BaseEntity
     {
         return regCapital;
     }
-    public void setCompanyType(String companyType)
+    public void setCompanyType(Integer companyType)
     {
         this.companyType = companyType;
     }
 
-    public String getCompanyType()
+    public Integer getCompanyType()
     {
         return companyType;
     }
@@ -123,12 +125,12 @@ public class SearchInfo extends BaseEntity
     {
         return matchType;
     }
-    public void setType(String type)
+    public void setType(Integer type)
     {
         this.type = type;
     }
 
-    public String getType()
+    public Integer getType()
     {
         return type;
     }
@@ -168,12 +170,12 @@ public class SearchInfo extends BaseEntity
     {
         return name;
     }
-    public void setId(String id)
+    public void setId(Long id)
     {
         this.id = id;
     }
 
-    public String getId()
+    public Long getId()
     {
         return id;
     }
