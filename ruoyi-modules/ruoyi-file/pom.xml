@@ -54,11 +54,6 @@
             <version>${minio.version}</version>
         </dependency>
 
-        <!-- jsch ssh/sftp client -->
-        <dependency>
-            <groupId>com.jcraft</groupId>
-            <artifactId>jsch</artifactId>
-        </dependency>
         <!-- RuoYi Api System -->
         <dependency>
             <groupId>com.ruoyi</groupId>

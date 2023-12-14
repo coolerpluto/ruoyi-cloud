@@ -207,6 +207,12 @@
                 <version>${ruoyi.version}</version>
             </dependency>
 
+            <!-- jsch ssh/sftp client -->
+            <dependency>
+                <groupId>com.jcraft</groupId>
+                <artifactId>jsch</artifactId>
+                <version>${jsch.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -267,6 +273,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
