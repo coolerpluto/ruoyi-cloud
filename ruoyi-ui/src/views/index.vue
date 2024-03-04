@@ -10,7 +10,7 @@
             <b>当前版本:</b> <span>v{{ version }}</span>
           </p>
           <div style="text-align: end;">
-            <iframe scrolling="no" src="https://tianqiapi.com/api.php?style=tz&skin=pitaya" frameborder="0" width="275"
+            <iframe scrolling="no" src="https://i.tianqi.com/?c=code&a=getcode&id=10&icon=1&site=12" frameborder="0" width="275"
                     height="20" allowtransparency="true"></iframe>
           </div>
           <p style="float: right;">

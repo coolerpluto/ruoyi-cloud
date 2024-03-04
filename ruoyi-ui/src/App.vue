@@ -29,7 +29,7 @@ export default {
           watermark_width:300,
           watermark_height:300,
         });
-    })
+    },5000)
   },
   // 销毁时清除计时器
   beforeDestroy: function () {
