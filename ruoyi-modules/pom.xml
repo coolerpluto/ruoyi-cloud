@@ -13,10 +13,6 @@
         <module>ruoyi-gen</module>
         <module>ruoyi-job</module>
         <module>ruoyi-file</module>
-        <module>highgo-crm</module>
-        <module>highgo-medium</module>
-        <module>highgo-message</module>
-        <module>highgo-company</module>
     </modules>
 
     <artifactId>ruoyi-modules</artifactId>

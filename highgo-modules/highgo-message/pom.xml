@@ -3,14 +3,12 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>com.ruoyi</groupId>
-        <artifactId>ruoyi-modules</artifactId>
-        <version>3.6.3</version>
+        <groupId>com.highgo</groupId>
+        <artifactId>highgo-modules</artifactId>
+        <version>${highgo.version}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.highgo</groupId>
     <artifactId>highgo-modules-message</artifactId>
-    <version>1.0.1</version>
     <description>
         highgo-modules-message 通讯模块
     </description>

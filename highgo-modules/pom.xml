@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>ruoyi</artifactId>
+        <groupId>com.ruoyi</groupId>
+        <version>3.6.3</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.highgo</groupId>
+    <artifactId>highgo-modules</artifactId>
+    <version>${highgo.version}</version>
+    <packaging>pom</packaging>
+
+    <properties>
+        <highgo.version>1.0.1</highgo.version>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
+    <modules>
+        <module>highgo-crm</module>
+        <module>highgo-medium</module>
+        <module>highgo-message</module>
+        <module>highgo-company</module>
+    </modules>
+    <description>
+        highgo-modules 业务模块
+    </description>
+</project>
