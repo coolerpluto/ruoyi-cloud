@@ -19,7 +19,6 @@
         >
           {{ item.label + ' ' }}
         </el-tag>
-        <span v-show="Array.isArray(value)">{{splitFlag}}</span>
       </template>
     </template>
     <template v-if="unmatch && showValue">
@@ -37,10 +36,6 @@ export default {
       default: null,
     },
     value: [Number, String, Array],
-    splitFlag: {
-      type: String,
-      default: ","
-    },
     // 当未找到匹配的数据时，显示value
     showValue: {
       type: Boolean,
@@ -73,14 +68,9 @@ export default {
           unmatch = true // 如果有未匹配项，将标志设置为true
         }
       })
-      // 传入值为Array
-      this.value.forEach((item) => {
-        if (!this.options.some((v) => v.value == item))
-          this.unmatchArray.push(item);
-          unmatch = true // 如果有未匹配项，将标志设置为true
-      });
       return unmatch // 返回标志的值
     },
+
   },
   filters: {
     handleArray(array) {
