@@ -1,11 +1,12 @@
 package com.ruoyi.rocketmq.controller;
 
+import com.ruoyi.rocketmq.entity.MessageReg;
 import com.ruoyi.rocketmq.producer.MessageProducer;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.common.message.Message;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import java.util.Map;
  * 消息测试类Controller
  */
 @RestController
-@RequestMapping("/rocketMessage")
+@RequestMapping("/rocketMq")
 public class RocketMqController
 {
 
@@ -25,11 +26,11 @@ public class RocketMqController
      * 发送同步消息
      */
     @PostMapping("/sendSynchronizeMessage")
-    private Map sendSynchronizeMessage()
+    private Map sendSynchronizeMessage(@RequestBody MessageReg messageReg)
     {
         MessageProducer messageProducer = new MessageProducer();
         //调用MessageProducer配置好的消息方法
-        SendResult sendResult = messageProducer.sendSynchronizeMessage("order-message", "order_message_tag", "title", "content");
+        SendResult sendResult = messageProducer.sendSynchronizeMessage(messageReg.getTopic(), messageReg.getTag(), messageReg.getKey(), messageReg.getValue());
         Map<String, Object> result = new HashMap<>();
         result.put("data", sendResult);
         return result;
@@ -40,11 +41,11 @@ public class RocketMqController
      * 发送单向消息
      */
     @PostMapping("/sendOnewayMessage")
-    private Map sendOnewayMessage(@RequestParam("topic") String topic, @RequestParam("tag") String tag, @RequestParam("key") String key, @RequestParam("value") String value)
+    private Map sendOnewayMessage(@RequestBody MessageReg messageReg)
     {
         MessageProducer messageProducer = new MessageProducer();
         //调用MessageProducer配置好的消息方法 topic需要你根据你们业务定制相应的
-        messageProducer.sendOnewayMessage("order-message", "order_timeout_tag", "title", "content");
+        messageProducer.sendOnewayMessage(messageReg.getTopic(), messageReg.getTag(), messageReg.getKey(), messageReg.getValue());
         Map<String, Object> result = new HashMap<>();
         result.put("msg", "发送成功");
         result.put("code", 200);
@@ -56,16 +57,17 @@ public class RocketMqController
      * 批量发送消息
      */
     @PostMapping("/sendBatchMessage")
-    private Map sendBatchMessage()
+    private Map sendBatchMessage(@RequestBody List<MessageReg> messageRegList)
     {
         // 根据实际需求创建消息列表并返回
         List<Message> messages = new ArrayList<>();
         // 添加消息到列表
-        messages.add(new Message("order-message", "order_timeout_tag", "Message 1".getBytes()));
-        messages.add(new Message("order-message", "order_timeout_tag", "Message 2".getBytes()));
-        messages.add(new Message("order-message", "order_timeout_tag", "Message 3".getBytes()));
+        for (MessageReg messageReg : messageRegList)
+        {
+            //调用MessageProducer配置好的消息方法 topic需要你根据你们业务定制相应的
+            messages.add(new Message(messageReg.getTopic(), messageReg.getTag(), messageReg.getKey(), messageReg.getValue().getBytes()));
+        }
         MessageProducer messageProducer = new MessageProducer();
-        //调用MessageProducer配置好的消息方法 topic需要你根据你们业务定制相应的
         SendResult sendResult = messageProducer.sendBatchMessage(messages);
         Map<String, Object> result = new HashMap<>();
         result.put("data", sendResult);
@@ -77,11 +79,11 @@ public class RocketMqController
      * 发送事物消息
      */
     @PostMapping("/sendThingMessage")
-    private Map sendThingMessage(@RequestParam("topic") String topic, @RequestParam("tag") String tag, @RequestParam("key") String key, @RequestParam("value") String value)
+    private Map sendThingMessage(@RequestBody MessageReg messageReg)
     {
         MessageProducer messageProducer = new MessageProducer();
         //调用MessageProducer配置好的消息方法 topic需要你根据你们业务定制相应的
-        SendResult sendResult = messageProducer.sendThingMessage("order-message", "order_timeout_tag", "title", "content");
+        SendResult sendResult = messageProducer.sendThingMessage(messageReg.getTopic(), messageReg.getTag(), messageReg.getKey(), messageReg.getValue());
         Map<String, Object> result = new HashMap<>();
         result.put("data", sendResult);
         return result;
@@ -92,14 +94,16 @@ public class RocketMqController
      * 发送有序的消息
      */
     @PostMapping("/sendOrderlyMessage")
-    private Map sendOrderlyMessage()
+    private Map sendOrderlyMessage(@RequestBody List<MessageReg> messageRegList)
     {
         // 根据实际需求创建消息列表并返回
         List<Message> messages = new ArrayList<>();
         // 添加消息到列表
-        messages.add(new Message("order-message", "order_timeout_tag", "Message 1".getBytes()));
-        messages.add(new Message("order-message", "order_timeout_tag", "Message 2".getBytes()));
-        messages.add(new Message("order-message", "order_timeout_tag", "Message 3".getBytes()));
+        for (MessageReg messageReg : messageRegList)
+        {
+            //调用MessageProducer配置好的消息方法 topic需要你根据你们业务定制相应的
+            messages.add(new Message(messageReg.getTopic(), messageReg.getTag(), messageReg.getKey(), messageReg.getValue().getBytes()));
+        }
         Integer messageQueueNumber = 3;
         MessageProducer messageProducer = new MessageProducer();
         //调用MessageProducer配置好的消息方法 topic需要你根据你们业务定制相应的
@@ -113,11 +117,11 @@ public class RocketMqController
      * 发送延迟消息
      */
     @PostMapping("/sendDelayMessage")
-    private Map sendDelayMessage(@RequestParam("topic") String topic, @RequestParam("tag") String tag, @RequestParam("key") String key, @RequestParam("value") String value)
+    private Map sendDelayMessage(@RequestBody MessageReg messageReg)
     {
         MessageProducer messageProducer = new MessageProducer();
         //调用MessageProducer配置好的消息方法 topic需要你根据你们业务定制相应的
-        SendResult sendResult = messageProducer.sendDelayMessage("order-message", "order_timeout_tag", "title", "content");
+        SendResult sendResult = messageProducer.sendDelayMessage(messageReg.getTopic(), messageReg.getTag(), messageReg.getKey(), messageReg.getValue(), messageReg.getDelayTimeLevel());
         Map<String, Object> result = new HashMap<>();
         result.put("data", sendResult);
         return result;
@@ -128,11 +132,11 @@ public class RocketMqController
      * 发送异步的消息
      */
     @PostMapping("/sendAsyncProducerMessage")
-    private Map sendAsyncProducerMessage(@RequestParam("topic") String topic, @RequestParam("tag") String tag, @RequestParam("key") String key, @RequestParam("value") String value)
+    private Map sendAsyncProducerMessage(@RequestBody MessageReg messageReg)
     {
         MessageProducer messageProducer = new MessageProducer();
         //调用MessageProducer配置好的消息方法 topic需要你根据你们业务定制相应的
-        SendResult sendResult = messageProducer.sendAsyncProducerMessage("order-message", "order_timeout_tag", "title", "content");
+        SendResult sendResult = messageProducer.sendAsyncProducerMessage(messageReg.getTopic(), messageReg.getTag(), messageReg.getKey(), messageReg.getValue());
         Map<String, Object> result = new HashMap<>();
         result.put("data", sendResult);
         return result;

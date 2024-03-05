@@ -1,0 +1,15 @@
+# 基础镜像
+FROM  openjdk:8-jre
+# author
+MAINTAINER eszhang
+EXPOSE 9204
+# 挂载目录
+VOLUME /home/ruoyi
+# 创建目录
+RUN mkdir -p /home/ruoyi
+# 指定路径
+WORKDIR /home/ruoyi
+# 复制jar文件到路径
+COPY ./ruoyi-modules-rocketmq.jar /home/ruoyi/ruoyi-modules-rocketmq.jar
+# 启动系统服务
+ENTRYPOINT ["java","-Duser.timezone=GMT+8","-jar","ruoyi-modules-rocketmq.jar"]
